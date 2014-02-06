@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[sjpsega's Blog]]></title>
+  <link href="http://sjpsega.github.io/atom.xml" rel="self"/>
+  <link href="http://sjpsega.github.io/"/>
+  <updated>2014-02-06T17:14:46+08:00</updated>
+  <id>http://sjpsega.github.io/</id>
+  <author>
+    <name><![CDATA[sjpsega]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[开始写Blog]]></title>
+    <link href="http://sjpsega.github.io/blog/2014/02/06/kai-shi-xie-blog/"/>
+    <updated>2014-02-06T16:31:07+08:00</updated>
+    <id>http://sjpsega.github.io/blog/2014/02/06/kai-shi-xie-blog</id>
+    <content type="html"><![CDATA[<p>趁着春节假期，花了点时间，在github上用<a href="http://octopress.org/">Octopress</a>搭了个个人Blog。希望自己新的一年，能写点技术Blog，多做积累，锻炼文字。</p>
+
+<p>其实以前在javaeye上也写过技术Blog，但是写得不多。以前也在Sohu上写自己的生活Blog，写的蛮多的，现在渐渐也写得少了。</p>
+
+<p>javaeye的Blog有个最大的缺点：编辑器不好用，生成的文章格式不好看，特别是代码块，特别难看。</p>
+
+<p>自己搭建Blog的话，javaeye的编辑器这个缺点就不存在了，而且使用MarkDown格式写文章，很方便，很轻松就能写出格式优美的文章了。而且放在github上，更不用怕文章丢失的问题了，哈哈。</p>
+
+<p>当然自己搭建Blog的最大缺点是，流量少，缺少流量，缺少讨论；当然这个也不重要，重要的是自己的积累，如果自己写得好，肯定会有人看到的。</p>
+
+<p>刚入门<a href="http://octopress.org/">Octopress</a>，定制化蛮强的，还要好好研究下。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2013年终总结]]></title>
+    <link href="http://sjpsega.github.io/blog/2014/01/30/2013summer/"/>
+    <updated>2014-01-30T22:09:20+08:00</updated>
+    <id>http://sjpsega.github.io/blog/2014/01/30/2013summer</id>
+    <content type="html"><![CDATA[<h2>2013已经过去，先总结下去年的目标与主要的事：</h2>
+
+<ul>
+<li>花血本买了mac，开发用mac就是爽，很纯粹；</li>
+<li>买了5S，为了不换号码上4G;</li>
+<li>3月份当上了爸爸，有了一个健健康康的儿子，养孩子真不容易，好累！感谢比我更累的是我老婆。我还不是个好爸爸，陪儿子的时间不多。快到年底时，不小心又弄出了条人命，因为老婆身体素质不够好，感冒了近一个月，只能作罢…苦了老婆…</li>
+<li>js没有深入学习，很肤浅，还是基于业务层面的开发</li>
+<li>开发了一个App，登录了AppStore，虽然下载量不高，但还是很让人高兴的；</li>
+<li>没有去学习Ruby这样的新语言，为了开发App，学习了Object-C；</li>
+<li>BeeChart开源了，但只局限于开源了，现在js的图表越来越流行了，flash的图表意义不大了，不会去优化了吧；</li>
+<li>因为个人关系，换了部门，原先采购业务部门太业务了，觉得在那里意义不大，更想做移动方面的开发；换到了旺铺，希望能好好工作，提高自己的能力，发挥所长。</li>
+</ul>
+
+
+<p>总得来说去年的目标完成的非常不错，完成了90%，来年要继续努力啊。</p>
+
+<h2>想想2014要做的</h2>
+
+<ul>
+<li>继续好好学习OC，开发至少一款新应用登录AppStore；</li>
+<li>继续努力当个好爸爸，教孩子走路说话，多陪陪孩子；还要努力当个好老公…</li>
+<li>在Github上开个blog，写写技术文章与总结，希望一年至少12篇，一个月一篇吧；</li>
+<li>好好工作，收入上能再提高30%。</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2012年终总结]]></title>
+    <link href="http://sjpsega.github.io/blog/2013/02/09/2012summary/"/>
+    <updated>2013-02-09T20:45:29+08:00</updated>
+    <id>http://sjpsega.github.io/blog/2013/02/09/2012summary</id>
+    <content type="html"><![CDATA[<p>时间真快，一年的时间就这么过去了，当然每年过年的时候，都感觉时间过得好快，一年就这么没了。
+过去自己也没总结的习惯，这个习惯不好，该改一改了，总结过去，憧憬未来。</p>
+
+<h2>2012的主要事情</h2>
+
+<ul>
+<li>结婚。3.30完成了终身大事。每天晚上家里多了个等我回家的人。</li>
+<li>因为公司部门调整的缘故，我的工作重心也从AS转到了JS，负责了中文站首页的工作，初始压力很大，虽然看过书，但没实践经验，就怕搞砸了。还好在毛哥的指导下，顺利完成了任务，做完了2012版本的首页工作。年前又完成了2013的改版。</li>
+<li>为了玩《暗黑3》升级了电脑，买了显卡、电源，从5月中旬游戏发售，一直浑浑噩噩玩到了10月国庆前。游戏还是那个游戏，但人不是那个时候的人了。《暗黑2》对我初中时期影响太大了，因为他，我带上了眼镜。但游戏类型对我现在的我来说不太感冒了，小时候特别钟爱的RPG现在也不爱玩了，太费时间了。玩了4个多月，和同事们一起玩，很开心。后来就慢慢累了，一段时间不玩，发条松了，没动力玩了……</li>
+<li>结婚后，出乎意料，老婆怀上了……在这里得跟老婆说声对不起，自己自制力较差，睡得比较晚，经常拖的老婆到11点，甚至12点才睡，对孕妇来说，太晚睡了……</li>
+<li>抛弃黑莓8700，投入了Andorid的怀抱……</li>
+<li>爷爷去世……</li>
+</ul>
+
+
+<p>没了吧，脑子里没有印象深的事情了……</p>
+
+<h2>2013展望/想做的事</h2>
+
+<ul>
+<li>买台Mac Pro，都说mac/Linux是程序员使用的系统，想买台用用。</li>
+<li>3月底是老婆的预产期，要当爸爸了，努力当个负责的好爸爸。</li>
+<li>深入学习JS，jQuery、node等，要知其然知其所以然。</li>
+<li>学习移动开发，phoneGap、andorid或iPhone原生开发，期望做出一个有趣的小项目，未来是移动的时代。</li>
+<li>想学习一门新的语言，期望是Ruby，让自己的知识更全面一些。</li>
+<li>BeeChart开源。网站、编辑器完成了大半，本来期望2.14开源，在项目2周年的日子。过年时间不好控制，估计会稍许延期。开源后的RoadMap不清晰，先开源了吧……</li>
+</ul>
+
+
+<p>差不多了，事情已经蛮多了，看来年能完成几件。</p>
+]]></content>
+  </entry>
+  
+</feed>
