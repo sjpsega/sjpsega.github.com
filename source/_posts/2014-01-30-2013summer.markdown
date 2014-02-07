@@ -4,6 +4,7 @@ title: "2013年终总结"
 date: 2014-01-30 22:09:20 +0800
 comments: true
 categories: life
+keywords: 2013, 总结
 ---
 
 ## 2013已经过去，先总结下去年的目标与主要的事：
