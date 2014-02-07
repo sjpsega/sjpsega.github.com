@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Life | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/life/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-02-07T11:24:41+08:00</updated>
+  <updated>2014-02-07T13:11:37+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -20,9 +20,9 @@
     <id>http://sjpsega.com/blog/2014/02/06/kai-shi-xie-blog</id>
     <content type="html"><![CDATA[<p>趁着春节假期，花了点时间，在github上用<a href="http://octopress.org/">Octopress</a>搭了个个人Blog。希望自己新的一年，能写点技术Blog，多做积累，锻炼文字。</p>
 
-<p>其实以前在javaeye上也写过技术Blog，但是写得不多。以前也在Sohu上写自己的生活Blog，写的蛮多的，现在渐渐也写得少了。</p>
+<p>其实以前在javaeye上也写过技术Blog，但是写得不多。在Sohu上写自己的生活Blog，写的蛮多的，现在渐渐也写得少了。</p>
 
-<p>javaeye的Blog有个最大的缺点：编辑器不好用，生成的文章格式不好看，特别是代码块，特别难看。</p>
+<p>javaeye的Blog有个最大的缺点：编辑器不好用，生成的文章格式不好看，特别是代码块，特别难看。而且添加代码demo更加麻烦，需要上传，且不便于后期的维护与管理。</p>
 
 <p>自己搭建Blog的话，javaeye的编辑器这个缺点就不存在了，而且使用MarkDown格式写文章，很方便，很轻松就能写出格式优美的文章了。而且放在github上，更不用怕文章丢失的问题了，哈哈。</p>
 
