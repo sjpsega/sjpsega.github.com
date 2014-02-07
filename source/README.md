@@ -1,2 +1,0 @@
-sjpsega.github.com
-==================

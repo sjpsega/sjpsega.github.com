@@ -15,7 +15,8 @@
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <!--友言验证-->
+  <meta name="uyan_auth" content="7d2af41cee" />
   {% capture canonical %}{{ site.url }}{% if site.permalink contains '.html' %}{{ page.url }}{% else %}{{ page.url | remove:'index.html' | strip_slash }}{% endif %}{% endcapture %}
   <link rel="canonical" href="{{ canonical }}">
   <link href="{{ root_url }}/favicon.png" rel="icon">
