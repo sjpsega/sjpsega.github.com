@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Life | sjpsega's Blog]]></title>
-  <link href="http://sjpsega.github.io/blog/categories/life/atom.xml" rel="self"/>
-  <link href="http://sjpsega.github.io/"/>
-  <updated>2014-02-06T17:14:46+08:00</updated>
-  <id>http://sjpsega.github.io/</id>
+  <link href="http://sjpsega.com/blog/categories/life/atom.xml" rel="self"/>
+  <link href="http://sjpsega.com/"/>
+  <updated>2014-02-07T11:24:41+08:00</updated>
+  <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[开始写Blog]]></title>
-    <link href="http://sjpsega.github.io/blog/2014/02/06/kai-shi-xie-blog/"/>
+    <link href="http://sjpsega.com/blog/2014/02/06/kai-shi-xie-blog/"/>
     <updated>2014-02-06T16:31:07+08:00</updated>
-    <id>http://sjpsega.github.io/blog/2014/02/06/kai-shi-xie-blog</id>
+    <id>http://sjpsega.com/blog/2014/02/06/kai-shi-xie-blog</id>
     <content type="html"><![CDATA[<p>趁着春节假期，花了点时间，在github上用<a href="http://octopress.org/">Octopress</a>搭了个个人Blog。希望自己新的一年，能写点技术Blog，多做积累，锻炼文字。</p>
 
 <p>其实以前在javaeye上也写过技术Blog，但是写得不多。以前也在Sohu上写自己的生活Blog，写的蛮多的，现在渐渐也写得少了。</p>
@@ -34,9 +34,9 @@
   
   <entry>
     <title type="html"><![CDATA[2013年终总结]]></title>
-    <link href="http://sjpsega.github.io/blog/2014/01/30/2013summer/"/>
+    <link href="http://sjpsega.com/blog/2014/01/30/2013summer/"/>
     <updated>2014-01-30T22:09:20+08:00</updated>
-    <id>http://sjpsega.github.io/blog/2014/01/30/2013summer</id>
+    <id>http://sjpsega.com/blog/2014/01/30/2013summer</id>
     <content type="html"><![CDATA[<h2>2013已经过去，先总结下去年的目标与主要的事：</h2>
 
 <ul>
@@ -67,9 +67,9 @@
   
   <entry>
     <title type="html"><![CDATA[2012年终总结]]></title>
-    <link href="http://sjpsega.github.io/blog/2013/02/09/2012summary/"/>
+    <link href="http://sjpsega.com/blog/2013/02/09/2012summary/"/>
     <updated>2013-02-09T20:45:29+08:00</updated>
-    <id>http://sjpsega.github.io/blog/2013/02/09/2012summary</id>
+    <id>http://sjpsega.com/blog/2013/02/09/2012summary</id>
     <content type="html"><![CDATA[<p>时间真快，一年的时间就这么过去了，当然每年过年的时候，都感觉时间过得好快，一年就这么没了。
 过去自己也没总结的习惯，这个习惯不好，该改一改了，总结过去，憧憬未来。</p>
 
