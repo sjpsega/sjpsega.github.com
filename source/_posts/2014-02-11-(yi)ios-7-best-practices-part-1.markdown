@@ -7,7 +7,9 @@ categories: study
 keywords: iOS7, Cocoapods, ReactiveCocoa
 ---
 
-注：本文由译自：[raywenderlich ios-7-best-practices-part-1](http://www.raywenderlich.com/55384/ios-7-best-practices-part-1)，去除了跟主题无关的寒暄部分
+注：本文由译自：[raywenderlich ios-7-best-practices-part-1](http://www.raywenderlich.com/55384/ios-7-best-practices-part-1)，去除了跟主题无关的寒暄部分。
+欢迎转载，保持署名
+
 
 在这个两部分的系列教程中，您将探索如何使用以下工具和技术来创建自己的App：
 
