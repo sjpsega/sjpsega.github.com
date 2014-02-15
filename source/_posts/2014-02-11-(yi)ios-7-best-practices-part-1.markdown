@@ -47,15 +47,15 @@ keywords: iOS7, Cocoapods, ReactiveCocoa
 ## 设置你的Cocoapods
 设置你的Cocoapods，先要确保你已经安装了Cocoapods。为此，打开命令行程序，并输入。
 
-~~~
+```
 which pod
-~~~
+```
 
 你将会看到类似这样的输出:
 
-~~~
+```
 /usr/bin/pod
-~~~
+```
 
 这依赖与你如何管理Ruby gems，例如你使用[rbenv](http://rbenv.org/)或[RVM](http://rvm.io/),路径可能有所不同。
 
@@ -65,14 +65,14 @@ which pod
 
 要创建你的第一个Cocoapod，首先在命令行中用`cd`命令导航到你的XCode项目所在的文件夹，在命令行中启动编辑器，输入
 
-~~~
+```
 platform :ios, '7.0'
  
 pod 'Mantle'
 pod 'LBBlurredImage'
 pod 'TSMessages'
 pod 'ReactiveCocoa'
-~~~
+```
 
 这文件做了两件事情：
 
@@ -83,7 +83,7 @@ pod 'ReactiveCocoa'
 
 这可能需要话一到两分钟的时间去安装各种包。你的终端应该输出如下所示:
 
-~~~
+```
 $ pod install
 Analyzing dependencies
  
@@ -100,9 +100,9 @@ Generating Pods project
 Integrating client project
  
 [!] From now on use `SimpleWeather.xcworkspace`.
-~~~
+```
 
-Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一个你会关心，SimpleWeather.xcworkspace。
+Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一个需要你关心，SimpleWeather.xcworkspace。
 
 用Xcode打开SimpleWeather.xcworkspace。看看你的项目设置，现在有一个Pods项目在你的项目工作区，以及在Pods文件夹放着每一个你引入的库，如下所示：
 
@@ -114,9 +114,9 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 构建并运行您的App，以确保一切工作正常：
 ![Blank App](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/blank-app.jpg)
 
-~~~
+```
 提示：您可能会注意到一些项目生成警告。由Cocoapods引入的项目，是由不同的开发者开发，并且不同的开发者对生成警告有不同的态度。通常，你应该可以忽略它们。只要确保没有任何编译器错误！
-~~~
+```
 
 ## 创建你的主视图控制器
 虽然App看起来复杂，但它会通过一个单一的View Controller完成。现在，你将添加他。 
@@ -128,21 +128,21 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 打开` WXController.m`然后用如下所示替换`-viewDidLoad`方法：
 
-~~~
+```
 - (void)viewDidLoad {
     [super viewDidLoad];
  
     // Remove this later
     self.view.backgroundColor = [UIColor redColor];
 }
-~~~
+```
 
 现在打开`AppDelegate.m`，并且引入如下两个class:
 
-~~~
-#import "WXController.h"
-#import <TSMessage.h>
-~~~
+```
+	#import "WXController.h"
+	#import <TSMessage.h>
+```
 
 眼尖的读者会注意到`WXController`使用引号引入，`TSMessage`使用单括号引入。
 
@@ -150,7 +150,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 代替`-application:didFinishLaunchingWithOptions`的内容：
 
-~~~
+```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // 1
@@ -161,7 +161,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
     [TSMessage setDefaultViewController: self.window.rootViewController];
     return YES;
 }
-~~~
+```
 
 标号注释的解释：
 
@@ -175,11 +175,11 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 在iOS7，UIViewController有一个新的API，用来控制状态栏的外观。打开`WXController`，直接添加下面的代码到`-viewDidLoad:`方法下：
 
-~~~
+```
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
-~~~
+```
 
 再次构建并运行，你将看到状态栏如下的变化:
 ![Create WXController with Light Status Bar](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/wxcontroller-red-status.jpg)
@@ -191,22 +191,23 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 打开`WXController.h`, 添加如下委托协议：
 
-~~~
+```
 <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
-~~~
+```
 
 现在打开`WXController.m`。 小提示：你可以使用`Control-Command-Up`的快捷键来实现`.h`和`.m`文件之间的快速切换。
 
 添加如下代码到`WXController.m`顶部:
-~~~
+
+```
 #import <LBBlurredImage/UIImageView+LBBlurredImage.h>
-~~~
+```
 
 `LBBlurredImage.h`包含在Cocoapods引入的`LBBlurredImage`项目，你会使用这个库来模糊背景图片。
 
 应该有一个空的私有接口样板在`WXController` imports的下方。它具有以下属性：
 
-~~~
+```
 @interface WXController ()
  
 @property (nonatomic, strong) UIImageView *backgroundImageView;
@@ -215,7 +216,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 @property (nonatomic, assign) CGFloat screenHeight;
  
 @end
-~~~
+```
 
 现在，是时候在项目中创建并设置视图。
 
@@ -226,7 +227,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 打开`WXController.m`，使用如下代码来，替换掉`-viewDidLoad`中设置背景色的代码：
 
-~~~
+```
 // 1
 self.screenHeight = [UIScreen mainScreen].bounds.size.height;
  
@@ -252,7 +253,7 @@ self.tableView.dataSource = self;
 self.tableView.separatorColor = [UIColor colorWithWhite:1 alpha:0.2];
 self.tableView.pagingEnabled = YES;
 [self.view addSubview:self.tableView];
-~~~
+```
 
 这是非常简单的代码：
 
@@ -263,7 +264,7 @@ self.tableView.pagingEnabled = YES;
 
 添加如下UITableView的delegate和dataSource的代码到`WXController.m`的`@implementation`块中：
 
-~~~
+```
 // 1
 #pragma mark - UITableViewDataSource
  
@@ -302,18 +303,19 @@ self.tableView.pagingEnabled = YES;
     // TODO: Determine cell height based on screen
     return 44;
 }
-~~~
+```
 
 1. `Pragma mark`是[组织代码](http://nshipster.com/pragma/)的很好的一种方式。
 2. 你的table view有两个部分，一个是每小时的天气预报，另一个用于每日播报。table view的section数目，返回2。 
 3. 天气预报的cell不应该是可选择的。给他们一个半透明的黑色背景和白色文字。
 
-~~~
-注意：使用格式化的注释`// TODO：`帮助Xcode找到需要你以后完成的代码。你还可以使用`Show Document Items`(Control-6)来查看TODO项。~~~
+```
+注意：使用格式化的注释`// TODO：`帮助Xcode找到需要你以后完成的代码。你还可以使用`Show Document Items`(Control-6)来查看TODO项。
+```
 
 最后，添加如下代码到`WXController.m`:
 
-~~~
+```
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
  
@@ -323,7 +325,7 @@ self.tableView.pagingEnabled = YES;
     self.blurredImageView.frame = bounds;
     self.tableView.frame = bounds;
 }
-~~~
+```
 
 在`WXController.m`中，你的视图控制器调用该方法来编排其子视图。 
 构建并运行你的App，看看你的视图如何堆叠。
@@ -332,7 +334,7 @@ self.tableView.pagingEnabled = YES;
 仔细看，你会看到所有空的table cell的单独的cell分隔线。
 仍然在`-viewDidLoad`中，添加下面的代码来设置你的布局框架和边距：
 
-~~~
+```
 // 1
 CGRect headerFrame = [UIScreen mainScreen].bounds;
 // 2
@@ -360,7 +362,7 @@ CGRect iconFrame = CGRectMake(inset,
 CGRect conditionsFrame = iconFrame;
 conditionsFrame.size.width = self.view.bounds.size.width - (((2 * inset) + iconHeight) + 10);
 conditionsFrame.origin.x = iconFrame.origin.x + (iconHeight + 10);
-~~~
+```
 
 这是相当常规设置代码，但这里是怎么回事： 
 
@@ -372,7 +374,7 @@ conditionsFrame.origin.x = iconFrame.origin.x + (iconHeight + 10);
 
 添加如下代码到`-viewDidLoad`：
 
-~~~
+```
 // 1
 UIView *header = [[UIView alloc] initWithFrame:headerFrame];
 header.backgroundColor = [UIColor clearColor];
@@ -416,7 +418,7 @@ UIImageView *iconView = [[UIImageView alloc] initWithFrame:iconFrame];
 iconView.contentMode = UIViewContentModeScaleAspectFit;
 iconView.backgroundColor = [UIColor clearColor];
 [header addSubview:iconView];
-~~~
+```
 这是相当长的一块代码，但它真的只是在做设置各种控件的繁重工作。总之：
 
 1. 设置当前view为你的table header。
@@ -451,3 +453,264 @@ iconView.backgroundColor = [UIColor clearColor];
 
 ## 创建你的天气模型
 你的模型将使用[Mantle](https://github.com/github/Mantle)，这使得数据映射和转型非常简单。
+
+打开`WXCondition.h`如下列代码，修改接口：
+
+```
+// 1
+@interface WXCondition : MTLModel <MTLJSONSerializing>
+ 
+// 2
+@property (nonatomic, strong) NSDate *date;
+@property (nonatomic, strong) NSNumber *humidity;
+@property (nonatomic, strong) NSNumber *temperature;
+@property (nonatomic, strong) NSNumber *tempHigh;
+@property (nonatomic, strong) NSNumber *tempLow;
+@property (nonatomic, strong) NSString *locationName;
+@property (nonatomic, strong) NSDate *sunrise;
+@property (nonatomic, strong) NSDate *sunset;
+@property (nonatomic, strong) NSString *conditionDescription;
+@property (nonatomic, strong) NSString *condition;
+@property (nonatomic, strong) NSNumber *windBearing;
+@property (nonatomic, strong) NSNumber *windSpeed;
+@property (nonatomic, strong) NSString *icon;
+ 
+// 3
+- (NSString *)imageName;
+ 
+@end
+```
+
+1. `MTLJSONSerializing`协议告诉Mantle序列化该对象如何从JSON映射到Objective-C的属性。 
+2. 这些都是你的天气数据的属性。在扩展App的过程中，这是一种很好的方法-全部使用事件来访问数据。
+3. 这是一个简单的辅助方法，从天气条件映射到图像文件。
+
+构建并运行App。失败了……
+
+原因是你没有从你的Cocoapods项目中引入`Mantle`。解决方法是，在`WXCondition.h`中，你需要把`MTLModel.h`替换为`#import <Mantle.h>`。
+
+现在构建并运行App。成功了。你会看到一些新的警告，但你可以忽略他们。
+
+首先，你需要处理未实现的`-imageName`方法。
+
+打开`WXCondition.m`，添加如下方法：
+
+```
++ (NSDictionary *)imageMap {
+    // 1
+    static NSDictionary *_imageMap = nil;
+    if (! _imageMap) {
+        // 2
+        _imageMap = @{
+                      @"01d" : @"weather-clear",
+                      @"02d" : @"weather-few",
+                      @"03d" : @"weather-few",
+                      @"04d" : @"weather-broken",
+                      @"09d" : @"weather-shower",
+                      @"10d" : @"weather-rain",
+                      @"11d" : @"weather-tstorm",
+                      @"13d" : @"weather-snow",
+                      @"50d" : @"weather-mist",
+                      @"01n" : @"weather-moon",
+                      @"02n" : @"weather-few-night",
+                      @"03n" : @"weather-few-night",
+                      @"04n" : @"weather-broken",
+                      @"09n" : @"weather-shower",
+                      @"10n" : @"weather-rain-night",
+                      @"11n" : @"weather-tstorm",
+                      @"13n" : @"weather-snow",
+                      @"50n" : @"weather-mist",
+                      };
+    }
+    return _imageMap;
+}
+ 
+// 3
+- (NSString *)imageName {
+    return [WXCondition imageMap][self.icon];
+}
+```
+
+1. 创建一个静态的NSDictionary，因为WXCondition的每个实例都将使用相同的数据映射。 
+2. 天气状况与图像文件的关系（例如“01D”代表“weather-clear.png”）。 
+3. 声明获取图像文件名的公有方法。
+
+看一看从OpenWeatherMap返回的JSON响应数据：
+
+```
+{
+    "dt": 1384279857,
+    "id": 5391959,
+    "main": {
+        "humidity": 69,
+        "pressure": 1025,
+        "temp": 62.29,
+        "temp_max": 69.01,
+        "temp_min": 57.2
+    },
+    "name": "San Francisco",
+    "weather": [
+        {
+            "description": "haze",
+            "icon": "50d",
+            "id": 721,
+            "main": "Haze"
+        }
+    ]
+}
+```
+
+你需要把嵌套的JSON值映射到Objective-C的属性。嵌套的JSON值是元素，如温度，即上面看到的`main`节点。
+ 
+要做到这一点，你将利用的Objective-C的[Key-Value Coding](https://developer.apple.com/library/ios/documentation/cocoa/conceptual/KeyValueCoding/Articles/BasicPrinciples.html)和Mantle[的MTLJSONAdapter](https://github.com/MantleFramework/Mantle/blob/master/Mantle/MTLJSONAdapter.h)。
+ 
+还在`WXCondition.m`，通过添加`+JSONKeyPathsByPropertyKey`方法，“JSON到模型属性”的映射，且该方法是`MTLJSONSerializing`协议的[require](https://github.com/MantleFramework/Mantle/blob/master/Mantle/MTLJSONAdapter.h#L17-28)。
+
+```
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+    return @{
+             @"date": @"dt",
+             @"locationName": @"name",
+             @"humidity": @"main.humidity",
+             @"temperature": @"main.temp",
+             @"tempHigh": @"main.temp_max",
+             @"tempLow": @"main.temp_min",
+             @"sunrise": @"sys.sunrise",
+             @"sunset": @"sys.sunset",
+             @"conditionDescription": @"weather.description",
+             @"condition": @"weather.main",
+             @"icon": @"weather.icon",
+             @"windBearing": @"wind.deg",
+             @"windSpeed": @"wind.speed"
+             };
+}
+```
+
+在这个方法里，dictionary的key是`WXCondition`的属性名称，而dictionary的value是JSON的路径。
+ 
+您可能已经注意到，这里有一个从JSON数据映射到Objective-C属性的问题。属性`date`是`NSDate`类型的，但JSON有一个Unix时间类型(sjpsega注:即从1970年1月1日0时0分0秒起至现在的总秒数)的NSInteger值。你需要完成两者之间的转换。
+ 
+Mantle正好有一个功能来为你解决这个问题：[MTLValueTransformer](https://github.com/github/Mantle/blob/master/Mantle/MTLValueTransformer.h)。这个类允许你声明一个block，详细说明值的相互转换。
+
+Mantle的转换器语法有点怪。要创建一个为一个特定属性的转换器，，您可以添加一个以属性名开头和`JSONTransformer`结尾的类方法。 
+可能看实际代码比试图解释它更容易理解，所以在`WXCondition.m`中添加以下为NSDate属性设置的转换器。
+
+```
++ (NSValueTransformer *)dateJSONTransformer {
+    // 1
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+        return [NSDate dateWithTimeIntervalSince1970:str.floatValue];
+    } reverseBlock:^(NSDate *date) {
+        return [NSString stringWithFormat:@"%f",[date timeIntervalSince1970]];
+    }];
+}
+ 
+// 2
++ (NSValueTransformer *)sunriseJSONTransformer {
+    return [self dateJSONTransformer];
+}
+ 
++ (NSValueTransformer *)sunsetJSONTransformer {
+    return [self dateJSONTransformer];
+}
+```
+
+1. 使用blocks做属性的转换的工作，并返回一个MTLValueTransformer返回值。 
+2. 您只需要详细说明Unix时间和NSDate之间进行转换一次，就可以重用`-dateJSONTransformer'方法为sunrise和sunset属性做转换。
+
+下一个值转型有点讨厌，但它只是使用OpenWeatherMap的API和他们自己的格式化JSON响应方式的结果。`weather`值是一个JSON数组，但你只关注单一的天气状况。
+
+在`WXCondition.m`中，使用`dateJSONTransformer`相同的结构，您可以创建一个NSArray和NSString的之间的转换。该解决方案提供如下：
+
+```
++ (NSValueTransformer *)conditionDescriptionJSONTransformer {
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSArray *values) {
+        return [values firstObject];
+    } reverseBlock:^(NSString *str) {
+        return @[str];
+    }];
+}
+ 
++ (NSValueTransformer *)conditionJSONTransformer {
+    return [self conditionDescriptionJSONTransformer];
+}
+ 
++ (NSValueTransformer *)iconJSONTransformer {
+    return [self conditionDescriptionJSONTransformer];
+}
+```
+
+最后的转换器只是为了格式化。 OpenWeatherAPI使用每秒/米的风速。由于您的App使用英制系统，你需要将其转换为每小时/英里。 
+
+在`WXCondition.m`的实现中添加以下转换器的方法和宏定义。
+
+```
+#define MPS_TO_MPH 2.23694f
+ 
++ (NSValueTransformer *)windSpeedJSONTransformer {
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSNumber *num) {
+        return @(num.floatValue*MPS_TO_MPH);
+    } reverseBlock:^(NSNumber *speed) {
+        return @(speed.floatValue/MPS_TO_MPH);
+    }];
+}
+```
+
+在OpenWeatherMap的API中有一个小的差异，你必须处理。看一看在位于[当前条件的响应](http://api.openweathermap.org/data/2.5/weather?lat=37.785834&lon=-122.406417&units=imperial)和[每日预测反应](http://api.openweathermap.org/data/2.5/forecast/daily?lat=37.785834&lon=-122.406417&units=imperial&cnt=7)之间的温度：
+
+```
+// current
+"main": {
+    "grnd_level": 1021.87,
+    "humidity": 64,
+    "pressure": 1021.87,
+    "sea_level": 1030.6,
+    "temp": 58.09,
+    "temp_max": 58.09,
+    "temp_min": 58.09
+}
+ 
+// daily forecast
+"temp": {
+    "day": 58.14,
+    "eve": 58.14,
+    "max": 58.14,
+    "min": 57.18,
+    "morn": 58.14,
+    "night": 57.18
+}
+```
+
+'current'的第一个key是'main',最高温度存储在key temp_max中，而`daily forecast`的第一个key是temp,最高温度存储在key max中。 
+
+key Temperature的差异放在一边，其他都一样。所以，你真正需要做的是修改daily forecasts的键映射。
+
+打开`WXDailyForecast.m`重写`+JSONKeyPathsByPropertyKey`方法：
+
+```
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+    // 1
+    NSMutableDictionary *paths = [[super JSONKeyPathsByPropertyKey] mutableCopy];
+    // 2
+    paths[@"tempHigh"] = @"temp.max";
+    paths[@"tempLow"] = @"temp.min";
+    // 3
+    return paths;
+}
+```
+
+1. 获取`WXCondition`的映射，并创建它的可变副本。 
+2. 你需要为daily forecast做的是改变max和min键映射。 
+3. 返回新的映射。
+
+构建并运行您的App，看起来和上次运行没什么改变，但好的一点是，App编译和运行没有任何错误。
+
+![Labels and Views](http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/built-layout.jpg)
+
+
+## 何去何从？
+你可以从[这里](http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/SimpleWeather-Part-1.zip)下载完整程序。
+
+在这部分教程中，您使用Cocoapods设置项目，增加视图到控制器，编排视图，并建立模型来反映你抓取的气象数据。该App还没有充分发挥作用，但是你成功用纯代码创建视图，并学习了如何使用Mantle映射和转换JSON数据。 
+
+接下来看看[教程的第二部分]()，你将充实你的App，从weather API获取数据，并在UI上显示。您将使用新的iOS7 [NSURLSession](https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html)去下载数据，以及使用`ReactiveCocoa`把位置查找，天气数据抓取和UI更新事件绑在一起。
