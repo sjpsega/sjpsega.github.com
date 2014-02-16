@@ -4,7 +4,7 @@ title: "[译]iOS7最佳实践：一个天气App案例(一)"
 date: 2014-02-11 22:21:53 +0800
 comments: true
 categories: study
-keywords: iOS7, Cocoapods, ReactiveCocoa
+keywords: iOS7, Cocoapods, ReactiveCocoa, Mantle
 ---
 
 注：本文由译自：[raywenderlich ios-7-best-practices-part-1](http://www.raywenderlich.com/55384/ios-7-best-practices-part-1)，去除了跟主题无关的寒暄部分。
@@ -112,7 +112,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 ![Select SimpleWeather Project](http://cdn1.raywenderlich.com/wp-content/uploads/2013/12/SimpleWeather-Project.jpg)
 
 构建并运行您的App，以确保一切工作正常：
-![Blank App](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/blank-app.jpg)
+![Blank App](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/blank-app.jpg =320x)
 
 ```
 提示：您可能会注意到一些项目生成警告。由Cocoapods引入的项目，是由不同的开发者开发，并且不同的开发者对生成警告有不同的态度。通常，你应该可以忽略它们。只要确保没有任何编译器错误！
@@ -150,7 +150,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 代替`-application:didFinishLaunchingWithOptions`的内容：
 
-```
+```objc
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // 1
@@ -169,20 +169,20 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 2. 设置默认的视图控制器来显示你的TSMessages。通过这样做，你将不再需要手动指定要使用的控制器来显示警告。
 
 构建并运行，看看你的新视图控制器起作用了。
-![WXController](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/wxcontroller-red.jpg)
+![WXController](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/wxcontroller-red.jpg =320x)
 
 在红色背景下，状态栏有点难以阅读。幸运的是，有一个简单的方法，使状态栏更清晰易读。
 
 在iOS7，UIViewController有一个新的API，用来控制状态栏的外观。打开`WXController`，直接添加下面的代码到`-viewDidLoad:`方法下：
 
-```
+```objc
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
 ```
 
 再次构建并运行，你将看到状态栏如下的变化:
-![Create WXController with Light Status Bar](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/wxcontroller-red-status.jpg)
+![Create WXController with Light Status Bar](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/wxcontroller-red-status.jpg =320x)
 
 ## 设置你的App视图
 现在是时候让你的App接近生活。下载这个项目的[图片](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/Images.zip)，并解压缩到一个合适的位置。这个压缩包的背景图片出自Flickr用户[idleformat](http://www.flickr.com/photos/52547323@N00/5637648252)之手，天气图片出自Dribbble用户[heeyeun](http://dribbble.com/shots/1247177-Weather-icons?list=users)之手。
@@ -191,7 +191,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 打开`WXController.h`, 添加如下委托协议：
 
-```
+```objc
 <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 ```
 
@@ -199,7 +199,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 添加如下代码到`WXController.m`顶部:
 
-```
+```objc
 #import <LBBlurredImage/UIImageView+LBBlurredImage.h>
 ```
 
@@ -207,7 +207,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 应该有一个空的私有接口样板在`WXController` imports的下方。它具有以下属性：
 
-```
+```objc
 @interface WXController ()
  
 @property (nonatomic, strong) UIImageView *backgroundImageView;
@@ -227,7 +227,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 打开`WXController.m`，使用如下代码来，替换掉`-viewDidLoad`中设置背景色的代码：
 
-```
+```objc
 // 1
 self.screenHeight = [UIScreen mainScreen].bounds.size.height;
  
@@ -264,7 +264,7 @@ self.tableView.pagingEnabled = YES;
 
 添加如下UITableView的delegate和dataSource的代码到`WXController.m`的`@implementation`块中：
 
-```
+```objc
 // 1
 #pragma mark - UITableViewDataSource
  
@@ -315,7 +315,7 @@ self.tableView.pagingEnabled = YES;
 
 最后，添加如下代码到`WXController.m`:
 
-```
+```objc
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
  
@@ -329,12 +329,13 @@ self.tableView.pagingEnabled = YES;
 
 在`WXController.m`中，你的视图控制器调用该方法来编排其子视图。 
 构建并运行你的App，看看你的视图如何堆叠。
-![Image Background](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/background.jpg)
+
+![Image Background](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/background.jpg =320x)
 
 仔细看，你会看到所有空的table cell的单独的cell分隔线。
 仍然在`-viewDidLoad`中，添加下面的代码来设置你的布局框架和边距：
 
-```
+```objc
 // 1
 CGRect headerFrame = [UIScreen mainScreen].bounds;
 // 2
@@ -374,7 +375,7 @@ conditionsFrame.origin.x = iconFrame.origin.x + (iconHeight + 10);
 
 添加如下代码到`-viewDidLoad`：
 
-```
+```objc
 // 1
 UIView *header = [[UIView alloc] initWithFrame:headerFrame];
 header.backgroundColor = [UIColor clearColor];
@@ -456,7 +457,7 @@ iconView.backgroundColor = [UIColor clearColor];
 
 打开`WXCondition.h`如下列代码，修改接口：
 
-```
+```objc
 // 1
 @interface WXCondition : MTLModel <MTLJSONSerializing>
  
@@ -483,7 +484,7 @@ iconView.backgroundColor = [UIColor clearColor];
 
 1. `MTLJSONSerializing`协议告诉Mantle序列化该对象如何从JSON映射到Objective-C的属性。 
 2. 这些都是你的天气数据的属性。在扩展App的过程中，这是一种很好的方法-全部使用事件来访问数据。
-3. 这是一个简单的辅助方法，从天气条件映射到图像文件。
+3. 这是一个简单的辅助方法，从天气状况映射到图像文件。
 
 构建并运行App。失败了……
 
@@ -495,7 +496,7 @@ iconView.backgroundColor = [UIColor clearColor];
 
 打开`WXCondition.m`，添加如下方法：
 
-```
+```objc
 + (NSDictionary *)imageMap {
     // 1
     static NSDictionary *_imageMap = nil;
@@ -537,7 +538,7 @@ iconView.backgroundColor = [UIColor clearColor];
 
 看一看从OpenWeatherMap返回的JSON响应数据：
 
-```
+```json
 {
     "dt": 1384279857,
     "id": 5391959,
@@ -566,7 +567,7 @@ iconView.backgroundColor = [UIColor clearColor];
  
 还在`WXCondition.m`，通过添加`+JSONKeyPathsByPropertyKey`方法，“JSON到模型属性”的映射，且该方法是`MTLJSONSerializing`协议的[require](https://github.com/MantleFramework/Mantle/blob/master/Mantle/MTLJSONAdapter.h#L17-28)。
 
-```
+```objc
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
              @"date": @"dt",
@@ -595,7 +596,7 @@ Mantle正好有一个功能来为你解决这个问题：[MTLValueTransformer](h
 Mantle的转换器语法有点怪。要创建一个为一个特定属性的转换器，，您可以添加一个以属性名开头和`JSONTransformer`结尾的类方法。 
 可能看实际代码比试图解释它更容易理解，所以在`WXCondition.m`中添加以下为NSDate属性设置的转换器。
 
-```
+```objc
 + (NSValueTransformer *)dateJSONTransformer {
     // 1
     return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
@@ -622,7 +623,7 @@ Mantle的转换器语法有点怪。要创建一个为一个特定属性的转�
 
 在`WXCondition.m`中，使用`dateJSONTransformer`相同的结构，您可以创建一个NSArray和NSString的之间的转换。该解决方案提供如下：
 
-```
+```objc
 + (NSValueTransformer *)conditionDescriptionJSONTransformer {
     return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSArray *values) {
         return [values firstObject];
@@ -644,7 +645,7 @@ Mantle的转换器语法有点怪。要创建一个为一个特定属性的转�
 
 在`WXCondition.m`的实现中添加以下转换器的方法和宏定义。
 
-```
+```objc
 #define MPS_TO_MPH 2.23694f
  
 + (NSValueTransformer *)windSpeedJSONTransformer {
@@ -656,9 +657,9 @@ Mantle的转换器语法有点怪。要创建一个为一个特定属性的转�
 }
 ```
 
-在OpenWeatherMap的API中有一个小的差异，你必须处理。看一看在位于[当前条件的响应](http://api.openweathermap.org/data/2.5/weather?lat=37.785834&lon=-122.406417&units=imperial)和[每日预测反应](http://api.openweathermap.org/data/2.5/forecast/daily?lat=37.785834&lon=-122.406417&units=imperial&cnt=7)之间的温度：
+在OpenWeatherMap的API中有一个小的差异，你必须处理。看一看在位于[当前状况的响应](http://api.openweathermap.org/data/2.5/weather?lat=37.785834&lon=-122.406417&units=imperial)和[每日预测反应](http://api.openweathermap.org/data/2.5/forecast/daily?lat=37.785834&lon=-122.406417&units=imperial&cnt=7)之间的温度：
 
-```
+```json
 // current
 "main": {
     "grnd_level": 1021.87,
@@ -687,7 +688,7 @@ key Temperature的差异放在一边，其他都一样。所以，你真正需�
 
 打开`WXDailyForecast.m`重写`+JSONKeyPathsByPropertyKey`方法：
 
-```
+```objc
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     // 1
     NSMutableDictionary *paths = [[super JSONKeyPathsByPropertyKey] mutableCopy];
@@ -705,7 +706,7 @@ key Temperature的差异放在一边，其他都一样。所以，你真正需�
 
 构建并运行您的App，看起来和上次运行没什么改变，但好的一点是，App编译和运行没有任何错误。
 
-![Labels and Views](http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/built-layout.jpg)
+![Labels and Views](http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/built-layout.jpg =320x)
 
 
 ## 何去何从？
