@@ -517,4 +517,197 @@ else {
 构建并运行您的App，你会看到当前温度，当前状况和表示当前状况的图标。所有的数据都是实时的。但是，如果你的位置是旧金山，它似乎总是约65度。Lucky San Franciscans! :]
 ![Wiring up the UI](http://cdn3.raywenderlich.com/wp-content/uploads/2013/11/ui-wiring.jpg =320x)
 
-#ReactiveCocoa的绑定
+## ReactiveCocoa的绑定
+ReactiveCocoa为iOS带来了自己的[Cocoa绑定](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CocoaBindings/CocoaBindings.html)的形式。 
+
+不知道是什么绑定？简而言之，他们是一种提供了保持模型和视图的数据同步而无需编写大量"胶水代码"的手段，它们允许你建立一个视图和数据块之间的连接， “结合”它们，使得一方的变化反映到另一个中的技术。
+
+这是一个非常强大的概念，不是吗？
+
+```
+注意：要获得更多的绑定实例代码，请查看[ReactiveCocoa Readme](https://github.com/ReactiveCocoa/ReactiveCocoa)。
+```
+
+添加如下代码到你上一步添加的代码后面：
+
+
+```objc
+// 1
+RAC(hiloLabel, text) = [[RACSignal combineLatest:@[
+                        // 2
+                        RACObserve([WXManager sharedManager], currentCondition.tempHigh),
+                        RACObserve([WXManager sharedManager], currentCondition.tempLow)]
+                        // 3
+                        reduce:^(NSNumber *hi, NSNumber *low) {
+                            return [NSString  stringWithFormat:@"%.0f° / %.0f°",hi.floatValue,low.floatValue];
+                        }]
+                        // 4
+                        deliverOn:RACScheduler.mainThreadScheduler];
+```
+
+上面的代码结合高低温值到hiloLabel的text属性。这里有一个详细的看看你完成这件事情： 
+1. RAC（...）宏有助于保持语法整洁。从该信号的返回值将被分配给`hiloLabel`对象的`text`。 
+2. 观察`currentCondition`的高温和低温。合并信号，并使用两者最新的值。当两个数据都变化时，信号都会触发`(The signal fires when either key changes 是需要确认)`。 
+3. 从合并的信号中，减少数值，转换成一个单一的数据，注意参数的顺序与信号的顺序相匹配。 
+4. 同样，因为你正在处理UI界面，所以把所有东西都传递到主线程。
+
+构建并运行你的App。你应该看到在左下方的高/低温度label更新了：
+![UI Wiring with Bindings](http://cdn3.raywenderlich.com/wp-content/uploads/2013/11/ui-wiring-hilo.jpg =320x)
+
+## 在Table View中显示数据
+现在，你已经获取所有的数据，你可以在table view整齐地显示出来。你会在标题单元格分页显示最近6小时的每时播报和每日预报。该App会显示三个页面：一个是当前状况，一个是逐时预报，以及一个每日预报。 
+
+之前，你可以添加单元格到table view，你需要初始化和配置一些日期格式化。
+
+到`WXController.m`最顶端的私有接口处，添加下列两个属性
+
+```objc
+@property (nonatomic, strong) NSDateFormatter *hourlyFormatter;
+@property (nonatomic, strong) NSDateFormatter *dailyFormatter;
+```
+
+由于创建日期格式化非常昂贵，我们将在init方法中实例化他们，并使用这些变量去存储他们的引用。
+
+还在`WXController.m`中，添加如下代码到`@implementation`中：
+
+```objc
+- (id)init {
+    if (self = [super init]) {
+        _hourlyFormatter = [[NSDateFormatter alloc] init];
+        _hourlyFormatter.dateFormat = @"h a";
+ 
+        _dailyFormatter = [[NSDateFormatter alloc] init];
+        _dailyFormatter.dateFormat = @"EEEE";
+    }
+    return self;
+}
+```
+
+你可能想知道为什么在`-init`中初始化这些日期格式化，而不是在`-viewDidLoad`中初始化他们。好问题！ 
+
+实际上`-viewDidLoad`可以在一个视图控制器的生命周期中多次调用。 [NSDateFormatter对象的初始化是昂贵的](http://www.rsaunders.co.uk/2012/02/nsdateformatter-are-expensive.html)，而是将它们放置在你的`-init`，会确保被你的视图控制器初始化一次。 
+
+在`WXController.m`中，寻找`tableView:numberOfRowsInSection：`,并用如下代码更换`TODO`到`return`：
+
+```objc
+// 1
+if (section == 0) {
+    return MIN([[WXManager sharedManager].hourlyForecast count], 6) + 1;
+}
+// 2
+return MIN([[WXManager sharedManager].dailyForecast count], 6) + 1;
+```
+
+1. 第一部分是对的逐时预报。使用最近6小时的预预报，并添加了一个作为页眉的单元格。 
+2. 接下来的部分是每日预报。使用最近6天的每日预报，并添加了一个作为页眉的单元格。
+
+```
+注意：您使用表格单元格作为标题，而不是内置的、具有粘性的滚动行为的标题。这个table view设置了分页，粘性滚动行为看起来会很奇怪。
+```
+
+在`WXController.m`找到`tableView:cellForRowAtIndexPath:`,并用如下代码更换`TODO`：
+
+```objc
+if (indexPath.section == 0) {
+    // 1
+    if (indexPath.row == 0) {
+        [self configureHeaderCell:cell title:@"Hourly Forecast"];
+    }
+    else {
+        // 2
+        WXCondition *weather = [WXManager sharedManager].hourlyForecast[indexPath.row - 1];
+        [self configureHourlyCell:cell weather:weather];
+    }
+}
+else if (indexPath.section == 1) {
+    // 1
+    if (indexPath.row == 0) {
+        [self configureHeaderCell:cell title:@"Daily Forecast"];
+    }
+    else {
+        // 3
+        WXCondition *weather = [WXManager sharedManager].dailyForecast[indexPath.row - 1];
+        [self configureDailyCell:cell weather:weather];
+    }
+}
+```
+
+1. 每个部分的第一行是标题单元格。 
+2. 获取每小时的天气和使用自定义配置方法配置cell。 
+3. 获取每天的天气，并使用另一个自定义配置方法配置cell。
+
+最后，添加如下代码到`WXController.m`:
+
+```objc
+// 1
+- (void)configureHeaderCell:(UITableViewCell *)cell title:(NSString *)title {
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
+    cell.textLabel.text = title;
+    cell.detailTextLabel.text = @"";
+    cell.imageView.image = nil;
+}
+ 
+// 2
+- (void)configureHourlyCell:(UITableViewCell *)cell weather:(WXCondition *)weather {
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
+    cell.textLabel.text = [self.hourlyFormatter stringFromDate:weather.date];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%.0f°",weather.temperature.floatValue];
+    cell.imageView.image = [UIImage imageNamed:[weather imageName]];
+    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+}
+ 
+// 3
+- (void)configureDailyCell:(UITableViewCell *)cell weather:(WXCondition *)weather {
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
+    cell.textLabel.text = [self.dailyFormatter stringFromDate:weather.date];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%.0f° / %.0f°",
+                                  weather.tempHigh.floatValue,
+                                  weather.tempLow.floatValue];
+    cell.imageView.image = [UIImage imageNamed:[weather imageName]];
+    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+}
+```
+
+1. 配置和添加文本作为节头的单元格。你会重用此为每日每时的预测部分。 
+2. 格式化单元格的逐时预报。 
+3. 格式化单元格每天的预测。
+
+构建并运行您的App，尝试滚动你的table view，并...等一下。什么都没显示！怎么办？ 
+
+如果你已经使用过的`UITableView`，可能你之前遇到过问题。这个table没有重新加载！ 
+
+为了解决这个问题，你需要添加另一个针对每时预报和每天预报属性的添加ReactiveCocoa观察。
+
+在`WXController.m`的`-viewDidLoad`中，添加下列代码到其他ReactiveCocoa观察代码中：
+
+```objc
+[[RACObserve([WXManager sharedManager], hourlyForecast)
+       deliverOn:RACScheduler.mainThreadScheduler]
+   subscribeNext:^(NSArray *newForecast) {
+       [self.tableView reloadData];
+   }];
+ 
+[[RACObserve([WXManager sharedManager], dailyForecast)
+       deliverOn:RACScheduler.mainThreadScheduler]
+   subscribeNext:^(NSArray *newForecast) {
+       [self.tableView reloadData];
+   }];
+```
+
+构建并运行App；滚动table view，你将看到填充的所有预报数据。
+
+![Forecast with Odd Heights](http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/unaligned-heights.jpg =320x)
+
+## Adding Polish to Your App
+本页面为每时和每日预报不会占满整个屏幕。幸运的是，有一个非常简单的修复办法。在本教程前期，您在`-viewDidLoad`中获得屏幕高度。
+ 
+在`WXController.m`中，查找table view的委托方法`-tableView:heightForRowAtIndexPath:`，并且替换`TODO`到`return`的代码:
+
+```objc
+NSInteger cellCount = [self tableView:tableView numberOfRowsInSection:indexPath.section];
+return self.screenHeight / (CGFloat)cellCount;
+```
+
+这将屏幕高度由细胞中各部分的数量，以便所有单元的总高度等于屏幕的高度。
