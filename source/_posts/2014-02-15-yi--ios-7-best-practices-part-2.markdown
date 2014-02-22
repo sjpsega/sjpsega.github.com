@@ -12,7 +12,7 @@ keywords: iOS7, Cocoapods, ReactiveCocoa, Mantle
 
 ## 开始
 
-你有两个选择开始本教程：您可以使用你本教程的第1部分已完成的项目，或者你可以在这里下载[第1部分已完成的项目](http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/SimpleWeather-Part-1.zip)。 
+你有两个选择开始本教程：您可以使用在本教程的第1部分你已完成的项目，或者你可以在这里下载[第1部分已完成的项目](http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/SimpleWeather-Part-1.zip)。 
 
 在前面的教程中你创建了你的App的天气模型 - 现在你需要使用OpenWeatherMap API为你的App来获取一些数据。你将使用两个类抽象数据抓取、分析、存储：`WXClient`和`WXManager`。
 
@@ -42,7 +42,7 @@ keywords: iOS7, Cocoapods, ReactiveCocoa, Mantle
 
 现在，似乎是一个很好的机会来介绍[ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa)！
 
-ReactiveCocoa（RAC）是一个Objective-C的框架，用于函数式反应型编程，它提供的组合和转化数据流的API。代替专注于编写串行的代码 - 执行有序的代码队列 - 可以响应非确定性事件。
+ReactiveCocoa（RAC）是一个Objective-C的框架，用于函数式反应型编程，它提供了组合和转化数据流的API。代替专注于编写串行的代码 - 执行有序的代码队列 - 可以响应非确定性事件。
 
 Github上提供的[a great overview of the benefits](https://github.com/blog/1107-reactivecocoa-for-a-better-world)： 
 
@@ -50,7 +50,7 @@ Github上提供的[a great overview of the benefits](https://github.com/blog/110
 * 减少状态和可变性。 
 * 用声明的形式来定义行为和属性之间的关系。 
 * 为异步操作带来一个统一的，高层次的接口。 
-* 一个良好的API建立在KVO的基础上。
+* 在KVO的基础上建立一个优雅的API。
 
 例如，你可以监听`username`属性的变化，用这样的代码:
 
@@ -96,7 +96,7 @@ Github上提供的[a great overview of the benefits](https://github.com/blog/110
 @end
 ```
 
-这个接口有个属性，用来管理API请求的URL session。
+这个接口用这个属性来管理API请求的URL session。
 
 添加以下`init`放到到`@implementation`和`@end`之间：
 
@@ -110,16 +110,16 @@ Github上提供的[a great overview of the benefits](https://github.com/blog/110
 }
 ```
 
-使用`defaultSessionConfiguration`为您创建了的session。
+使用`defaultSessionConfiguration`为您创建session。
 
 ```
 注意：如果你以前没有了解过NSURLSession，看看我们的[NSURLSession教程](http://www.raywenderlich.com/51127/nsurlsession-tutorial)，了解更多信息。
 ```
 
 ## 构建信号
-你需要一个主方法来建立一个信号从URL中取数据。你已经知道，需要三种方法来获取当前的状况下，逐时预报及每日预报。
+你需要一个主方法来建立一个信号从URL中取数据。你已经知道，需要三种方法来获取当前状况，逐时预报及每日预报。
 
-而不是写三个独立的方法，你可以按照[DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself)（Don’t Repeat Yourself）的软件设计理念，使您的代码容易维护。
+不是写三个独立的方法，你可以遵守[DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself)（Don’t Repeat Yourself）的软件设计理念，使您的代码容易维护。
 
 第一次看，以下的一些ReactiveCocoa部分可能看起来相当陌生。别担心，你会一块一块理解他。
 
@@ -152,10 +152,10 @@ Github上提供的[a great overview of the benefits](https://github.com/blog/110
 
 通过一个一个注释，你会看到代码执行以下操作：
 
-1. 返回信号。请记住，这将不会执行，直到这个信号被订阅。 `- fetchJSONFromURL：`创建一个对象为其他方法和对象使用;这种行为有时也被称为[工厂模式](https://developer.apple.com/library/ios/documentation/general/conceptual/CocoaEncyclopedia/ClassFactoryMethods/ClassFactoryMethods.html)。 
+1. 返回信号。请记住，这将不会执行，直到这个信号被订阅。 `- fetchJSONFromURL：`创建一个对象给其他方法和对象使用；这种行为有时也被称为[工厂模式](https://developer.apple.com/library/ios/documentation/general/conceptual/CocoaEncyclopedia/ClassFactoryMethods/ClassFactoryMethods.html)。 
 2. 创建一个[NSURLSessionDataTask](https://developer.apple.com/library/IOS/documentation/Foundation/Reference/NSURLSessionDataTask_class/Reference/Reference.html)（在iOS7中加入）从URL取数据。你会在以后添加的数据解析。 
-3. 启动网络请求一旦有人订阅了信号。 
-4. 创建并返回[RACDisposable](https://github.com/ReactiveCocoa/ReactiveCocoa/blob/master/ReactiveCocoaFramework/ReactiveCocoa/RACDisposable.h)对象，它处理当信号摧毁时的清理的工作。 
+3. 一旦订阅了信号，启动网络请求。 
+4. 创建并返回[RACDisposable](https://github.com/ReactiveCocoa/ReactiveCocoa/blob/master/ReactiveCocoaFramework/ReactiveCocoa/RACDisposable.h)对象，它处理当信号摧毁时的清理工作。 
 5. 增加了一个“side effect”，以记录发生的任何错误。side effect不订阅信号，相反，他们返回被连接到方法链的信号。你只需添加一个side effect来记录错误。
 
 ```
@@ -211,7 +211,7 @@ else {
 }
 ```
 
-1. 使用`CLLocationCoordinate2D`对象的经纬度数据，格式化URL。 
+1. 使用`CLLocationCoordinate2D`对象的经纬度数据来格式化URL。 
 2. 用你刚刚建立的创建信号的方法。由于返回值是一个信号，你可以调用其他ReactiveCocoa的方法。 在这里，您将返回值映射到一个不同的值 - 一个NSDictionary实例。 
 3. 使用`MTLJSONAdapter`来转换JSON到`WXCondition`对象 - 使用`MTLJSONSerializing`协议创建的`WXCondition`。
 
@@ -243,7 +243,7 @@ else {
 1. 再次使用`-fetchJSONFromUR`方法，映射JSON。注意：重复使用该方法节省了多少代码！ 
 2. 使用JSON的"list"key创建`RACSequence`。 `RACSequences`让你对列表进行ReactiveCocoa操作。 
 3. 映射新的对象列表。调用`-map：`方法，针对列表中的每个对象，返回新对象的列表。 
-4. 再次使用MTLJSONAdapter`来转换JSON到`WXCondition`对象。 
+4. 再次使用`MTLJSONAdapter`来转换JSON到`WXCondition`对象。 
 5. 使用`RACSequence`的`-map`方法，返回另一个`RACSequence`，所以用这个简便的方法来获得一个`NSArray`数据。
 
 ## 获取每日预报
@@ -339,10 +339,10 @@ else {
 @end
 ```
 
-1. 声明你在公共接口中添加的相同的属性，但是这一次把他们定义为读写，因此您可以在后台更改他们。 
+1. 声明你在公共接口中添加的相同的属性，但是这一次把他们定义为`可读写`，因此您可以在后台更改他们。 
 2. 为查找定位和数据抓取声明一些私有变量。
 
-添加如下通用的单例构造器到@implementation与@end中间：
+添加如下通用的单例构造器到`@implementation`与`@end`å中间：
 
 ```objc
 + (instancetype)sharedManager {
@@ -493,7 +493,7 @@ else {
 这些输出代表你的代码工作正常，网络请求正常执行。
 
 ## 连接接口
-这是最后一次显示所有你获取，映射和存储的数据。您将使用ReactiveCocoa来观察`WXManager`单例的变化和当新数据到达时更新界面。 
+这是最后一次展示所有获取，映射和存储的数据。您将使用ReactiveCocoa来观察`WXManager`单例的变化和当新数据到达时更新界面。 
 
 还在`WXController.m`，到`- viewDidLoad`的底部，并添加下面的代码到`[[WXManager sharedManager] findCurrentLocation];`之前：
 
@@ -514,11 +514,12 @@ else {
 ```
 
 1. 观察`WXManager`单例的currentCondition。 
-2. 提供在主线程上的任何变化，因为你正在更新UI。 
-3. 使用气象数据更新的文本标签;你为文本标签使用`newCondition`的数据，而不是单例。订阅者的参数保证是最新值。 
+2. 传递在主线程上的任何变化，因为你正在更新UI。 
+3. 使用气象数据更新文本标签；你为文本标签使用`newCondition`的数据，而不是单例。订阅者的参数保证是最新值。 
 4. 使用映射的图像文件名来创建一个图像，并将其设置为视图的图标。
 
 构建并运行您的App，你会看到当前温度，当前状况和表示当前状况的图标。所有的数据都是实时的。但是，如果你的位置是旧金山，它似乎总是约65度。Lucky San Franciscans! :]
+
 ![Wiring up the UI](http://cdn3.raywenderlich.com/wp-content/uploads/2013/11/ui-wiring.jpg =320x)
 
 ## ReactiveCocoa的绑定
@@ -549,17 +550,19 @@ RAC(hiloLabel, text) = [[RACSignal combineLatest:@[
                         deliverOn:RACScheduler.mainThreadScheduler];
 ```
 
-上面的代码结合高低温值到hiloLabel的text属性。这里有一个详细的看看你完成这件事情： 
+上面的代码结合高温、低温的值到hiloLabel的text属性。看看你完成了什么： 
+
 1. RAC（...）宏有助于保持语法整洁。从该信号的返回值将被分配给`hiloLabel`对象的`text`。 
-2. 观察`currentCondition`的高温和低温。合并信号，并使用两者最新的值。当两个数据都变化时，信号都会触发`(The signal fires when either key changes 是需要确认)`。 
+2. 观察`currentCondition`的高温和低温。合并信号，并使用两者最新的值。当任一数据变化时，信号就会触发。 
 3. 从合并的信号中，减少数值，转换成一个单一的数据，注意参数的顺序与信号的顺序相匹配。 
 4. 同样，因为你正在处理UI界面，所以把所有东西都传递到主线程。
 
 构建并运行你的App。你应该看到在左下方的高/低温度label更新了：
+
 ![UI Wiring with Bindings](http://cdn3.raywenderlich.com/wp-content/uploads/2013/11/ui-wiring-hilo.jpg =320x)
 
 ## 在Table View中显示数据
-现在，你已经获取所有的数据，你可以在table view整齐地显示出来。你会在标题单元格分页显示最近6小时的每时播报和每日预报。该App会显示三个页面：一个是当前状况，一个是逐时预报，以及一个每日预报。 
+现在，你已经获取所有的数据，你可以在table view中整齐地显示出来。你会在分页的table view中显示最近6小时的每时播报和每日预报。该App会显示三个页面：一个是当前状况，一个是逐时预报，以及一个每日预报。 
 
 之前，你可以添加单元格到table view，你需要初始化和配置一些日期格式化。
 
@@ -589,7 +592,7 @@ RAC(hiloLabel, text) = [[RACSignal combineLatest:@[
 
 你可能想知道为什么在`-init`中初始化这些日期格式化，而不是在`-viewDidLoad`中初始化他们。好问题！ 
 
-实际上`-viewDidLoad`可以在一个视图控制器的生命周期中多次调用。 [NSDateFormatter对象的初始化是昂贵的](http://www.rsaunders.co.uk/2012/02/nsdateformatter-are-expensive.html)，而是将它们放置在你的`-init`，会确保被你的视图控制器初始化一次。 
+实际上`-viewDidLoad`可以在一个视图控制器的生命周期中多次调用。 [NSDateFormatter对象的初始化是昂贵的](http://www.rsaunders.co.uk/2012/02/nsdateformatter-are-expensive.html)，而将它们放置在你的`-init`，会确保被你的视图控制器初始化一次。 
 
 在`WXController.m`中，寻找`tableView:numberOfRowsInSection：`,并用如下代码更换`TODO`到`return`：
 
@@ -674,15 +677,15 @@ else if (indexPath.section == 1) {
 }
 ```
 
-1. 配置和添加文本作为节头的单元格。你会重用此为每日每时的预测部分。 
-2. 格式化单元格的逐时预报。 
-3. 格式化单元格每天的预测。
+1. 配置和添加文本到作为section页眉单元格。你会重用此为每日每时的预测部分。 
+2. 格式化逐时预报的单元格。 
+3. 格式化每日预报的单元格。
 
 构建并运行您的App，尝试滚动你的table view，并...等一下。什么都没显示！怎么办？ 
 
 如果你已经使用过的`UITableView`，可能你之前遇到过问题。这个table没有重新加载！ 
 
-为了解决这个问题，你需要添加另一个针对每时预报和每天预报属性的添加ReactiveCocoa观察。
+为了解决这个问题，你需要添加另一个针对每时预报和每日预报属性的ReactiveCocoa观察。
 
 在`WXController.m`的`-viewDidLoad`中，添加下列代码到其他ReactiveCocoa观察代码中：
 
@@ -738,11 +741,11 @@ return self.screenHeight / (CGFloat)cellCount;
 }
 ```
 
-1. 获取滚动视图的高度和内容偏移量。盖上为0偏移因此试图滚过表的启动将不会影响模糊。
+1. 获取滚动视图的高度和内容偏移量。与0偏移量做比较，因此试图滚动table低于初始位置将不会影响模糊效果。
 2. 偏移量除以高度，并且最大值为1，所以alpha上限为1。 
 3. 当你滚动的时候，把结果值赋给模糊图像的alpha属性，来更改模糊图像。
 
-构建并运行App，滚动你的table view，并检查这令人惊异的模糊效果：
+构建并运行App，滚动你的table view，并查看这令人惊异的模糊效果：
 
 ![Finished Product](http://cdn5.raywenderlich.com/wp-content/uploads/2013/11/with-blur.jpg =320x)
 

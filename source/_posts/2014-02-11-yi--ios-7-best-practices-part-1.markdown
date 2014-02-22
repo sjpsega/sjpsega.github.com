@@ -154,7 +154,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 眼尖的读者会注意到`WXController`使用引号引入，`TSMessage`使用单括号引入。
 
-回头看看，当你创建Podfile的时候，你使用Cocoapods引入TSMessage。Cocoapods创建TSMessage项目，并把它加入到工作空间。既然你从工作区的其他项目导入，可以使用尖括号代替引号。
+回头看下当你创建Podfile的时候，你使用Cocoapods引入`TSMessage`。Cocoapods创建TSMessage项目，并把它加入到工作空间。既然你从工作区的其他项目导入，可以使用尖括号代替引号。
 
 代替`-application:didFinishLaunchingWithOptions`的内容：
 
@@ -174,14 +174,15 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 标号注释的解释：
 
 1. 初始化并设置`WXController`实例作为App的根视图控制器。通常这个控制器是一个的`UINavigationController`或`UITabBarController`，但在当前情况下，你使用`WXController`的单个实例。
-2. 设置默认的视图控制器来显示你的TSMessages。通过这样做，你将不再需要手动指定要使用的控制器来显示警告。
+2. 设置默认的视图控制器来显示你的TSMessages。这样做，你将不再需要手动指定要使用的控制器来显示警告。
 
 构建并运行，看看你的新视图控制器起作用了。
+
 ![WXController](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/wxcontroller-red.jpg =320x)
 
-在红色背景下，状态栏有点难以阅读。幸运的是，有一个简单的方法，使状态栏更清晰易读。
+在红色背景下，状态栏有点不够清晰。幸运的是，有一个简单的方法，使状态栏更清晰易读。
 
-在iOS7，UIViewController有一个新的API，用来控制状态栏的外观。打开`WXController`，直接添加下面的代码到`-viewDidLoad:`方法下：
+在iOS7，[UIViewController](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIViewController_Class/Reference/Reference.html#//apple_ref/occ/instm/UIViewController/preferredStatusBarStyle)有一个新的API，用来控制状态栏的外观。打开`WXController`，直接添加下面的代码到`-viewDidLoad:`方法下：
 
 ```objc
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -190,6 +191,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 ```
 
 再次构建并运行，你将看到状态栏如下的变化:
+
 ![Create WXController with Light Status Bar](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/wxcontroller-red-status.jpg =320x)
 
 ## 设置你的App视图
@@ -228,7 +230,8 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 现在，是时候在项目中创建并设置视图。
 
-下面是你App的分解图，记住，表视图将是透明的：
+下面是你App的分解图，记住，table view将是透明的：
+
 ![Exploded Screens](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/screens.jpg)
 
 为了实现动态模糊效果，在你的App中，你会根据App的滚动来改变模糊图像的alpha值。
@@ -265,10 +268,10 @@ self.tableView.pagingEnabled = YES;
 
 这是非常简单的代码：
 
-1. 获取并存储屏幕高度。之后，你将在用分页的方式来显示所有天气​​数据时，使用它。`貌似没有使用到`
+1. 获取并存储屏幕高度。之后，你将在用分页的方式来显示所有天气​​数据时，使用它。
 2. 创建一个静态的背景图，并添加到视图上。
 3. 使用LBBlurredImage来创建一个模糊的背景图像，并设置alpha为0，使得开始`backgroundImageView`是可见的。
-4. 创建tableview来处理所有的数据呈现。 设置WXController的delegate和dataSource，以及滚动视图的delegate。请注意，设置`pagingEnabled`为`YES`。
+4. 创建tableview来处理所有的数据呈现。 设置WXController为delegate和dataSource，以及滚动视图的delegate。请注意，设置`pagingEnabled`为`YES`。
 
 添加如下UITableView的delegate和dataSource的代码到`WXController.m`的`@implementation`块中：
 
@@ -314,11 +317,11 @@ self.tableView.pagingEnabled = YES;
 ```
 
 1. `Pragma mark`是[组织代码](http://nshipster.com/pragma/)的很好的一种方式。
-2. 你的table view有两个部分，一个是每小时的天气预报，另一个用于每日播报。table view的section数目，返回2。 
-3. 天气预报的cell不应该是可选择的。给他们一个半透明的黑色背景和白色文字。
+2. 你的table view有两个部分，一个是每小时的天气预报，另一个用于每日播报。table view的section数目，设置为2。 
+3. 天气预报的cell是不可选择的。给他们一个半透明的黑色背景和白色文字。
 
 ```
-注意：使用格式化的注释`// TODO：`帮助Xcode找到需要你以后完成的代码。你还可以使用`Show Document Items`(Control-6)来查看TODO项。
+注意：使用格式化的注释 // TODO：可以帮助Xcode找到需要以后完成的代码。你还可以使用 Show Document Items(Control-6)来查看TODO项。
 ```
 
 最后，添加如下代码到`WXController.m`:
@@ -336,11 +339,13 @@ self.tableView.pagingEnabled = YES;
 ```
 
 在`WXController.m`中，你的视图控制器调用该方法来编排其子视图。 
+
 构建并运行你的App，看看你的视图如何堆叠。
 
 ![Image Background](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/background.jpg =320x)
 
-仔细看，你会看到所有空的table cell的单独的cell分隔线。
+仔细看，你会看到所有空的table cell的cell分隔线。
+
 仍然在`-viewDidLoad`中，添加下面的代码来设置你的布局框架和边距：
 
 ```objc
@@ -375,11 +380,11 @@ conditionsFrame.origin.x = iconFrame.origin.x + (iconHeight + 10);
 
 这是相当常规设置代码，但这里是怎么回事： 
 
-1. 设置table的header与屏幕相同的大小。你将利用的UITableView的分页来分隔页面页眉和每日每时的天气预报部分。 
+1. 设置table的header大小与屏幕相同。你将利用的UITableView的分页来分隔页面页头和每日每时的天气预报部分。 
 2. 创建inset（或padding）变量，以便您的所有标签均匀分布并居中。
-3. 创建并初始化为各种视图创建的高度变量。设置这些值作为常量，可以很容易地在需要配置和更改您的视图设置。
+3. 创建并初始化为各种视图创建的高度变量。设置这些值作为常量，使得可以很容易地在需要的时候，配置和更改您的视图设置。
 4. 使用常量和inset变量，为label和view创建框架。
-5. 复制图标框，调整，使文本具有一定的扩展空间，并将其移动到该图标的右侧。当我们把标签添加到视图，你会看到布局的计算。
+5. 复制图标框，调整它，使文本具有一定的扩展空间，并将其移动到该图标的右侧。当我们把标签添加到视图，你会看到布局的效果。
 
 添加如下代码到`-viewDidLoad`：
 
@@ -428,20 +433,22 @@ iconView.contentMode = UIViewContentModeScaleAspectFit;
 iconView.backgroundColor = [UIColor clearColor];
 [header addSubview:iconView];
 ```
-这是相当长的一块代码，但它真的只是在做设置各种控件的繁重工作。总之：
+这是相当长的一块代码，但它真的只是在做设置各种控件的繁重工作。简单的说：
 
 1. 设置当前view为你的table header。
 2. 构建每一个显示气象数据的标签。
 3. 添加一个天气图标的图像视图。
 
 构建并运行你的App，你应该可以看到你之前布局的所有所有view。下面的屏幕截图显示了使用手工布局的、所有标签框在视觉上的显示。
-![Labels and Views](http://cdn1.raywenderlich.com/wp-content/uploads/2013/12/built-layout.jpg)
+
+![Labels and Views](http://cdn1.raywenderlich.com/wp-content/uploads/2013/12/built-layout.jpg =500x)
+
 用手指轻轻推动table，当你滚动它的时候，应该会反弹。
 
 ## 获取气象数据
-你会注意到，App显示“Loading...”，但它不是真正在做事情。是时候获取一些真正的天气数据。
+你会注意到，App显示“Loading...”，但它不是真正地在工作。是时候获取一些真正的天气数据。
 
-你会从[OpenWeatherMap](http://openweathermap.org/)的API拉取数据。 OpenWeatherMap是一个非常棒的服务，旨在提供实时，准确，免费的天气数据给任何人。虽然有很多的天气API，但他们大多要么使用较旧的数据格式，如XML，或是有偿服务 - 并且有时还相当昂贵。
+你会从[OpenWeatherMap](http://openweathermap.org/)的API拉取数据。 OpenWeatherMap是一个非常棒的服务，旨在提供实时，准确，免费的天气数据给任何人。虽然有很多天气API，但他们大多要么使用较旧的数据格式，如XML，或是有偿服务 - 并且有时还相当昂贵。
 
 你会遵循以下基本步骤，来获你设备的位置的气象数据： 
 
@@ -452,9 +459,9 @@ iconView.backgroundColor = [UIColor clearColor];
 
 开始创建你的天气模型和数据管理类。单击`File\New\File…`并选择`Cocoa Touch\Objective-C class`。命名为`WXClient`并使其为`NSObject`的子类。
 
-这样做三次创建以下类：
+这样再做三次创建以下类：
 
-* `WXManager`作为NSObject`的子类 
+* `WXManager`作为`NSObject`的子类 
 * `WXCondition`作为`MTLModel`的子类 
 * `WXDailyForecast`作为`WXCondition`的子类
 
@@ -491,7 +498,7 @@ iconView.backgroundColor = [UIColor clearColor];
 ```
 
 1. `MTLJSONSerializing`协议告诉Mantle序列化该对象如何从JSON映射到Objective-C的属性。 
-2. 这些都是你的天气数据的属性。在扩展App的过程中，这是一种很好的方法-全部使用事件来访问数据。
+2. 这些都是你的天气数据的属性。你将会使用这些属性的get set方法，但是当你要扩展App，这是一种很好的方法来访问数据。
 3. 这是一个简单的辅助方法，从天气状况映射到图像文件。
 
 构建并运行App。失败了……
@@ -541,7 +548,7 @@ iconView.backgroundColor = [UIColor clearColor];
 ```
 
 1. 创建一个静态的NSDictionary，因为WXCondition的每个实例都将使用相同的数据映射。 
-2. 天气状况与图像文件的关系（例如“01D”代表“weather-clear.png”）。 
+2. 天气状况与图像文件的关系（例如“01d”代表“weather-clear.png”）。 
 3. 声明获取图像文件名的公有方法。
 
 看一看从OpenWeatherMap返回的JSON响应数据：
@@ -625,9 +632,9 @@ Mantle的转换器语法有点怪。要创建一个为一个特定属性的转�
 ```
 
 1. 使用blocks做属性的转换的工作，并返回一个MTLValueTransformer返回值。 
-2. 您只需要详细说明Unix时间和NSDate之间进行转换一次，就可以重用`-dateJSONTransformer'方法为sunrise和sunset属性做转换。
+2. 您只需要详细说明Unix时间和NSDate之间进行转换一次，就可以重用`-dateJSONTransformer`方法为sunrise和sunset属性做转换。
 
-下一个值转型有点讨厌，但它只是使用OpenWeatherMap的API和他们自己的格式化JSON响应方式的结果。`weather`值是一个JSON数组，但你只关注单一的天气状况。
+下一个值转型有点讨厌，但它只是使用OpenWeatherMap的API，并自己的格式化JSON响应方式的结果。`weather`键对应的值是一个JSON数组，但你只关注单一的天气状况。
 
 在`WXCondition.m`中，使用`dateJSONTransformer`相同的结构，您可以创建一个NSArray和NSString的之间的转换。该解决方案提供如下：
 
@@ -690,7 +697,7 @@ Mantle的转换器语法有点怪。要创建一个为一个特定属性的转�
 }
 ```
 
-'current'的第一个key是'main',最高温度存储在key temp_max中，而`daily forecast`的第一个key是temp,最高温度存储在key max中。 
+`current`的第一个key是`main`，最高温度存储在key `temp_max`中，而`daily forecast`的第一个key是`temp`，最高温度存储在key `max`中。 
 
 key Temperature的差异放在一边，其他都一样。所以，你真正需要做的是修改daily forecasts的键映射。
 
