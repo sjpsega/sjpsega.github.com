@@ -7,9 +7,12 @@ categories: study
 keywords: iOS7, Cocoapods, ReactiveCocoa, Mantle
 ---
 
+注：本文译自：[raywenderlich ios-7-best-practices-part-2](http://www.raywenderlich.com/55385/ios-7-best-practices-part-2)，去除了跟主题无关的寒暄部分。
+欢迎转载，保持署名
+
 ## 开始
 
-你有两个选择开始本教程：您可以使用你本教程的第1部分已完成的项目，或者你可以在这里下载[已完成的项目](http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/SimpleWeather-Part-1.zip)。 
+你有两个选择开始本教程：您可以使用你本教程的第1部分已完成的项目，或者你可以在这里下载[第1部分已完成的项目](http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/SimpleWeather-Part-1.zip)。 
 
 在前面的教程中你创建了你的App的天气模型 - 现在你需要使用OpenWeatherMap API为你的App来获取一些数据。你将使用两个类抽象数据抓取、分析、存储：`WXClient`和`WXManager`。
 
@@ -311,12 +314,13 @@ else {
 
 现在打开` WXManager.m`并添加如下imports到文件顶部：
 
-```objc
-#import "WXClient.h"
-#import <TSMessages/TSMessage.h>
-```
+
+	#import "WXClient.h"
+	#import <TSMessages/TSMessage.h>
+
 
 在imports下方，粘贴如下私有接口：
+
 
 ```objc
 @interface WXManager ()
@@ -700,7 +704,7 @@ else if (indexPath.section == 1) {
 
 ![Forecast with Odd Heights](http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/unaligned-heights.jpg =320x)
 
-## Adding Polish to Your App
+## 给你的App添加效果
 本页面为每时和每日预报不会占满整个屏幕。幸运的是，有一个非常简单的修复办法。在本教程前期，您在`-viewDidLoad`中获得屏幕高度。
  
 在`WXController.m`中，查找table view的委托方法`-tableView:heightForRowAtIndexPath:`，并且替换`TODO`到`return`的代码:
@@ -710,4 +714,43 @@ NSInteger cellCount = [self tableView:tableView numberOfRowsInSection:indexPath.
 return self.screenHeight / (CGFloat)cellCount;
 ```
 
-这将屏幕高度由细胞中各部分的数量，以便所有单元的总高度等于屏幕的高度。
+屏幕高度由一定数量的cell所分割，所以所有cell的总高度等于屏幕的高度。
+
+构建并运行你的App；table view填满了整个屏幕，如下所示：
+
+![Forecast with Full Height](http://cdn3.raywenderlich.com/wp-content/uploads/2013/11/aligned-heights.jpg =320x)
+
+最后要做的是把我在本教程的第一部分开头提到的模糊效果引入。当你滚动预报页面，模糊效果应该动态显示。
+
+添加下列scroll delegate到`WXController.m`最底部：
+
+```objc
+#pragma mark - UIScrollViewDelegate
+ 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    // 1
+    CGFloat height = scrollView.bounds.size.height;
+    CGFloat position = MAX(scrollView.contentOffset.y, 0.0);
+    // 2
+    CGFloat percent = MIN(position / height, 1.0);
+    // 3
+    self.blurredImageView.alpha = percent;
+}
+```
+
+1. 获取滚动视图的高度和内容偏移量。盖上为0偏移因此试图滚过表的启动将不会影响模糊。
+2. 偏移量除以高度，并且最大值为1，所以alpha上限为1。 
+3. 当你滚动的时候，把结果值赋给模糊图像的alpha属性，来更改模糊图像。
+
+构建并运行App，滚动你的table view，并检查这令人惊异的模糊效果：
+
+![Finished Product](http://cdn5.raywenderlich.com/wp-content/uploads/2013/11/with-blur.jpg =320x)
+
+## 何去何从？ 
+在本教程中你已经完成了很多内容：您使用CocoaPods创建了一个项目，完全用代码书写了一个视图结构，创建数据模型和管理类，并使用函数式编程将他们连接到一起！ 
+
+您可以从[这里下载](http://cdn5.raywenderlich.com/wp-content/uploads/2013/11/SimpleWeather-Part-2.zip)该项目的完成版本。 
+
+这个App还有很多酷的东西可以去做。一个好的开始是使用[Flickr API](http://www.flickr.com/services/api/)来查找基于设备位置的背景图像。 
+
+还有，你的应用程序只处理温度和状态;有什么其他的天气信息能融入你的App？ 

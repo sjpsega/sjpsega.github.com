@@ -7,7 +7,7 @@ categories: study
 keywords: iOS7, Cocoapods, ReactiveCocoa, Mantle
 ---
 
-注：本文由译自：[raywenderlich ios-7-best-practices-part-1](http://www.raywenderlich.com/55384/ios-7-best-practices-part-1)，去除了跟主题无关的寒暄部分。
+注：本文译自：[raywenderlich ios-7-best-practices-part-1](http://www.raywenderlich.com/55384/ios-7-best-practices-part-1)，去除了跟主题无关的寒暄部分。
 欢迎转载，保持署名
 
 
@@ -18,31 +18,33 @@ keywords: iOS7, Cocoapods, ReactiveCocoa, Mantle
 * [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa)
 * [OpenWeatherMap](http://openweathermap.org/)
 
-本教程专为熟悉基本知识的、但还没有接触到太多高级主题的中级开发者而设计。本教程也是想要去探索Objective-C函数编程一个很好的开始。
+本教程专为熟悉基本知识的、但还没有接触到太多高级主题的中级开发者而设计。本教程也是想要去探索Objective-C[函数编程](http://en.wikipedia.org/wiki/Functional_programming)一个很好的开始。
 
 ![Finished Weather App](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/weather3.gif)
 
 ## 开始
 
-打开Xcode并执行File\New\Project。选择Application\Empty Application。将项目命名为SimpleWeather，单击下一步，选择一个目录去保存你的项目，然后点击Create。
-现在，你的基础项目已经完成。下一步是集成你的第三方工具。但首先你要确定关闭Xcode，确保他不会影响下一步。
+打开Xcode并执行`File\New\Project`。选择`Application\Empty Application`。将项目命名为`SimpleWeather`，单击下一步，选择一个目录去保存你的项目，然后点击Create。
+现在，你的基础项目已经完成。下一步是集成你的第三方工具。但首先你要`关闭Xcode`，确保他不会影响下一步。
 
 ### Cocoapods
-你将要下载[Cocoapods](http://cocoapods.org/)的代码，将文件添加到你的Xcode项目中来使用，以及配置这些项目需要的设置。
+你将要下载[Cocoapods](http://cocoapods.org/)的代码，在Xcode项目中添加文件来使用，并配置项目需要的设置。
 
 ### Mantle
-[Mantle](https://github.com/MantleFramework/Mantle)是由于Github团队开发的，用来去除所有的需要Objective-C把JSON数据转为NSObject子类的样板代码。Mantle也做数据转换，通过一种神奇的方式把JSON原始数据(strings, ints, floats)转换为复杂数据，比如NSDate, NSURL, 甚至是自定义类。
+[Mantle](https://github.com/MantleFramework/Mantle)是由于Github团队开发的，目的是去除Objective-C把JSON数据转为NSObject子类的所有样板代码。Mantle也能做数据转换，通过一种神奇的方式把JSON原始数据(strings, ints, floats)转换为复杂数据，比如NSDate, NSURL, 甚至是自定义类。
 
 ### LBBlurredImage
-[LBBlurredImage](https://github.com/lukabernardi/LBBlurredImage)是一个继承自UIImageView，使图像模糊变得轻而易举的项目。你将仅仅用一行代码来创建一个神奇的模糊效果。
+[LBBlurredImage](https://github.com/lukabernardi/LBBlurredImage)是一个继承自UIImageView，轻而易举使图像模糊的项目。你将仅仅用一行代码来创建一个神奇的模糊效果。
 
 ### TSMessages
-[TSMessages](https://github.com/toursprung/TSMessages) 是另一个非常简单的库，用来显示浮层警告和通知。当出现错误信息而不直接影响用户的时候，最好使用浮层来代替模态窗口(例如UIAlertView)，这样你将尽可能少影响用户。
+[TSMessages](https://github.com/toursprung/TSMessages) 是另一个非常简单的库，用来显示浮层警告和通知。当出现错误信息而不直接影响用户的时候，最好使用浮层来代替模态窗口(例如UIAlertView)，这样你将尽可能减少对用户的影响。
+
 你将只用TSMessages，在网络失去连接或API错误的时候。如果发生错误，你将看到类似这样的一个浮层：
+
 ![TSMessages Error](http://cdn1.raywenderlich.com/wp-content/uploads/2013/12/TSMessage.png)
 
 ### ReactiveCocoa
-最后，你将使用到[ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa),他也来自于GitHub团队。ReactiveCocoa给Objective-C带来了函数编程，类似与[Reactive Extensions](http://msdn.microsoft.com/en-us/data/gg577609.aspx)在.NET的模式。你将在第二部分花费大部分时间去实现ReactiveCocoa。
+最后，你将使用到[ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa)，他也来自于GitHub团队。ReactiveCocoa给Objective-C带来了函数编程，类似与.NET的[Reactive Extensions](http://msdn.microsoft.com/en-us/data/gg577609.aspx)。你将在第二部分花费大部分时间去实现ReactiveCocoa。
 
 ## 设置你的Cocoapods
 设置你的Cocoapods，先要确保你已经安装了Cocoapods。为此，打开命令行程序，并输入。
@@ -57,9 +59,9 @@ which pod
 /usr/bin/pod
 ```
 
-这依赖与你如何管理Ruby gems，例如你使用[rbenv](http://rbenv.org/)或[RVM](http://rvm.io/),路径可能有所不同。
+这决定于你如何管理Ruby gems，例如你使用[rbenv](http://rbenv.org/)或[RVM](http://rvm.io/),路径可能有所不同。
 
-如果terminal简单的返回提示，或显示`pod not found`,Cocoapods未安装在你的机器上。可以查看我们的[Cocoapods教程](http://www.raywenderlich.com/12139/introduction-to-cocoapods)作为安装说明。这也是一个很好的资源，如果你想更多得了解Cocoapods的话。
+如果命令行简单的返回提示，或显示`pod not found`，表示Cocoapods未安装在你的机器上。可以查看我们的[Cocoapods教程](http://www.raywenderlich.com/12139/introduction-to-cocoapods)作为安装说明。这也是一个很好的资源，如果你想更多得了解Cocoapods的话。
 
 [Podfiles](http://guides.cocoapods.org/syntax/podfile.html)是用来告诉Cocoapods哪些开源项目需要导入。
 
@@ -81,7 +83,7 @@ pod 'ReactiveCocoa'
 
 在命令行中输入`pod install`进行安装。
 
-这可能需要话一到两分钟的时间去安装各种包。你的终端应该输出如下所示:
+这可能需要花一到两分钟的时间去安装各种包。你的命令行应该输出如下所示:
 
 ```
 $ pod install
@@ -102,9 +104,14 @@ Integrating client project
 [!] From now on use `SimpleWeather.xcworkspace`.
 ```
 
-Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一个需要你关心，SimpleWeather.xcworkspace。
+```
+sjpsega注:若你之前安装过Cocoapods的话，这里安装报错的话，可以看看http://blog.cocoapods.org/Repairing-Our-Broken-Specs-Repository/ 修复问题
+```
 
-用Xcode打开SimpleWeather.xcworkspace。看看你的项目设置，现在有一个Pods项目在你的项目工作区，以及在Pods文件夹放着每一个你引入的库，如下所示：
+
+Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一个需要你关心，`SimpleWeather.xcworkspace`。
+
+用Xcode打开`SimpleWeather.xcworkspace`。看看你的项目设置，现在有一个Pods项目在你的项目工作区，以及在Pods文件夹放着每一个你引入的库，如下所示：
 
 ![Cocoapods Project](http://cdn1.raywenderlich.com/wp-content/uploads/2013/12/SimpleWeather-Cocoapods.jpg)
 
@@ -112,23 +119,24 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 ![Select SimpleWeather Project](http://cdn1.raywenderlich.com/wp-content/uploads/2013/12/SimpleWeather-Project.jpg)
 
 构建并运行您的App，以确保一切工作正常：
+
 ![Blank App](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/blank-app.jpg =320x)
 
 ```
-提示：您可能会注意到一些项目生成警告。由Cocoapods引入的项目，是由不同的开发者开发，并且不同的开发者对生成警告有不同的态度。通常，你应该可以忽略它们。只要确保没有任何编译器错误！
+提示：您可能会注意到有一些项目生成警告。因为Cocoapods引入的项目，是由不同的开发者开发，并且不同的开发者对生成警告有不同的态度。通常，你应该可以忽略它们。只要确保没有任何编译器错误！
 ```
 
 ## 创建你的主视图控制器
-虽然App看起来复杂，但它会通过一个单一的View Controller完成。现在，你将添加他。 
+虽然这个App看起来复杂，但它还会通过一个单一的View Controller完成。现在，你将添加他。 
 
-选中SimpleWeather项目，单击`File\New\File`，并且选择`Cocoa Touch\Objective-C class`. 命名为`WXController`，并设置为`UIViewController`的子类。
+选中`SimpleWeather`项目，单击`File\New\File`，并且选择`Cocoa Touch\Objective-C class`. 命名为`WXController`，并设置为`UIViewController`的子类。
 
 确保`Targeted for iPad`和`With XIB for user interface`都没有选中，如下图所示：
 ![Create WXController](http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/create-controller.jpg)
 
 打开` WXController.m`然后用如下所示替换`-viewDidLoad`方法：
 
-```
+```objc
 - (void)viewDidLoad {
     [super viewDidLoad];
  
@@ -139,7 +147,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 现在打开`AppDelegate.m`，并且引入如下两个class:
 
-```
+```objc
 	#import "WXController.h"
 	#import <TSMessage.h>
 ```
@@ -165,7 +173,7 @@ Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一�
 
 标号注释的解释：
 
-1. 初始化并设置W`XController`实例作为App的根视图控制器。通常这个控制器是一个的`UINavigationController`或`UITabBarController`，但在当前情况下，你使用`WXController`的单个实例。
+1. 初始化并设置`WXController`实例作为App的根视图控制器。通常这个控制器是一个的`UINavigationController`或`UITabBarController`，但在当前情况下，你使用`WXController`的单个实例。
 2. 设置默认的视图控制器来显示你的TSMessages。通过这样做，你将不再需要手动指定要使用的控制器来显示警告。
 
 构建并运行，看看你的新视图控制器起作用了。
@@ -714,4 +722,4 @@ key Temperature的差异放在一边，其他都一样。所以，你真正需�
 
 在这部分教程中，您使用Cocoapods设置项目，增加视图到控制器，编排视图，并建立模型来反映你抓取的气象数据。该App还没有充分发挥作用，但是你成功用纯代码创建视图，并学习了如何使用Mantle映射和转换JSON数据。 
 
-接下来看看[教程的第二部分]()，你将充实你的App，从weather API获取数据，并在UI上显示。您将使用新的iOS7 [NSURLSession](https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html)去下载数据，以及使用`ReactiveCocoa`把位置查找，天气数据抓取和UI更新事件绑在一起。
+接下来看看[教程的第二部分](/blog/2014/02/15/yi--ios-7-best-practices-part-2/)，你将充实你的App，从weather API获取数据，并在UI上显示。您将使用新的iOS7 [NSURLSession](https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html)去下载数据，以及使用`ReactiveCocoa`把位置查找，天气数据抓取和UI更新事件绑在一起。
