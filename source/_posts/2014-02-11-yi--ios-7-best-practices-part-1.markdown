@@ -63,6 +63,11 @@ which pod
 
 如果命令行简单的返回提示，或显示`pod not found`，表示Cocoapods未安装在你的机器上。可以查看我们的[Cocoapods教程](http://www.raywenderlich.com/12139/introduction-to-cocoapods)作为安装说明。这也是一个很好的资源，如果你想更多得了解Cocoapods的话。
 
+```
+sjpsega注:Cocoapods中文安装教程可以看这篇 http://geeklu.com/2013/06/cocoapods-101/
+```
+
+
 [Podfiles](http://guides.cocoapods.org/syntax/podfile.html)是用来告诉Cocoapods哪些开源项目需要导入。
 
 要创建你的第一个Cocoapod，首先在命令行中用`cd`命令导航到你的XCode项目所在的文件夹，在命令行中启动编辑器，输入
