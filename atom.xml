@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-02-23T00:56:38+08:00</updated>
+  <updated>2014-02-28T11:14:44+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -1253,6 +1253,10 @@
 <p>这决定于你如何管理Ruby gems，例如你使用<a href="http://rbenv.org/">rbenv</a>或<a href="http://rvm.io/">RVM</a>,路径可能有所不同。</p>
 
 <p>如果命令行简单的返回提示，或显示<code>pod not found</code>，表示Cocoapods未安装在你的机器上。可以查看我们的<a href="http://www.raywenderlich.com/12139/introduction-to-cocoapods">Cocoapods教程</a>作为安装说明。这也是一个很好的资源，如果你想更多得了解Cocoapods的话。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sjpsega注:Cocoapods中文安装教程可以看这篇 http://geeklu.com/2013/06/cocoapods-101/</span></code></pre></td></tr></table></div></figure>
+
 
 <p><a href="http://guides.cocoapods.org/syntax/podfile.html">Podfiles</a>是用来告诉Cocoapods哪些开源项目需要导入。</p>
 
