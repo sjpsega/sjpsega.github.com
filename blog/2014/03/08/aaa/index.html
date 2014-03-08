@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>iOS Js与native相互通信 - sjpsega's Blog</title>
+  <meta name="author" content="sjpsega">
+
+  
+  <meta name="description" content="js与navive相互通信的机制 js &ndash;> native 目前，截止至iOS7，iOS原生并没有提供js直接调用native的方式，只能通过UIWebView相关的UIWebViewDelegate协议的 1
+- (BOOL)webView:(UIWebView *)webView &hellip;">
+  <meta name="keywords" content="iOS, js, native, WebViewJavascriptBridge">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--友言验证-->
+  <meta name="uyan_auth" content="7d2af41cee" />
+  
+  <link rel="canonical" href="http://sjpsega.com/blog/2014/03/08/aaa">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/libs/jquery.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts 
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+-->
+  
+
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">sjpsega's Blog</a></h1>
+  
+    <h2>记录我的生活与学习.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sjpsega.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="/blog/categories/study">学习</a></li>
+  <li><a href="/blog/categories/life">生活</a></li>
+  <li><a href="http://weibo.com/sjpsega" target="_blank">我的微博</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">iOS Js与native相互通信</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-08T21:53:16+08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>js与navive相互通信的机制</h2>
+
+<h3>js &ndash;> native</h3>
+
+<p>目前，截止至iOS7，iOS原生并没有提供js直接调用native的方式，只能通过UIWebView相关的UIWebViewDelegate协议的</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="n">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">shouldStartLoadWithRequest:</span><span class="p">(</span><span class="n">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="nv">request</span> <span class="nf">navigationType:</span><span class="p">(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="nv">navigationType</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>方法来做拦截，并在这个方法中，根据url的协议或特征字符串来做调用方法或触发事件等工作，如</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="n">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">shouldStartLoadWithRequest:</span><span class="p">(</span><span class="n">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="nv">request</span> <span class="nf">navigationType:</span><span class="p">(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="nv">navigationType</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">request</span> <span class="n">URL</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">([[</span><span class="n">url</span> <span class="n">scheme</span><span class="p">]</span> <span class="nl">isEqualToString:</span><span class="s">@&quot;callFunction&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//调用原生方法</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(([[</span><span class="n">url</span> <span class="n">scheme</span><span class="p">]</span> <span class="nl">isEqualToString:</span><span class="s">@&quot;sendEvent&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//触发事件</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>虽然通过这个方式，js调用native是<code>异步</code>的，但是效率还是很高，我通过在js调用端，把time传入navive然后相减的方式计算，平均只有5ms的时间间隔。</p>
+
+<h4>如何触发这个方法拦截</h4>
+
+<p>最最简单且实用的方法莫过于用js创建一个隐藏的iframe设置src了，代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">js2native</span><span class="p">(){</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">iframe</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;iframe&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">iframe</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;callFunction://&quot;</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">iframe</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+</span><span class='line'>      <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">iframe</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">iframe</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">iFrame</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">iframe</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过查看phoneGap源码的iOSExec方法，还有使用XMLHttpRequest或修改hash的方式来触发方法拦截，但是因为有bug或其他原因，不推荐。</p>
+
+<h3>native &ndash;> js</h3>
+
+<p>native调用js非常简洁方便，只需要</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString:</span><span class="s">@&quot;alert(&#39;hello world!&#39;)&quot;</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>并且该方法是<code>同步</code>的。</p>
+
+<h2>调试</h2>
+
+<p>虽然现在能直接用Safari的开发模式直接查看模拟器中的webView页面，但是经过亲自尝试，最想要的也是最重要的js调试，还是不支持，不能进行js断点调试，还是要依赖console来弄……当然css样式调试支持的不错。</p>
+
+<h3>相关资料</h3>
+
+<p><a href="http://blog.devtang.com/blog/2012/03/24/talk-about-uiwebview-and-phonegap/">唐巧-关于UIWebView和PhoneGap的总结</a></p>
+
+<p><a href="https://github.com/marcuswestin/WebViewJavascriptBridge">Github上的WebViewJavascriptBridge项目</a></p>
+
+<p><a href="http://phonegap.com/">大名鼎鼎的phonegap</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">sjpsega</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-08T21:53:16+08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/study/'>study</a>
+  
+</span>
+
+
+    </p>
+    <p class="meta">
+      版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">CC BY-NC-ND 3.0</a>
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+      <!--jiathis与友言-->
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share?uid=1891960" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1891960" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1891960"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/15/yi--ios-7-best-practices-part-2/" title="Previous Post: [译]iOS7最佳实践：一个天气App案例(二)">&laquo; [译]iOS7最佳实践：一个天气App案例(二)</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/08/aaa/">iOS Js与native相互通信</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/15/yi--ios-7-best-practices-part-2/">[译]iOS7最佳实践：一个天气App案例(二)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/11/yi--ios-7-best-practices-part-1/">[译]iOS7最佳实践：一个天气App案例(一)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/06/kai-shi-xie-blog/">开始写Blog</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/30/2013summer/">2013年终总结</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p>程序员</p>
+  <p>技术经历：As -> Js -> iOS</p>
+  <p>新浪微博：<a href="http://weibo.com/sjpsega">IORI_YAGAMI_7</a></p>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - sjpsega -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+<!--cnzz统计-->
+<script src="http://s13.cnzz.com/stat.php?id=5808684&web_id=5808684" language="JavaScript"></script>
+
+</body>
+</html>
