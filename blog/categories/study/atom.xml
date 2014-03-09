@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-03-09T01:36:55+08:00</updated>
+  <updated>2014-03-09T17:57:07+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS Js与native相互通信]]></title>
-    <link href="http://sjpsega.com/blog/2014/03/08/aaa/"/>
+    <link href="http://sjpsega.com/blog/2014/03/08/js-communicate-with-native-in-iOS/"/>
     <updated>2014-03-08T21:53:16+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/03/08/aaa</id>
+    <id>http://sjpsega.com/blog/2014/03/08/js-communicate-with-native-in-iOS</id>
     <content type="html"><![CDATA[<h2>js与navive相互通信的机制</h2>
 
 <h3>js &ndash;> native</h3>
