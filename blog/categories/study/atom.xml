@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-04-08T10:26:52+08:00</updated>
+  <updated>2014-04-09T12:58:21+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -232,7 +232,11 @@ iframe = null;
 
 <h2>调试</h2>
 
-<p>虽然现在能直接用Safari的开发模式直接查看模拟器中的webView页面，但是经过亲自尝试，最想要的也是最重要的js调试，还是不支持，不能进行js断点调试，还是要依赖console来弄……当然css样式调试支持的不错。</p>
+<p><del>虽然现在能直接用Safari的开发模式直接查看模拟器中的webView页面，但是经过亲自尝试，最想要的也是最重要的js调试，还是不支持，不能进行js断点调试，还是要依赖console来弄……当然css样式调试支持的不错。</del></p>
+
+<p>2014-04-09 update: 昨天发现Safari是可以对模拟器中的webView页面进行js断点调试的，之前是因为我没有设置<code>启用所有断点</code>……</p>
+
+<p>可以在模拟器进入webView页面后，打开Safari，然后在 开发->iPhone simulator 菜单下进行页面选择，进入调试。</p>
 
 <h3>相关资料</h3>
 
