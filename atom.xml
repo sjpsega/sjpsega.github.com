@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-05-04T01:40:44+08:00</updated>
+  <updated>2014-05-04T10:26:43+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -41,7 +41,7 @@
 
 <p>所以，之后我主要记录印象比较深的话题与内容。</p>
 
-<h2>产品设计中的逆向思维</h2>
+<h2>《产品设计中的逆向思维》</h2>
 
 <p>主题的演讲者是<a href="http://guopengliang.com/">梁国鹏</a>，iOS上著名的记账软件DailyCost的作者，一人业余时间独立完成了产品、设计、开发和运营。</p>
 
@@ -75,7 +75,7 @@
 </ul>
 
 
-<h2>跨端组件实践</h2>
+<h2>《跨端组件实践》</h2>
 
 <p>主题演讲者是王集鹄，百度资深研发工程师，来自社区基础技术部 FEX。</p>
 
@@ -119,9 +119,26 @@
 
 <p>这篇分享的记录这么详细，其实是因为原作者出了<a href="http://fex.baidu.com/blog/2014/05/light-component/">blog</a>&hellip;</p>
 
+<p>因为工作中，也在做这方面的工作，跟我们的方案与思路有一些契合点，该方案的优缺点：</p>
+
+<p>优点：</p>
+
+<ul>
+<li>在各种端都有良好的用户体验</li>
+<li>跨平台不用修改HTML代码</li>
+</ul>
+
+
+<p>缺点：</p>
+
+<ul>
+<li>工作量大，每个端都要去适配，写对应的组件代码</li>
+</ul>
+
+
 <h2>ChinaJoy般的QCon</h2>
 
-<p>这次来QCon的展台主要是云服务与安全的，大家一开始就用美女来吸引眼球……</p>
+<p>这次来QCon的展台主要是云服务与安全的，可是大家一开始就用美女来吸引眼球……</p>
 
 <p>这个策略，是只能说，你们赢了……</p>
 
