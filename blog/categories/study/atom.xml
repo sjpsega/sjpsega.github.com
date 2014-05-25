@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-05-04T10:26:43+08:00</updated>
+  <updated>2014-05-25T20:46:53+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,154 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS中的单例模式]]></title>
+    <link href="http://sjpsega.com/blog/2014/05/25/singleton-in-ios/"/>
+    <updated>2014-05-25T12:25:10+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/05/25/singleton-in-ios</id>
+    <content type="html"><![CDATA[<p>单例模式是指在一个系统中，类有且只有一个实例对象，可以通过全局的一个入口对这个实例对象进行访问。</p>
+
+<p>在iOS开发中，单例模式是非常常用的一种设计模式。</p>
+
+<h2>ARC下的实现</h2>
+
+<p>iOS5.0以后就开始可以使用ARC（Automatic Reference Counting：自动引用计数）来代替之前的MRC（Manual Reference Counting：人工引用计数）。</p>
+
+<p>使用ARC会减少很多代码和忘了释放对象的苦恼。</p>
+
+<p>慢慢ARC会成为主流，我入门iOS也是学ARC的，所以这里只写ARC的单例实现。</p>
+
+<p><code>Singleton.h:</code>
+```objc
+//
+//  Singleton.h
+//  Singleton</p>
+
+<h1>import &lt;Foundation/Foundation.h></h1>
+
+<p>@interface Singleton : NSObject</p>
+
+<ul>
+<li>(Singleton *)sharedInstance;</li>
+</ul>
+
+
+<p>@end</p>
+
+<p>```</p>
+
+<p><code>Singleton.m:</code>
+```objc</p>
+
+<p>//
+//  Singleton.m
+//  Singleton</p>
+
+<h1>import &ldquo;Singleton.h&rdquo;</h1>
+
+<p>@implementation Singleton</p>
+
+<ul>
+<li>(Singleton <em>)sharedInstance{
+  static Singleton </em>singleton;
+  static dispatch_once_t token;
+  dispatch_once(&amp;token,^{
+      singleton = [[Singleton alloc]init];
+  });
+  return singleton;
+}</li>
+</ul>
+
+
+<p>&ndash;(id)init{</p>
+
+<pre><code>self = [super init];
+if(self){
+    //在这里可以进行类的初始化工作
+}
+return self;
+</code></pre>
+
+<p>}</p>
+
+<p>@end</p>
+
+<p>```</p>
+
+<p>在这个实现中，核心是使用了GCD（Grand Central Dispatch）的<code>dispatch_once</code>方法，该方法可以保证Singleton只被实例化一次，并且该方法<code>线程安全</code>。</p>
+
+<h2>纰漏</h2>
+
+<p>以上实现有一个纰漏，Singleton继承与<code>NSObject</code>，<code>NSObject</code>有一个公开的初始化方法<code>-(id)init</code>，所以若使用者不小心，他完全可以使用<code>[[Singleton alloc]init]</code>来创建多个实例对象，这样轻易就破坏了单例的实现。</p>
+
+<p>例如：
+<code>objc
+Singleton *single1 = [[Singleton alloc]init];
+Singleton *single2 = [[Singleton alloc]init];
+//结果为0，即NO，两者不是同一个实例
+NSLog(@"%d",single1 == single2);
+</code></p>
+
+<h2>更好的实现</h2>
+
+<p>其实是要对<code>Singleton.m</code>做一点改变，就能封住这个纰漏：</p>
+
+<p>```objc
+//
+//  Singleton.m
+//  Singleton</p>
+
+<h1>import &ldquo;Singleton.h&rdquo;</h1>
+
+<p>@implementation Singleton</p>
+
+<ul>
+<li>(Singleton <em>)sharedInstance{
+  static Singleton </em>singleton;
+  static dispatch_once_t token;
+  dispatch_once(&amp;token,^{
+      //这里调用私有的initSingle方法
+      singleton = [[Singleton alloc]initSingle];
+  });
+  return singleton;
+}</li>
+</ul>
+
+
+<p>//只是把原来在init方法中的代码，全都搬到initSingle
+&ndash;(id)initSingle{</p>
+
+<pre><code>self = [super init];
+if(self){
+    //在这里可以进行类的初始化工作
+}
+return self;
+</code></pre>
+
+<p>}</p>
+
+<p>&ndash;(id)init{</p>
+
+<pre><code>//改为调用[Singleton sharedInstance]
+return [Singleton sharedInstance];
+</code></pre>
+
+<p>}</p>
+
+<p>@end
+```</p>
+
+<ul>
+<li>新建initSingle方法，将原来init中的实现，全部搬入</li>
+<li>sharedInstance中的初始化，调用initSingle方法</li>
+<li>init方法中，调用[Singleton sharedInstance]</li>
+</ul>
+
+
+<p>该实现，我是自己在实践中，觉得更好的单例实现，如有问题，请及时反馈。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Category添加实例变量的故事]]></title>
