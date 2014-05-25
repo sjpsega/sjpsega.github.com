@@ -70,7 +70,7 @@ iOS5.0以后就开始可以使用ARC（Automatic Reference Counting：自动引�
 在这个实现中，核心是使用了GCD（Grand Central Dispatch）的`dispatch_once`方法，该方法可以保证Singleton只被实例化一次，并且该方法`线程安全`。
 
 ## 纰漏
-以上实现有一个纰漏，Singleton继承与`NSObject`，`NSObject`有一个公开的初始化方法`-(id)init`，所以若使用者不小心，他完全可以使用`[[Singleton alloc]init]`来创建多个实例对象，这样轻易就破坏了单例的实现。
+以上实现有一个纰漏，Singleton继承于`NSObject`，`NSObject`有一个公开的初始化方法`-(id)init`，所以若使用者不小心，他完全可以使用`[[Singleton alloc]init]`来创建多个实例对象，这样轻易就破坏了单例的实现。
 
 例如：
 ```objc
