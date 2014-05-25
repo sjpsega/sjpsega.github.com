@@ -4,7 +4,7 @@ title: "iOS中的单例模式"
 date: 2014-05-25 12:25:10 +0800
 comments: true
 categories: study
-keywords: 设计模式 单例 singleton
+keywords: 设计模式 单例 singleton iOS
 ---
 
 单例模式是指在一个系统中，类有且只有一个实例对象，可以通过全局的一个入口对这个实例对象进行访问。
