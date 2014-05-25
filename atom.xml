@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-05-25T20:46:53+08:00</updated>
+  <updated>2014-05-25T21:00:04+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -120,7 +120,7 @@
 
 <h2>纰漏</h2>
 
-<p>以上实现有一个纰漏，Singleton继承与<code>NSObject</code>，<code>NSObject</code>有一个公开的初始化方法<code>-(id)init</code>，所以若使用者不小心，他完全可以使用<code>[[Singleton alloc]init]</code>来创建多个实例对象，这样轻易就破坏了单例的实现。</p>
+<p>以上实现有一个纰漏，Singleton继承于<code>NSObject</code>，<code>NSObject</code>有一个公开的初始化方法<code>-(id)init</code>，所以若使用者不小心，他完全可以使用<code>[[Singleton alloc]init]</code>来创建多个实例对象，这样轻易就破坏了单例的实现。</p>
 
 <p>例如：</p>
 
