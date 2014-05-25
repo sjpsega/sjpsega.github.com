@@ -1,112 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>sjpsega's Blog</title>
-  <meta name="author" content="sjpsega">
-
-  
-  <meta name="description" content="单例模式是指在一个系统中，类有且只有一个实例对象，可以通过全局的一个入口对这个实例对象进行访问。 在iOS开发中，单例模式是非常常用的一种设计模式。 ARC下的实现 iOS5.0以后就开始可以使用ARC（Automatic Reference Counting：自动引用计数）来代替之前的MRC（ &hellip;">
-  
-
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--友言验证-->
-  <meta name="uyan_auth" content="7d2af41cee" />
-  
-  <link rel="canonical" href="http://sjpsega.com">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/libs/jquery.min.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts 
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
--->
-  
-
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
-  });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">sjpsega's Blog</a></h1>
-  
-    <h2>记录我的生活与学习.</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">首页</a></li>
-  <li><a href="/blog/archives">所有文章</a></li>
-  <li><a href="/blog/categories/study">学习</a></li>
-  <li><a href="/blog/categories/life">生活</a></li>
-  <li><a href="http://weibo.com/sjpsega" target="_blank">我的微博</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[sjpsega's Blog]]></title>
+  <link href="http://sjpsega.com/atom.xml" rel="self"/>
+  <link href="http://sjpsega.com/"/>
+  <updated>2014-05-25T21:00:04+08:00</updated>
+  <id>http://sjpsega.com/</id>
+  <author>
+    <name><![CDATA[sjpsega]]></name>
     
-      <h1 class="entry-title"><a href="/blog/2014/05/25/singleton-in-ios/">iOS中的单例模式</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
   
-
-
-<time datetime="2014-05-25T12:25:10+08:00" pubdate data-updated="true">May 25<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>单例模式是指在一个系统中，类有且只有一个实例对象，可以通过全局的一个入口对这个实例对象进行访问。</p>
+  <entry>
+    <title type="html"><![CDATA[iOS中的单例模式]]></title>
+    <link href="http://sjpsega.com/blog/2014/05/25/singleton-in-ios/"/>
+    <updated>2014-05-25T12:25:10+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/05/25/singleton-in-ios</id>
+    <content type="html"><![CDATA[<p>单例模式是指在一个系统中，类有且只有一个实例对象，可以通过全局的一个入口对这个实例对象进行访问。</p>
 
 <p>在iOS开发中，单例模式是非常常用的一种设计模式。</p>
 
@@ -304,42 +216,15 @@ $(document).ready(function(event) {
 
 
 <p>该实现，我是自己在实践中，觉得更好的单例实现，如有问题，请及时反馈。</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/01/qcon-beijing-2/">QCon北京行（二）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-01T17:24:01+08:00" pubdate data-updated="true">May 1<span>st</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在<a href="/blog/2014/05/01/qcon-beijing-1/">上篇 QCon北京行（一）</a>中主要写了对北京的印象，现在写下关于QCon的话题。</p>
+  <entry>
+    <title type="html"><![CDATA[QCon北京行（二）]]></title>
+    <link href="http://sjpsega.com/blog/2014/05/01/qcon-beijing-2/"/>
+    <updated>2014-05-01T17:24:01+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/05/01/qcon-beijing-2</id>
+    <content type="html"><![CDATA[<p>在<a href="http://sjpsega.com/blog/2014/05/01/qcon-beijing-1/">上篇 QCon北京行（一）</a>中主要写了对北京的印象，现在写下关于QCon的话题。</p>
 
 <h2>代价</h2>
 
@@ -463,48 +348,21 @@ $(document).ready(function(event) {
 
 <p>这个策略，是只能说，你们赢了……</p>
 
-<p><img src="/images/2014-05-01-qcon-beijing-2/beauty_1.jpg" alt="beauty_1" />
-<img src="/images/2014-05-01-qcon-beijing-2/beauty_2.jpg" alt="beauty_2" />
-<img src="/images/2014-05-01-qcon-beijing-2/beauty_3.jpg" alt="beauty_3" />
-<img src="/images/2014-05-01-qcon-beijing-2/beauty_4.jpg" alt="beauty_4" />
-<img src="/images/2014-05-01-qcon-beijing-2/beauty_5.jpg" alt="beauty_5" />
-<img src="/images/2014-05-01-qcon-beijing-2/beauty_6.jpg" alt="beauty_6" /></p>
-</div>
+<p><img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_1.jpg" alt="beauty_1" />
+<img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_2.jpg" alt="beauty_2" />
+<img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_3.jpg" alt="beauty_3" />
+<img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_4.jpg" alt="beauty_4" />
+<img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_5.jpg" alt="beauty_5" />
+<img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_6.jpg" alt="beauty_6" /></p>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/01/qcon-beijing-1/">QCon北京行（一）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-01T14:37:27+08:00" pubdate data-updated="true">May 1<span>st</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>去年因前端方凳会上的分享得了总分第一，获得了去参加QCon的机会，这次的地点在北京，北京还没去过，去见见世面。</p>
+  <entry>
+    <title type="html"><![CDATA[QCon北京行（一）]]></title>
+    <link href="http://sjpsega.com/blog/2014/05/01/qcon-beijing-1/"/>
+    <updated>2014-05-01T14:37:27+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/05/01/qcon-beijing-1</id>
+    <content type="html"><![CDATA[<p>去年因前端方凳会上的分享得了总分第一，获得了去参加QCon的机会，这次的地点在北京，北京还没去过，去见见世面。</p>
 
 <h2>北京印象</h2>
 
@@ -586,42 +444,15 @@ $(document).ready(function(event) {
 <li>IT氛围好，各大公司在北京都有分店，创业公司、风投云集，机会较多</li>
 </ul>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/07/category-with-instance-variables/">Category添加实例变量的故事</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-07T20:55:16+08:00" pubdate data-updated="true">Apr 7<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>起因</h2>
+  <entry>
+    <title type="html"><![CDATA[Category添加实例变量的故事]]></title>
+    <link href="http://sjpsega.com/blog/2014/04/07/category-with-instance-variables/"/>
+    <updated>2014-04-07T20:55:16+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/04/07/category-with-instance-variables</id>
+    <content type="html"><![CDATA[<h2>起因</h2>
 
 <p>有一个需求，针对 url 字符串，需要根据传入的key获取对应参数键值对的value。例如：</p>
 
@@ -793,42 +624,15 @@ $(document).ready(function(event) {
 <p><a href="http://www.cnblogs.com/wupher/archive/2013/01/05/2845338.html">让Category支持添加属性与成员变量</a></p>
 
 <p><a href="http://kaspermunck.github.io/2012/11/adding-properties-to-objective-c-categories/">Adding Properties to Objective-C Categories</a></p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/08/js-communicate-with-native-in-iOS/">iOS Js与native相互通信</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-08T21:53:16+08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>js与navive相互通信的机制</h2>
+  <entry>
+    <title type="html"><![CDATA[iOS Js与native相互通信]]></title>
+    <link href="http://sjpsega.com/blog/2014/03/08/js-communicate-with-native-in-iOS/"/>
+    <updated>2014-03-08T21:53:16+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/03/08/js-communicate-with-native-in-iOS</id>
+    <content type="html"><![CDATA[<h2>js与navive相互通信的机制</h2>
 
 <h3>js &ndash;> native</h3>
 
@@ -925,42 +729,15 @@ $(document).ready(function(event) {
 <p><a href="https://github.com/marcuswestin/WebViewJavascriptBridge">Github上的WebViewJavascriptBridge项目</a></p>
 
 <p><a href="http://phonegap.com/">大名鼎鼎的phonegap</a></p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/15/yi--ios-7-best-practices-part-2/">[译]iOS7最佳实践：一个天气App案例(二)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-15T16:46:02+08:00" pubdate data-updated="true">Feb 15<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>注：本文译自：<a href="http://www.raywenderlich.com/55385/ios-7-best-practices-part-2">raywenderlich ios-7-best-practices-part-2</a>，去除了跟主题无关的寒暄部分。
+  <entry>
+    <title type="html"><![CDATA[[译]iOS7最佳实践：一个天气App案例(二)]]></title>
+    <link href="http://sjpsega.com/blog/2014/02/15/yi--ios-7-best-practices-part-2/"/>
+    <updated>2014-02-15T16:46:02+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/02/15/yi&#8211;ios-7-best-practices-part-2</id>
+    <content type="html"><![CDATA[<p>注：本文译自：<a href="http://www.raywenderlich.com/55385/ios-7-best-practices-part-2">raywenderlich ios-7-best-practices-part-2</a>，去除了跟主题无关的寒暄部分。
 欢迎转载，保持署名</p>
 
 <h2>开始</h2>
@@ -2124,42 +1901,15 @@ $(document).ready(function(event) {
 <p>这个App还有很多酷的东西可以去做。一个好的开始是使用<a href="http://www.flickr.com/services/api/">Flickr API</a>来查找基于设备位置的背景图像。</p>
 
 <p>还有，你的应用程序只处理温度和状态;有什么其他的天气信息能融入你的App？</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/11/yi--ios-7-best-practices-part-1/">[译]iOS7最佳实践：一个天气App案例(一)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-11T22:21:53+08:00" pubdate data-updated="true">Feb 11<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>注：本文译自：<a href="http://www.raywenderlich.com/55384/ios-7-best-practices-part-1">raywenderlich ios-7-best-practices-part-1</a>，去除了跟主题无关的寒暄部分。
+  <entry>
+    <title type="html"><![CDATA[[译]iOS7最佳实践：一个天气App案例(一)]]></title>
+    <link href="http://sjpsega.com/blog/2014/02/11/yi--ios-7-best-practices-part-1/"/>
+    <updated>2014-02-11T22:21:53+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/02/11/yi&#8211;ios-7-best-practices-part-1</id>
+    <content type="html"><![CDATA[<p>注：本文译自：<a href="http://www.raywenderlich.com/55384/ios-7-best-practices-part-1">raywenderlich ios-7-best-practices-part-1</a>，去除了跟主题无关的寒暄部分。
 欢迎转载，保持署名</p>
 
 <p>在这个两部分的系列教程中，您将探索如何使用以下工具和技术来创建自己的App：</p>
@@ -3291,43 +3041,16 @@ $(document).ready(function(event) {
 
 <p>在这部分教程中，您使用Cocoapods设置项目，增加视图到控制器，编排视图，并建立模型来反映你抓取的气象数据。该App还没有充分发挥作用，但是你成功用纯代码创建视图，并学习了如何使用Mantle映射和转换JSON数据。</p>
 
-<p>接下来看看<a href="/blog/2014/02/15/yi--ios-7-best-practices-part-2/">教程的第二部分</a>，你将充实你的App，从weather API获取数据，并在UI上显示。您将使用新的iOS7 <a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html">NSURLSession</a>去下载数据，以及使用<code>ReactiveCocoa</code>把位置查找，天气数据抓取和UI更新事件绑在一起。</p>
-</div>
+<p>接下来看看<a href="http://sjpsega.com/blog/2014/02/15/yi--ios-7-best-practices-part-2/">教程的第二部分</a>，你将充实你的App，从weather API获取数据，并在UI上显示。您将使用新的iOS7 <a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html">NSURLSession</a>去下载数据，以及使用<code>ReactiveCocoa</code>把位置查找，天气数据抓取和UI更新事件绑在一起。</p>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/06/kai-shi-xie-blog/">开始写Blog</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-06T16:31:07+08:00" pubdate data-updated="true">Feb 6<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>趁着春节假期，花了点时间，在github上用<a href="http://octopress.org/">Octopress</a>搭了个个人Blog。希望自己新的一年，能写点技术Blog，多做积累，锻炼文字。</p>
+  <entry>
+    <title type="html"><![CDATA[开始写Blog]]></title>
+    <link href="http://sjpsega.com/blog/2014/02/06/kai-shi-xie-blog/"/>
+    <updated>2014-02-06T16:31:07+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/02/06/kai-shi-xie-blog</id>
+    <content type="html"><![CDATA[<p>趁着春节假期，花了点时间，在github上用<a href="http://octopress.org/">Octopress</a>搭了个个人Blog。希望自己新的一年，能写点技术Blog，多做积累，锻炼文字。</p>
 
 <p>其实以前在javaeye上也写过技术Blog，但是写得不多。在Sohu上写自己的生活Blog，写的蛮多的，现在渐渐也写得少了。</p>
 
@@ -3338,42 +3061,15 @@ $(document).ready(function(event) {
 <p>当然自己搭建Blog的最大缺点是，流量少，缺少流量，缺少讨论；当然这个也不重要，重要的是自己的积累，如果自己写得好，肯定会有人看到的。</p>
 
 <p>刚入门<a href="http://octopress.org/">Octopress</a>，定制化蛮强的，还要好好研究下。</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/30/2013summer/">2013年终总结</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-30T22:09:20+08:00" pubdate data-updated="true">Jan 30<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>2013已经过去，先总结下去年的目标与主要的事：</h2>
+  <entry>
+    <title type="html"><![CDATA[2013年终总结]]></title>
+    <link href="http://sjpsega.com/blog/2014/01/30/2013summer/"/>
+    <updated>2014-01-30T22:09:20+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/01/30/2013summer</id>
+    <content type="html"><![CDATA[<h2>2013已经过去，先总结下去年的目标与主要的事：</h2>
 
 <ul>
 <li>花血本买了mac，开发用mac就是爽，很纯粹；</li>
@@ -3398,42 +3094,15 @@ $(document).ready(function(event) {
 <li>好好工作，收入上能再提高30%。</li>
 </ul>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/09/2012summary/">2012年终总结</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-09T20:45:29+08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>时间真快，一年的时间就这么过去了，当然每年过年的时候，都感觉时间过得好快，一年就这么没了。
+  <entry>
+    <title type="html"><![CDATA[2012年终总结]]></title>
+    <link href="http://sjpsega.com/blog/2013/02/09/2012summary/"/>
+    <updated>2013-02-09T20:45:29+08:00</updated>
+    <id>http://sjpsega.com/blog/2013/02/09/2012summary</id>
+    <content type="html"><![CDATA[<p>时间真快，一年的时间就这么过去了，当然每年过年的时候，都感觉时间过得好快，一年就这么没了。
 过去自己也没总结的习惯，这个习惯不好，该改一改了，总结过去，憧憬未来。</p>
 
 <h2>2012的主要事情</h2>
@@ -3463,77 +3132,7 @@ $(document).ready(function(event) {
 
 
 <p>差不多了，事情已经蛮多了，看来年能完成几件。</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/05/25/singleton-in-ios/">iOS中的单例模式</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/01/qcon-beijing-2/">QCon北京行（二）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/01/qcon-beijing-1/">QCon北京行（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/07/category-with-instance-variables/">Category添加实例变量的故事</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/08/js-communicate-with-native-in-iOS/">iOS Js与native相互通信</a>
-      </li>
-    
-  </ul>
-</section>
-<section>
-  <h1>About Me</h1>
-  <p>程序员</p>
-  <p>技术经历：As -> Js -> iOS</p>
-  <p>新浪微博：<a href="http://weibo.com/sjpsega">IORI_YAGAMI_7</a></p>
-</section>
-
-  
-</aside>
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - sjpsega -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-
-
-
-
-
-
-
-
-<!--cnzz统计-->
-<script src="http://s13.cnzz.com/stat.php?id=5808684&web_id=5808684" language="JavaScript"></script>
-
-</body>
-</html>
+</feed>

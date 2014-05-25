@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Category添加实例变量的故事 - sjpsega's Blog</title>
+  <meta name="author" content="sjpsega">
+
+  
+  <meta name="description" content="起因 有一个需求，针对 url 字符串，需要根据传入的key获取对应参数键值对的value。例如： 1
+2
+3
+NSString *urlString = @&quot;http://www.1688.com?key1=val1&amp;key2=val2&quot;;
+NSURL *url &hellip;">
+  <meta name="keywords" content="iOS, Category, Instance variables">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--友言验证-->
+  <meta name="uyan_auth" content="7d2af41cee" />
+  
+  <link rel="canonical" href="http://sjpsega.com/blog/2014/04/07/category-with-instance-variables">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/libs/jquery.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts 
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+-->
+  
+
+</head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">sjpsega's Blog</a></h1>
+  
+    <h2>记录我的生活与学习.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sjpsega.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="/blog/categories/study">学习</a></li>
+  <li><a href="/blog/categories/life">生活</a></li>
+  <li><a href="http://weibo.com/sjpsega" target="_blank">我的微博</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Category添加实例变量的故事</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-07T20:55:16+08:00" pubdate data-updated="true">Apr 7<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>起因</h2>
+
+<p>有一个需求，针对 url 字符串，需要根据传入的key获取对应参数键值对的value。例如：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">urlString</span> <span class="o">=</span> <span class="s">@&quot;http://www.1688.com?key1=val1&amp;key2=val2&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="n">urlString</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="n">url</span> <span class="nl">paramWithKey:</span><span class="s">@&quot;key1&quot;</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NSURL 类虽然自带方法很多，但是却没有这个有用的方法。故需要做类扩展（Category）。</p>
+
+<p>实现的时候，需要一个 NSDictionary 类型的实例变量来存储 url 字符串的参数键值对，便于多次调用 -paramWithKey 的时候，提高性能。</p>
+
+<h2>经过</h2>
+
+<p>写的时候，闹了几个笑话，走了弯路，记录下来。</p>
+
+<h3>在头文件中添加变量</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">NSURL</span> <span class="nl">(WingQueryDictionary)</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span> <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>结果：编译不报错，但是实际执行中，实例中，找不到 self.queryDictionary 这个变量。</p>
+
+<h3>直接在 Category 中添加实例变量</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@implementation</span> <span class="nc">NSURL</span> <span class="nl">(QueryDictionary)</span><span class="p">{</span>
+</span><span class='line'>  <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>结果：编译直接报错，因为<code>Category不允许为已有的类添加新的属性或者实例变量，只能添加新方法</code>。</p>
+
+<h3>在匿名 Category 中添加实例变量</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">NSURL</span><span class="p">(){</span>
+</span><span class='line'>    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">NSURL</span> <span class="nl">(QueryDictionary)</span><span class="p">{</span>
+</span><span class='line'>  <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nl">paramWithKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">key</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">queryDictionary</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>结果：编译直接报错，原因同上。</p>
+
+<h3>添加一个类变量</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">NSURL</span> <span class="nl">(WingQueryDictionary)</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>结果：能够完成需求，但是若新建多个 NSURL 并调用 -paramWithKey 方法，参数获取会有bug。</p>
+
+<h3>利用 runtime.h 来实现添加实例变量</h3>
+
+<p>最后，实在没辙了，只能 google 找方法。</p>
+
+<p>发现可以<code>利用 runtime.h 中 objc_getAssociatedObject / objc_setAssociatedObject 方法来模拟生成实例变量</code>。</p>
+
+<p>关键代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">static</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">varKey</span> <span class="o">=</span> <span class="s">&quot;queryDictionary&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">queryDictionary</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="n">objc_getAssociatedObject</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">varKey</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setQueryDictionary:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">queryDictionary</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">varKey</span><span class="p">,</span> <span class="n">queryDictionary</span><span class="p">,</span> <span class="n">OBJC_ASSOCIATION_RETAIN_NONATOMIC</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>API 解析</h3>
+
+<p>设置实例对象：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="kt">void</span> <span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="kt">id</span> <span class="n">object</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="kt">id</span> <span class="n">value</span><span class="p">,</span> <span class="n">objc_AssociationPolicy</span> <span class="n">policy</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用该方法来完成实例变量的 setter 实现。</p>
+
+<ul>
+<li>参数 id：设置实例对象相关的实例，通常为self</li>
+<li>参数 key：设置实例对象的key，即name</li>
+<li>参数 value：设置实例对象的值</li>
+<li>参数 policy：设置实例对象的内存对策，可选值如下：
+
+<ul>
+<li>(weak) / (assign) OBJC_ASSOCIATION_ASSIGN</li>
+<li>(strong) / (retain) OBJC_ASSOCIATION_RETAIN</li>
+<li>(copy) OBJC_ASSOCIATION_COPY</li>
+<li>(nonatomic,strong) OBJC_ASSOCIATION_RETAIN_NONATOMIC</li>
+<li>(nonatomic,copy) OBJC_ASSOCIATION_COPY_NONATOMIC</li>
+</ul>
+</li>
+</ul>
+
+
+<p>获得实例对象：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="kt">id</span> <span class="n">objc_getAssociatedObject</span><span class="p">(</span><span class="kt">id</span> <span class="n">object</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完成实例变量的 getter实现。看了 setter 实现，这个方法的参数就很容易理解了。</p>
+
+<h2>参考资料</h2>
+
+<p><a href="http://www.cnblogs.com/wupher/archive/2013/01/05/2845338.html">让Category支持添加属性与成员变量</a></p>
+
+<p><a href="http://kaspermunck.github.io/2012/11/adding-properties-to-objective-c-categories/">Adding Properties to Objective-C Categories</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">sjpsega</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-07T20:55:16+08:00" pubdate data-updated="true">Apr 7<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/study/'>study</a>
+  
+</span>
+
+
+    </p>
+    <p class="meta">
+      版权声明：自由转载-非商用-非衍生-保持署名 | <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">CC BY-NC-ND 3.0</a>
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+      <!--jiathis与友言-->
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a href="http://www.jiathis.com/share?uid=1891960" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1891960" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1891960"></script>
+<!-- UY END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/03/08/js-communicate-with-native-in-iOS/" title="Previous Post: iOS js与native相互通信">&laquo; iOS js与native相互通信</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/01/qcon-beijing-1/" title="Next Post: QCon北京行（一）">QCon北京行（一） &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/25/singleton-in-ios/">iOS中的单例模式</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/01/qcon-beijing-2/">QCon北京行（二）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/01/qcon-beijing-1/">QCon北京行（一）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/07/category-with-instance-variables/">Category添加实例变量的故事</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/08/js-communicate-with-native-in-iOS/">iOS Js与native相互通信</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p>程序员</p>
+  <p>技术经历：As -> Js -> iOS</p>
+  <p>新浪微博：<a href="http://weibo.com/sjpsega">IORI_YAGAMI_7</a></p>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - sjpsega -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+<!--cnzz统计-->
+<script src="http://s13.cnzz.com/stat.php?id=5808684&web_id=5808684" language="JavaScript"></script>
+
+</body>
+</html>
