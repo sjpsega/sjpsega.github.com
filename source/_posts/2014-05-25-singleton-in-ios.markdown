@@ -55,7 +55,7 @@ iOS5.0以后就开始可以使用ARC（Automatic Reference Counting：自动引�
     return singleton;
 }
 
--(id)init{
+- (id)init{
     self = [super init];
     if(self){
         //在这里可以进行类的初始化工作
@@ -103,7 +103,7 @@ NSLog(@"%d",single1 == single2);
 }
     
 //只是把原来在init方法中的代码，全都搬到initSingle
--(id)initSingle{
+- (id)initSingle{
     self = [super init];
     if(self){
         //在这里可以进行类的初始化工作
@@ -111,7 +111,7 @@ NSLog(@"%d",single1 == single2);
     return self;
 }
 
--(id)init{
+- (id)init{
     //改为调用[Singleton sharedInstance]
     return [Singleton sharedInstance];
 }
