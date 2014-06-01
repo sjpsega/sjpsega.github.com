@@ -119,8 +119,8 @@ NSLog(@"%d",single1 == single2);
 @end
 ```
 
-* 新建initSingle方法，将原来init中的实现，全部搬入
-* sharedInstance中的初始化，调用initSingle方法
+* 新建私有的initSingle方法，将原来init中的实现，全部搬入
+* sharedInstance中的singleton初始化，调用initSingle方法
 * init方法中，调用[Singleton sharedInstance]
 
 
