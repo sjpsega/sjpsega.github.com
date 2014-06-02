@@ -21,6 +21,11 @@ keywords: iOS, js, native, WebViewJavascriptBridge
 方法来做拦截，并在这个方法中，根据url的协议或特征字符串来做调用方法或触发事件等工作，如
 
 ```objc
+/*
+* 方法的返回值是BOOL值。
+* 返回YES：表示让浏览器执行默认操作，比如某个a链接跳转
+* 返回NO：表示不执行浏览器的默认操作，这里因为通过url协议来判断js执行native的操作，肯定不是浏览器默认操作，故返回NO
+* /
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     NSURL *url = [request URL];
     if ([[url scheme] isEqualToString:@"callFunction") {
