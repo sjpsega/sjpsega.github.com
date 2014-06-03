@@ -294,8 +294,8 @@ $(document).ready(function(event) {
 
 
 <ul>
-<li>新建initSingle方法，将原来init中的实现，全部搬入</li>
-<li>sharedInstance中的初始化，调用initSingle方法</li>
+<li>新建私有的initSingle方法，将原来init中的实现，全部搬入</li>
+<li>sharedInstance中的singleton初始化，调用initSingle方法</li>
 <li>init方法中，调用[Singleton sharedInstance]</li>
 </ul>
 
@@ -372,6 +372,8 @@ var jiathis_config = {data_track_clickback:'true'};
         <a class="basic-alignment left" href="/blog/2014/05/01/qcon-beijing-2/" title="Previous Post: QCon北京行（二）">&laquo; QCon北京行（二）</a>
       
       
+        <a class="basic-alignment right" href="/blog/2014/06/01/phonegap-ios/" title="Next Post: iOS版PhoneGap原理分析">iOS版PhoneGap原理分析 &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -383,6 +385,10 @@ var jiathis_config = {data_track_clickback:'true'};
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/01/phonegap-ios/">iOS版PhoneGap原理分析</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/05/25/singleton-in-ios/">iOS中的单例模式</a>
@@ -398,10 +404,6 @@ var jiathis_config = {data_track_clickback:'true'};
     
       <li class="post">
         <a href="/blog/2014/04/07/category-with-instance-variables/">Category添加实例变量的故事</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/08/js-communicate-with-native-in-iOS/">iOS Js与native相互通信</a>
       </li>
     
   </ul>

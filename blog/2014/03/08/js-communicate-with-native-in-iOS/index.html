@@ -131,7 +131,17 @@ $(document).ready(function(event) {
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="n">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">shouldStartLoadWithRequest:</span><span class="p">(</span><span class="n">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="nv">request</span> <span class="nf">navigationType:</span><span class="p">(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="nv">navigationType</span> <span class="p">{</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">/*</span>
+</span><span class='line'><span class="o">*</span> <span class="err">方法的返回值是</span><span class="kt">BOOL</span><span class="err">值。</span>
+</span><span class='line'><span class="o">*</span> <span class="err">返回</span><span class="n">YES</span><span class="err">：表示让浏览器执行默认操作，比如某个</span><span class="n">a</span><span class="err">链接跳转</span>
+</span><span class='line'><span class="o">*</span> <span class="err">返回</span><span class="n">NO</span><span class="err">：表示不执行浏览器的默认操作，这里因为通过</span><span class="n">url</span><span class="err">协议来判断</span><span class="n">js</span><span class="err">执行</span><span class="n">native</span><span class="err">的操作，肯定不是浏览器默认操作，故返回</span><span class="n">NO</span>
+</span><span class='line'><span class="o">*</span> <span class="o">/</span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">webView:</span><span class="p">(</span><span class="n">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="n">webView</span> <span class="nl">shouldStartLoadWithRequest:</span><span class="p">(</span><span class="n">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="n">request</span> <span class="nl">navigationType:</span><span class="p">(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="n">navigationType</span> <span class="p">{</span>
 </span><span class='line'>    <span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">request</span> <span class="n">URL</span><span class="p">];</span>
 </span><span class='line'>    <span class="k">if</span> <span class="p">([[</span><span class="n">url</span> <span class="n">scheme</span><span class="p">]</span> <span class="nl">isEqualToString:</span><span class="s">@&quot;callFunction&quot;</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">//调用原生方法</span>
@@ -287,6 +297,10 @@ var jiathis_config = {data_track_clickback:'true'};
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/06/01/phonegap-ios/">iOS版PhoneGap原理分析</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/25/singleton-in-ios/">iOS中的单例模式</a>
       </li>
     
@@ -300,10 +314,6 @@ var jiathis_config = {data_track_clickback:'true'};
     
       <li class="post">
         <a href="/blog/2014/04/07/category-with-instance-variables/">Category添加实例变量的故事</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/08/js-communicate-with-native-in-iOS/">iOS Js与native相互通信</a>
       </li>
     
   </ul>
