@@ -142,7 +142,7 @@ module.exports = {
 
 因为对应的`cordova/exec`源码非常长，我只能截取最关键的代码并做说明：
 ```javascript
-define("wing/exec", function(require, exports, module) {
+define("cordova/exec", function(require, exports, module) {
 
     ...
 
@@ -168,8 +168,8 @@ define("wing/exec", function(require, exports, module) {
 
         //如果传入参数有successCallback或failCallback，说明需要回调，就设置callbackId，并存储对应的回调函数
         if (successCallback || failCallback) {
-            callbackId = service + wing.callbackId++;
-            wing.callbacks[callbackId] =
+            callbackId = service + cordova.callbackId++;
+            cordova.callbacks[callbackId] =
                 {success:successCallback, fail:failCallback};
         }
 
@@ -326,6 +326,8 @@ executePending方法其实与之后的execute方法紧密相连，这里一起�
   * CDVCommandQueue：执行js调用native的队列，调用对应的plugin
 
 ## 时序图
+PhoneGap js调用native的时序图：
+![PhoneGap](/images/2014-06-01-phonegap-ios/PhoneGap.jpg)
 
 ## 结语
 PhoneGap还是很给力的，能做到主流平台全兼容着实不容易。
