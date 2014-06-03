@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-06-04T01:29:57+08:00</updated>
+  <updated>2014-06-04T01:42:18+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -105,12 +105,11 @@ if ([[url scheme] isEqualToString:@"callFunction") {
 
 <p>Dialog是一个PhoneGap的插件，可以看<a href="https://github.com/apache/cordova-plugin-dialogs/blob/master/doc/index.md">dialog 插件文档</a>，学习下载并使用该插件。</p>
 
-<p>```
+<p><code>
 这里有个很重要的事需要说明一下：
-目前PhoneGap的文档更新非常不及时，特别是插件的使用方面，比如Dialog插件的使用，文档中写的是使用navigator.notification.alert，但是经过我的摸索，因为现在PhoneGap使用AMD的方式来管理插件，所以应该是使用cordova.require(&ldquo;cordova/plugin/notification&rdquo;).alert的方式来调用。</p>
-
-<p>插件的合并方面，也有很多坑，主要是文档不全 &ndash; &ndash;|||
-```</p>
+目前PhoneGap的文档更新非常不及时，特别是插件的使用方面，比如Dialog插件的使用，文档中写的是使用navigator.notification.alert，但是经过我的摸索，因为现在PhoneGap使用AMD的方式来管理插件，所以应该是使用cordova.require("cordova/plugin/notification").alert的方式来调用。
+插件的合并方面，也有很多坑，主要是文档不全 - -|||
+</code></p>
 
 <h3>js部分</h3>
 
@@ -163,9 +162,9 @@ alert: function(message, completeCallback, title, buttonLabel) {
 <p>&hellip;.
 ```</p>
 
-<p>可以看到alert最终其实是调用了<code>exec</code>来调用native代码的，<code>exec</code>非常关键，是PhoneGap js调用native的核心代码。</p>
+<p>可以看到alert最终其实是调用了<code>exec</code>方法来调用native代码的，<code>exec</code>方法非常关键，是PhoneGap js调用native的核心代码。</p>
 
-<p>然后在源码中搜索<code>cordova/exec</code>，查看exec方法的源码。</p>
+<p>然后在源码中搜索<code>exec对应的cordova/exec</code>，查看exec方法的源码。</p>
 
 <p>因为对应的<code>cordova/exec</code>源码非常长，我只能截取最关键的代码并做说明：
 ```javascript
@@ -365,7 +364,13 @@ NSString* buttons = [command argumentAtIndex:2];
 
 <p>前面用<code>objc_msgSend(obj, normalSelector, command);</code>做消息发送，执行的便是这块代码，代码很好理解，就是对command再做解析，并显示。</p>
 
-<p>到此为止，我们已经走完完从js端调用native alert的全部过程了。</p>
+<p>最终效果：</p>
+
+<p><img src="/images/2014-06-01-phonegap-ios/alert.png" alt="alert" /></p>
+
+<p>点击"Done"，native会再回调执行js端的成功回调，这里对应的就是js里设置的alertDismissed方法。</p>
+
+<p>到此为止，我们已经走完从js端调用native alert的全部过程了。</p>
 
 <p>列下过程的核心代码：</p>
 
