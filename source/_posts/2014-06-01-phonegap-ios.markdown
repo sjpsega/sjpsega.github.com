@@ -90,7 +90,6 @@ Dialog是一个PhoneGap的插件，可以看[dialog 插件文档](https://github
 ```
 这里有个很重要的事需要说明一下：
 目前PhoneGap的文档更新非常不及时，特别是插件的使用方面，比如Dialog插件的使用，文档中写的是使用navigator.notification.alert，但是经过我的摸索，因为现在PhoneGap使用AMD的方式来管理插件，所以应该是使用cordova.require("cordova/plugin/notification").alert的方式来调用。
-
 插件的合并方面，也有很多坑，主要是文档不全 - -|||
 ```
 
@@ -136,9 +135,9 @@ module.exports = {
 ....
 ```
 
-可以看到alert最终其实是调用了`exec`来调用native代码的，`exec`非常关键，是PhoneGap js调用native的核心代码。
+可以看到alert最终其实是调用了`exec`方法来调用native代码的，`exec`方法非常关键，是PhoneGap js调用native的核心代码。
 
-然后在源码中搜索`cordova/exec`，查看exec方法的源码。
+然后在源码中搜索`exec对应的cordova/exec`，查看exec方法的源码。
 
 因为对应的`cordova/exec`源码非常长，我只能截取最关键的代码并做说明：
 ```javascript
@@ -315,7 +314,13 @@ executePending方法其实与之后的execute方法紧密相连，这里一起�
 
 前面用`objc_msgSend(obj, normalSelector, command);`做消息发送，执行的便是这块代码，代码很好理解，就是对command再做解析，并显示。
 
-到此为止，我们已经走完完从js端调用native alert的全部过程了。
+最终效果：
+
+![alert](/images/2014-06-01-phonegap-ios/alert.png)
+
+点击"Done"，native会再回调执行js端的成功回调，这里对应的就是js里设置的alertDismissed方法。
+
+到此为止，我们已经走完从js端调用native alert的全部过程了。
 
 列下过程的核心代码：
 
