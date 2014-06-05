@@ -35,7 +35,7 @@ Cordova是PhoneGap贡献给Apache后的开源项目，是从PhoneGap中抽离出
 
 渊源就是：早在2011年10月，Adobe收购了Nitobi Software和它的PhoneGap产品，然后宣布这个移动Web开发框架将会继续开源，并把它提交到Apache Incubator，以便完全接受ASF的管治。当然，由于Adobe拥有了PhoneGap商标，所以开源组织的这个PhoneGap v2.0版产品就更名为Apache Cordova。
 
-为什么说这个？因为下面的文章中，会出现Cordova这个命令，大家不要觉得奇怪。
+为什么说这个？因为下面的文章中，会出现`Cordova`这个命令，大家不要觉得奇怪。
 
 ## js与native通信的原理
 
@@ -73,12 +73,14 @@ Cordova是PhoneGap贡献给Apache后的开源项目，是从PhoneGap中抽离出
     }
 }
 ```
+值得注意的是，通过这个方式，js调用native是`异步`的。
 
 ### native -> js
 native调用js非常简洁方便，只需要
 ```objc
 [webView stringByEvaluatingJavaScriptFromString:@"alert('hello world!')"];
 ```
+并且该方法是`同步`的。
 
 native调用js非常简单直接，所以PhoneGap解决的主要是js调用native的问题。
 
@@ -196,7 +198,7 @@ define("cordova/exec", function(require, exports, module) {
 });
 ```
 
-为了调用native方法，iOSExec方法做了大量初始化的工作，这么做的原因，还是因为`iOS没有提供直接的方法来执行js调用native，不能把参数直接传递给native，所以只能通过js端存储对应操作的所有参数，然后通过指令来让native代码来回调的方式间接完成。`
+为了调用native方法，exec方法做了大量初始化的工作，这么做的原因，还是因为`iOS没有提供直接的方法来执行js调用native，不能把参数直接传递给native，所以只能通过js端存储对应操作的所有参数，然后通过指令来让native代码来回调的方式间接完成。`
 
 ### native部分
 之后，就走到了native代码的部分。
@@ -331,7 +333,7 @@ executePending方法其实与之后的execute方法紧密相连，这里一起�
   * CDVCommandQueue：执行js调用native的队列，调用对应的plugin
 
 ## 时序图
-PhoneGap js调用native的时序图：
+以上Dialog例子中，PhoneGap js调用native的时序图：
 ![PhoneGap](/images/2014-06-01-phonegap-ios/PhoneGap.jpg)
 
 ## 结语
