@@ -1,0 +1,86 @@
+---
+layout: post
+title: "ARC学习笔记"
+date: 2014-06-25 00:50:28 +0800
+comments: true
+categories: study
+keywords: iOS ARC MRC
+---
+
+## ARC执行新规则
+* 开发者不能显示调用 `dealloc`；不能实现和调用 retain、release、retainCount 和 autorelease。
+* 不能使用 NSAllocateObject 或者 NSDeallocateObject 。开发者创建对象使用alloc，运行时环境负责销毁对象。
+* 在 C 数据结构中，不能使用对象指针。可以使用 OC 类来代替 C 的 struct。
+* id 和 void * 没有自动转换。
+* 开发者不能使用 NSAutoreleasePool 对象。ARC 下使用 @autoreleasepool，它比 NSAtuoreleasePool 更有效率。
+* 开发者不能使用内存zones。不用再使用 NSZone 了。
+
+为了配合手动引用计数，ARC 的方法命名有限制：
+* 访问器方法不能以 new 开头，开发者不能声明一个以 new 开头的属性，除非你给你指定一个getter：
+
+```objc
+// Won't work:
+@property NSString *newTitle;
+ 
+// Works:
+@property (getter=theNewTitle) NSString *newTitle;
+```
+
+## ARC引入新的生命周期修饰符
+
+### 变量修饰符
+* `__strong` 是默认的，只要对象还有强引用，他就一直存在。
+* `__weak` 指向一个不会保持被引用对象一直存在的引用。当没有强引用指向它，弱引用将被设置为 nil。
+* `__unsafe_unretained` 指向一个不会保持被引用对象一直存在的引用，它`不会`被设置为 nil，当没有强引用指向它。如果它引用的对象被释放，指针会变成野指针。
+* `__autoreleasing` 用于标识id *的引用参数，并且在返回的时候自动释放。
+
+### 使用生命周期修饰符，避免循环引用
+在MRC下，`__block id x;`这样的写法，不会对x进行retain。
+
+在ARC下，`__block id x;`默认retain x（就像其他变量一样）。
+
+如果想在ARC模式下，得到手动引用计数的效果，开发者可以使用`__unsafe_unretained __block id x;`。顾名思义，`__unsafe_unretained是危险的`(因为他可能导致野指针)，因此也不建议使用。`好的解决方案是：使用__weak或者将__block的值设置为nil，来打断retain循环`。
+
+* 使用 `__block` ，然后设置为 `nil`：
+```objc
+MyViewController * __block myController = [[MyViewController alloc] init…];
+// ...
+myController.completionHandler =  ^(NSInteger result) {
+    [myController dismissViewControllerAnimated:YES completion:nil];
+    myController = nil;
+};
+```
+
+* 使用 `__weak` 修饰符 ：
+```objc
+MyViewController *myController = [[MyViewController alloc] init…];
+// ...
+MyViewController * __weak weakMyViewController = myController;
+myController.completionHandler =  ^(NSInteger result) {
+    [weakMyViewController dismissViewControllerAnimated:YES completion:nil];
+};
+```
+
+* 对于复杂场景： 
+```objc
+MyViewController *myController = [[MyViewController alloc] init…];
+// ...
+MyViewController * __weak weakMyController = myController;
+myController.completionHandler =  ^(NSInteger result) {
+    MyViewController *strongMyController = weakMyController;
+    if (strongMyController) {
+        // ...
+        [strongMyController dismissViewControllerAnimated:YES completion:nil];
+        // ...
+    }
+    else {
+        // Probably nothing...
+    }
+};
+```
+
+## 相关资料
+
+[Transitioning to ARC Release Notes](https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html)
+
+[转向ARC的说明](http://www.cocoachina.com/applenews/devnews/2013/1209/7497.html)
