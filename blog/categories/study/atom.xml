@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-06-05T10:31:04+08:00</updated>
+  <updated>2014-07-05T22:08:17+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,584 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ARC学习笔记]]></title>
+    <link href="http://sjpsega.com/blog/2014/06/25/arc-note/"/>
+    <updated>2014-06-25T00:50:28+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/06/25/arc-note</id>
+    <content type="html"><![CDATA[<h2>ARC执行新规则</h2>
+
+<ul>
+<li>开发者不能显示调用 <code>dealloc</code>；不能实现和调用 retain、release、retainCount 和 autorelease。</li>
+<li>不能使用 NSAllocateObject 或者 NSDeallocateObject 。开发者创建对象使用alloc，运行时环境负责销毁对象。</li>
+<li>在 C 数据结构中，不能使用对象指针。可以使用 OC 类来代替 C 的 struct。</li>
+<li>id 和 void * 没有自动转换。</li>
+<li>开发者不能使用 NSAutoreleasePool 对象。ARC 下使用 @autoreleasepool，它比 NSAtuoreleasePool 更有效率。</li>
+<li>开发者不能使用内存zones。不用再使用 NSZone 了。</li>
+</ul>
+
+
+<p>为了配合手动引用计数，ARC 的方法命名有限制：
+* 访问器方法不能以 new 开头，开发者不能声明一个以 new 开头的属性，除非你给你指定一个getter：</p>
+
+<p>```objc
+// Won&rsquo;t work:
+@property NSString *newTitle;</p>
+
+<p>// Works:
+@property (getter=theNewTitle) NSString *newTitle;
+```</p>
+
+<h2>ARC引入新的生命周期修饰符</h2>
+
+<h3>变量修饰符</h3>
+
+<ul>
+<li><code>__strong</code> 是默认的，只要对象还有强引用，他就一直存在。</li>
+<li><code>__weak</code> 指向一个不会保持被引用对象一直存在的引用。当没有强引用指向它，弱引用将被设置为 nil。</li>
+<li><code>__unsafe_unretained</code> 指向一个不会保持被引用对象一直存在的引用，它<code>不会</code>被设置为 nil，当没有强引用指向它。如果它引用的对象被释放，指针会变成野指针。</li>
+<li><code>__autoreleasing</code> 用于标识id *的引用参数，并且在返回的时候自动释放。</li>
+</ul>
+
+
+<h3>使用生命周期修饰符，避免循环引用</h3>
+
+<p>在MRC下，<code>__block id x;</code>这样的写法，不会对x进行retain。</p>
+
+<p>在ARC下，<code>__block id x;</code>默认retain x（就像其他变量一样）。</p>
+
+<p>如果想在ARC模式下，得到手动引用计数的效果，开发者可以使用<code>__unsafe_unretained __block id x;</code>。顾名思义，<code>__unsafe_unretained是危险的</code>(因为他可能导致野指针)，因此也不建议使用。<code>好的解决方案是：使用__weak或者将__block的值设置为nil，来打断retain循环</code>。</p>
+
+<ul>
+<li><p>使用 <code>__block</code> ，然后设置为 <code>nil</code>：
+<code>objc
+MyViewController * __block myController = [[MyViewController alloc] init…];
+// ...
+myController.completionHandler =  ^(NSInteger result) {
+  [myController dismissViewControllerAnimated:YES completion:nil];
+  myController = nil;
+};
+</code></p></li>
+<li><p>使用 <code>__weak</code> 修饰符 ：
+<code>objc
+MyViewController *myController = [[MyViewController alloc] init…];
+// ...
+MyViewController * __weak weakMyViewController = myController;
+myController.completionHandler =  ^(NSInteger result) {
+  [weakMyViewController dismissViewControllerAnimated:YES completion:nil];
+};
+</code></p></li>
+<li><p>对于复杂场景：
+<code>objc
+MyViewController *myController = [[MyViewController alloc] init…];
+// ...
+MyViewController * __weak weakMyController = myController;
+myController.completionHandler =  ^(NSInteger result) {
+  MyViewController *strongMyController = weakMyController;
+  if (strongMyController) {
+      // ...
+      [strongMyController dismissViewControllerAnimated:YES completion:nil];
+      // ...
+  }
+  else {
+      // Probably nothing...
+  }
+};
+</code></p></li>
+</ul>
+
+
+<h2>相关资料</h2>
+
+<p><a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html">Transitioning to ARC Release Notes</a></p>
+
+<p><a href="http://www.cocoachina.com/applenews/devnews/2013/1209/7497.html">转向ARC的说明</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[《#2 并发编程》 学习笔记]]></title>
+    <link href="http://sjpsega.com/blog/2014/06/12/concurrent-programming-note/"/>
+    <updated>2014-06-12T12:49:46+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/06/12/concurrent-programming-note</id>
+    <content type="html"><![CDATA[<p>文章地址：<a href="http://objccn.io/issue-2/">objc第二章</a></p>
+
+<h2>并发编程：API 及挑战</h2>
+
+<h3>OS X 和 iOS 中的并发编程</h3>
+
+<h4>Grand Central Dispatch(GCD)</h4>
+
+<p>GCD 在后端管理着一个线程池，可以将开发者从线程管理的工作中解放出来，通过集中的管理线程，来缓解大量线程被创建的问题。在日常开发中，最好使用 GCD 来做线程方面的工作。</p>
+
+<p>GCD 公开有 5 个不同的队列：运行在主线程中的 main queue，3 个不同优先级的后台队列，以及一个优先级更低的后台队列（用于 I/O）</p>
+
+<p>使用不同优先级的若干个队列乍听起来非常直接，不过，我们强烈建议，<code>在绝大多数情况下使用默认的优先级队列就可以了</code>。</p>
+
+<p><img src="http://img.objccn.io/issue-2/gcd-queues.png" alt="http://img.objccn.io/issue-2/gcd-queues.png" /></p>
+
+<h4>Operation Queues</h4>
+
+<p>操作队列（operation queue）是由 GCD 提供的一个队列模型的 Cocoa 抽象。GCD 提供了更加底层的控制，而操作队列则在 GCD 之上实现了一些方便的功能，这些功能对于 app 的开发者来说通常是最好最安全的选择。</p>
+
+<p><code>NSOperationQueue</code> 有两种不同类型的队列：主队列和自定义队列。主队列运行在主线程之上，而自定义队列在后台执行。在两种类型中，这些队列所处理的任务都使用 <code>NSOperation</code> 的子类来表述。</p>
+
+<h4>Run Loops</h4>
+
+<p>Run loop并不像 GCD 或者操作队列那样是一种并发机制，因为它并不能并行执行任务。不过在主 dispatch/operation 队列中， run loop 将直接配合任务的执行，它提供了一种异步执行代码的机制。</p>
+
+<p>Run loop 比起操作队列或者 GCD 来说容易使用得多，因为通过 run loop ，你不必处理并发中的复杂情况，就能异步地执行任务。</p>
+
+<h3>并发编程中面临的挑战</h3>
+
+<h4>资源共享</h4>
+
+<p>并发编程中许多问题的根源就是在多线程中访问共享资源。</p>
+
+<p>在多线程中任何一个共享的资源都可能是一个潜在的冲突点，你必须精心设计以防止这种冲突的发生。</p>
+
+<p>为了防止出现这样的问题，多线程需要一种互斥的机制来访问共享资源。</p>
+
+<h4>互斥锁</h4>
+
+<p>互斥访问的意思就是同一时刻，只允许一个线程访问某个特定资源。</p>
+
+<p>从语言层面来说，在 Objective-C 中将属性以 atomic 的形式来声明，就能支持互斥锁了。事实上在默认情况下，属性就是 atomic 的。将一个属性声明为 atomic 表示每次访问该属性都会进行隐式的加锁和解锁操作。虽然最把稳的做法就是将所有的属性都声明为 atomic，但是加解锁这也会付出一定的代价。</p>
+
+<h4>死锁</h4>
+
+<p>互斥锁解决了竞态条件的问题，但很不幸同时这也引入了一些其他问题，其中一个就是死锁。当多个线程在相互等待着对方的结束时，就会发生死锁，这时程序可能会被卡住。</p>
+
+<h4>资源饥饿（Starvation）</h4>
+
+<p>大多数情况下，限制资源一次只能有一个线程进行读取访问其实是非常浪费的。因此，在资源上没有写入锁的时候，持有一个读取锁是被允许的。这种情况下，如果一个持有读取锁的线程在等待获取写入锁的时候，其他希望读取资源的线程则因为无法获得这个读取锁而导致资源饥饿的发生。</p>
+
+<h4>优先级反转</h4>
+
+<p>优先级反转是指程序在运行时低优先级的任务阻塞了高优先级的任务，有效的反转了任务的优先级。</p>
+
+<p>解决这个问题的方法，通常就是不要使用不同的优先级。通常最后你都会以让高优先级的代码等待低优先级的代码来解决问题。<code>当你使用 GCD 时，总是使用默认的优先级队列（直接使用，或者作为目标队列）</code>。如果你使用不同的优先级，很可能实际情况会让事情变得更糟糕。</p>
+
+<h3>总结</h3>
+
+<p>建议采纳的安全模式：从主线程中提取出要使用到的数据，并利用一个操作队列在后台处理相关的数据，最后回到主队列中来发送你在后台队列中得到的结果。使用这种方式，你不需要自己做任何锁操作，这也就大大减少了犯错误的几率。</p>
+
+<h2>常见的后台实践</h2>
+
+<h3>操作队列 (Operation Queues) 还是 GCD ?</h3>
+
+<p><code>GCD 是基于 C 的底层的 API ，而操作队列则是 GCD 实现的 Objective-C API。</code></p>
+
+<p><code>操作队列可以取消在任务处理队列中的任务</code>，而在 GCD 中不容易实现。</p>
+
+<h4>后台的 Core Data</h4>
+
+<p><code>Core Data</code>不熟悉</p>
+
+<h3>后台 UI 代码</h3>
+
+<p><code>UIKit 只能在主线程上运行。</code>而那部分不与 UIKit 直接相关，却会消耗大量时间的 UI 代码可以被移动到后台去处理。</p>
+
+<h3>异步网络请求处理</h3>
+
+<ul>
+<li>所有网络请求都应该采取异步的方式完成。</li>
+<li>可以使用 <code>NSURLConnection</code> 的异步方法，并且把所有操作转化为 operation 来执行。通过这种方法，我们可以从操作队列的强大功能和便利中获益良多：我们能轻易地控制并发操作的数量，添加依赖，以及取消操作。</li>
+<li>使用像 <a href="http://afnetworking.com/">AFNetworking</a> 这样的框架：建立一个独立的线程，为建立的线程设置自己的 run loop，然后在其中调度 URL 连接。但是并不推荐你自己去实现这些事情。</li>
+</ul>
+
+
+<h3>进阶：后台文件 I/O</h3>
+
+<p>大体上逐行读取一个文件的模式是这样的：</p>
+
+<ol>
+<li>建立一个中间缓冲层以提供，当没有找到换行符号的时候可以向其中添加数据</li>
+<li>从 stream 中读取一块数据</li>
+<li>对于这块数据中发现的每一个换行符，取中间缓冲层，向其中添加数据，直到（并包括）这个换行符，并将其输出</li>
+<li>将剩余的字节添加到中间缓冲层去</li>
+<li>回到 2，直到 stream 关闭</li>
+</ol>
+
+
+<h3>总结</h3>
+
+<p>在主队列中接收事件或者数据，然后用后台操作队列来执行实际操作，然后回到主队列去传递结果，遵循这样的原则来编写尽量简单的并行代码，将是保证高效正确的不二法则。</p>
+
+<h2>底层并发 API</h2>
+
+<h3>dispatch_once</h3>
+
+<p>```objc
++ (UIColor *)boringColor;
+{</p>
+
+<pre><code>static UIColor *color;
+static dispatch_once_t onceToken;
+dispatch_once(&amp;onceToken, ^{
+    color = [UIColor colorWithRed:0.380f green:0.376f blue:0.376f alpha:1.000f];
+});
+return color;
+</code></pre>
+
+<p>}
+<code>``
+上面的 block 只会运行一次。并且在连续的调用中，这种检查是很高效的。你能使用它来初始化全局数据比如单例。要注意的是，使用</code>dispatch_once_t` 会使得测试变得非常困难（单例和测试不是很好配合）。</p>
+
+<p><code>要确保 onceToken 被声明为 static ，或者有全局作用域。任何其他的情况都会导致无法预知的行为。</code></p>
+
+<h3>dispatch_after</h3>
+
+<p>它使工作延后执行。它是很强大的，但是要注意：你很容易就陷入到一堆麻烦中。
+```objc
+&ndash; (void)foo
+{</p>
+
+<pre><code>double delayInSeconds = 2.0;
+dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t) (delayInSeconds * NSEC_PER_SEC));
+dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+    [self bar];
+});
+</code></pre>
+
+<p>}
+<code>``
+这里存在一些缺点。我们</code>不能（直接）取消我们已经提交到 dispatch_after 的代码，它将会运行`。</p>
+
+<p>如果你需要一些事情在某个特定的时刻运行，那么 <code>dispatch_after</code> 或许会是个好的选择。确保同时考虑了 <code>NSTimer</code>，这个API虽然有点笨重，但是它<code>允许你取消定时器的触发</code>。</p>
+
+<h3>队列</h3>
+
+<p>GCD 中一个基本的代码块就是队列。</p>
+
+<p>```objc
+&ndash; (id)init
+{</p>
+
+<pre><code>self = [super init];
+if (self != nil) {
+    NSString *label = [NSString stringWithFormat:@"%@.isolation.%p", [self class], self];
+    self.isolationQueue = dispatch_queue_create([label UTF8String], 0);
+
+    label = [NSString stringWithFormat:@"%@.work.%p", [self class], self];
+    self.workQueue = dispatch_queue_create([label UTF8String], 0);
+}
+return self;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>队列可以是并行也可以是串行的，也可以是并行的。默认情况下，是串行的。</p>
+
+<p>GCD 队列的内部使用的是线程。</p>
+
+<h4>目标队列</h4>
+
+<p>你能够为你创建的任何一个队列设置一个目标队列。</p>
+
+<p>为一个类创建它自己的队列而不是使用全局的队列被普遍认为是一种好的风格。这种方式下，你可以设置队列的名字，这让调试变得轻松许多—— Xcode 可以让你在 Debug Navigator 中看到所有的队列名字，如果你直接使用 lldb。(lldb) thread list 命令将会在控制台打印出所有队列的名字。一旦你使用大量的异步内容，这会是非常有用的帮助。</p>
+
+<h3>隔离</h3>
+
+<h4>资源保护</h4>
+
+<p>多线程编程中，最常见的情形是你有一个资源，每次只有一个线程被允许访问这个资源。</p>
+
+<h4>全都使用异步分发</h4>
+
+<h4>如何写出好的异步 API</h4>
+
+<p>如果你的方法或函数有一个返回值，异步地将其传递给一个回调处理程序。这个 API 应该是这样的，你的方法或函数同时持有一个结果 block 和一个将结果传递过去的队列。
+```objc
+&ndash; (void)processImage:(UIImage *)image completionHandler:(void(^)(BOOL success))handler;
+{</p>
+
+<pre><code>dispatch_async(self.isolationQueue, ^(void){
+    // do actual processing here
+    dispatch_async(self.resultQueue, ^(void){
+        handler(YES);
+    });
+});
+</code></pre>
+
+<p>}
+```</p>
+
+<h3>迭代执行</h3>
+
+<p>dispatch_apply
+```objc
+for (size_t y = 0; y &lt; height; ++y) {</p>
+
+<pre><code>for (size_t x = 0; x &lt; width; ++x) {
+    // Do something with x and y here
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>小小的改动或许就可以让它运行的更快：
+```objc
+dispatch_apply(height, dispatch_get_global_queue(0, 0), ^(size_t y) {</p>
+
+<pre><code>for (size_t x = 0; x &lt; width; x += 2) {
+    // Do something with x and y here
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<h3>组</h3>
+
+<p>```objc
+dispatch_group_t group = dispatch_group_create();</p>
+
+<p>dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
+dispatch_group_async(group, queue, ^(){</p>
+
+<pre><code>// Do something that takes a while
+[self doSomeFoo];
+dispatch_group_async(group, dispatch_get_main_queue(), ^(){
+    self.foo = 42;
+});
+</code></pre>
+
+<p>});
+dispatch_group_async(group, queue, ^(){</p>
+
+<pre><code>// Do something else that takes a while
+[self doSomeBar];
+dispatch_group_async(group, dispatch_get_main_queue(), ^(){
+    self.bar = 1;
+});
+</code></pre>
+
+<p>});</p>
+
+<p>// This block will run once everything above is done:
+dispatch_group_notify(group, dispatch_get_main_queue(), ^(){</p>
+
+<pre><code>NSLog(@"foo: %d", self.foo);
+NSLog(@"bar: %d", self.bar);
+</code></pre>
+
+<p>});
+```</p>
+
+<h4>对现有API使用 dispatch_group_t</h4>
+
+<p>```objc
++ (void)withGroup:(dispatch_group_t)group</p>
+
+<pre><code>    sendAsynchronousRequest:(NSURLRequest *)request 
+    queue:(NSOperationQueue *)queue 
+    completionHandler:(void (^)(NSURLResponse*, NSData*, NSError*))handler
+</code></pre>
+
+<p>{</p>
+
+<pre><code>if (group == NULL) {
+    [self sendAsynchronousRequest:request 
+                            queue:queue 
+                completionHandler:handler];
+} else {
+    dispatch_group_enter(group);
+    [self sendAsynchronousRequest:request 
+                            queue:queue 
+                completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
+        handler(response, data, error);
+        dispatch_group_leave(group);
+    }];
+}
+</code></pre>
+
+<p>}
+```
+为了能正常工作，你需要确保:
+* dispatch_group_enter() 必须要在 dispatch_group_leave()之前运行。
+* dispatch_group_enter() 和 dispatch_group_leave() 一直是成对出现的。</p>
+
+<h3>事件源</h3>
+
+<p>GCD 有一个较少人知道的特性：事件源 <code>dispatch_source_t</code>。</p>
+
+<p>当你需要用到它时，它会变得极其有用。它的一些使用是秘传招数，我们将会接触到一部分的使用。但是大部分事件源在 iOS 平台不是很有用，因为在 iOS 平台有诸多限制，你无法启动进程（因此就没有必要监视进程），也不能在你的 app bundle 之外写数据（因此也就没有必要去监视文件）等等。</p>
+
+<p>GCD 事件源是以极其资源高效的方式实现的。</p>
+
+<h4>监视进程</h4>
+
+<h4>监视文件</h4>
+
+<h4>定时器</h4>
+
+<h4>取消</h4>
+
+<h3>输入输出</h3>
+
+<p>写出能够在繁重的 I/O 处理情况下运行良好的代码是一件非常棘手的事情。</p>
+
+<h4>GCD 和缓冲区</h4>
+
+<p>最直接了当的方法是使用数据缓冲区。GCD 有一个 <code>dispatch_data_t</code> 类型，在某种程度上和 Objective-C 的 NSData 类型很相似。但是它能做别的事情，而且更通用。</p>
+
+<h4>读和写</h4>
+
+<p>在 GCD 的核心里，调度 I/O（译注：原文为 Dispatch I/O） 与所谓的通道有关。调度 I/O 通道提供了一种与从文件描述符中读写不同的方式。</p>
+
+<h3>基准测试</h3>
+
+<p>能够测量给定的代码执行的平均的纳秒数。
+<code>objc
+uint64_t dispatch_benchmark(size_t count, void (^block)(void));
+</code></p>
+
+<h3>原子操作</h3>
+
+<p>头文件 <code>libkern/OSAtomic.h</code> 里有许多强大的函数，专门用来底层多线程编程。尽管它是内核头文件的一部分，它也能够在内核之外来帮助编程。</p>
+
+<h4>计数器</h4>
+
+<h4>原子队列</h4>
+
+<h4>自旋锁</h4>
+
+<p>OSAtomic.h 头文件定义了使用自旋锁的函数：OSSpinLock。</p>
+
+<h2>线程安全类的设计</h2>
+
+<h3>线程安全</h3>
+
+<h4>Apple 的框架</h4>
+
+<p>一般来说除非特别声明，大多数的类默认都<code>不是</code>线程安全的。</p>
+
+<p>Apple没有把 UIKit 设计为线程安全的类是有意为之的，将其打造为线程安全的话会使很多操作变慢。而事实上 UIKit 是和主线程绑定的，这一特点使得编写并发程序以及使用 UIKit 十分容易的，你唯一需要确保的就是对于 UIKit 的调用总是在主线程中来进行。</p>
+
+<h4>为什么 UIKit 不是线程安全的？</h4>
+
+<p>对于一个像 UIKit 这样的大型框架，确保它的线程安全将会带来巨大的工作量和成本。</p>
+
+<h4>内存回收 (deallocation) 问题</h4>
+
+<p>另一个在后台使用 UIKit 对象的的危险之处在于“内存回收问题”。</p>
+
+<h4>Collection 类</h4>
+
+<p>总的来说，比如 <code>NSArry 这样不可变类是线程安全的</code>。然而它们的可变版本，比如 <code>NSMutableArray 是线程不安全的</code>。</p>
+
+<p>一个好习惯是写类似于 <code>return [array copy]</code> 这样的代码来确保返回的对象事实上是不可变对象。</p>
+
+<h4>原子属性 (Atomic Properties)</h4>
+
+<h5>为何不用 @synchronized ？</h5>
+
+<p><code>@synchonized(self)</code> 更适合使用在你 需要确保在发生错误时代码不会死锁，而是抛出异常的时候。</p>
+
+<h4>你自己的类</h4>
+
+<p>单独使用原子属性并不会使你的类变成线程安全。它不能保护你应用的逻辑，只能保护你免于在 setter 中遭遇到竞态条件的困扰。</p>
+
+<p>一个简单的解决办法是使用 <code>@synchronize</code>。其他的方式都非常非常可能使你误入歧途，已经有太多聪明人在这种尝试上一次又一次地以失败告终。</p>
+
+<h5>可行的线程安全设计</h5>
+
+<h3>GCD 的陷阱</h3>
+
+<p><a href="http://www.cnblogs.com/yjg2014/p/yjg.html">http://www.cnblogs.com/yjg2014/p/yjg.html</a></p>
+
+<p><a href="http://m.blog.csdn.net/blog/againbike/11870459">http://m.blog.csdn.net/blog/againbike/11870459</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[《#1 更轻量的 View Controllers》 学习笔记]]></title>
+    <link href="http://sjpsega.com/blog/2014/06/11/lighter-view-controllers-note/"/>
+    <updated>2014-06-11T12:01:53+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/06/11/lighter-view-controllers-note</id>
+    <content type="html"><![CDATA[<p>文章地址：<a href="http://objccn.io/issue-1/">objc第一章</a></p>
+
+<h2>更轻量的 View Controllers</h2>
+
+<ul>
+<li>针对<code>UITableViewController</code>等VC，可以把对应的<code>UITableViewDataSource</code>、<code>UITableViewDelegate</code>等<code>Protocol</code>代码，写成单独的类，再设置给VC的dataSource或deletege</li>
+<li>将业务逻辑、网络请求逻辑移到 Model 中</li>
+</ul>
+
+
+<h2>整洁的 Table View 代码</h2>
+
+<h3>添加Child View Controllers的步骤</h3>
+
+<p><code>objc
+ChildViewController *childVC = [[ChildViewController alloc] init];
+[self addChildViewController:childVC];
+CGRect frame = self.view.bounds;
+childVC.view.frame = frame;
+[self.view addSubview:childVC.view];
+[childVC didMoveToParentViewController:self];
+</code></p>
+
+<h3>移除Child View Controllers的步骤</h3>
+
+<p><code>objc
+[childVC willMoveToParentViewController:nil];
+[childVC.view removeFromSuperview];
+[childVC removeFromParentViewController];
+</code>
+源自：<a href="http://geeklu.com/2014/05/custom-container-view-controller/">Custom Container View Controller</a></p>
+
+<h3>分离关注点（Separating Concerns）</h3>
+
+<p>这块最好对照看下文章的代码实践：<a href="http://objccn.io/issue-1-2/">http://objccn.io/issue-1-2/</a></p>
+
+<h2>测试 View Controllers</h2>
+
+<h2>View Controller 容器</h2>
+
+<h3>过场动画 &ndash; 新老VC替换</h3>
+
+<p>```objc
+toController.view.frame = fromController.view.bounds;                         <br/>
+[self addChildViewController:toController];                                   <br/>
+[fromController willMoveToParentViewController:nil]; <br/>
+[self transitionFromViewController:fromController</p>
+
+<pre><code>              toViewController:toController
+                      duration:0.2
+                       options:direction | UIViewAnimationOptionCurveEaseIn
+                    animations:nil
+                    completion:^(BOOL finished) {
+                        [toController didMoveToParentViewController:self];  
+                        [fromController removeFromParentViewController];    
+                    }];
+</code></pre>
+
+<p>```</p>
+
+<h2>代码学习：</h2>
+
+<p>代码地址：<a href="https://github.com/objcio/issue-1-lighter-view-controllers">https://github.com/objcio/issue-1-lighter-view-controllers</a></p>
+
+<h3>反序列化</h3>
+
+<p><code>objc
+NSData *data = [NSData dataWithContentsOfURL:archiveURL options:0 error:NULL];
+NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+_users = [unarchiver decodeObjectOfClass:[NSArray class] forKey:@"users"];
+_photos = [unarchiver decodeObjectOfClass:[NSArray class] forKey:@"photos"];
+[unarchiver finishDecoding];
+</code></p>
+
+<p><a href="http://stackoverflow.com/questions/17301769/when-to-use-nssecurecoding">When to use NSSecureCoding</a></p>
+
+<p><a href="http://nshipster.com/nssecurecoding/">NSSecure​Coding</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS版PhoneGap原理分析]]></title>
@@ -549,1147 +1127,6 @@ return self;
 
 
 <p>该实现，我是自己在实践中，觉得更好的单例实现，如有问题，请及时反馈。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Category添加实例变量的故事]]></title>
-    <link href="http://sjpsega.com/blog/2014/04/07/category-with-instance-variables/"/>
-    <updated>2014-04-07T20:55:16+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/04/07/category-with-instance-variables</id>
-    <content type="html"><![CDATA[<h2>起因</h2>
-
-<p>有一个需求，针对 url 字符串，需要根据传入的key获取对应参数键值对的value。例如：</p>
-
-<p><code>objc
-NSString *urlString = @"http://www.1688.com?key1=val1&amp;key2=val2";
-NSURL *url = [NSURL URLWithString:urlString];
-NSString *val = [url paramWithKey:@"key1"];
-</code></p>
-
-<p>NSURL 类虽然自带方法很多，但是却没有这个有用的方法。故需要做类扩展（Category）。</p>
-
-<p>实现的时候，需要一个 NSDictionary 类型的实例变量来存储 url 字符串的参数键值对，便于多次调用 -paramWithKey 的时候，提高性能。</p>
-
-<h2>经过</h2>
-
-<p>写的时候，闹了几个笑话，走了弯路，记录下来。</p>
-
-<h3>在头文件中添加变量</h3>
-
-<p><code>objc
-@interface NSURL (WingQueryDictionary)
-@property (nonatomic, copy) NSDictionary *queryDictionary;
-@end
-</code></p>
-
-<p>结果：编译不报错，但是实际执行中，实例中，找不到 self.queryDictionary 这个变量。</p>
-
-<h3>直接在 Category 中添加实例变量</h3>
-
-<p>```objc
-@implementation NSURL (QueryDictionary){</p>
-
-<pre><code>NSDictionary *queryDictionary;
-</code></pre>
-
-<p>}
-@end
-```</p>
-
-<p>结果：编译直接报错，因为<code>Category不允许为已有的类添加新的属性或者实例变量，只能添加新方法</code>。</p>
-
-<h3>在匿名 Category 中添加实例变量</h3>
-
-<p>```objc
-@interface NSURL(){</p>
-
-<pre><code>NSDictionary *queryDictionary;
-</code></pre>
-
-<p>}
-@end</p>
-
-<p>@implementation NSURL (QueryDictionary){</p>
-
-<pre><code>NSDictionary *queryDictionary;
-</code></pre>
-
-<p>}</p>
-
-<ul>
-<li>(NSString <em>)paramWithKey:(NSString </em>)key{
-  return self.queryDictionary[key];
-}
-@end
-```</li>
-</ul>
-
-
-<p>结果：编译直接报错，原因同上。</p>
-
-<h3>添加一个类变量</h3>
-
-<p>```objc
-static NSDictionary *queryDictionary;</p>
-
-<p>@implementation NSURL (WingQueryDictionary)
-@end
-```</p>
-
-<p>结果：能够完成需求，但是若新建多个 NSURL 并调用 -paramWithKey 方法，参数获取会有bug。</p>
-
-<h3>利用 runtime.h 来实现添加实例变量</h3>
-
-<p>最后，实在没辙了，只能 google 找方法。</p>
-
-<p>发现可以<code>利用 runtime.h 中 objc_getAssociatedObject / objc_setAssociatedObject 方法来模拟生成实例变量</code>。</p>
-
-<p>关键代码：
-```objc</p>
-
-<h1>import &lt;objc/runtime.h></h1>
-
-<p>static const char *varKey = &ldquo;queryDictionary&rdquo;;</p>
-
-<ul>
-<li><p>(NSDictionary <em>)queryDictionary {
-  return (NSDictionary </em>)objc_getAssociatedObject(self, &amp;varKey);
-}</p></li>
-<li><p>(void)setQueryDictionary:(NSDictionary *)queryDictionary {
-  objc_setAssociatedObject(self, &amp;varKey, queryDictionary, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-```</p></li>
-</ul>
-
-
-<h3>API 解析</h3>
-
-<p>设置实例对象：
-<code>objc
-void objc_setAssociatedObject(id object, const void *key, id value, objc_AssociationPolicy policy)
-</code>
-用该方法来完成实例变量的 setter 实现。</p>
-
-<ul>
-<li>参数 id：设置实例对象相关的实例，通常为self</li>
-<li>参数 key：设置实例对象的key，即name</li>
-<li>参数 value：设置实例对象的值</li>
-<li>参数 policy：设置实例对象的内存对策，可选值如下：
-
-<ul>
-<li>(weak) / (assign) OBJC_ASSOCIATION_ASSIGN</li>
-<li>(strong) / (retain) OBJC_ASSOCIATION_RETAIN</li>
-<li>(copy) OBJC_ASSOCIATION_COPY</li>
-<li>(nonatomic,strong) OBJC_ASSOCIATION_RETAIN_NONATOMIC</li>
-<li>(nonatomic,copy) OBJC_ASSOCIATION_COPY_NONATOMIC</li>
-</ul>
-</li>
-</ul>
-
-
-<p>获得实例对象：
-<code>objc
-id objc_getAssociatedObject(id object, void *key)
-</code>
-完成实例变量的 getter实现。看了 setter 实现，这个方法的参数就很容易理解了。</p>
-
-<h2>参考资料</h2>
-
-<p><a href="http://www.cnblogs.com/wupher/archive/2013/01/05/2845338.html">让Category支持添加属性与成员变量</a></p>
-
-<p><a href="http://kaspermunck.github.io/2012/11/adding-properties-to-objective-c-categories/">Adding Properties to Objective-C Categories</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS Js与native相互通信]]></title>
-    <link href="http://sjpsega.com/blog/2014/03/08/js-communicate-with-native-in-iOS/"/>
-    <updated>2014-03-08T21:53:16+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/03/08/js-communicate-with-native-in-iOS</id>
-    <content type="html"><![CDATA[<h2>js与navive相互通信的机制</h2>
-
-<h3>js &ndash;> native</h3>
-
-<p>目前，截止至iOS7，iOS原生并没有提供js直接调用native的方式，只能通过UIWebView相关的UIWebViewDelegate协议的</p>
-
-<p><code>objc
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-</code></p>
-
-<p>方法来做拦截，并在这个方法中，根据url的协议或特征字符串来做调用方法或触发事件等工作，如</p>
-
-<p>```objc
-/<em>
-* 方法的返回值是BOOL值。
-* 返回YES：表示让浏览器执行默认操作，比如某个a链接跳转
-* 返回NO：表示不执行浏览器的默认操作，这里因为通过url协议来判断js执行native的操作，肯定不是浏览器默认操作，故返回NO
-* /
-&ndash; (BOOL)webView:(UIWebView </em>)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {</p>
-
-<pre><code>NSURL *url = [request URL];
-if ([[url scheme] isEqualToString:@"callFunction") {
-    //调用原生方法
-
-    return NO;
-} else if (([[url scheme] isEqualToString:@"sendEvent") {    
-    //触发事件
-
-    return NO;
-} else {
-    return YES;
-}
-</code></pre>
-
-<p>}
-<code>``
-虽然通过这个方式，js调用native是</code>异步`的，但是效率还是很高，我通过在js调用端，把time传入navive然后相减的方式计算，平均只有5ms的时间间隔。</p>
-
-<h4>如何触发这个方法拦截</h4>
-
-<p>最最简单且实用的方法莫过于用js创建一个隐藏的iframe设置src了，代码：</p>
-
-<p>```js
-function js2native(){</p>
-
-<pre><code>var iframe = document.createElement("iframe");
-iframe.src="callFunction://";
-iframe.style.display = 'none';
-document.body.appendChild(iframe);
-iframe.parentNode.removeChild(iFrame);
-iframe = null;
-</code></pre>
-
-<p>}
-```</p>
-
-<p>通过查看phoneGap源码的iOSExec方法，还有使用XMLHttpRequest或修改hash的方式来触发方法拦截，但是因为有bug或其他原因，不推荐。</p>
-
-<h3>native &ndash;> js</h3>
-
-<p>native调用js非常简洁方便，只需要</p>
-
-<p><code>objc
-[webView stringByEvaluatingJavaScriptFromString:@"alert('hello world!')"];
-</code>
-并且该方法是<code>同步</code>的。</p>
-
-<h2>调试</h2>
-
-<p><del>虽然现在能直接用Safari的开发模式直接查看模拟器中的webView页面，但是经过亲自尝试，最想要的也是最重要的js调试，还是不支持，不能进行js断点调试，还是要依赖console来弄……当然css样式调试支持的不错。</del></p>
-
-<p>2014-04-09 update: 昨天发现Safari是可以对模拟器中的webView页面进行js断点调试的，之前是因为我没有设置<code>启用所有断点</code>……</p>
-
-<p>可以在模拟器进入webView页面后，打开Safari，然后在 开发->iPhone simulator 菜单下进行页面选择，进入调试。</p>
-
-<h3>相关资料</h3>
-
-<p><a href="http://blog.devtang.com/blog/2012/03/24/talk-about-uiwebview-and-phonegap/">唐巧-关于UIWebView和PhoneGap的总结</a></p>
-
-<p><a href="https://github.com/marcuswestin/WebViewJavascriptBridge">Github上的WebViewJavascriptBridge项目</a></p>
-
-<p><a href="http://phonegap.com/">大名鼎鼎的phonegap</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[[译]iOS7最佳实践：一个天气App案例(二)]]></title>
-    <link href="http://sjpsega.com/blog/2014/02/15/yi--ios-7-best-practices-part-2/"/>
-    <updated>2014-02-15T16:46:02+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/02/15/yi--ios-7-best-practices-part-2</id>
-    <content type="html"><![CDATA[<p>注：本文译自：<a href="http://www.raywenderlich.com/55385/ios-7-best-practices-part-2">raywenderlich ios-7-best-practices-part-2</a>，去除了跟主题无关的寒暄部分。
-欢迎转载，保持署名</p>
-
-<h2>开始</h2>
-
-<p>你有两个选择开始本教程：您可以使用在本教程的第1部分你已完成的项目，或者你可以在这里下载<a href="http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/SimpleWeather-Part-1.zip">第1部分已完成的项目</a>。</p>
-
-<p>在前面的教程中你创建了你的App的天气模型 &ndash; 现在你需要使用OpenWeatherMap API为你的App来获取一些数据。你将使用两个类抽象数据抓取、分析、存储：<code>WXClient</code>和<code>WXManager</code>。</p>
-
-<p><code>WXClient</code>的唯一责任是创建API请求，并解析它们；别人可以不用担心用数据做什么以及如何存储它。划分类的不同工作职责的设计模式被称为关注点分离。这使你的代码更容易理解，扩展和维护。</p>
-
-<h2>与ReactiveCocoa工作</h2>
-
-<p>确保你使用<code>SimpleWeather.xcworkspace</code>,打开<code>WXClient.h</code>并增加imports</p>
-
-<p>```objc
-@import CoreLocation;</p>
-
-<h1>import &lt;ReactiveCocoa/ReactiveCocoa/ReactiveCocoa.h></h1>
-
-<p>```</p>
-
-<p><code>
-注意：您可能之前没有见过的@import指令，它在Xcode5中被引入，是由苹果公司看作是一个现代的，更高效的替代 #import。有一个非常好的教程，涵盖了最新的Objective-C特性-[What’s New in Objective-C and Foundation in iOS 7](http://www.raywenderlich.com/49850/whats-new-in-objective-c-and-foundation-in-ios-7)。
-</code></p>
-
-<p>在<code>WXClient.h</code>中添加下列四个方法到接口申明：</p>
-
-<p><code>objc
-@import Foundation;
-- (RACSignal *)fetchJSONFromURL:(NSURL *)url;
-- (RACSignal *)fetchCurrentConditionsForLocation:(CLLocationCoordinate2D)coordinate;
-- (RACSignal *)fetchHourlyForecastForLocation:(CLLocationCoordinate2D)coordinate;
-- (RACSignal *)fetchDailyForecastForLocation:(CLLocationCoordinate2D)coordinate;
-</code></p>
-
-<p>现在，似乎是一个很好的机会来介绍<a href="https://github.com/ReactiveCocoa/ReactiveCocoa">ReactiveCocoa</a>！</p>
-
-<p>ReactiveCocoa（RAC）是一个Objective-C的框架，用于函数式反应型编程，它提供了组合和转化数据流的API。代替专注于编写串行的代码 &ndash; 执行有序的代码队列 &ndash; 可以响应非确定性事件。</p>
-
-<p>Github上提供的<a href="https://github.com/blog/1107-reactivecocoa-for-a-better-world">a great overview of the benefits</a>：</p>
-
-<ul>
-<li>对未来数据的进行组合操作的能力。</li>
-<li>减少状态和可变性。</li>
-<li>用声明的形式来定义行为和属性之间的关系。</li>
-<li>为异步操作带来一个统一的，高层次的接口。</li>
-<li>在KVO的基础上建立一个优雅的API。</li>
-</ul>
-
-
-<p>例如，你可以监听<code>username</code>属性的变化，用这样的代码:</p>
-
-<p>```objc
-[RACAble(self.username) subscribeNext:^(NSString *newName) {</p>
-
-<pre><code>NSLog(@"%@", newName);
-</code></pre>
-
-<p>}];
-```</p>
-
-<p><code>subscribeNext</code>这个block会在<code>self.username</code>属性变化的时候执行。新的值会传递给这个block。</p>
-
-<p>您还可以合并信号并组合数据到一个组合数据中。下面的示例取自于ReactiveCocoa的Github页面：</p>
-
-<p>```objc
-[[RACSignal</p>
-
-<pre><code>combineLatest:@[ RACAble(self.password), RACAble(self.passwordConfirmation) ] 
-       reduce:^(NSString *currentPassword, NSString *currentConfirmPassword) {
-           return [NSNumber numberWithBool:[currentConfirmPassword isEqualToString:currentPassword]];
-       }] 
-subscribeNext:^(NSNumber *passwordsMatch) {
-    self.createEnabled = [passwordsMatch boolValue];
-}];
-</code></pre>
-
-<p>```</p>
-
-<p><a href="https://github.com/ReactiveCocoa/ReactiveCocoa/blob/master/ReactiveCocoaFramework/ReactiveCocoa/RACSignal.h">RACSignal</a>对象捕捉当前和未来的值。信号可以被观察者链接，组合和反应。信号实际上不会执行，直到它被订阅。</p>
-
-<p>这意味着调用<code>[mySignal fetchCurrentConditionsForLocation：someLocation];</code>不会做什么，但创建并返回一个信号。你将看到之后如何订阅和反应。</p>
-
-<p>打开<code>WXClient.m</code>加入以下imports:</p>
-
-<p>```objc</p>
-
-<h1>import &ldquo;WXCondition.h&rdquo;</h1>
-
-<h1>import &ldquo;WXDailyForecast.h&rdquo;</h1>
-
-<p>```</p>
-
-<p>在imports下，添加私有接口：</p>
-
-<p>```objc
-@interface WXClient ()</p>
-
-<p>@property (nonatomic, strong) NSURLSession *session;</p>
-
-<p>@end
-```</p>
-
-<p>这个接口用这个属性来管理API请求的URL session。</p>
-
-<p>添加以下<code>init</code>放到到<code>@implementation</code>和<code>@end</code>之间：</p>
-
-<p>```objc
-&ndash; (id)init {</p>
-
-<pre><code>if (self = [super init]) {
-    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    _session = [NSURLSession sessionWithConfiguration:config];
-}
-return self;
-</code></pre>
-
-<p>}
-```</p>
-
-<p>使用<code>defaultSessionConfiguration</code>为您创建session。</p>
-
-<p><code>
-注意：如果你以前没有了解过NSURLSession，看看我们的[NSURLSession教程](http://www.raywenderlich.com/51127/nsurlsession-tutorial)，了解更多信息。
-</code></p>
-
-<h2>构建信号</h2>
-
-<p>你需要一个主方法来建立一个信号从URL中取数据。你已经知道，需要三种方法来获取当前状况，逐时预报及每日预报。</p>
-
-<p>不是写三个独立的方法，你可以遵守<a href="http://en.wikipedia.org/wiki/Don't_repeat_yourself">DRY</a>（Don’t Repeat Yourself）的软件设计理念，使您的代码容易维护。</p>
-
-<p>第一次看，以下的一些ReactiveCocoa部分可能看起来相当陌生。别担心，你会一块一块理解他。</p>
-
-<p>增加下列方法到<code>WXClient.m</code>:</p>
-
-<p>```objc
-&ndash; (RACSignal <em>)fetchJSONFromURL:(NSURL </em>)url {</p>
-
-<pre><code>NSLog(@"Fetching: %@",url.absoluteString);
-
-// 1
-return [[RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
-    // 2
-    NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        // TODO: Handle retrieved data
-    }];
-
-    // 3
-    [dataTask resume];
-
-    // 4
-    return [RACDisposable disposableWithBlock:^{
-        [dataTask cancel];
-    }];
-}] doError:^(NSError *error) {
-    // 5
-    NSLog(@"%@",error);
-}];
-</code></pre>
-
-<p>}
-```</p>
-
-<p>通过一个一个注释，你会看到代码执行以下操作：</p>
-
-<ol>
-<li>返回信号。请记住，这将不会执行，直到这个信号被订阅。 <code>- fetchJSONFromURL：</code>创建一个对象给其他方法和对象使用；这种行为有时也被称为<a href="https://developer.apple.com/library/ios/documentation/general/conceptual/CocoaEncyclopedia/ClassFactoryMethods/ClassFactoryMethods.html">工厂模式</a>。</li>
-<li>创建一个<a href="https://developer.apple.com/library/IOS/documentation/Foundation/Reference/NSURLSessionDataTask_class/Reference/Reference.html">NSURLSessionDataTask</a>（在iOS7中加入）从URL取数据。你会在以后添加的数据解析。</li>
-<li>一旦订阅了信号，启动网络请求。</li>
-<li>创建并返回<a href="https://github.com/ReactiveCocoa/ReactiveCocoa/blob/master/ReactiveCocoaFramework/ReactiveCocoa/RACDisposable.h">RACDisposable</a>对象，它处理当信号摧毁时的清理工作。</li>
-<li>增加了一个“side effect”，以记录发生的任何错误。side effect不订阅信号，相反，他们返回被连接到方法链的信号。你只需添加一个side effect来记录错误。</li>
-</ol>
-
-
-<p><code>
-如果你觉得需要更多一些背景知识，看看由Ash Furrow编写的[这篇文章](http://www.teehanlax.com/blog/getting-started-with-reactivecocoa/)，以便更好地了解ReactiveCocoa的核心概念。
-</code></p>
-
-<p>在<code>-fetchJSONFromURL:</code>中找到<code>// TODO: Handle retrieved data</code> ，替换为:</p>
-
-<p>```objc
-if (! error) {</p>
-
-<pre><code>NSError *jsonError = nil;
-id json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&amp;jsonError];
-if (! jsonError) {
-    // 1
-    [subscriber sendNext:json];
-}
-else {
-    // 2
-    [subscriber sendError:jsonError];
-}
-</code></pre>
-
-<p>}
-else {</p>
-
-<pre><code>// 2
-[subscriber sendError:error];
-</code></pre>
-
-<p>}</p>
-
-<p>// 3
-[subscriber sendCompleted];
-```</p>
-
-<ol>
-<li>当JSON数据存在并且没有错误，发送给订阅者序列化后的JSON数组或字典。</li>
-<li>在任一情况下如果有一个错误，通知订阅者。</li>
-<li>无论该请求成功还是失败，通知订阅者请求已经完成。</li>
-</ol>
-
-
-<p><code>-fetchJSONFromURL：</code>方法有点长，但它使你的特定的API请求方法变得很简单。</p>
-
-<h2>获取当前状况</h2>
-
-<p>还在<code>WXClient.m</code>中，添加如下方法：</p>
-
-<p>```objc
-&ndash; (RACSignal *)fetchCurrentConditionsForLocation:(CLLocationCoordinate2D)coordinate {</p>
-
-<pre><code>// 1
-NSString *urlString = [NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/weather?lat=%f&amp;lon=%f&amp;units=imperial",coordinate.latitude, coordinate.longitude];
-NSURL *url = [NSURL URLWithString:urlString];
-
-// 2
-return [[self fetchJSONFromURL:url] map:^(NSDictionary *json) {
-    // 3
-    return [MTLJSONAdapter modelOfClass:[WXCondition class] fromJSONDictionary:json error:nil];
-}];
-</code></pre>
-
-<p>}
-```</p>
-
-<ol>
-<li>使用<code>CLLocationCoordinate2D</code>对象的经纬度数据来格式化URL。</li>
-<li>用你刚刚建立的创建信号的方法。由于返回值是一个信号，你可以调用其他ReactiveCocoa的方法。 在这里，您将返回值映射到一个不同的值 &ndash; 一个NSDictionary实例。</li>
-<li>使用<code>MTLJSONAdapter</code>来转换JSON到<code>WXCondition</code>对象 &ndash; 使用<code>MTLJSONSerializing</code>协议创建的<code>WXCondition</code>。</li>
-</ol>
-
-
-<h2>获取逐时预报</h2>
-
-<p>现在添加根据坐标获取逐时预报的方法到<code>WXClient.m</code>:</p>
-
-<p>```objc
-&ndash; (RACSignal *)fetchHourlyForecastForLocation:(CLLocationCoordinate2D)coordinate {</p>
-
-<pre><code>NSString *urlString = [NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/forecast?lat=%f&amp;lon=%f&amp;units=imperial&amp;cnt=12",coordinate.latitude, coordinate.longitude];
-NSURL *url = [NSURL URLWithString:urlString];
-
-// 1
-return [[self fetchJSONFromURL:url] map:^(NSDictionary *json) {
-    // 2
-    RACSequence *list = [json[@"list"] rac_sequence];
-
-    // 3
-    return [[list map:^(NSDictionary *item) {
-        // 4
-        return [MTLJSONAdapter modelOfClass:[WXCondition class] fromJSONDictionary:item error:nil];
-    // 5
-    }] array];
-}];
-</code></pre>
-
-<p>}
-```</p>
-
-<ol>
-<li>再次使用<code>-fetchJSONFromUR</code>方法，映射JSON。注意：重复使用该方法节省了多少代码！</li>
-<li>使用JSON的"list"key创建<code>RACSequence</code>。 <code>RACSequences</code>让你对列表进行ReactiveCocoa操作。</li>
-<li>映射新的对象列表。调用<code>-map：</code>方法，针对列表中的每个对象，返回新对象的列表。</li>
-<li>再次使用<code>MTLJSONAdapter</code>来转换JSON到<code>WXCondition</code>对象。</li>
-<li>使用<code>RACSequence</code>的<code>-map</code>方法，返回另一个<code>RACSequence</code>，所以用这个简便的方法来获得一个<code>NSArray</code>数据。</li>
-</ol>
-
-
-<h2>获取每日预报</h2>
-
-<p>最后，添加如下方法到<code>WXClient.m</code>:</p>
-
-<p>```objc
-&ndash; (RACSignal *)fetchDailyForecastForLocation:(CLLocationCoordinate2D)coordinate {</p>
-
-<pre><code>NSString *urlString = [NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/forecast/daily?lat=%f&amp;lon=%f&amp;units=imperial&amp;cnt=7",coordinate.latitude, coordinate.longitude];
-NSURL *url = [NSURL URLWithString:urlString];
-
-// Use the generic fetch method and map results to convert into an array of Mantle objects
-return [[self fetchJSONFromURL:url] map:^(NSDictionary *json) {
-    // Build a sequence from the list of raw JSON
-    RACSequence *list = [json[@"list"] rac_sequence];
-
-    // Use a function to map results from JSON to Mantle objects
-    return [[list map:^(NSDictionary *item) {
-        return [MTLJSONAdapter modelOfClass:[WXDailyForecast class] fromJSONDictionary:item error:nil];
-    }] array];
-}];
-</code></pre>
-
-<p>}
-```</p>
-
-<p>是不是看起来很熟悉？是的，这个方法与<code>-fetchHourlyForecastForLocation:</code>方法非常像。除了它使用<code>WXDailyForecast</code>代替<code>WXCondition</code>，并获取每日预报。</p>
-
-<p>构建并运行您的App，现在你不会看到任何新的东西，但这是一个很好机会松一口气，并确保没有任何错误或警告。</p>
-
-<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/built-layout.jpg" width="320" alt="Labels and Views" /></p>
-
-<h2>管理并存储你的数据</h2>
-
-<p>现在是时间来充实<code>WXManager</code>，这个类会把所有东西结合到一起。这个类实现您App的一些关键功能：</p>
-
-<ul>
-<li>它使用<a href="http://www.raywenderlich.com/46988/ios-design-patterns">单例设计模式</a>。</li>
-<li>它试图找到设备的位置。</li>
-<li>找到位置后，它获取相应的气象数据。</li>
-</ul>
-
-
-<p>打开<code>WXManager.h</code>使用以下代码来替换其内容：</p>
-
-<p>```objc
-@import Foundation;
-@import CoreLocation;</p>
-
-<h1>import &lt;ReactiveCocoa/ReactiveCocoa/ReactiveCocoa.h></h1>
-
-<p>// 1</p>
-
-<h1>import &ldquo;WXCondition.h&rdquo;</h1>
-
-<p>@interface WXManager : NSObject
-<CLLocationManagerDelegate></p>
-
-<p>// 2
-+ (instancetype)sharedManager;</p>
-
-<p>// 3
-@property (nonatomic, strong, readonly) CLLocation <em>currentLocation;
-@property (nonatomic, strong, readonly) WXCondition </em>currentCondition;
-@property (nonatomic, strong, readonly) NSArray <em>hourlyForecast;
-@property (nonatomic, strong, readonly) NSArray </em>dailyForecast;</p>
-
-<p>// 4
-&ndash; (void)findCurrentLocation;</p>
-
-<p>@end
-```</p>
-
-<ol>
-<li>请注意，你没有引入<code>WXDailyForecast.h</code>，你会始终使用<code>WXCondition</code>作为预报的类。 <code>WXDailyForecast</code>的存在是为了帮助Mantle转换JSON到Objective-C。</li>
-<li>使用<code>instancetype</code>而不是<code>WXManager</code>，子类将返回适当的类型。</li>
-<li>这些属性将存储您的数据。由于<code>WXManager</code>是一个单例，这些属性可以任意访问。设置公共属性为只读，因为只有管理者能更改这些值。</li>
-<li>这个方法启动或刷新整个位置和天气的查找过程。</li>
-</ol>
-
-
-<p>现在打开<code>WXManager.m</code>并添加如下imports到文件顶部：</p>
-
-<pre><code>#import "WXClient.h"
-#import &lt;TSMessages/TSMessage.h&gt;
-</code></pre>
-
-<p>在imports下方，粘贴如下私有接口：</p>
-
-<p>```objc
-@interface WXManager ()</p>
-
-<p>// 1
-@property (nonatomic, strong, readwrite) WXCondition <em>currentCondition;
-@property (nonatomic, strong, readwrite) CLLocation </em>currentLocation;
-@property (nonatomic, strong, readwrite) NSArray <em>hourlyForecast;
-@property (nonatomic, strong, readwrite) NSArray </em>dailyForecast;</p>
-
-<p>// 2
-@property (nonatomic, strong) CLLocationManager <em>locationManager;
-@property (nonatomic, assign) BOOL isFirstUpdate;
-@property (nonatomic, strong) WXClient </em>client;</p>
-
-<p>@end
-```</p>
-
-<ol>
-<li>声明你在公共接口中添加的相同的属性，但是这一次把他们定义为<code>可读写</code>，因此您可以在后台更改他们。</li>
-<li>为查找定位和数据抓取声明一些私有变量。</li>
-</ol>
-
-
-<p>添加如下通用的单例构造器到<code>@implementation</code>与<code>@end</code>å中间：</p>
-
-<p>```objc
-+ (instancetype)sharedManager {</p>
-
-<pre><code>static id _sharedManager = nil;
-static dispatch_once_t onceToken;
-dispatch_once(&amp;onceToken, ^{
-    _sharedManager = [[self alloc] init];
-});
-
-return _sharedManager;
-</code></pre>
-
-<p>}
-```</p>
-
-<p>然后，你需要设置你的属性和观察者。</p>
-
-<p>添加如下方法到<code>WXManager.m</code>:</p>
-
-<p>```objc
-&ndash; (id)init {</p>
-
-<pre><code>if (self = [super init]) {
-    // 1
-    _locationManager = [[CLLocationManager alloc] init];
-    _locationManager.delegate = self;
-
-    // 2
-    _client = [[WXClient alloc] init];
-
-    // 3
-    [[[[RACObserve(self, currentLocation)
-        // 4
-        ignore:nil]
-        // 5
-       // Flatten and subscribe to all 3 signals when currentLocation updates
-       flattenMap:^(CLLocation *newLocation) {
-           return [RACSignal merge:@[
-                                     [self updateCurrentConditions],
-                                     [self updateDailyForecast],
-                                     [self updateHourlyForecast]
-                                     ]];
-        // 6
-       }] deliverOn:RACScheduler.mainThreadScheduler]
-       // 7
-     subscribeError:^(NSError *error) {
-         [TSMessage showNotificationWithTitle:@"Error" 
-                                     subtitle:@"There was a problem fetching the latest weather."
-                                         type:TSMessageNotificationTypeError];
-     }];
-}
-return self;
-</code></pre>
-
-<p>}
-```</p>
-
-<p>你正使用更多的ReactiveCocoa方法来观察和反应数值的变化。上面这些你做了：</p>
-
-<ol>
-<li>创建一个位置管理器，并设置它的delegate为<code>self</code>。</li>
-<li>为管理器创建<code>WXClient</code>对象。这里处理所有的网络请求和数据分析，这是关注点分离的最佳实践。</li>
-<li>管理器使用一个返回信号的ReactiveCocoa脚本来观察自身的<code>currentLocation</code>。这与<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueObserving/KeyValueObserving.html">KVO</a>类似，但更为强大。</li>
-<li>为了继续执行方法链，<code>currentLocation</code>必须不为<code>nil</code>。</li>
-<li><code>- flattenMap：</code>非常类似于<code>-map：</code>，但不是映射每一个值，它把数据变得扁平，并返回包含三个信号中的一个对象。通过这种方式，你可以考虑将三个进程作为单个工作单元。</li>
-<li>将信号传递给主线程上的观察者。</li>
-<li>这不是很好的做法，在你的模型中进行UI交互，但出于演示的目的，每当发生错误时，会显示一个banner。</li>
-</ol>
-
-
-<p>接下来，为了显示准确的天气预报，我们需要确定设备的位置。</p>
-
-<h2>查找你的位置</h2>
-
-<p>下一步，你要添加当位置查找到，触发抓取天气数据的代码。</p>
-
-<p>添加如下代码到<code>WXManager.m</code>的实现块中:</p>
-
-<p>```objc
-&ndash; (void)findCurrentLocation {</p>
-
-<pre><code>self.isFirstUpdate = YES;
-[self.locationManager startUpdatingLocation];
-</code></pre>
-
-<p>}</p>
-
-<ul>
-<li><p>(void)locationManager:(CLLocationManager <em>)manager didUpdateLocations:(NSArray </em>)locations {
-  // 1
-  if (self.isFirstUpdate) {
-      self.isFirstUpdate = NO;
-      return;
-  }</p>
-
-<p>  CLLocation *location = [locations lastObject];</p>
-
-<p>  // 2
-  if (location.horizontalAccuracy > 0) {
-      // 3
-      self.currentLocation = location;
-      [self.locationManager stopUpdatingLocation];
-  }
-}
-```</p></li>
-<li><p>忽略第一个位置更新，因为它一般是缓存值。</p></li>
-<li>一旦你获得一定精度的位置，停止进一步的更新。</li>
-<li>设置<code>currentLocation</code>，将触发您之前在init中设置的RACObservable。</li>
-</ul>
-
-
-<h2>获取气象数据</h2>
-
-<p>最后，是时候添加在客户端上调用并保存数据的三个获取方法。将三个方法捆绑起来，被之前在<code>init</code>方法中添加的RACObservable订阅。您将返回客户端返回的，能被订阅的，相同的信号。</p>
-
-<p>所有的属性设置发生在<code>-doNext:</code>中。</p>
-
-<p>添加如下代码到<code>WXManager.m</code>:</p>
-
-<p>```objc
-&ndash; (RACSignal *)updateCurrentConditions {</p>
-
-<pre><code>return [[self.client fetchCurrentConditionsForLocation:self.currentLocation.coordinate] doNext:^(WXCondition *condition) {
-    self.currentCondition = condition;
-}];
-</code></pre>
-
-<p>}</p>
-
-<ul>
-<li><p>(RACSignal <em>)updateHourlyForecast {
-  return [[self.client fetchHourlyForecastForLocation:self.currentLocation.coordinate] doNext:^(NSArray </em>conditions) {
-      self.hourlyForecast = conditions;
-  }];
-}</p></li>
-<li><p>(RACSignal <em>)updateDailyForecast {
-  return [[self.client fetchDailyForecastForLocation:self.currentLocation.coordinate] doNext:^(NSArray </em>conditions) {
-      self.dailyForecast = conditions;
-  }];
-}
-```</p></li>
-</ul>
-
-
-<p>它看起来像将一切都连接起来，并蓄势待发。别急！这App实际上并没有告诉管理者做任何事情。
-打开<code>WXController.m</code>并导入这管理者到文件的顶部，如下所示：</p>
-
-<p>```objc</p>
-
-<h1>import &ldquo;WXManager.h&rdquo;</h1>
-
-<p>```</p>
-
-<p>添加如下代码到<code>-viewDidLoad:</code>的最后:</p>
-
-<p><code>objc
-[[WXManager sharedManager] findCurrentLocation];
-</code></p>
-
-<p>这告诉管理类，开始寻找设备的当前位置。</p>
-
-<p>构建并运行您的App，系统会提示您是否允许使用位置服务。你仍然不会看到任何UI的更新，但检查控制台日志，你会看到类似以下内容：</p>
-
-<p><code>
-2013-11-05 08:38:48.886 WeatherTutorial[17097:70b] Fetching: http://api.openweathermap.org/data/2.5/weather?lat=37.785834&amp;lon=-122.406417&amp;units=imperial
-2013-11-05 08:38:48.886 WeatherTutorial[17097:70b] Fetching: http://api.openweathermap.org/data/2.5/forecast/daily?lat=37.785834&amp;lon=-122.406417&amp;units=imperial&amp;cnt=7
-2013-11-05 08:38:48.886 WeatherTutorial[17097:70b] Fetching: http://api.openweathermap.org/data/2.5/forecast?lat=37.785834&amp;lon=-122.406417&amp;units=imperial&amp;cnt=12
-</code></p>
-
-<p>这些输出代表你的代码工作正常，网络请求正常执行。</p>
-
-<h2>连接接口</h2>
-
-<p>这是最后一次展示所有获取，映射和存储的数据。您将使用ReactiveCocoa来观察<code>WXManager</code>单例的变化和当新数据到达时更新界面。</p>
-
-<p>还在<code>WXController.m</code>，到<code>- viewDidLoad</code>的底部，并添加下面的代码到<code>[[WXManager sharedManager] findCurrentLocation];</code>之前：</p>
-
-<p>```objc
-// 1
-[[RACObserve([WXManager sharedManager], currentCondition)
-  // 2
-  deliverOn:RACScheduler.mainThreadScheduler]
- subscribeNext:^(WXCondition *newCondition) {</p>
-
-<pre><code> // 3
- temperatureLabel.text = [NSString stringWithFormat:@"%.0f°",newCondition.temperature.floatValue];
- conditionsLabel.text = [newCondition.condition capitalizedString];
- cityLabel.text = [newCondition.locationName capitalizedString];
-
- // 4
- iconView.image = [UIImage imageNamed:[newCondition imageName]];
-</code></pre>
-
-<p> }];
-```</p>
-
-<ol>
-<li>观察<code>WXManager</code>单例的currentCondition。</li>
-<li>传递在主线程上的任何变化，因为你正在更新UI。</li>
-<li>使用气象数据更新文本标签；你为文本标签使用<code>newCondition</code>的数据，而不是单例。订阅者的参数保证是最新值。</li>
-<li>使用映射的图像文件名来创建一个图像，并将其设置为视图的图标。</li>
-</ol>
-
-
-<p>构建并运行您的App，你会看到当前温度，当前状况和表示当前状况的图标。所有的数据都是实时的。但是，如果你的位置是旧金山，它似乎总是约65度。Lucky San Franciscans! :]</p>
-
-<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2013/11/ui-wiring.jpg" width="320" alt="Wiring up the UI" /></p>
-
-<h2>ReactiveCocoa的绑定</h2>
-
-<p>ReactiveCocoa为iOS带来了自己的<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CocoaBindings/CocoaBindings.html">Cocoa绑定</a>的形式。</p>
-
-<p>不知道是什么绑定？简而言之，他们是一种提供了保持模型和视图的数据同步而无需编写大量"胶水代码"的手段，它们允许你建立一个视图和数据块之间的连接， “结合”它们，使得一方的变化反映到另一个中的技术。</p>
-
-<p>这是一个非常强大的概念，不是吗？</p>
-
-<p><code>
-注意：要获得更多的绑定实例代码，请查看[ReactiveCocoa Readme](https://github.com/ReactiveCocoa/ReactiveCocoa)。
-</code></p>
-
-<p>添加如下代码到你上一步添加的代码后面：</p>
-
-<p>```objc
-// 1
-RAC(hiloLabel, text) = [[RACSignal combineLatest:@[</p>
-
-<pre><code>                    // 2
-                    RACObserve([WXManager sharedManager], currentCondition.tempHigh),
-                    RACObserve([WXManager sharedManager], currentCondition.tempLow)]
-                    // 3
-                    reduce:^(NSNumber *hi, NSNumber *low) {
-                        return [NSString  stringWithFormat:@"%.0f° / %.0f°",hi.floatValue,low.floatValue];
-                    }]
-                    // 4
-                    deliverOn:RACScheduler.mainThreadScheduler];
-</code></pre>
-
-<p>```</p>
-
-<p>上面的代码结合高温、低温的值到hiloLabel的text属性。看看你完成了什么：</p>
-
-<ol>
-<li>RAC（&hellip;）宏有助于保持语法整洁。从该信号的返回值将被分配给<code>hiloLabel</code>对象的<code>text</code>。</li>
-<li>观察<code>currentCondition</code>的高温和低温。合并信号，并使用两者最新的值。当任一数据变化时，信号就会触发。</li>
-<li>从合并的信号中，减少数值，转换成一个单一的数据，注意参数的顺序与信号的顺序相匹配。</li>
-<li>同样，因为你正在处理UI界面，所以把所有东西都传递到主线程。</li>
-</ol>
-
-
-<p>构建并运行你的App。你应该看到在左下方的高/低温度label更新了：</p>
-
-<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2013/11/ui-wiring-hilo.jpg" width="320" alt="UI Wiring with Bindings" /></p>
-
-<h2>在Table View中显示数据</h2>
-
-<p>现在，你已经获取所有的数据，你可以在table view中整齐地显示出来。你会在分页的table view中显示最近6小时的每时播报和每日预报。该App会显示三个页面：一个是当前状况，一个是逐时预报，以及一个每日预报。</p>
-
-<p>之前，你可以添加单元格到table view，你需要初始化和配置一些日期格式化。</p>
-
-<p>到<code>WXController.m</code>最顶端的私有接口处，添加下列两个属性</p>
-
-<p><code>objc
-@property (nonatomic, strong) NSDateFormatter *hourlyFormatter;
-@property (nonatomic, strong) NSDateFormatter *dailyFormatter;
-</code></p>
-
-<p>由于创建日期格式化非常昂贵，我们将在init方法中实例化他们，并使用这些变量去存储他们的引用。</p>
-
-<p>还在<code>WXController.m</code>中，添加如下代码到<code>@implementation</code>中：</p>
-
-<p>```objc
-&ndash; (id)init {</p>
-
-<pre><code>if (self = [super init]) {
-    _hourlyFormatter = [[NSDateFormatter alloc] init];
-    _hourlyFormatter.dateFormat = @"h a";
-
-    _dailyFormatter = [[NSDateFormatter alloc] init];
-    _dailyFormatter.dateFormat = @"EEEE";
-}
-return self;
-</code></pre>
-
-<p>}
-```</p>
-
-<p>你可能想知道为什么在<code>-init</code>中初始化这些日期格式化，而不是在<code>-viewDidLoad</code>中初始化他们。好问题！</p>
-
-<p>实际上<code>-viewDidLoad</code>可以在一个视图控制器的生命周期中多次调用。 <a href="http://www.rsaunders.co.uk/2012/02/nsdateformatter-are-expensive.html">NSDateFormatter对象的初始化是昂贵的</a>，而将它们放置在你的<code>-init</code>，会确保被你的视图控制器初始化一次。</p>
-
-<p>在<code>WXController.m</code>中，寻找<code>tableView:numberOfRowsInSection：</code>,并用如下代码更换<code>TODO</code>到<code>return</code>：</p>
-
-<p>```objc
-// 1
-if (section == 0) {</p>
-
-<pre><code>return MIN([[WXManager sharedManager].hourlyForecast count], 6) + 1;
-</code></pre>
-
-<p>}
-// 2
-return MIN([[WXManager sharedManager].dailyForecast count], 6) + 1;
-```</p>
-
-<ol>
-<li>第一部分是对的逐时预报。使用最近6小时的预预报，并添加了一个作为页眉的单元格。</li>
-<li>接下来的部分是每日预报。使用最近6天的每日预报，并添加了一个作为页眉的单元格。</li>
-</ol>
-
-
-<p><code>
-注意：您使用表格单元格作为标题，而不是内置的、具有粘性的滚动行为的标题。这个table view设置了分页，粘性滚动行为看起来会很奇怪。
-</code></p>
-
-<p>在<code>WXController.m</code>找到<code>tableView:cellForRowAtIndexPath:</code>,并用如下代码更换<code>TODO</code>：</p>
-
-<p>```objc
-if (indexPath.section == 0) {</p>
-
-<pre><code>// 1
-if (indexPath.row == 0) {
-    [self configureHeaderCell:cell title:@"Hourly Forecast"];
-}
-else {
-    // 2
-    WXCondition *weather = [WXManager sharedManager].hourlyForecast[indexPath.row - 1];
-    [self configureHourlyCell:cell weather:weather];
-}
-</code></pre>
-
-<p>}
-else if (indexPath.section == 1) {</p>
-
-<pre><code>// 1
-if (indexPath.row == 0) {
-    [self configureHeaderCell:cell title:@"Daily Forecast"];
-}
-else {
-    // 3
-    WXCondition *weather = [WXManager sharedManager].dailyForecast[indexPath.row - 1];
-    [self configureDailyCell:cell weather:weather];
-}
-</code></pre>
-
-<p>}
-```</p>
-
-<ol>
-<li>每个部分的第一行是标题单元格。</li>
-<li>获取每小时的天气和使用自定义配置方法配置cell。</li>
-<li>获取每天的天气，并使用另一个自定义配置方法配置cell。</li>
-</ol>
-
-
-<p>最后，添加如下代码到<code>WXController.m</code>:</p>
-
-<p>```objc
-// 1
-&ndash; (void)configureHeaderCell:(UITableViewCell <em>)cell title:(NSString </em>)title {</p>
-
-<pre><code>cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
-cell.textLabel.text = title;
-cell.detailTextLabel.text = @"";
-cell.imageView.image = nil;
-</code></pre>
-
-<p>}</p>
-
-<p>// 2
-&ndash; (void)configureHourlyCell:(UITableViewCell <em>)cell weather:(WXCondition </em>)weather {</p>
-
-<pre><code>cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
-cell.textLabel.text = [self.hourlyFormatter stringFromDate:weather.date];
-cell.detailTextLabel.text = [NSString stringWithFormat:@"%.0f°",weather.temperature.floatValue];
-cell.imageView.image = [UIImage imageNamed:[weather imageName]];
-cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
-</code></pre>
-
-<p>}</p>
-
-<p>// 3
-&ndash; (void)configureDailyCell:(UITableViewCell <em>)cell weather:(WXCondition </em>)weather {</p>
-
-<pre><code>cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
-cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
-cell.textLabel.text = [self.dailyFormatter stringFromDate:weather.date];
-cell.detailTextLabel.text = [NSString stringWithFormat:@"%.0f° / %.0f°",
-                              weather.tempHigh.floatValue,
-                              weather.tempLow.floatValue];
-cell.imageView.image = [UIImage imageNamed:[weather imageName]];
-cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
-</code></pre>
-
-<p>}
-```</p>
-
-<ol>
-<li>配置和添加文本到作为section页眉单元格。你会重用此为每日每时的预测部分。</li>
-<li>格式化逐时预报的单元格。</li>
-<li>格式化每日预报的单元格。</li>
-</ol>
-
-
-<p>构建并运行您的App，尝试滚动你的table view，并&hellip;等一下。什么都没显示！怎么办？</p>
-
-<p>如果你已经使用过的<code>UITableView</code>，可能你之前遇到过问题。这个table没有重新加载！</p>
-
-<p>为了解决这个问题，你需要添加另一个针对每时预报和每日预报属性的ReactiveCocoa观察。</p>
-
-<p>在<code>WXController.m</code>的<code>-viewDidLoad</code>中，添加下列代码到其他ReactiveCocoa观察代码中：</p>
-
-<p>```objc
-[[RACObserve([WXManager sharedManager], hourlyForecast)</p>
-
-<pre><code>   deliverOn:RACScheduler.mainThreadScheduler]
-</code></pre>
-
-<p>   subscribeNext:^(NSArray *newForecast) {</p>
-
-<pre><code>   [self.tableView reloadData];
-</code></pre>
-
-<p>   }];</p>
-
-<p>[[RACObserve([WXManager sharedManager], dailyForecast)</p>
-
-<pre><code>   deliverOn:RACScheduler.mainThreadScheduler]
-</code></pre>
-
-<p>   subscribeNext:^(NSArray *newForecast) {</p>
-
-<pre><code>   [self.tableView reloadData];
-</code></pre>
-
-<p>   }];
-```</p>
-
-<p>构建并运行App；滚动table view，你将看到填充的所有预报数据。</p>
-
-<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/unaligned-heights.jpg" width="320" alt="Forecast with Odd Heights" /></p>
-
-<h2>给你的App添加效果</h2>
-
-<p>本页面为每时和每日预报不会占满整个屏幕。幸运的是，有一个非常简单的修复办法。在本教程前期，您在<code>-viewDidLoad</code>中获得屏幕高度。</p>
-
-<p>在<code>WXController.m</code>中，查找table view的委托方法<code>-tableView:heightForRowAtIndexPath:</code>，并且替换<code>TODO</code>到<code>return</code>的代码:</p>
-
-<p><code>objc
-NSInteger cellCount = [self tableView:tableView numberOfRowsInSection:indexPath.section];
-return self.screenHeight / (CGFloat)cellCount;
-</code></p>
-
-<p>屏幕高度由一定数量的cell所分割，所以所有cell的总高度等于屏幕的高度。</p>
-
-<p>构建并运行你的App；table view填满了整个屏幕，如下所示：</p>
-
-<p><img src="http://cdn3.raywenderlich.com/wp-content/uploads/2013/11/aligned-heights.jpg" width="320" alt="Forecast with Full Height" /></p>
-
-<p>最后要做的是把我在本教程的第一部分开头提到的模糊效果引入。当你滚动预报页面，模糊效果应该动态显示。</p>
-
-<p>添加下列scroll delegate到<code>WXController.m</code>最底部：</p>
-
-<p>```objc</p>
-
-<h1>pragma mark &ndash; UIScrollViewDelegate</h1>
-
-<ul>
-<li><p>(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-  // 1
-  CGFloat height = scrollView.bounds.size.height;
-  CGFloat position = MAX(scrollView.contentOffset.y, 0.0);
-  // 2
-  CGFloat percent = MIN(position / height, 1.0);
-  // 3
-  self.blurredImageView.alpha = percent;
-}
-```</p></li>
-<li><p>获取滚动视图的高度和内容偏移量。与0偏移量做比较，因此试图滚动table低于初始位置将不会影响模糊效果。</p></li>
-<li>偏移量除以高度，并且最大值为1，所以alpha上限为1。</li>
-<li>当你滚动的时候，把结果值赋给模糊图像的alpha属性，来更改模糊图像。</li>
-</ul>
-
-
-<p>构建并运行App，滚动你的table view，并查看这令人惊异的模糊效果：</p>
-
-<p><img src="http://cdn5.raywenderlich.com/wp-content/uploads/2013/11/with-blur.jpg" width="320" alt="Finished Product" /></p>
-
-<h2>何去何从？</h2>
-
-<p>在本教程中你已经完成了很多内容：您使用CocoaPods创建了一个项目，完全用代码书写了一个视图结构，创建数据模型和管理类，并使用函数式编程将他们连接到一起！</p>
-
-<p>您可以从<a href="http://cdn5.raywenderlich.com/wp-content/uploads/2013/11/SimpleWeather-Part-2.zip">这里下载</a>该项目的完成版本。</p>
-
-<p>这个App还有很多酷的东西可以去做。一个好的开始是使用<a href="http://www.flickr.com/services/api/">Flickr API</a>来查找基于设备位置的背景图像。</p>
-
-<p>还有，你的应用程序只处理温度和状态;有什么其他的天气信息能融入你的App？</p>
 ]]></content>
   </entry>
   
