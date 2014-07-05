@@ -58,17 +58,256 @@ Run loop 比起操作队列或者 GCD 来说容易使用得多，因为通过 ru
 
 ### 总结
 
-我们建议采纳的安全模式是这样的：从主线程中提取出要使用到的数据，并利用一个操作队列在后台处理相关的数据，最后回到主队列中来发送你在后台队列中得到的结果。使用这种方式，你不需要自己做任何锁操作，这也就大大减少了犯错误的几率。
+建议采纳的安全模式：从主线程中提取出要使用到的数据，并利用一个操作队列在后台处理相关的数据，最后回到主队列中来发送你在后台队列中得到的结果。使用这种方式，你不需要自己做任何锁操作，这也就大大减少了犯错误的几率。
 
 
 ## 常见的后台实践
 ### 操作队列 (Operation Queues) 还是 GCD ?
 `GCD 是基于 C 的底层的 API ，而操作队列则是 GCD 实现的 Objective-C API。`
 
-`操作队列可以取消在任务处理队列中的任务`，而在 GCD 中不那么容易复制的有用特性。
+`操作队列可以取消在任务处理队列中的任务`，而在 GCD 中不容易实现。
 
 #### 后台的 Core Data
 `Core Data`不熟悉
+
+### 后台 UI 代码
+`UIKit 只能在主线程上运行。`而那部分不与 UIKit 直接相关，却会消耗大量时间的 UI 代码可以被移动到后台去处理。
+
+### 异步网络请求处理
+* 所有网络请求都应该采取异步的方式完成。
+* 可以使用 `NSURLConnection` 的异步方法，并且把所有操作转化为 operation 来执行。通过这种方法，我们可以从操作队列的强大功能和便利中获益良多：我们能轻易地控制并发操作的数量，添加依赖，以及取消操作。
+* 使用像 [AFNetworking](http://afnetworking.com/) 这样的框架：建立一个独立的线程，为建立的线程设置自己的 run loop，然后在其中调度 URL 连接。但是并不推荐你自己去实现这些事情。
+
+### 进阶：后台文件 I/O
+大体上逐行读取一个文件的模式是这样的：
+
+1. 建立一个中间缓冲层以提供，当没有找到换行符号的时候可以向其中添加数据
+2. 从 stream 中读取一块数据
+3. 对于这块数据中发现的每一个换行符，取中间缓冲层，向其中添加数据，直到（并包括）这个换行符，并将其输出
+4. 将剩余的字节添加到中间缓冲层去
+5. 回到 2，直到 stream 关闭
+
+### 总结
+在主队列中接收事件或者数据，然后用后台操作队列来执行实际操作，然后回到主队列去传递结果，遵循这样的原则来编写尽量简单的并行代码，将是保证高效正确的不二法则。
+
+## 底层并发 API
+### dispatch_once
+```objc 
++ (UIColor *)boringColor;
+{
+    static UIColor *color;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        color = [UIColor colorWithRed:0.380f green:0.376f blue:0.376f alpha:1.000f];
+    });
+    return color;
+}
+```
+上面的 block 只会运行一次。并且在连续的调用中，这种检查是很高效的。你能使用它来初始化全局数据比如单例。要注意的是，使用 `dispatch_once_t` 会使得测试变得非常困难（单例和测试不是很好配合）。
+
+`要确保 onceToken 被声明为 static ，或者有全局作用域。任何其他的情况都会导致无法预知的行为。`
+
+### dispatch_after
+它使工作延后执行。它是很强大的，但是要注意：你很容易就陷入到一堆麻烦中。
+```objc
+- (void)foo
+{
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t) (delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self bar];
+    });
+}
+```
+这里存在一些缺点。我们`不能（直接）取消我们已经提交到 dispatch_after 的代码，它将会运行`。
+
+如果你需要一些事情在某个特定的时刻运行，那么 `dispatch_after` 或许会是个好的选择。确保同时考虑了 `NSTimer`，这个API虽然有点笨重，但是它`允许你取消定时器的触发`。
+
+### 队列
+GCD 中一个基本的代码块就是队列。
+
+```objc
+- (id)init
+{
+    self = [super init];
+    if (self != nil) {
+        NSString *label = [NSString stringWithFormat:@"%@.isolation.%p", [self class], self];
+        self.isolationQueue = dispatch_queue_create([label UTF8String], 0);
+
+        label = [NSString stringWithFormat:@"%@.work.%p", [self class], self];
+        self.workQueue = dispatch_queue_create([label UTF8String], 0);
+    }
+    return self;
+}
+```
+
+队列可以是并行也可以是串行的，也可以是并行的。默认情况下，是串行的。
+
+GCD 队列的内部使用的是线程。
+
+#### 目标队列
+你能够为你创建的任何一个队列设置一个目标队列。
+
+为一个类创建它自己的队列而不是使用全局的队列被普遍认为是一种好的风格。这种方式下，你可以设置队列的名字，这让调试变得轻松许多—— Xcode 可以让你在 Debug Navigator 中看到所有的队列名字，如果你直接使用 lldb。(lldb) thread list 命令将会在控制台打印出所有队列的名字。一旦你使用大量的异步内容，这会是非常有用的帮助。
+
+### 隔离
+#### 资源保护
+多线程编程中，最常见的情形是你有一个资源，每次只有一个线程被允许访问这个资源。
+
+#### 全都使用异步分发
+#### 如何写出好的异步 API
+如果你的方法或函数有一个返回值，异步地将其传递给一个回调处理程序。这个 API 应该是这样的，你的方法或函数同时持有一个结果 block 和一个将结果传递过去的队列。
+```objc
+- (void)processImage:(UIImage *)image completionHandler:(void(^)(BOOL success))handler;
+{
+    dispatch_async(self.isolationQueue, ^(void){
+        // do actual processing here
+        dispatch_async(self.resultQueue, ^(void){
+            handler(YES);
+        });
+    });
+}
+```
+
+### 迭代执行
+
+dispatch_apply
+```objc
+for (size_t y = 0; y < height; ++y) {
+    for (size_t x = 0; x < width; ++x) {
+        // Do something with x and y here
+    }
+}
+```
+
+小小的改动或许就可以让它运行的更快：
+```objc
+dispatch_apply(height, dispatch_get_global_queue(0, 0), ^(size_t y) {
+    for (size_t x = 0; x < width; x += 2) {
+        // Do something with x and y here
+    }
+});
+```
+
+### 组
+```objc
+dispatch_group_t group = dispatch_group_create();
+
+dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
+dispatch_group_async(group, queue, ^(){
+    // Do something that takes a while
+    [self doSomeFoo];
+    dispatch_group_async(group, dispatch_get_main_queue(), ^(){
+        self.foo = 42;
+    });
+});
+dispatch_group_async(group, queue, ^(){
+    // Do something else that takes a while
+    [self doSomeBar];
+    dispatch_group_async(group, dispatch_get_main_queue(), ^(){
+        self.bar = 1;
+    });
+});
+
+// This block will run once everything above is done:
+dispatch_group_notify(group, dispatch_get_main_queue(), ^(){
+    NSLog(@"foo: %d", self.foo);
+    NSLog(@"bar: %d", self.bar);
+});
+```
+
+#### 对现有API使用 dispatch_group_t
+```objc
++ (void)withGroup:(dispatch_group_t)group 
+        sendAsynchronousRequest:(NSURLRequest *)request 
+        queue:(NSOperationQueue *)queue 
+        completionHandler:(void (^)(NSURLResponse*, NSData*, NSError*))handler
+{
+    if (group == NULL) {
+        [self sendAsynchronousRequest:request 
+                                queue:queue 
+                    completionHandler:handler];
+    } else {
+        dispatch_group_enter(group);
+        [self sendAsynchronousRequest:request 
+                                queue:queue 
+                    completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
+            handler(response, data, error);
+            dispatch_group_leave(group);
+        }];
+    }
+}
+```
+为了能正常工作，你需要确保:
+* dispatch_group_enter() 必须要在 dispatch_group_leave()之前运行。
+* dispatch_group_enter() 和 dispatch_group_leave() 一直是成对出现的。
+
+### 事件源
+GCD 有一个较少人知道的特性：事件源 `dispatch_source_t`。
+
+当你需要用到它时，它会变得极其有用。它的一些使用是秘传招数，我们将会接触到一部分的使用。但是大部分事件源在 iOS 平台不是很有用，因为在 iOS 平台有诸多限制，你无法启动进程（因此就没有必要监视进程），也不能在你的 app bundle 之外写数据（因此也就没有必要去监视文件）等等。
+
+GCD 事件源是以极其资源高效的方式实现的。
+
+#### 监视进程
+#### 监视文件
+#### 定时器
+#### 取消
+
+### 输入输出
+写出能够在繁重的 I/O 处理情况下运行良好的代码是一件非常棘手的事情。
+
+#### GCD 和缓冲区
+最直接了当的方法是使用数据缓冲区。GCD 有一个 `dispatch_data_t` 类型，在某种程度上和 Objective-C 的 NSData 类型很相似。但是它能做别的事情，而且更通用。
+
+#### 读和写 
+在 GCD 的核心里，调度 I/O（译注：原文为 Dispatch I/O） 与所谓的通道有关。调度 I/O 通道提供了一种与从文件描述符中读写不同的方式。
+
+### 基准测试
+能够测量给定的代码执行的平均的纳秒数。
+```objc
+uint64_t dispatch_benchmark(size_t count, void (^block)(void));
+```
+### 原子操作
+头文件 `libkern/OSAtomic.h` 里有许多强大的函数，专门用来底层多线程编程。尽管它是内核头文件的一部分，它也能够在内核之外来帮助编程。
+
+#### 计数器
+#### 原子队列
+#### 自旋锁
+OSAtomic.h 头文件定义了使用自旋锁的函数：OSSpinLock。
+
+## 线程安全类的设计
+### 线程安全
+#### Apple 的框架
+一般来说除非特别声明，大多数的类默认都`不是`线程安全的。
+
+Apple没有把 UIKit 设计为线程安全的类是有意为之的，将其打造为线程安全的话会使很多操作变慢。而事实上 UIKit 是和主线程绑定的，这一特点使得编写并发程序以及使用 UIKit 十分容易的，你唯一需要确保的就是对于 UIKit 的调用总是在主线程中来进行。
+
+#### 为什么 UIKit 不是线程安全的？
+对于一个像 UIKit 这样的大型框架，确保它的线程安全将会带来巨大的工作量和成本。
+
+#### 内存回收 (deallocation) 问题
+另一个在后台使用 UIKit 对象的的危险之处在于“内存回收问题”。
+
+#### Collection 类
+总的来说，比如 `NSArry 这样不可变类是线程安全的`。然而它们的可变版本，比如 `NSMutableArray 是线程不安全的`。
+
+一个好习惯是写类似于 `return [array copy]` 这样的代码来确保返回的对象事实上是不可变对象。
+
+#### 原子属性 (Atomic Properties)
+
+##### 为何不用 @synchronized ？
+`@synchonized(self)` 更适合使用在你 需要确保在发生错误时代码不会死锁，而是抛出异常的时候。
+
+#### 你自己的类
+单独使用原子属性并不会使你的类变成线程安全。它不能保护你应用的逻辑，只能保护你免于在 setter 中遭遇到竞态条件的困扰。
+
+一个简单的解决办法是使用 `@synchronize`。其他的方式都非常非常可能使你误入歧途，已经有太多聪明人在这种尝试上一次又一次地以失败告终。
+
+##### 可行的线程安全设计
+
+### GCD 的陷阱
+
 
 http://www.cnblogs.com/yjg2014/p/yjg.html
 
