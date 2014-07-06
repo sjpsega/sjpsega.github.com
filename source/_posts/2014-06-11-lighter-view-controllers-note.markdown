@@ -4,7 +4,7 @@ title: "《#1 更轻量的 View Controllers》 学习笔记"
 date: 2014-06-11 12:01:53 +0800
 comments: true
 categories: study
-keywords: iOS 
+keywords: iOS ViewController
 ---
 文章地址：[objc第一章](http://objccn.io/issue-1/)
 

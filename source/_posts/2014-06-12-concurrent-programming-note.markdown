@@ -4,7 +4,7 @@ title: "《#2 并发编程》 学习笔记"
 date: 2014-06-12 12:49:46 +0800
 comments: true
 categories: study
-keywords: iOS GCD
+keywords: iOS GCD 并发
 ---
 文章地址：[objc第二章](http://objccn.io/issue-2/)
 
@@ -297,7 +297,7 @@ Apple没有把 UIKit 设计为线程安全的类是有意为之的，将其打�
 #### 原子属性 (Atomic Properties)
 
 ##### 为何不用 @synchronized ？
-`@synchonized(self)` 更适合使用在你 需要确保在发生错误时代码不会死锁，而是抛出异常的时候。
+`@synchonized(self)` 更适合使用在你需要确保在发生错误时代码不会死锁，而是抛出异常的时候。
 
 #### 你自己的类
 单独使用原子属性并不会使你的类变成线程安全。它不能保护你应用的逻辑，只能保护你免于在 setter 中遭遇到竞态条件的困扰。
@@ -305,9 +305,22 @@ Apple没有把 UIKit 设计为线程安全的类是有意为之的，将其打�
 一个简单的解决办法是使用 `@synchronize`。其他的方式都非常非常可能使你误入歧途，已经有太多聪明人在这种尝试上一次又一次地以失败告终。
 
 ##### 可行的线程安全设计
+对于那些肯定应该线程安全的代码（一个好例子是负责缓存的类）来说，一个不错的设计是使用并发的 dispatch_queue 作为读/写锁，并且确保只锁着那些真的需要被锁住的部分，以此来最大化性能。
 
 ### GCD 的陷阱
+对于大多数上锁的需求来说，GCD 就足够好了。它简单迅速，并且基于 block 的 API 使得粗心大意造成非平衡锁操作的概率下降了不少。
 
+#### 将 GCD 当作递归锁使用
+GCD 是一个对共享资源的访问进行串行化的队列。这个特性可以被当作锁来使用，但实际上它和 @synchronized 有很大区别。 
+
+#### 用 dispatch_async 修复时序问题
+
+#### 在性能关键的代码中混用 dispatchsync 和 dispatchasync
+
+#### 使用 dispatch_async 来派发内存敏感的操作
+
+## 测试并发程序
+以 SenTestingKit 为例子，在XCode5中已经不再使用。
 
 http://www.cnblogs.com/yjg2014/p/yjg.html
 
