@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-07-05T22:29:01+08:00</updated>
+  <updated>2014-07-14T00:15:40+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,420 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[《#3 Views》 学习笔记]]></title>
+    <link href="http://sjpsega.com/blog/2014/07/06/views-note/"/>
+    <updated>2014-07-06T17:15:53+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/07/06/views-note</id>
+    <content type="html"><![CDATA[<p>文章地址：<a href="http://objccn.io/issue-3/">objc第三章</a></p>
+
+<h2>绘制像素到屏幕上</h2>
+
+<h2>理解 Scroll Views</h2>
+
+<h3>光栅化和组合</h3>
+
+<p>渲染过程的第一部分是众所周知的光栅化(<code>rasterization</code>)，光栅化简单的说就是产生一组绘图指令并且生成一张图片。</p>
+
+<p>每个视图都有一个 <code>bounds</code> 和 <code>frame</code>。当布局一个界面时，我们需要处理视图的 frame。这允许我们放置并设置视图的大小。视图的 frame 和 bounds 的大小总是一样的，但是他们的 origin 有可能不同。</p>
+
+<p><img src="/images/2014-07-06-views-note/scrollview_1.png" alt="scrollview_1" /></p>
+
+<p>视图图片的左上角会根据它 frame 的 origin 进行偏移，并绘制到父视图的图片上：</p>
+
+<p>```objc
+CompositedPosition.x = View.frame.origin.x &ndash; Superview.bounds.origin.x;</p>
+
+<p>CompositedPosition.y = View.frame.origin.y &ndash; Superview.bounds.origin.y;
+```</p>
+
+<p>正如之前所说的，如果一个视图 bounds 的 origin 是 {0,0}。那么，我们得到这个公式：</p>
+
+<p>```objc
+CompositedPosition.x = View.frame.origin.x;</p>
+
+<p>CompositedPosition.y = View.frame.origin.y;
+```</p>
+
+<h3>Scroll View的Content Offset</h3>
+
+<p>```objc
+CompositedPosition.x = View.frame.origin.x &ndash; Superview.bounds.origin.x;</p>
+
+<p>CompositedPosition.y = View.frame.origin.y &ndash; Superview.bounds.origin.y;
+```</p>
+
+<p>我们减少 <code>Superview.bounds.origin</code> 的值(因为他们总是0)。但是如果他们不为0呢？我们用和前一个图例相同的 frames，但是我们改变了紫色视图 bounds 的 origin 为 {-30, -30}。得到下图：</p>
+
+<p><img src="/images/2014-07-06-views-note/scrollview_4.png" alt="scrollview_4" /></p>
+
+<p>现在，巧妙的是通过改变这个紫色视图的 bounds，它每一个单独的子视图都被移动了。事实上，这正是 scroll view 工作的原理。当你设置它的 contentOffset 属性时它改变 scroll view.bounds 的 origin。事实上，contentOffset 甚至不是实际存在的。代码看起来像这样：</p>
+
+<p>```objc
+&ndash; (void)setContentOffset:(CGPoint)offset
+{</p>
+
+<pre><code>CGRect bounds = [self bounds];
+bounds.origin = offset;
+[self setBounds:bounds];
+</code></pre>
+
+<p>}
+```</p>
+
+<h3>Content Size</h3>
+
+<p>content size 定义了可滚动区域。</p>
+
+<p>当 content size 设置为比 bounds 大的时候，用户就可以滚动视图了。</p>
+
+<p><img src="/images/2014-07-06-views-note/scrollview_5.png" alt="scrollview_5" /></p>
+
+<h3>用Content Insets对窗口稍作调整</h3>
+
+<p>contentInset 属性可以改变 content offset 的最大和最小值，这样便可以滚动出可滚动区域。</p>
+
+<p>实际使用：</p>
+
+<ul>
+<li>下拉刷新的实现</li>
+</ul>
+
+
+<p><img src="/images/2014-07-06-views-note/scrollview_6.png" alt="scrollview_6" /></p>
+
+<ul>
+<li>键盘出现，不遮挡可视区域</li>
+</ul>
+
+
+<p>当键盘出现在屏幕上时，设置 content inset 的底部等于键盘的高度。</p>
+
+<p><img src="/images/2014-07-06-views-note/scrollview_7.png" alt="scrollview_7" /></p>
+
+<h2>自定义 Collection View 布局</h2>
+
+<h3>布局对象 (Layout Objects)</h3>
+
+<p>UITableView 和 UICollectionView 都是 data-source 和 delegate 驱动的。</p>
+
+<p>布局继承自 UICollectionViewLayout 抽象基类。</p>
+
+<h3>Cells 和其他 Views</h3>
+
+<p>Collection view 的 cell 必须是 UICollectionViewCell 的子类。除了 cell，collection view 额外管理着两种视图：supplementary views 和 decoration views。</p>
+
+<p><code>Supplementary views</code> 相当于 table view 的 section header 和 footer views。像 cells 一样，他们的内容都由数据源对象驱动。然而和 table view 中用法不一样，supplementary view 并不一定会作为 header 或 footer view；他们的数量和放置的位置完全由布局控制。</p>
+
+<p><code>Decoration views</code> 纯粹为一个装饰品。他们完全属于布局对象，并被布局对象管理，他们并不从 data source 获取的 contents。当布局对象指定需要一个 decoration view 的时候，collection view 会自动创建，并将布局对象提供的布局参数应用到上面去。并不需要为自定义视图准备任何内容。</p>
+
+<p>Supplementary views 和 decoration views 必须是 <code>UICollectionResuableView</code> 的子类。</p>
+
+<h3>自定义布局</h3>
+
+<p>一般有两种类型的 collection view 布局：</p>
+
+<ul>
+<li>独立于内容的布局计算</li>
+<li>基于内容的布局计算</li>
+</ul>
+
+
+<h4>collectionViewContentSize</h4>
+
+<p>布局首先要提供的信息就是滚动区域大小，这样 collection view 才能正确的管理滚动。布局对象必须在此时计算它内容的总大小，包括 supplementary views 和 decoration views。</p>
+
+<h4>layoutAttributesForElementsInRect:</h4>
+
+<p>具体实现必须返回一个包含 <code>UICollectionViewLayoutAttributes</code> 对象的数组，为每一个 cell 包含一个这样的对象，supplementary view 或 decoration view 在矩形区域内是可见的。UICollectionViewLayoutAttributes 类包含了 collection view 内 item 的所有相关布局属性。默认情况下，这个类包含 frame，center，size，transform3D，alpha，zIndex 和 hidden属性。</p>
+
+<p>这个方法涉及到所有类型的视图，也就是 cell，supplementary views 和 decoration views。</p>
+
+<p>实现需要做这几步：</p>
+
+<ol>
+<li><p>创建一个空的可变数组来存放所有的布局属性。</p></li>
+<li><p>确定 index paths 中哪些 cells 的 frame 完全或部分位于矩形中。这个计算需要你从 collection view 的数据源中取出你需要显示的数据。然后在循环中调用你实现的 <code>layoutAttributesForItemAtIndexPath:</code> 方法为每个 index path 创建并配置一个合适的布局属性对象，并将每个对象添加到数组中。</p></li>
+<li><p>如果你的布局包含 supplementary views，计算矩形内可见 supplementary view 的 index paths。在循环中调用你实现的 <code>layoutAttributesForSupplementaryViewOfKind:atIndexPath:</code> ，并且将这些对象加到数组中。通过为 kind 参数传递你选择的不同字符，你可以区分出不同种类的supplementary views（比如headers和footers）。当需要创建视图时，collection view 会将 kind 字符传回到你的数据源。记住 supplementary 和 decoration views 的数量和种类完全由布局控制。你不会受到 headers 和 footers 的限制。</p></li>
+<li><p>如果布局包含 decoration views，计算矩形内可见 decoration views 的 index paths。在循环中调用你实现的 layoutAttributesForDecorationViewOfKind:atIndexPath: ，并且将这些对象加到数组中。</p></li>
+<li><p>返回数组。</p></li>
+</ol>
+
+
+<h4>layoutAttributesFor…IndexPath</h4>
+
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>创建布局对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>layoutAttributesForItemAtIndexPath:</td>
+<td>[UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:]</td>
+</tr>
+<tr>
+<td>layoutAttributesForSupplementaryViewOfKind:atIndexPath:</td>
+<td>[UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:withIndexPath:]</td>
+</tr>
+<tr>
+<td>layoutAttributesForDecorationViewOfKind:atIndexPath:</td>
+<td>[UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:withIndexPath:]</td>
+</tr>
+</tbody>
+</table>
+
+
+<h4>shouldInvalidateLayoutForBoundsChange</h4>
+
+<p>当 collection view 的 bounds 改变时，布局需要告诉 collection view 是否需要重新计算布局。</p>
+
+<h3>动画</h3>
+
+<h4>插入和删除</h4>
+
+<p>对应实现的方法：</p>
+
+<ul>
+<li>initialLayoutAttributesForAppearingItemAtIndexPath:</li>
+<li>initialLayoutAttributesForAppearingSupplementaryElementOfKind:atIndexPath:</li>
+<li>initialLayoutAttributesForAppearingDecorationElementOfKind:atIndexPath:</li>
+<li>finalLayoutAttributesForDisappearingItemAtIndexPath:</li>
+<li>finalLayoutAttributesForDisappearingSupplementaryElementOfKind:atIndexPath:</li>
+<li>finalLayoutAttributesForDisappearingDecorationElementOfKind:atIndexPath:</li>
+</ul>
+
+
+<h4>布局间切换</h4>
+
+<p>可以通过调用 <code>setCollectionViewLayout:animated:</code> 将一个 collection view 布局动态的切换到另外一个布局。</p>
+
+<h2>自定义控件</h2>
+
+<h3>视图层次概览</h3>
+
+<h4>UIResponder</h4>
+
+<p>UIResponder 是 <code>UIView</code> 的父类。responder 能够处理触摸、手势、远程控制等事件。</p>
+
+<p>UIResponder 的子类有 <code>UIView</code>、<code>UIApplication</code>、<code>UIViewController</code>。</p>
+
+<p>通过重写 UIResponder 的方法，可以决定一个类是否可以成为第一响应者 (first responder)，例如当前输入焦点元素。</p>
+
+<p>UIResponder 允许自定义输入方法，使用 inputAccessoryView 向键盘添加辅助视图；使用 inputView 提供一个完全自定义的键盘。</p>
+
+<h4>UIView</h4>
+
+<p>UIView 子类处理所有跟内容绘制有关的事情以及触摸时间。</p>
+
+<p>一个普遍错误的概念：视图的区域是由它的 frame 定义的。实际上 <code>frame</code> 是一个<code>派生属性</code>，是由 <code>center</code> 和 <code>bounds</code> 合成而来。</p>
+
+<h4>UIControl</h4>
+
+<p>UIControl 建立在视图上，增加了更多的交互支持。</p>
+
+<p>最重要的是，它增加了 target / action 模式。</p>
+
+<h3>渲染</h3>
+
+<p>尽量避免 <code>drawRect:</code>，使用现有的视图构建自定义视图。</p>
+
+<p>通常最快速的渲染方法是使用图片视图。</p>
+
+<p>把可拉伸的图片和图片视图一起使用也可以极大的提高效率。可拉伸图片是这些技术中最快的。原因是可拉伸图片在 CPU 和 GPU 之间的数据转移量最小，并且这些图片的绘制是经过高度优化的。(<code>-[UIImage resizableImageWithCapInsets:resizingMode:]</code>)</p>
+
+<h4>自定义绘制</h4>
+
+<p>技术选择：</p>
+
+<p>图片 > Core Animation > Core Graphics > GLKit 和原生 OpenGL</p>
+
+<p>若重写 <code>drawRect:</code>，确保检查内容模式。默认的模式是将内容缩放以填充视图的范围，这在当视图的 frame 改变时并不会重新绘制。</p>
+
+<h3>自定义交互</h3>
+
+<p>创建自定义控件时所面对的一个普遍的设计问题是向拥有它们的类中回传返回值。可选择的方式有 target action 模式，代理，block 或者 KVO，甚至通知。</p>
+
+<h4>使用 Target-Action</h4>
+
+<p>最方便的做法是使用 target-action。</p>
+
+<p>自定义视图中：
+<code>objc
+[self sendActionsForControlEvents:UIControlEventValueChanged];
+</code></p>
+
+<p>视图控制器中：
+```objc
+&ndash; (void)setupPieChart
+{</p>
+
+<pre><code>[self.pieChart addTarget:self
+              action:@selector(updateSelection:)
+    forControlEvents:UIControlEventValueChanged];
+</code></pre>
+
+<p>}</p>
+
+<ul>
+<li>(void)updateSelection:(id)sender
+{
+  NSLog(@&ldquo;%@&rdquo;, self.pieChart.selectedSector);
+}
+```
+这么做的好处是在自定义视图子类中需要做的事情很少，并且自动获得多目标支持。</li>
+</ul>
+
+
+<h4>使用代理</h4>
+
+<p>如果你需要更多的控制从视图发送到视图控制器的消息，通常使用代理模式。</p>
+
+<p>自定义视图中：
+<code>objc
+[self.delegate pieChart:self didSelectSector:self.selectedSector];
+</code></p>
+
+<p>视图控制器中:
+```objc
+@interface MyViewController <PieChartDelegate></p>
+
+<p> &hellip;</p>
+
+<ul>
+<li><p>(void)setupPieChart
+{
+  self.pieChart.delegate = self;
+}</p></li>
+<li><p>(void)pieChart:(PieChart<em>)pieChart didSelectSector:(PieChartSector</em>)sector
+{
+  // 处理区块
+}
+```
+当你想要做更多复杂的工作而不仅仅是通知所有者值发生了变化时，这么做显然更合适。</p></li>
+</ul>
+
+
+<h4>使用 Block</h4>
+
+<p>自定义视图中：</p>
+
+<p>```objc
+@interface PieChart : UIControl</p>
+
+<p>@property (nonatomic,copy) void(^selectionHandler)(PieChartSection* selectedSection);</p>
+
+<p>@end
+```</p>
+
+<p><code>Block</code> 的好处是可以把相关的代码整合在视图控制器中:</p>
+
+<p>```objc
+&ndash; (void)setupPieChart
+{</p>
+
+<pre><code>self.pieChart.selectionHandler = ^(PieChartSection* section) {
+    // 处理区块
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>一旦 block 中的代码要失去控制 (比如 block 中要处理的事情太多，导致 block 中的代码过多)，你还应该将它们抽离成独立的方法，这种情况的话可能用代理会更好一些。</p>
+
+<h4>使用 KVO</h4>
+
+<p>编写代码:</p>
+
+<p><code>objc
+self.selectedSegment = theNewSelectedSegment;
+</code></p>
+
+<p>当使用合成属性，KVO 会拦截到该变化并发出通知。在视图控制器中，编写类似的代码:
+```objc
+&ndash; (void)setupPieChart
+{</p>
+
+<pre><code>[self.pieChart addObserver:self forKeyPath:@"selectedSegment" options:0 context:NULL];
+</code></pre>
+
+<p>}</p>
+
+<ul>
+<li>(void)observeValueForKeyPath:(NSString <em>)keyPath ofObject:(id)object change:(NSDictionary </em>)change context:(void *)context
+{
+  if(object == self.pieChart &amp;&amp; [keyPath isEqualToString:@&ldquo;selectedSegment&rdquo;]) {
+      // 处理改变
+  }
+}
+```</li>
+</ul>
+
+
+<h4>使用通知</h4>
+
+<p>视图头文件中：
+<code>objc
+extern NSString* const SelectedSegmentChangedNotification;
+</code></p>
+
+<p>在实现文件中：
+```objc
+NSString* const SelectedSegmentChangedNotification = @&ldquo;selectedSegmentChangedNotification&rdquo;;</p>
+
+<p>&hellip;</p>
+
+<ul>
+<li>(void)notifyAboutChanges
+{
+  [[NSNotificationCenter defaultCenter] postNotificationName:SelectedSegmentChangedNotification object:self];
+}
+```</li>
+</ul>
+
+
+<p>现在订阅通知，在视图控制器中：
+```objc
+&ndash; (void)setupPieChart
+{</p>
+
+<pre><code>[[NSNotificationCenter defaultCenter] addObserver:self
+                                   selector:@selector(segmentChanged:)
+                                       name:SelectedSegmentChangedNotification
+                                      object:self.pieChart];
+</code></pre>
+
+<p>}</p>
+
+<p>&hellip;</p>
+
+<ul>
+<li>(void)segmentChanged:(NSNotification*)note
+{
+}
+```</li>
+</ul>
+
+
+<h3>辅助功能 (Accessibility)</h3>
+
+<p>苹果官方提供的标准 iOS 控件均有辅助功能。这也是推荐用标准控件创建自定义控件的另一个原因。</p>
+
+<h3>本地化</h3>
+
+<p>使用 NSLocalizedString 本地化字符串。</p>
+
+<h3>测试</h3>
+
+<p>使用 <code>UIAutomation</code> 做视图测试。</p>
+
+<h2>先进的自动布局工具箱</h2>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ARC学习笔记]]></title>
@@ -488,7 +902,7 @@ uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 
 <h5>为何不用 @synchronized ？</h5>
 
-<p><code>@synchonized(self)</code> 更适合使用在你 需要确保在发生错误时代码不会死锁，而是抛出异常的时候。</p>
+<p><code>@synchonized(self)</code> 更适合使用在你需要确保在发生错误时代码不会死锁，而是抛出异常的时候。</p>
 
 <h4>你自己的类</h4>
 
@@ -498,7 +912,25 @@ uint64_t dispatch_benchmark(size_t count, void (^block)(void));
 
 <h5>可行的线程安全设计</h5>
 
+<p>对于那些肯定应该线程安全的代码（一个好例子是负责缓存的类）来说，一个不错的设计是使用并发的 dispatch_queue 作为读/写锁，并且确保只锁着那些真的需要被锁住的部分，以此来最大化性能。</p>
+
 <h3>GCD 的陷阱</h3>
+
+<p>对于大多数上锁的需求来说，GCD 就足够好了。它简单迅速，并且基于 block 的 API 使得粗心大意造成非平衡锁操作的概率下降了不少。</p>
+
+<h4>将 GCD 当作递归锁使用</h4>
+
+<p>GCD 是一个对共享资源的访问进行串行化的队列。这个特性可以被当作锁来使用，但实际上它和 @synchronized 有很大区别。</p>
+
+<h4>用 dispatch_async 修复时序问题</h4>
+
+<h4>在性能关键的代码中混用 dispatchsync 和 dispatchasync</h4>
+
+<h4>使用 dispatch_async 来派发内存敏感的操作</h4>
+
+<h2>测试并发程序</h2>
+
+<p>以 SenTestingKit 为例子，在XCode5中已经不再使用。</p>
 
 <p><a href="http://www.cnblogs.com/yjg2014/p/yjg.html">http://www.cnblogs.com/yjg2014/p/yjg.html</a></p>
 
@@ -983,150 +1415,6 @@ NSString* buttons = [command argumentAtIndex:2];
 <p>iOS端因为没有提供js调用native的直接方法，做的处理也算合理到位。</p>
 
 <p>特别是插件化的支持做的很好，但是文档着实不够给力。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS中的单例模式]]></title>
-    <link href="http://sjpsega.com/blog/2014/05/25/singleton-in-ios/"/>
-    <updated>2014-05-25T12:25:10+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/05/25/singleton-in-ios</id>
-    <content type="html"><![CDATA[<p>单例模式是指在一个系统中，类有且只有一个实例对象，可以通过全局的一个入口对这个实例对象进行访问。</p>
-
-<p>在iOS开发中，单例模式是非常常用的一种设计模式。</p>
-
-<h2>ARC下的实现</h2>
-
-<p>iOS5.0以后就开始可以使用ARC（Automatic Reference Counting：自动引用计数）来代替之前的MRC（Manual Reference Counting：人工引用计数）。</p>
-
-<p>使用ARC会减少很多代码和忘了释放对象的苦恼。</p>
-
-<p>慢慢ARC会成为主流，我入门iOS也是学ARC的，所以这里只写ARC的单例实现。</p>
-
-<p><code>Singleton.h:</code>
-```objc
-//
-//  Singleton.h
-//  Singleton</p>
-
-<h1>import &lt;Foundation/Foundation.h></h1>
-
-<p>@interface Singleton : NSObject</p>
-
-<ul>
-<li>(Singleton *)sharedInstance;</li>
-</ul>
-
-
-<p>@end</p>
-
-<p>```</p>
-
-<p><code>Singleton.m:</code>
-```objc</p>
-
-<p>//
-//  Singleton.m
-//  Singleton</p>
-
-<h1>import &ldquo;Singleton.h&rdquo;</h1>
-
-<p>@implementation Singleton</p>
-
-<ul>
-<li><p>(Singleton <em>)sharedInstance{
-  static Singleton </em>singleton;
-  static dispatch_once_t token;
-  dispatch_once(&amp;token,^{
-      singleton = [[Singleton alloc]init];
-  });
-  return singleton;
-}</p></li>
-<li><p>(id)init{
-  self = [super init];
-  if(self){
-      //在这里可以进行类的初始化工作
-  }
-  return self;
-}</p></li>
-</ul>
-
-
-<p>@end</p>
-
-<p>```</p>
-
-<p>在这个实现中，核心是使用了GCD（Grand Central Dispatch）的<code>dispatch_once</code>方法，该方法可以保证Singleton只被实例化一次，并且该方法<code>线程安全</code>。</p>
-
-<h2>纰漏</h2>
-
-<p>以上实现有一个纰漏，Singleton继承于<code>NSObject</code>，<code>NSObject</code>有一个公开的初始化方法<code>-(id)init</code>，所以若使用者不小心，他完全可以使用<code>[[Singleton alloc]init]</code>来创建多个实例对象，这样轻易就破坏了单例的实现。</p>
-
-<p>例如：
-<code>objc
-Singleton *single1 = [[Singleton alloc]init];
-Singleton *single2 = [[Singleton alloc]init];
-//结果为0，即NO，两者不是同一个实例
-NSLog(@"%d",single1 == single2);
-</code></p>
-
-<h2>更好的实现</h2>
-
-<p>其实是要对<code>Singleton.m</code>做一点改变，就能封住这个纰漏：</p>
-
-<p>```objc
-//
-//  Singleton.m
-//  Singleton</p>
-
-<h1>import &ldquo;Singleton.h&rdquo;</h1>
-
-<p>@implementation Singleton</p>
-
-<ul>
-<li>(Singleton <em>)sharedInstance{
-  static Singleton </em>singleton;
-  static dispatch_once_t token;
-  dispatch_once(&amp;token,^{
-      //这里调用私有的initSingle方法
-      singleton = [[Singleton alloc]initSingle];
-  });
-  return singleton;
-}</li>
-</ul>
-
-
-<p>//只是把原来在init方法中的代码，全都搬到initSingle
-&ndash; (id)initSingle{</p>
-
-<pre><code>self = [super init];
-if(self){
-    //在这里可以进行类的初始化工作
-}
-return self;
-</code></pre>
-
-<p>}</p>
-
-<ul>
-<li>(id)init{
-  //改为调用[Singleton sharedInstance]
-  return [Singleton sharedInstance];
-}</li>
-</ul>
-
-
-<p>@end
-```</p>
-
-<ul>
-<li>新建私有的initSingle方法，将原来init中的实现，全部搬入</li>
-<li>sharedInstance中的singleton初始化，调用initSingle方法</li>
-<li>init方法中，调用[Singleton sharedInstance]</li>
-</ul>
-
-
-<p>该实现，我是自己在实践中，觉得更好的单例实现，如有问题，请及时反馈。</p>
 ]]></content>
   </entry>
   
