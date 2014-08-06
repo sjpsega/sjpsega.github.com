@@ -1,0 +1,50 @@
+---
+layout: post
+title: "iOS H5的那些坑"
+date: 2014-08-06 17:47:30 +0800
+comments: true
+keywords: iOS H5
+categories: study
+---
+
+最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。
+
+因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。
+
+## iOS 7.0 input 元素聚焦问题
+
+### bug 演示
+![ios7.0bug.gif](/images/2014-08-06-ios-h5-trap/ios7.0bug.gif)
+
+### bug 分析
+点击屏幕下方的input元素，且该元素在键盘弹起的区域内；当键盘弹起时，input 元素未获得焦点，且 input 元素不在可视范围内，没有进行自动定位调整。
+
+但 input 元素不在键盘弹起的区域内，当键盘弹起时，一切正常。
+
+该 bug，iOS < 7.1 有问题，>=7.1 无问题。
+
+### 解决办法
+办法有点猥琐，要通过 js，去强制 input 元素获得焦点。
+
+```javascript
+element.on("tap", function(e){
+  element.focus();
+});
+```
+
+## iOS 7.1 input 元素失焦问题
+
+### bug 演示
+![ios7.1bug.gif](/images/2014-08-06-ios-h5-trap/ios7.1bug.gif)
+
+### bug 分析
+点击 input 元素（input 元素在不在浮层中不重要），弹出键盘时，当点击 Html 中的元素，致使 input 元素失去焦点，键盘收起，position:fixed 元素（演示中的浮层为 position:fixed）会导致界面错乱。
+
+但若点击键盘右上角的 `完成` 按钮，键盘收起，一切正常。
+
+也就是说，使用 iOS 系统的方式使得键盘收起，没有问题；使用其他方式，使得键盘收起，position:fixed 元素会导致界面错乱。
+
+该 bug，iOS >= 7.1 有问题，< 7.1 无问题。当好和上一个 bug 的情况相反。
+
+### 解决办法
+避免使用 position:fixed，换成 position:absolute 替代。
