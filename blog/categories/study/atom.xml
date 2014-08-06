@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-07-14T00:15:40+08:00</updated>
+  <updated>2014-08-06T23:20:45+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS H5的那些坑]]></title>
+    <link href="http://sjpsega.com/blog/2014/08/06/ios-h5-trap/"/>
+    <updated>2014-08-06T17:47:30+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/08/06/ios-h5-trap</id>
+    <content type="html"><![CDATA[<p>最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。</p>
+
+<p>因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。</p>
+
+<h2>iOS 7.0 input 元素聚焦问题</h2>
+
+<h3>bug 演示</h3>
+
+<p><img src="/images/2014-08-06-ios-h5-trap/ios7.0bug.gif" alt="ios7.0bug.gif" /></p>
+
+<h3>bug 分析</h3>
+
+<p>点击屏幕下方的input元素，且该元素在键盘弹起的区域内；当键盘弹起时，input 元素未获得焦点，且 input 元素不在可视范围内，没有进行自动定位调整。</p>
+
+<p>但 input 元素不在键盘弹起的区域内，当键盘弹起时，一切正常。</p>
+
+<p>该 bug，iOS &lt; 7.1 有问题，>=7.1 无问题。</p>
+
+<h3>解决办法</h3>
+
+<p>办法有点猥琐，要通过 js，去强制 input 元素获得焦点。</p>
+
+<p><code>javascript
+element.on("tap", function(e){
+  element.focus();
+});
+</code></p>
+
+<h2>iOS 7.1 input 元素失焦问题</h2>
+
+<h3>bug 演示</h3>
+
+<p><img src="/images/2014-08-06-ios-h5-trap/ios7.1bug.gif" alt="ios7.1bug.gif" /></p>
+
+<h3>bug 分析</h3>
+
+<p>点击 input 元素（input 元素在不在浮层中不重要），弹出键盘时，当点击 Html 中的元素，致使 input 元素失去焦点，键盘收起，position:fixed 元素（演示中的浮层为 position:fixed）会导致界面错乱。</p>
+
+<p>但若点击键盘右上角的 <code>完成</code> 按钮，键盘收起，一切正常。</p>
+
+<p>也就是说，使用 iOS 系统的方式使得键盘收起，没有问题；使用其他方式，使得键盘收起，position:fixed 元素会导致界面错乱。</p>
+
+<p>该 bug，iOS >= 7.1 有问题，&lt; 7.1 无问题。当好和上一个 bug 的情况相反。</p>
+
+<h3>解决办法</h3>
+
+<p>避免使用 position:fixed，换成 position:absolute 替代。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[《#3 Views》 学习笔记]]></title>
@@ -1020,401 +1075,6 @@ _photos = [unarchiver decodeObjectOfClass:[NSArray class] forKey:@"photos"];
 <p><a href="http://stackoverflow.com/questions/17301769/when-to-use-nssecurecoding">When to use NSSecureCoding</a></p>
 
 <p><a href="http://nshipster.com/nssecurecoding/">NSSecure​Coding</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS版PhoneGap原理分析]]></title>
-    <link href="http://sjpsega.com/blog/2014/06/01/phonegap-ios/"/>
-    <updated>2014-06-01T00:59:15+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/06/01/phonegap-ios</id>
-    <content type="html"><![CDATA[<p>PhoneGap，著名的跨平台Hybrid框架，旨在让开发者使用HTML、Javascript、CSS开发跨平台的App。</p>
-
-<p>最近的工作，就是做Hybrid方面的，很自然，方案就从PhoneGap入手。</p>
-
-<p>下面就切入正题，分析下PhoneGap的原理，需要说明的是，我只针对iOS版本的PhoneGap做分析，android版本的原理大同小异。</p>
-
-<h2>安装PhoneGap</h2>
-
-<p>现在使用PhoneGap非常方便，只需要安装node，用简单的命令就能完成安装和使用的工作。</p>
-
-<p>安装PhoneGap:
-<code>objc
-sudo npm install -g phonegap
-</code></p>
-
-<p>创建phoneGap应用:
-<code>objc
-phonegap create my-app
-cd my-app
-phonegap run ios
-</code></p>
-
-<p>具体可看<a href="http://phonegap.com/">phonegap官网</a>进行学习。</p>
-
-<h2>PhoneGap与Cordova的关系</h2>
-
-<p>Cordova是PhoneGap贡献给Apache后的开源项目，是从PhoneGap中抽离出的核心代码，是驱动PhoneGap的核心引擎。有点类似Webkit和Google Chrome的关系。</p>
-
-<p>渊源就是：早在2011年10月，Adobe收购了Nitobi Software和它的PhoneGap产品，然后宣布这个移动Web开发框架将会继续开源，并把它提交到Apache Incubator，以便完全接受ASF的管治。当然，由于Adobe拥有了PhoneGap商标，所以开源组织的这个PhoneGap v2.0版产品就更名为Apache Cordova。</p>
-
-<p>为什么说这个？因为下面的文章中，会出现<code>Cordova</code>这个命令，大家不要觉得奇怪。</p>
-
-<h2>js与native通信的原理</h2>
-
-<p>但在切入正题前，需要先了解下iOS js与native通信的原理。了解这个原理，是理解PhoneGap代码的<code>关键</code>。</p>
-
-<p>具体可以看我之前写的<a href="http://sjpsega.com/blog/2014/03/08/js-communicate-with-native-in-iOS/">iOS Js与native相互通信</a>，这里做简单说明。</p>
-
-<h3>js &ndash;> native</h3>
-
-<p>在iOS中，js调用native并没有提供原生的实现，只能通过UIWebView相关的UIWebViewDelegate协议的</p>
-
-<p><code>objc
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-</code>
-方法来做拦截，并在这个方法中，根据url的协议或特征字符串来做调用方法或触发事件等工作，如</p>
-
-<p>```objc
-/<em>
-* 方法的返回值是BOOL值。
-* 返回YES：表示让浏览器执行默认操作，比如某个a链接跳转
-* 返回NO：表示不执行浏览器的默认操作，这里因为通过url协议来判断js执行native的操作，肯定不是浏览器默认操作，故返回NO
-* /
-&ndash; (BOOL)webView:(UIWebView </em>)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {</p>
-
-<pre><code>NSURL *url = [request URL];
-if ([[url scheme] isEqualToString:@"callFunction") {
-    //调用原生方法
-
-    return NO;
-} else if (([[url scheme] isEqualToString:@"sendEvent") {
-    //触发事件
-
-    return NO;
-} else {
-    return YES;
-}
-</code></pre>
-
-<p>}
-<code>``
-值得注意的是，通过这个方式，js调用native是</code>异步`的。</p>
-
-<h3>native &ndash;> js</h3>
-
-<p>native调用js非常简洁方便，只需要
-<code>objc
-[webView stringByEvaluatingJavaScriptFromString:@"alert('hello world!')"];
-</code>
-并且该方法是<code>同步</code>的。</p>
-
-<p>native调用js非常简单直接，所以PhoneGap解决的主要是js调用native的问题。</p>
-
-<h2>PhoneGap js &ndash;> native</h2>
-
-<p>我们通过一个js调用native的Dialog的例子做说明。</p>
-
-<p>Dialog是一个PhoneGap的插件，可以看<a href="https://github.com/apache/cordova-plugin-dialogs/blob/master/doc/index.md">dialog 插件文档</a>，学习下载并使用该插件。</p>
-
-<p><code>
-这里有个很重要的事需要说明一下：
-目前PhoneGap的文档更新非常不及时，特别是插件的使用方面，比如Dialog插件的使用，文档中写的是使用navigator.notification.alert，但是经过我的摸索，因为现在PhoneGap使用AMD的方式来管理插件，所以应该是使用cordova.require("cordova/plugin/notification").alert的方式来调用。
-插件的合并方面，也有很多坑，主要是文档不全 - -|||
-</code></p>
-
-<h3>js部分</h3>
-
-<p>在html上添加一个button，然后通过下列代码调用：
-```javascript
-function alertDismissed() {</p>
-
-<pre><code>// do something
-</code></pre>
-
-<p>}</p>
-
-<p>function showAlert() {</p>
-
-<pre><code>cordova.require("cordova/plugin/notification").alert(
-    'You are the winner!',  // message
-    alertDismissed,         // callback
-    'Game Over',            // title
-    'Done'                  // buttonName
-);
-</code></pre>
-
-<p>}
-```</p>
-
-<p>再看下对应的<code>cordova/plugin/notification</code>的代码：
-```javascript
-var exec = cordova.require(&lsquo;cordova/exec&rsquo;);
-var platform = cordova.require(&lsquo;cordova/platform&rsquo;);</p>
-
-<p>module.exports = {</p>
-
-<pre><code>/**
- * Open a native alert dialog, with a customizable title and button text.
- *
- * @param {String} message              Message to print in the body of the alert
- * @param {Function} completeCallback   The callback that is called when user clicks on a button.
- * @param {String} title                Title of the alert dialog (default: Alert)
- * @param {String} buttonLabel          Label of the close button (default: OK)
- */
-alert: function(message, completeCallback, title, buttonLabel) {
-    var _title = (title || "Alert");
-    var _buttonLabel = (buttonLabel || "OK");
-    exec(completeCallback, null, "Notification", "alert", [message, _title, _buttonLabel]);
-}
-</code></pre>
-
-<p>}</p>
-
-<p>&hellip;.
-```</p>
-
-<p>可以看到alert最终其实是调用了<code>exec</code>方法来调用native代码的，<code>exec</code>方法非常关键，是PhoneGap js调用native的核心代码。</p>
-
-<p>然后在源码中搜索<code>exec对应的cordova/exec</code>，查看exec方法的源码。</p>
-
-<p>因为对应的<code>cordova/exec</code>源码非常长，我只能截取最关键的代码并做说明：
-```javascript
-define(&ldquo;cordova/exec&rdquo;, function(require, exports, module) {</p>
-
-<pre><code>...
-
-function iOSExec() {
-    ...
-
-    var successCallback, failCallback, service, action, actionArgs, splitCommand;
-    var callbackId = null;
-
-    ...
-
-    // 格式化传入参数
-    successCallback = arguments[0]; //成功的回调函数
-    failCallback = arguments[1];    //失败的回调函数
-    service = arguments[2];         //表示调用native类的类名
-    action = arguments[3];          //表示调用native类的一个方法
-    actionArgs = arguments[4];      //参数
-
-    //默认callbackId为'INVALID'，表示不需要回调
-    callbackId = 'INVALID';
-
-    ...
-
-    //如果传入参数有successCallback或failCallback，说明需要回调，就设置callbackId，并存储对应的回调函数
-    if (successCallback || failCallback) {
-        callbackId = service + cordova.callbackId++;
-        cordova.callbacks[callbackId] =
-            {success:successCallback, fail:failCallback};
-    }
-
-    //格式化传入的service、action、actionArgs，并存储，准备native代码来调用
-    actionArgs = massageArgsJsToNative(actionArgs);
-
-    var command = [callbackId, service, action, actionArgs];
-
-    commandQueue.push(JSON.stringify(command));
-
-    ...
-
-    //通过创建一个iframe并设置src，给native代码一个指令，开始执行js调用native的过程
-    execIframe = execIframe || createExecIframe();
-    if (!execIframe.contentWindow) {
-        execIframe = createExecIframe();
-    }
-    execIframe.src = "gap://ready";
-
-    ...
-}
-
-module.exports = iOSExec;
-</code></pre>
-
-<p>});
-```</p>
-
-<p>为了调用native方法，exec方法做了大量初始化的工作，这么做的原因，还是因为<code>iOS没有提供直接的方法来执行js调用native，不能把参数直接传递给native，所以只能通过js端存储对应操作的所有参数，然后通过指令来让native代码来回调的方式间接完成。</code></p>
-
-<h3>native部分</h3>
-
-<p>之后，就走到了native代码的部分。</p>
-
-<h4>CDVViewController</h4>
-
-<p>前面js通过创建一个iframe并发送<code>gap://ready</code>这个指令来告诉native开始执行操作。native中对应的操作在<code>CDVViewController.m</code>文件中的<code>webView:shouldStartLoadWithRequest:navigationType:</code>方法：</p>
-
-<p>```objc
-&ndash; (BOOL)webView:(UIWebView<em>)theWebView shouldStartLoadWithRequest:(NSURLRequest</em>)request navigationType:(UIWebViewNavigationType)navigationType
-{</p>
-
-<pre><code>NSURL* url = [request URL];
-
-/*
- * 判断url的协议以"gap"开头
- * 执行在js端调用cordova.exec()的command队列
- * 注：这里的command表示js调用native
- */
-if ([[url scheme] isElaqualToString:@"gap"]) {
-   //_commandQueue即CDVCommandQueue类
-    //从js端拉取command，即存储在js端commandQueue数组中的数据
-    [_commandQueue fetchCommandsFromJs];
-    //开始执行command
-    [_commandQueue executePending];
-    return NO;
-}
-</code></pre>
-
-<p>&hellip;
-}
-```</p>
-
-<p>到这里，其实已经走完js调用native的主要过程了。</p>
-
-<p>之后，让我们再看下<code>CDVCommandQueue</code>中的fetchCommandsFromJs方法与executePending方法中做的事。</p>
-
-<h4>CDVCommandQueue</h4>
-
-<p>```objc
-&ndash; (void)fetchCommandsFromJs
-{</p>
-
-<pre><code>// 获取js端存储的command，并在native暂存
-NSString* queuedCommandsJSON = [_viewController.webView stringByEvaluatingJavaScriptFromString:
-    @"cordova.require('cordova/exec').nativeFetchMessages()"];
-[self enqueueCommandBatch:queuedCommandsJSON];
-</code></pre>
-
-<p>}
-```
-fetchCommandsFromJs方法非常简单，不细说了。</p>
-
-<p>executePending方法稍微复杂些，因为js是单线程的，而iOS是典型的多线程，所以executePending方法做的工作主要是让command一个一个执行，防止线程问题。</p>
-
-<p>executePending方法其实与之后的execute方法紧密相连，这里一起列出，只保留关键代码：</p>
-
-<p>```objc
-&ndash; (void)executePending
-{</p>
-
-<pre><code>...
-//_queue即command队列，依次执行
-while ([_queue count] &gt; 0) {
-    ...
-    //取出从js中获取的command字符串，解析为native端的CDVInvokedUrlCommand类
-    CDVInvokedUrlCommand* command = [CDVInvokedUrlCommand commandFromJson:jsonEntry];
-    ...
-    //执行command
-    [self execute:command])
-    ...
-}
-</code></pre>
-
-<p>}</p>
-
-<ul>
-<li>(BOOL)execute:(CDVInvokedUrlCommand<em>)command
-{
-  &hellip;
-  BOOL retVal = YES;
-  //获取plugin对应的实例
-  CDVPlugin</em> obj = [_viewController.commandDelegate getCommandInstance:command.className];
-  //调用plugin实例的方法名
-  NSString* methodName = [NSString stringWithFormat:@&ldquo;%@:&rdquo;, command.methodName];
-  SEL normalSelector = NSSelectorFromString(methodName);
-  if ([obj respondsToSelector:normalSelector]) {
-      //消息发送，执行plugin实例对应的方法，并传递参数
-      objc_msgSend(obj, normalSelector, command);
-  } else {
-      // There&rsquo;s no method to call, so throw an error.
-      NSLog(@&ldquo;ERROR: Method &lsquo;%@&rsquo; not defined in Plugin &lsquo;%@&rsquo;&rdquo;, methodName, command.className);
-      retVal = NO;
-  }
-  &hellip;
-  return retVal;
-}
-```</li>
-</ul>
-
-
-<p>可以看到js调用native plugin最终执行的是<code>objc_msgSend(obj, normalSelector, command);</code>这块代码，这里我们再拿js端的代码来进行理解。</p>
-
-<p>之前js中的showAlert方法中我们书写了
-<code>exec(completeCallback, null, "Notification", "alert", [message, _title, _buttonLabel]);</code></p>
-
-<p>故，这里的对应关系：</p>
-
-<ul>
-<li>obj:&ldquo;Notification&rdquo;</li>
-<li>normalSelector:&ldquo;alert&rdquo;</li>
-<li>command:[message, <em>title, </em>buttonLabel]</li>
-</ul>
-
-
-<h4>CDVNotification</h4>
-
-<p>&ldquo;Notification"真正对应的iOS类是CDVNotification。js端调用的插件名字"Notification"与真正的native类名并非完全对应，因为native因为平台的不同，有不同的命名规范。</p>
-
-<p>看下CDVNotification的代码：</p>
-
-<p>```objc
-&ndash; (void)alert:(CDVInvokedUrlCommand*)command
-{</p>
-
-<pre><code>NSString* callbackId = command.callbackId;
-NSString* message = [command argumentAtIndex:0];
-NSString* title = [command argumentAtIndex:1];
-NSString* buttons = [command argumentAtIndex:2];
-
-[self showDialogWithMessage:message title:title buttons:@[buttons] defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT];
-</code></pre>
-
-<p>}
-```</p>
-
-<p>前面用<code>objc_msgSend(obj, normalSelector, command);</code>做消息发送，执行的便是这块代码，代码很好理解，就是对command再做解析，并显示。</p>
-
-<p>最终效果：</p>
-
-<p><img src="/images/2014-06-01-phonegap-ios/alert.png" alt="alert" /></p>
-
-<p>点击"Done"，native会再回调执行js端的成功回调，这里对应的就是js里设置的alertDismissed方法。</p>
-
-<p>到此为止，我们已经走完从js端调用native alert的全部过程了。</p>
-
-<p>列下过程的核心代码：</p>
-
-<ul>
-<li>js部分：
-
-<ul>
-<li>cordova.js中的iOSExec()方法，指定js调用native的初始化工作，并发送开始执行的指令</li>
-</ul>
-</li>
-<li>native部分：
-
-<ul>
-<li>CDVViewController：拦截js调用native的url协议，执行调用</li>
-<li>CDVCommandQueue：执行js调用native的队列，调用对应的plugin</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>时序图</h2>
-
-<p>以上Dialog例子中，PhoneGap js调用native的时序图：
-<img src="/images/2014-06-01-phonegap-ios/PhoneGap.jpg" alt="PhoneGap" /></p>
-
-<h2>结语</h2>
-
-<p>PhoneGap还是很给力的，能做到主流平台全兼容着实不容易。</p>
-
-<p>iOS端因为没有提供js调用native的直接方法，做的处理也算合理到位。</p>
-
-<p>特别是插件化的支持做的很好，但是文档着实不够给力。</p>
 ]]></content>
   </entry>
   

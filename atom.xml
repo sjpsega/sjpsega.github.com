@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-07-14T00:15:40+08:00</updated>
+  <updated>2014-08-06T23:20:45+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,74 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS H5的那些坑]]></title>
+    <link href="http://sjpsega.com/blog/2014/08/06/ios-h5-trap/"/>
+    <updated>2014-08-06T17:47:30+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/08/06/ios-h5-trap</id>
+    <content type="html"><![CDATA[<p>最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。</p>
+
+<p>因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。</p>
+
+<h2>iOS 7.0 input 元素聚焦问题</h2>
+
+<h3>bug 演示</h3>
+
+<p><img src="http://sjpsega.com/images/2014-08-06-ios-h5-trap/ios7.0bug.gif" alt="ios7.0bug.gif" /></p>
+
+<h3>bug 分析</h3>
+
+<p>点击屏幕下方的input元素，且该元素在键盘弹起的区域内；当键盘弹起时，input 元素未获得焦点，且 input 元素不在可视范围内，没有进行自动定位调整。</p>
+
+<p>但 input 元素不在键盘弹起的区域内，当键盘弹起时，一切正常。</p>
+
+<p>该 bug，iOS &lt; 7.1 有问题，>=7.1 无问题。</p>
+
+<h3>解决办法</h3>
+
+<p>办法有点猥琐，要通过 js，去强制 input 元素获得焦点。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">element</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;tap&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>iOS 7.1 input 元素失焦问题</h2>
+
+<h3>bug 演示</h3>
+
+<p><img src="http://sjpsega.com/images/2014-08-06-ios-h5-trap/ios7.1bug.gif" alt="ios7.1bug.gif" /></p>
+
+<h3>bug 分析</h3>
+
+<p>点击 input 元素（input 元素在不在浮层中不重要），弹出键盘时，当点击 Html 中的元素，致使 input 元素失去焦点，键盘收起，position:fixed 元素（演示中的浮层为 position:fixed）会导致界面错乱。</p>
+
+<p>但若点击键盘右上角的 <code>完成</code> 按钮，键盘收起，一切正常。</p>
+
+<p>也就是说，使用 iOS 系统的方式使得键盘收起，没有问题；使用其他方式，使得键盘收起，position:fixed 元素会导致界面错乱。</p>
+
+<p>该 bug，iOS >= 7.1 有问题，&lt; 7.1 无问题。当好和上一个 bug 的情况相反。</p>
+
+<h3>解决办法</h3>
+
+<p>避免使用 position:fixed，换成 position:absolute 替代。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[我的第一次China Joy]]></title>
+    <link href="http://sjpsega.com/blog/2014/08/02/first-china-joy/"/>
+    <updated>2014-08-02T15:01:40+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/08/02/first-china-joy</id>
+    <content type="html"><![CDATA[<p>昨天，扒衣见君节，去ChinaJoy.
+早上差一点点火车误点……</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[《#3 Views》 学习笔记]]></title>

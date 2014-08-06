@@ -5,14 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>2013年终总结 - sjpsega's Blog</title>
+  <title>iOS H5的那些坑 - sjpsega's Blog</title>
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="2013已经过去，先总结下去年的目标与主要的事： 花血本买了mac，开发用mac就是爽，很纯粹；
-买了5S，为了不换号码上4G;
-3月份当上了爸爸，有了一个健健康康的儿子，养孩子真不容易，好累！感谢比我更累的是我老婆。我还不是个好爸爸，陪儿子的时间不多。快到年底时，不小心又弄出了条人命， &hellip;">
-  <meta name="keywords" content="2013, 总结">
+  <meta name="description" content="最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。 因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。 iOS 7.0 input 元素聚焦问题 bug 演示 bug &hellip;">
+  <meta name="keywords" content="iOS H5">
 
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
@@ -20,7 +18,7 @@
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
   
-  <link rel="canonical" href="http://sjpsega.com/blog/2014/01/30/2013summer">
+  <link rel="canonical" href="http://sjpsega.com/blog/2014/08/06/ios-h5-trap">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -82,7 +80,7 @@ $(document).ready(function(event) {
   
   <header>
     
-      <h1 class="entry-title">2013年终总结</h1>
+      <h1 class="entry-title">iOS H5的那些坑</h1>
     
     
       <p class="meta">
@@ -98,38 +96,63 @@ $(document).ready(function(event) {
   
 
 
-<time datetime="2014-01-30T22:09:20+08:00" pubdate data-updated="true">Jan 30<span>th</span>, 2014</time>
+<time datetime="2014-08-06T17:47:30+08:00" pubdate data-updated="true">Aug 6<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h2>2013已经过去，先总结下去年的目标与主要的事：</h2>
+<div class="entry-content"><p>最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。</p>
 
-<ul>
-<li>花血本买了mac，开发用mac就是爽，很纯粹；</li>
-<li>买了5S，为了不换号码上4G;</li>
-<li>3月份当上了爸爸，有了一个健健康康的儿子，养孩子真不容易，好累！感谢比我更累的是我老婆。我还不是个好爸爸，陪儿子的时间不多。快到年底时，不小心又弄出了条人命，因为老婆身体素质不够好，感冒了近一个月，只能作罢…苦了老婆…</li>
-<li>js没有深入学习，很肤浅，还是基于业务层面的开发</li>
-<li>开发了一个App &ndash; <a href="http://t.cn/zRAyu4l?u=1798492244&amp;m=3629415684524998&amp;cu=1798492244">Just Do it</a>，登录了AppStore，虽然下载量不高，但还是很让人高兴的；</li>
-<li>没有去学习Ruby这样的新语言，为了开发App，学习了Object-C；</li>
-<li><a href="http://beechart.com">BeeChart</a>开源了，但只局限于开源了，现在js的图表越来越流行了，flash的图表意义不大了，不会去优化了吧；</li>
-<li>因为个人关系，换了部门，原先采购业务部门太业务了，觉得在那里意义不大，更想做移动方面的开发；换到了旺铺，希望能好好工作，提高自己的能力，发挥所长。</li>
-</ul>
+<p>因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。</p>
+
+<h2>iOS 7.0 input 元素聚焦问题</h2>
+
+<h3>bug 演示</h3>
+
+<p><img src="/images/2014-08-06-ios-h5-trap/ios7.0bug.gif" alt="ios7.0bug.gif" /></p>
+
+<h3>bug 分析</h3>
+
+<p>点击屏幕下方的input元素，且该元素在键盘弹起的区域内；当键盘弹起时，input 元素未获得焦点，且 input 元素不在可视范围内，没有进行自动定位调整。</p>
+
+<p>但 input 元素不在键盘弹起的区域内，当键盘弹起时，一切正常。</p>
+
+<p>该 bug，iOS &lt; 7.1 有问题，>=7.1 无问题。</p>
+
+<h3>解决办法</h3>
+
+<p>办法有点猥琐，要通过 js，去强制 input 元素获得焦点。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">element</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;tap&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>总得来说去年的目标完成的非常不错，完成了90%，来年要继续努力啊。</p>
+<h2>iOS 7.1 input 元素失焦问题</h2>
 
-<h2>想想2014要做的</h2>
+<h3>bug 演示</h3>
 
-<ul>
-<li>继续好好学习OC，开发至少一款新应用登录AppStore；</li>
-<li>继续努力当个好爸爸，教孩子走路说话，多陪陪孩子；还要努力当个好老公…</li>
-<li>在Github上开个blog，写写技术文章与总结，希望一年至少12篇，一个月一篇吧；</li>
-<li>好好工作，收入上能再提高30%。</li>
-</ul>
+<p><img src="/images/2014-08-06-ios-h5-trap/ios7.1bug.gif" alt="ios7.1bug.gif" /></p>
 
+<h3>bug 分析</h3>
+
+<p>点击 input 元素（input 元素在不在浮层中不重要），弹出键盘时，当点击 Html 中的元素，致使 input 元素失去焦点，键盘收起，position:fixed 元素（演示中的浮层为 position:fixed）会导致界面错乱。</p>
+
+<p>但若点击键盘右上角的 <code>完成</code> 按钮，键盘收起，一切正常。</p>
+
+<p>也就是说，使用 iOS 系统的方式使得键盘收起，没有问题；使用其他方式，使得键盘收起，position:fixed 元素会导致界面错乱。</p>
+
+<p>该 bug，iOS >= 7.1 有问题，&lt; 7.1 无问题。当好和上一个 bug 的情况相反。</p>
+
+<h3>解决办法</h3>
+
+<p>避免使用 position:fixed，换成 position:absolute 替代。</p>
 </div>
 
 
@@ -152,12 +175,12 @@ $(document).ready(function(event) {
   
 
 
-<time datetime="2014-01-30T22:09:20+08:00" pubdate data-updated="true">Jan 30<span>th</span>, 2014</time>
+<time datetime="2014-08-06T17:47:30+08:00" pubdate data-updated="true">Aug 6<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/life/'>life</a>
+    <a class='category' href='/blog/categories/study/'>study</a>
   
 </span>
 
@@ -198,10 +221,8 @@ var jiathis_config = {data_track_clickback:'true'};
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/02/09/2012summary/" title="Previous Post: 2012年终总结">&laquo; 2012年终总结</a>
+        <a class="basic-alignment left" href="/blog/2014/08/02/first-china-joy/" title="Previous Post: 我的第一次China Joy">&laquo; 我的第一次China Joy</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/02/06/kai-shi-xie-blog/" title="Next Post: 开始写Blog">开始写Blog &raquo;</a>
       
     </p>
   </footer>
