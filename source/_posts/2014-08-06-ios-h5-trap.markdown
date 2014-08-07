@@ -51,7 +51,7 @@ element.on("tap", function(e){
 
 该 bug，iOS >= 7.1 有问题，< 7.1 无问题。正好与iOS 7.0 input 元素聚焦 bug 的情况相反。
 
-``注：iOS 键盘的操作，必须由用户的操作引发，想通过 JSBridge 去让键盘收起的方案是行不通的。`
+`注：iOS 键盘的操作，必须由用户的操作引发，想通过 JSBridge 去让键盘收起的方案是行不通的。`
 
 ### 解决办法
 避免使用 position:fixed，换成 position:absolute 替代。
