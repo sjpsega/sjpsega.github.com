@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-08-06T23:20:45+08:00</updated>
+  <updated>2014-08-07T10:06:49+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -46,6 +46,12 @@ element.on("tap", function(e){
 });
 </code></p>
 
+<h3>参考资料</h3>
+
+<p><a href="http://stackoverflow.com/questions/16149083/keyboardshrinksview-makes-lose-focus">KeyboardShrinksView makes lose focus</a></p>
+
+<p><a href="https://issues.apache.org/jira/browse/CB-6974">Keyboard causes input focus issue</a></p>
+
 <h2>iOS 7.1 input 元素失焦问题</h2>
 
 <h3>bug 演示</h3>
@@ -60,11 +66,17 @@ element.on("tap", function(e){
 
 <p>也就是说，使用 iOS 系统的方式使得键盘收起，没有问题；使用其他方式，使得键盘收起，position:fixed 元素会导致界面错乱。</p>
 
-<p>该 bug，iOS >= 7.1 有问题，&lt; 7.1 无问题。当好和上一个 bug 的情况相反。</p>
+<p>该 bug，iOS >= 7.1 有问题，&lt; 7.1 无问题。正好与iOS 7.0 input 元素聚焦 bug 的情况相反。</p>
+
+<p><code>`注：iOS 键盘的操作，必须由用户的操作引发，想通过 JSBridge 去让键盘收起的方案是行不通的。</code></p>
 
 <h3>解决办法</h3>
 
 <p>避免使用 position:fixed，换成 position:absolute 替代。</p>
+
+<h3>参考资料</h3>
+
+<p><a href="http://stackoverflow.com/questions/18970865/ios-7-input-elements-moving-fixed-positioned-elements">ios-7-input-elements-moving-fixed-positioned-elements</a></p>
 ]]></content>
   </entry>
   
