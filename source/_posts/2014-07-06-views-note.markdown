@@ -4,6 +4,7 @@ title: "《#3 Views》 学习笔记"
 date: 2014-07-06 17:15:53 +0800
 comments: true
 categories: study
+description: objc view scroll
 keywords: iOS 视图
 ---
 文章地址：[objc第三章](http://objccn.io/issue-3/)

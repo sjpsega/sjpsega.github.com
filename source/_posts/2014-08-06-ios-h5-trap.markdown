@@ -3,7 +3,8 @@ layout: post
 title: "iOS H5的那些坑"
 date: 2014-08-06 17:47:30 +0800
 comments: true
-keywords: iOS iOS 7 7.0 7.1 ios H5 input
+description: iOS H5的那些坑
+keywords: ios H5的那些坑 H5 input trap 坑 7 7.0 7.1 
 categories: study
 ---
 

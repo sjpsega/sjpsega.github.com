@@ -4,7 +4,8 @@ title: "《刀塔传奇》"
 date: 2014-07-05 00:35:42 +0800
 comments: true
 categories: life
-keywords: 刀塔 手游 Dota
+description: 刀塔传奇 手游 Dota
+keywords: 刀塔传奇 手游 Dota
 ---
 ![刀塔传奇](/images/2014-07-05-daotachuanqi/daotachuanqi.jpg)
 
