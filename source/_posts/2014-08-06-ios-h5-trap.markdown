@@ -3,9 +3,9 @@ layout: post
 title: "iOS H5的那些坑"
 date: 2014-08-06 17:47:30 +0800
 comments: true
-description: iOS H5的那些坑
-keywords: ios H5的那些坑 H5 input trap 坑 7 7.0 7.1 
 categories: study
+description: iOS H5的那些坑
+keywords: ios H5的那些坑 H5 input trap 坑 7 7.0 7.1
 ---
 
 最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。
