@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-10-02T01:28:03+08:00</updated>
+  <updated>2014-10-02T01:30:13+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -29,23 +29,28 @@
 </ul>
 
 
-<p>~~~objc</p>
+<p>```objc</p>
 
 <h1>import &ldquo;NSArray+Swizzle.h&rdquo;</h1>
 
 <p>@implementation NSArray (Swizzle)</p>
 
 <ul>
-<li><p>(id)xxx_lastObject<br/>
+<li>(id)xxx_lastObject<br/>
 {<br/>
   id ret = [self xxx_lastObject];<br/>
   NSLog(@&ldquo;<strong><strong><strong><strong><strong>  myLastObject </strong></strong></strong></strong></strong>*&rdquo;);<br/>
   return ret;<br/>
 }<br/>
 @end<br/>
-~~~
-注意这里的写法，xxx_lastObject 方法的 IMP 中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。</p></li>
-<li><p>调换 IMP</p></li>
+```</li>
+</ul>
+
+
+<p>注意这里的写法，xxx_lastObject 方法的 IMP 中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。</p>
+
+<ul>
+<li>调换 IMP</li>
 </ul>
 
 
@@ -90,8 +95,9 @@ TEST RESULT : 3
 
 <h2>常用 API</h2>
 
-<p>相关常用方法，都在<code>&lt;objc/runtime.h&gt;</code>包内：
-~~~ojbc
+<p>相关常用方法，都在<code>&lt;objc/runtime.h&gt;</code>包内：</p>
+
+<p>```ojbc
 //向类中添加Method
 BOOL class_addMethod(Class cls, SEL name, IMP imp, const char *types)</p>
 
@@ -103,7 +109,7 @@ void method_exchangeImplementations(Method m1, Method m2)</p>
 
 <p>//获取类的某个实例方法
 Method class_getInstanceMethod(Class aClass, SEL aSelector);
-~~~</p>
+```</p>
 
 <h2>底层原理</h2>
 
