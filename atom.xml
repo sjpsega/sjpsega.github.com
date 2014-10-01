@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-10-02T01:22:59+08:00</updated>
+  <updated>2014-10-02T01:28:03+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -14,9 +14,9 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Oc Method Swizzling]]></title>
+    <title type="html"><![CDATA[Object-C Method Swizzling]]></title>
     <link href="http://sjpsega.com/blog/2014/09/17/oc-method-swizzling/"/>
-    <updated>2014-09-17T00:00:00+08:00</updated>
+    <updated>2014-09-17T22:36:40+08:00</updated>
     <id>http://sjpsega.com/blog/2014/09/17/oc-method-swizzling</id>
     <content type="html"><![CDATA[<p>Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改方法调用的技术。是 OC 作为动态语言的典型证明。</p>
 
