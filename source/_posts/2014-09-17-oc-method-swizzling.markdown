@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Object-C Method Swizzling"
+title: "Objective-C Method Swizzling"
 date: 2014-09-17 22:36:40 +0800
 comments: true
 categories: study
