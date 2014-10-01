@@ -15,7 +15,7 @@ Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改�
 
 * 在 NSArray 中添加需要替换 lastObject 的方法 - xxx_lastObject方法：
 
-~~~objc
+```objc
 #import "NSArray+Swizzle.h"  
 
 @implementation NSArray (Swizzle)  
@@ -27,7 +27,8 @@ Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改�
     return ret;  
 }  
 @end  
-~~~
+```
+
 注意这里的写法，xxx_lastObject 方法的 IMP 中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。
 
 * 调换 IMP
@@ -66,7 +67,8 @@ TEST RESULT : 3
 
 ## 常用 API
 相关常用方法，都在`<objc/runtime.h>`包内：
-~~~ojbc
+
+```ojbc
 //向类中添加Method
 BOOL class_addMethod(Class cls, SEL name, IMP imp, const char *types)
 
@@ -78,7 +80,7 @@ void method_exchangeImplementations(Method m1, Method m2)
 
 //获取类的某个实例方法
 Method class_getInstanceMethod(Class aClass, SEL aSelector);
-~~~
+```
 
 ## 底层原理
 
