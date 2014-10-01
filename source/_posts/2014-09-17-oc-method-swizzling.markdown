@@ -4,8 +4,8 @@ title: "Object-C Method Swizzling"
 date: 2014-09-17 22:36:40 +0800
 comments: true
 categories: study
-description:Method Swizzling
-keywords:Method Swizzling
+description: Method Swizzling
+keywords: Method Swizzling
 ---
 
 Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改方法调用的技术。是 OC 作为动态语言的典型证明。
