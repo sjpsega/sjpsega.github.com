@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-10-02T01:30:13+08:00</updated>
+  <updated>2014-10-02T01:33:51+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Object-C Method Swizzling]]></title>
+    <title type="html"><![CDATA[Objective-C Method Swizzling]]></title>
     <link href="http://sjpsega.com/blog/2014/09/17/oc-method-swizzling/"/>
     <updated>2014-09-17T22:36:40+08:00</updated>
     <id>http://sjpsega.com/blog/2014/09/17/oc-method-swizzling</id>
