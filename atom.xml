@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-08-10T11:13:56+08:00</updated>
+  <updated>2014-10-02T01:22:59+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,245 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Oc Method Swizzling]]></title>
+    <link href="http://sjpsega.com/blog/2014/09/17/oc-method-swizzling/"/>
+    <updated>2014-09-17T00:00:00+08:00</updated>
+    <id>http://sjpsega.com/blog/2014/09/17/oc-method-swizzling</id>
+    <content type="html"><![CDATA[<p>Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改方法调用的技术。是 OC 作为动态语言的典型证明。</p>
+
+<h2>例子</h2>
+
+<p>以替换 NSArray 的 lastObject 方法为例：</p>
+
+<ul>
+<li>在 NSArray 中添加需要替换 lastObject 的方法 &ndash; xxx_lastObject方法：</li>
+</ul>
+
+
+<p>~~~objc</p>
+
+<h1>import &ldquo;NSArray+Swizzle.h&rdquo;</h1>
+
+<p>@implementation NSArray (Swizzle)</p>
+
+<ul>
+<li><p>(id)xxx_lastObject<br/>
+{<br/>
+  id ret = [self xxx_lastObject];<br/>
+  NSLog(@&ldquo;<strong><strong><strong><strong><strong>  myLastObject </strong></strong></strong></strong></strong>*&rdquo;);<br/>
+  return ret;<br/>
+}<br/>
+@end<br/>
+~~~
+注意这里的写法，xxx_lastObject 方法的 IMP 中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。</p></li>
+<li><p>调换 IMP</p></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;  </span>
+</span><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">ori_Method</span><span class="p">,</span> <span class="n">my_Method</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意这里需要引入 <code>&lt;objc/runtime.h&gt;</code>，否则会报错，因为使用了 runtime 中的 method_exchangeImplementations 方法。</p>
+
+<p>使用 <code>method_exchangeImplementations</code> 交换了 xxx_lastObject 与 lastObject 的 IMP。后面会讲解更深层次的原理。</p>
+
+<ul>
+<li>尝试调用 lastObject</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;</span>
+</span><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSArray</span> <span class="o">*</span><span class="n">array</span> <span class="o">=</span> <span class="err">@</span><span class="p">[</span><span class="s">@&quot;0&quot;</span><span class="p">,</span><span class="s">@&quot;1&quot;</span><span class="p">,</span><span class="s">@&quot;2&quot;</span><span class="p">,</span><span class="s">@&quot;3&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span> <span class="n">lastObject</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;TEST RESULT : %@&quot;</span><span class="p">,</span><span class="n">string</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>输出结果为:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">**********</span>  <span class="n">myLastObject</span> <span class="o">***********</span>
+</span><span class='line'><span class="n">TEST</span> <span class="n">RESULT</span> <span class="o">:</span> <span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>很明显，这里调用 lastObject 方法，其实是调用了我们添加的 xxx_lastObject 方法。</p>
+
+<h2>常用 API</h2>
+
+<p>相关常用方法，都在<code>&lt;objc/runtime.h&gt;</code>包内：
+~~~ojbc
+//向类中添加Method
+BOOL class_addMethod(Class cls, SEL name, IMP imp, const char *types)</p>
+
+<p>//修改类的Method
+IMP class_replaceMethod(Class cls, SEL name, IMP imp, const char *types)</p>
+
+<p>//交换2个方法中的IMP
+void method_exchangeImplementations(Method m1, Method m2)</p>
+
+<p>//获取类的某个实例方法
+Method class_getInstanceMethod(Class aClass, SEL aSelector);
+~~~</p>
+
+<h2>底层原理</h2>
+
+<p>在运行时，OC 的方法被称为一种叫 <code>Method</code> 的结构体，这种 <code>objc_method</code> 类型的结构体定义为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">struct</span> <span class="n">objc_method</span>
+</span><span class='line'>   <span class="kt">SEL</span> <span class="n">method_name</span>         <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+</span><span class='line'>   <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span>      <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+</span><span class='line'>   <span class="n">IMP</span> <span class="n">method_imp</span>          <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>method_name 是方法的 selector，可以理解为运行时的方法名；</li>
+<li>*method_types 是一个参数和返回值类型<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html">编码</a>的字符串；</li>
+<li>method_imp 是指向方法实现的指针。</li>
+</ul>
+
+
+<p><code>Method Swizzling 的实质是在运行时，访问对象的方法结构体，并改变它的底层实现。</code></p>
+
+<p>我们以上节修改 NSArray 的 lastObject 为例做说明。</p>
+
+<ul>
+<li>初始时，lastObject 与 xxx_lastObject 方法的 Method 结构体：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">lastObject</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">)</span>
+</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="err">@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值void, 参数id(self)，selector(_cmd)</span>
+</span><span class='line'>      <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Method</span> <span class="n">xxx_lastObject</span> <span class="p">{</span>
+</span><span class='line'>       <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">swizzle_originalMethodName</span><span class="p">)</span>
+</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="err">@</span><span class="o">:</span><span class="err">”</span>
+</span><span class='line'>       <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>调用 <code>void method_exchangeImplementations(Method m1, Method m2)</code> ,交换两者的实现：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">ori_Method</span><span class="p">,</span> <span class="n">my_Method</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>调换后的 Method 结构体：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">lastObject</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">)</span>
+</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“@@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值id, 参数id(self)，selector(_cmd)</span>
+</span><span class='line'>      <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Method</span> <span class="n">xxx_lastObject</span> <span class="p">{</span>
+</span><span class='line'>       <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">swizzle_originalMethodName</span><span class="p">)</span>
+</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“@@</span><span class="o">:</span><span class="err">”</span>
+</span><span class='line'>       <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到使用<code>void method_exchangeImplementations(Method m1, Method m2)</code>的实质是交换了xxx_lastObject 与 lastObject 的 IMP，实现了在运行时做方法的替换。使得当执行 [array lastObject] 的时候，实际会去执行 [array xxx_lastObject] 的方法实现。</p>
+
+<h2>用处</h2>
+
+<p>Method Swizzling 非常强大，主要作用有
+* 修改 iOS 系统类库的方法
+* 动态添加、修改方法，修复线上 bug（如果 Apple 官方允许的话）</p>
+
+<h2>其他提示</h2>
+
+<h3>+load</h3>
+
+<p>Swizzling 的处理，在类的 <code>+load</code> 方法中完成。</p>
+
+<p>因为 <code>+load</code> 方法会在类被添加到 OC 运行时执行，保证了 Swizzling 方法的及时处理。</p>
+
+<h3>dispatch_once</h3>
+
+<p>Swizzling 的处理，<code>dispatch_once</code> 中完成。保证只执行一次。</p>
+
+<h3>prefix</h3>
+
+<p>Swizzling 方法添加前缀，避免方法名称冲突。</p>
+
+<h2>参考资料</h2>
+
+<p><a href="http://blog.csdn.net/yiyaaixuexi/article/details/9374411">Objective-C的hook方案（一）:  Method Swizzling</a></p>
+
+<p><a href="http://nshipster.com/method-swizzling/">Method Swizzling</a></p>
+
+<p><a href="http://stackoverflow.com/questions/3267506/how-to-swizzle-a-class-method-on-ios">How to swizzle a class method on iOS?</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS H5的那些坑]]></title>
