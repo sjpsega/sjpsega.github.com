@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-10-02T21:36:03+08:00</updated>
+  <updated>2014-10-02T21:51:36+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -97,7 +97,7 @@ TEST RESULT : 3
 
 <p>相关常用方法，都在<code>&lt;objc/runtime.h&gt;</code>包内：</p>
 
-<p>```ojbc
+<p>```objc
 //向类中添加Method
 BOOL class_addMethod(Class cls, SEL name, IMP imp, const char *types)</p>
 
@@ -121,10 +121,14 @@ struct objc_method
    char *method_types      OBJC2_UNAVAILABLE;
    IMP method_imp          OBJC2_UNAVAILABLE;
 }
-</code>
-* method_name 是方法的 selector，可以理解为运行时的方法名；
-* *method_types 是一个参数和返回值类型<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html">编码</a>的字符串；
-* method_imp 是指向方法实现的指针。</p>
+</code></p>
+
+<ul>
+<li>method_name 是方法的 selector，可以理解为运行时的方法名；</li>
+<li>*method_types 是一个参数和返回值类型<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html">编码</a>的字符串；</li>
+<li>method_imp 是指向方法实现的指针。</li>
+</ul>
+
 
 <p><code>Method Swizzling 的实质是在运行时，访问对象的方法结构体，并改变它的底层实现。</code></p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-10-02T01:28:03+08:00</updated>
+  <updated>2014-10-02T21:51:36+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Object-C Method Swizzling]]></title>
+    <title type="html"><![CDATA[Objective-C Method Swizzling]]></title>
     <link href="http://sjpsega.com/blog/2014/09/17/oc-method-swizzling/"/>
     <updated>2014-09-17T22:36:40+08:00</updated>
     <id>http://sjpsega.com/blog/2014/09/17/oc-method-swizzling</id>
@@ -29,23 +29,35 @@
 </ul>
 
 
-<p>~~~objc</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;  </span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">NSArray</span> <span class="nl">(Swizzle)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">xxx_lastObject</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">id</span> <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">xxx_lastObject</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;**********  myLastObject ***********&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<h1>import &ldquo;NSArray+Swizzle.h&rdquo;</h1>
 
-<p>@implementation NSArray (Swizzle)</p>
+<p>注意这里的写法，xxx_lastObject 方法的 IMP 中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。</p>
 
 <ul>
-<li><p>(id)xxx_lastObject<br/>
-{<br/>
-  id ret = [self xxx_lastObject];<br/>
-  NSLog(@&ldquo;<strong><strong><strong><strong><strong>  myLastObject </strong></strong></strong></strong></strong>*&rdquo;);<br/>
-  return ret;<br/>
-}<br/>
-@end<br/>
-~~~
-注意这里的写法，xxx_lastObject 方法的 IMP 中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。</p></li>
-<li><p>调换 IMP</p></li>
+<li>调换 IMP</li>
 </ul>
 
 
@@ -101,20 +113,32 @@
 
 <h2>常用 API</h2>
 
-<p>相关常用方法，都在<code>&lt;objc/runtime.h&gt;</code>包内：
-~~~ojbc
-//向类中添加Method
-BOOL class_addMethod(Class cls, SEL name, IMP imp, const char *types)</p>
+<p>相关常用方法，都在<code>&lt;objc/runtime.h&gt;</code>包内：</p>
 
-<p>//修改类的Method
-IMP class_replaceMethod(Class cls, SEL name, IMP imp, const char *types)</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//向类中添加Method</span>
+</span><span class='line'><span class="kt">BOOL</span> <span class="nf">class_addMethod</span><span class="p">(</span><span class="n">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="n">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//修改类的Method</span>
+</span><span class='line'><span class="n">IMP</span> <span class="n">class_replaceMethod</span><span class="p">(</span><span class="n">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="n">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//交换2个方法中的IMP</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">Method</span> <span class="n">m1</span><span class="p">,</span> <span class="n">Method</span> <span class="n">m2</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//获取类的某个实例方法</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="n">Class</span> <span class="n">aClass</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">aSelector</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>//交换2个方法中的IMP
-void method_exchangeImplementations(Method m1, Method m2)</p>
-
-<p>//获取类的某个实例方法
-Method class_getInstanceMethod(Class aClass, SEL aSelector);
-~~~</p>
 
 <h2>底层原理</h2>
 
