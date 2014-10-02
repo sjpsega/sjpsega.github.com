@@ -68,7 +68,7 @@ TEST RESULT : 3
 ## 常用 API
 相关常用方法，都在`<objc/runtime.h>`包内：
 
-```ojbc
+```objc
 //向类中添加Method
 BOOL class_addMethod(Class cls, SEL name, IMP imp, const char *types)
 
@@ -93,6 +93,7 @@ struct objc_method
    IMP method_imp          OBJC2_UNAVAILABLE;
 }
 ```
+
 * method_name 是方法的 selector，可以理解为运行时的方法名；
 * *method_types 是一个参数和返回值类型[编码](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html)的字符串；
 * method_imp 是指向方法实现的指针。
