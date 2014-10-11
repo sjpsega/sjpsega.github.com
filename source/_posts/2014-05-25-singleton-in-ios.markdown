@@ -78,7 +78,7 @@ Singleton *single2 = [[Singleton alloc] init];
 //结果为0，即NO，两者不是同一个实例
 NSLog(@"%d",single1 == single2);
 ```
-
+`2014-10-10 更新：`
 `摒弃之前的实现方式：`
 ```
     ## 更好的实现
@@ -125,7 +125,7 @@ NSLog(@"%d",single1 == single2);
     * init方法中，调用[Singleton sharedInstance]
 ```
 
-`2014-10-10 更新：`
+`更好的实现：`
 
 最佳的实现方式是重写 `+allocWithZone` 方法，使得在给对象分配内存空间的时候，就指向同一份数据，并且 `+alloc` 默认调用的是 `+allocWithZone` 方法，重写 `+allocWithZone` 是最根本的解决方案。
 
@@ -161,6 +161,6 @@ NSLog(@"%d",single1 == single2);
 
 [Objective-C中单例模式的实现](http://cocoa.venj.me/blog/singleton-in-objc/)
 
-[iOS_单例](http://www.cnblogs.com/yudigege/p/3943898.html)
-
 [从 Objective-C 里的 Alloc 和 AllocWithZone 谈起](http://www.justinyan.me/post/1306)
+
+[iOS_单例](http://www.cnblogs.com/yudigege/p/3943898.html)
