@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-10-11T10:13:21+08:00</updated>
+  <updated>2014-10-11T10:16:18+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -2449,7 +2449,8 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><code>摒弃之前的实现方式：</code></p>
+<p><code>2014-10-10 更新：</code>
+<code>摒弃之前的实现方式：</code></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -2538,7 +2539,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><code>2014-10-10 更新：</code></p>
+<p><code>更好的实现：</code></p>
 
 <p>最佳的实现方式是重写 <code>+allocWithZone</code> 方法，使得在给对象分配内存空间的时候，就指向同一份数据，并且 <code>+alloc</code> 默认调用的是 <code>+allocWithZone</code> 方法，重写 <code>+allocWithZone</code> 是最根本的解决方案。</p>
 
@@ -2593,9 +2594,9 @@
 
 <p><a href="http://cocoa.venj.me/blog/singleton-in-objc/">Objective-C中单例模式的实现</a></p>
 
-<p><a href="http://www.cnblogs.com/yudigege/p/3943898.html">iOS_单例</a></p>
-
 <p><a href="http://www.justinyan.me/post/1306">从 Objective-C 里的 Alloc 和 AllocWithZone 谈起</a></p>
+
+<p><a href="http://www.cnblogs.com/yudigege/p/3943898.html">iOS_单例</a></p>
 ]]></content>
   </entry>
   
