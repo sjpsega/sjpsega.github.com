@@ -163,4 +163,4 @@ NSLog(@"%d",single1 == single2);
 
 [iOS_单例](http://www.cnblogs.com/yudigege/p/3943898.html)
 
-![从 Objective-C 里的 Alloc 和 AllocWithZone 谈起](http://www.justinyan.me/post/1306)
+[从 Objective-C 里的 Alloc 和 AllocWithZone 谈起](http://www.justinyan.me/post/1306)
