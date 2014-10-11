@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-10-11T10:16:18+08:00</updated>
+  <updated>2014-10-11T10:23:13+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -2449,8 +2449,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><code>2014-10-10 更新：</code>
-<code>摒弃之前的实现方式：</code></p>
+<p><code>2014-10-10 更新：</code></p>
+
+<p><code>摒弃之前的实现方式：</code></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
