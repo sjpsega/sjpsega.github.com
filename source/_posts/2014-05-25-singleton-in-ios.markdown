@@ -157,10 +157,10 @@ NSLog(@"%d",single1 == single2);
 [代码示例](https://github.com/sjpsega/SingletonTest)
 
 ## 参考资料
-![Creating a Singleton Instance](https://developer.apple.com/legacy/library/documentation/Cocoa/Conceptual/CocoaFundamentals/CocoaObjects/CocoaObjects.html#//apple_ref/doc/uid/TP40002974-CH4-SW32)
+[Creating a Singleton Instance](https://developer.apple.com/legacy/library/documentation/Cocoa/Conceptual/CocoaFundamentals/CocoaObjects/CocoaObjects.html#//apple_ref/doc/uid/TP40002974-CH4-SW32)
 
-![Objective-C中单例模式的实现](http://cocoa.venj.me/blog/singleton-in-objc/)
+[Objective-C中单例模式的实现](http://cocoa.venj.me/blog/singleton-in-objc/)
 
-![iOS_单例](http://www.cnblogs.com/yudigege/p/3943898.html)
+[iOS_单例](http://www.cnblogs.com/yudigege/p/3943898.html)
 
 ![从 Objective-C 里的 Alloc 和 AllocWithZone 谈起](http://www.justinyan.me/post/1306)
