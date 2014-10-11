@@ -78,7 +78,9 @@ Singleton *single2 = [[Singleton alloc] init];
 //结果为0，即NO，两者不是同一个实例
 NSLog(@"%d",single1 == single2);
 ```
+
 `2014-10-10 更新：`
+
 `摒弃之前的实现方式：`
 ```
     ## 更好的实现
