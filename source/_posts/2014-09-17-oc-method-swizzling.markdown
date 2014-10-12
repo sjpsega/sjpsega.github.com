@@ -10,6 +10,8 @@ keywords: Method Swizzling
 
 Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改方法调用的技术。是 OC 作为动态语言的典型证明。
 
+Method Swizzling 是 OC `<objc/runtime.h>` 类库提供的“黑魔法”之一。
+
 ## 例子
 以替换 NSArray 的 lastObject 方法为例：
 
@@ -29,7 +31,7 @@ Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改�
 @end  
 ```
 
-注意这里的写法，xxx_lastObject 方法的 IMP 中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。
+注意这里的写法，xxx_lastObject 方法的方法体中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。
 
 * 调换 IMP
 
@@ -65,6 +67,12 @@ TEST RESULT : 3
 
 很明显，这里调用 lastObject 方法，其实是调用了我们添加的 xxx_lastObject 方法。
 
+## 用处
+Method Swizzling 非常强大，主要作用有：
+
+* 在不修改 iOS 系统类库或第三方类库的源码基础上，修改原有调用逻辑
+* 动态添加、修改方法，修复线上 bug（如果 Apple 官方允许的话）
+
 ## 常用 API
 相关常用方法，都在`<objc/runtime.h>`包内：
 
@@ -84,7 +92,7 @@ Method class_getInstanceMethod(Class aClass, SEL aSelector);
 
 ## 底层原理
 
-在运行时，OC 的方法被称为一种叫 `Method` 的结构体，这种 `objc_method` 类型的结构体定义为：
+在运行时，OC 的方法是一种叫 `Method` 的结构体，这种 `objc_method` 类型的结构体定义为：
 
 ```objc
 struct objc_method
@@ -144,17 +152,12 @@ Method xxx_lastObject {
 
 可以看到使用`void method_exchangeImplementations(Method m1, Method m2)`的实质是交换了xxx_lastObject 与 lastObject 的 IMP，实现了在运行时做方法的替换。使得当执行 [array lastObject] 的时候，实际会去执行 [array xxx_lastObject] 的方法实现。
 
-## 用处
-Method Swizzling 非常强大，主要作用有
-* 修改 iOS 系统类库的方法
-* 动态添加、修改方法，修复线上 bug（如果 Apple 官方允许的话）
-
 ## 其他提示
 
 ### +load
 Swizzling 的处理，在类的 `+load` 方法中完成。
 
-因为 `+load` 方法会在类被添加到 OC 运行时执行，保证了 Swizzling 方法的及时处理。
+因为 `+load` 方法会在类被添加到 OC 运行时执行，且只会被调用一次，保证了 Swizzling 方法的及时处理。
 
 ### dispatch_once
 Swizzling 的处理，`dispatch_once` 中完成。保证只执行一次。
@@ -162,9 +165,16 @@ Swizzling 的处理，`dispatch_once` 中完成。保证只执行一次。
 ### prefix
 Swizzling 方法添加前缀，避免方法名称冲突。
 
-## 参考资料
-[Objective-C的hook方案（一）:  Method Swizzling](http://blog.csdn.net/yiyaaixuexi/article/details/9374411)
+## 代码示例
+[代码示例](https://github.com/sjpsega/SwizzleTest)
 
+## 参考资料
 [Method Swizzling](http://nshipster.com/method-swizzling/)
 
 [How to swizzle a class method on iOS?](http://stackoverflow.com/questions/3267506/how-to-swizzle-a-class-method-on-ios)
+
+[iOS 4.3: imp_implementationWithBlock()](http://www.friday.com/bbum/2011/03/17/ios-4-3-imp_implementationwithblock/)
+
+[Objective-C的hook方案（一）:  Method Swizzling](http://blog.csdn.net/yiyaaixuexi/article/details/9374411)
+
+[Objective-C 的动态提示和技巧](http://blog.jobbole.com/45963/)

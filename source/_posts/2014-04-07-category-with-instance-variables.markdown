@@ -124,6 +124,8 @@ id objc_getAssociatedObject(id object, void *key)
 
 ## 参考资料
 
+[Associated Objects](http://nshipster.com/associated-objects/)
+
 [让Category支持添加属性与成员变量](http://www.cnblogs.com/wupher/archive/2013/01/05/2845338.html)
 
 [Adding Properties to Objective-C Categories](http://kaspermunck.github.io/2012/11/adding-properties-to-objective-c-categories/)
