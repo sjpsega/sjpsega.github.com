@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Life | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/life/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2014-10-13T00:04:32+08:00</updated>
+  <updated>2015-02-19T01:58:38+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2014年终总结]]></title>
+    <link href="http://sjpsega.com/blog/2015/02/19/2014summer/"/>
+    <updated>2015-02-19T01:09:20+08:00</updated>
+    <id>http://sjpsega.com/blog/2015/02/19/2014summer</id>
+    <content type="html"><![CDATA[<h2>2014已经过去，先总结下去年的目标与主要的事：</h2>
+
+<ul>
+<li>一整年的工作，大部分都在做 iOS 开发，做了一些比较有成就感的东西，但是加班太多了，感觉好累好累，都没有时间思考，做一些自己感兴趣的事情；</li>
+<li>写了一份移动设备上，快速回到顶部的专利；</li>
+<li>优化了<a href="http://t.cn/zRAyu4l?u=1798492244&amp;m=3629415684524998&amp;cu=1798492244">Just Do it</a>这款 App，更新了几个版本，但是没做新应用，没有完成计划;</li>
+<li>坚持写 blog，数了一下，原创的、翻译的，加起来刚好 12 篇，刚好完成目标;</li>
+<li>宝宝终于开始熟练的会叫爸爸、妈妈、爷爷、奶奶、外婆了(就不会叫外公，估计是外公比较凶吧)，开始懂事了，模仿能力很强；比较惭愧，今年加班很多，较少时间陪他，陪他玩，和他在一起的时候我还经常拿着手机玩游戏……</li>
+<li>加了一点工资，虽然没有达到期望，但还算不错；</li>
+</ul>
+
+
+<p>总得来说去年的目标完成得非常一般，在及格线附近……</p>
+
+<h2>想想2015要做的</h2>
+
+<ul>
+<li>新年少加班，多充电学习，多陪陪家人；</li>
+<li>多花点时间思考代码、架构，而不要纯写代码，完成业务；</li>
+<li>写一份新专利；</li>
+<li>努力当个好爸爸，多陪陪儿子，自己的一些坏习惯也要改下，比如老是在他面前玩手机，不怎么做家务等；给儿子树立良好的榜样；</li>
+<li>带老婆出国旅游一次；</li>
+<li>多写技术文章与总结，一年至少12篇；</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[我的第一次China Joy]]></title>
@@ -429,25 +462,6 @@
 <li>IT氛围好，各大公司在北京都有分店，创业公司、风投云集，机会较多</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[开始写Blog]]></title>
-    <link href="http://sjpsega.com/blog/2014/02/06/kai-shi-xie-blog/"/>
-    <updated>2014-02-06T16:31:07+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/02/06/kai-shi-xie-blog</id>
-    <content type="html"><![CDATA[<p>趁着春节假期，花了点时间，在github上用<a href="http://octopress.org/">Octopress</a>搭了个个人Blog。希望自己新的一年，能写点技术Blog，多做积累，锻炼文字。</p>
-
-<p>其实以前在javaeye上也写过技术Blog，但是写得不多。在Sohu上写自己的生活Blog，写的蛮多的，现在渐渐也写得少了。</p>
-
-<p>javaeye的Blog有个最大的缺点：编辑器不好用，生成的文章格式不好看，特别是代码块，特别难看。而且添加代码demo更加麻烦，需要上传，且不便于后期的维护与管理。</p>
-
-<p>自己搭建Blog的话，javaeye的编辑器这个缺点就不存在了，而且使用MarkDown格式写文章，很方便，很轻松就能写出格式优美的文章了。而且放在github上，更不用怕文章丢失的问题了，哈哈。</p>
-
-<p>当然自己搭建Blog的最大缺点是，流量少，缺少流量，缺少讨论；当然这个也不重要，重要的是自己的积累，如果自己写得好，肯定会有人看到的。</p>
-
-<p>刚入门<a href="http://octopress.org/">Octopress</a>，定制化蛮强的，还要好好研究下。</p>
 ]]></content>
   </entry>
   
