@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2015-02-19T01:58:38+08:00</updated>
+  <updated>2015-03-25T14:44:14+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[重置 iOS UIWebView 的缩放]]></title>
+    <link href="http://sjpsega.com/blog/2015/03/25/reset-webview-zoom-with-ios/"/>
+    <updated>2015-03-25T14:01:19+08:00</updated>
+    <id>http://sjpsega.com/blog/2015/03/25/reset-webview-zoom-with-ios</id>
+    <content type="html"><![CDATA[<h2>需求</h2>
+
+<p>遇到一个需求，iOS webView设置了可缩放，用户缩放webView后，做某个操作，需要将webView的缩放重置。</p>
+
+<h2>经过</h2>
+
+<p>在网上找了下，看到很多很多解决方案，不论是国内的，还是国外的解决方案，但是实际使用都没有效果……</p>
+
+<h2>解决</h2>
+
+<p>经过不断尝试，发现以下方式是有效果的：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//重置 webView 的 html viewport 属性，变成不可缩放，并且缩放比例为1.0，并执行javaScript</span>
+</span><span class='line'><span class="cp">#define QUOTE(...) #__VA_ARGS__</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">webViewHeightJSString</span> <span class="o">=</span> <span class="n">QUOTE</span><span class="p">(</span>
+</span><span class='line'><span class="n">var</span> <span class="n">viewportmeta</span> <span class="o">=</span> <span class="n">document</span><span class="p">.</span><span class="n">querySelector</span><span class="p">(</span><span class="err">&#39;</span><span class="n">meta</span><span class="p">[</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span><span class="p">]</span><span class="err">&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">viewportmeta</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="n">viewportmeta</span><span class="p">.</span><span class="n">content</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">width</span><span class="o">=</span><span class="n">device</span><span class="o">-</span><span class="n">width</span><span class="p">,</span> <span class="n">initial</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">minimum</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">maximum</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">user</span><span class="o">-</span><span class="n">scalable</span><span class="o">=</span><span class="n">no</span><span class="err">&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'><span class="cp">#undef QUOTE</span>
+</span><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString:</span><span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithUTF8String:</span><span class="n">webViewHeightJSString</span><span class="p">]];</span>
+</span><span class='line'><span class="c1">//设置 webView zoomScale 为 1.0</span>
+</span><span class='line'><span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">zoomScale</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>此方法在iOS7、8上的 UIWebView 上测试通过，WKWebView 没有测试。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2014年终总结]]></title>
@@ -5518,44 +5566,6 @@
 <li>好好工作，收入上能再提高30%。</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[2012年终总结]]></title>
-    <link href="http://sjpsega.com/blog/2013/02/09/2012summary/"/>
-    <updated>2013-02-09T20:45:29+08:00</updated>
-    <id>http://sjpsega.com/blog/2013/02/09/2012summary</id>
-    <content type="html"><![CDATA[<p>时间真快，一年的时间就这么过去了，当然每年过年的时候，都感觉时间过得好快，一年就这么没了。
-过去自己也没总结的习惯，这个习惯不好，该改一改了，总结过去，憧憬未来。</p>
-
-<h2>2012的主要事情</h2>
-
-<ul>
-<li>结婚。3.30完成了终身大事。每天晚上家里多了个等我回家的人。</li>
-<li>因为公司部门调整的缘故，我的工作重心也从AS转到了JS，负责了中文站首页的工作，初始压力很大，虽然看过书，但没实践经验，就怕搞砸了。还好在毛哥的指导下，顺利完成了任务，做完了2012版本的首页工作。年前又完成了2013的改版。</li>
-<li>为了玩《暗黑3》升级了电脑，买了显卡、电源，从5月中旬游戏发售，一直浑浑噩噩玩到了10月国庆前。游戏还是那个游戏，但人不是那个时候的人了。《暗黑2》对我初中时期影响太大了，因为他，我带上了眼镜。但游戏类型对我现在的我来说不太感冒了，小时候特别钟爱的RPG现在也不爱玩了，太费时间了。玩了4个多月，和同事们一起玩，很开心。后来就慢慢累了，一段时间不玩，发条松了，没动力玩了……</li>
-<li>结婚后，出乎意料，老婆怀上了……在这里得跟老婆说声对不起，自己自制力较差，睡得比较晚，经常拖的老婆到11点，甚至12点才睡，对孕妇来说，太晚睡了……</li>
-<li>抛弃黑莓8700，投入了Andorid的怀抱……</li>
-<li>爷爷去世……</li>
-</ul>
-
-
-<p>没了吧，脑子里没有印象深的事情了……</p>
-
-<h2>2013展望/想做的事</h2>
-
-<ul>
-<li>买台Mac Pro，都说mac/Linux是程序员使用的系统，想买台用用。</li>
-<li>3月底是老婆的预产期，要当爸爸了，努力当个负责的好爸爸。</li>
-<li>深入学习JS，jQuery、node等，要知其然知其所以然。</li>
-<li>学习移动开发，phoneGap、andorid或iPhone原生开发，期望做出一个有趣的小项目，未来是移动的时代。</li>
-<li>想学习一门新的语言，期望是Ruby，让自己的知识更全面一些。</li>
-<li>BeeChart开源。网站、编辑器完成了大半，本来期望2.14开源，在项目2周年的日子。过年时间不好控制，估计会稍许延期。开源后的RoadMap不清晰，先开源了吧……</li>
-</ul>
-
-
-<p>差不多了，事情已经蛮多了，看来年能完成几件。</p>
 ]]></content>
   </entry>
   

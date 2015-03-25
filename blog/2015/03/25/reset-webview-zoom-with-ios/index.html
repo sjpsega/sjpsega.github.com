@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iOS H5的那些坑 - sjpsega's Blog</title>
+  <title>重置 iOS UIWebView 的缩放 - sjpsega's Blog</title>
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="iOS H5的那些坑">
-  <meta name="keywords" content="ios H5的那些坑 H5 input trap 坑 7 7.0 7.1">
+  <meta name="description" content="重置 iOS UIWebView 的缩放">
+  <meta name="keywords" content="iOS UIWebView reset zoom">
 
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
@@ -18,7 +18,7 @@
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
   
-  <link rel="canonical" href="http://sjpsega.com/blog/2014/08/06/ios-h5-trap">
+  <link rel="canonical" href="http://sjpsega.com/blog/2015/03/25/reset-webview-zoom-with-ios">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -80,7 +80,7 @@ $(document).ready(function(event) {
   
   <header>
     
-      <h1 class="entry-title">iOS H5的那些坑</h1>
+      <h1 class="entry-title">重置 iOS UIWebView 的缩放</h1>
     
     
       <p class="meta">
@@ -96,75 +96,53 @@ $(document).ready(function(event) {
   
 
 
-<time datetime="2014-08-06T17:47:30+08:00" pubdate data-updated="true">Aug 6<span>th</span>, 2014</time>
+<time datetime="2015-03-25T14:01:19+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。</p>
+<div class="entry-content"><h2>需求</h2>
 
-<p>因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。</p>
+<p>遇到一个需求，iOS webView设置了可缩放，用户缩放webView后，做某个操作，需要将webView的缩放重置。</p>
 
-<h2>iOS 7.0 input 元素聚焦问题</h2>
+<h2>经过</h2>
 
-<h3>bug 演示</h3>
+<p>在网上找了下，看到很多很多解决方案，不论是国内的，还是国外的解决方案，但是实际使用都没有效果……</p>
 
-<p><img src="/images/2014-08-06-ios-h5-trap/ios7.0bug.gif" alt="ios7.0bug.gif" /></p>
+<h2>解决</h2>
 
-<h3>bug 分析</h3>
-
-<p>点击屏幕下方的input元素，且该元素在键盘弹起的区域内；当键盘弹起时，input 元素未获得焦点，且 input 元素不在可视范围内，没有进行自动定位调整。</p>
-
-<p>但 input 元素不在键盘弹起的区域内，当键盘弹起时，一切正常。</p>
-
-<p>该 bug，iOS &lt; 7.1 有问题，>=7.1 无问题。</p>
-
-<h3>解决办法</h3>
-
-<p>办法有点猥琐，要通过 js，去强制 input 元素获得焦点。</p>
+<p>经过不断尝试，发现以下方式是有效果的：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">element</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;tap&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//重置 webView 的 html viewport 属性，变成不可缩放，并且缩放比例为1.0，并执行javaScript</span>
+</span><span class='line'><span class="cp">#define QUOTE(...) #__VA_ARGS__</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">webViewHeightJSString</span> <span class="o">=</span> <span class="n">QUOTE</span><span class="p">(</span>
+</span><span class='line'><span class="n">var</span> <span class="n">viewportmeta</span> <span class="o">=</span> <span class="n">document</span><span class="p">.</span><span class="n">querySelector</span><span class="p">(</span><span class="err">&#39;</span><span class="n">meta</span><span class="p">[</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span><span class="p">]</span><span class="err">&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">viewportmeta</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="n">viewportmeta</span><span class="p">.</span><span class="n">content</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">width</span><span class="o">=</span><span class="n">device</span><span class="o">-</span><span class="n">width</span><span class="p">,</span> <span class="n">initial</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">minimum</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">maximum</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">user</span><span class="o">-</span><span class="n">scalable</span><span class="o">=</span><span class="n">no</span><span class="err">&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'><span class="cp">#undef QUOTE</span>
+</span><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString:</span><span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithUTF8String:</span><span class="n">webViewHeightJSString</span><span class="p">]];</span>
+</span><span class='line'><span class="c1">//设置 webView zoomScale 为 1.0</span>
+</span><span class='line'><span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">zoomScale</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>参考资料</h3>
-
-<p><a href="http://stackoverflow.com/questions/16149083/keyboardshrinksview-makes-lose-focus">KeyboardShrinksView makes lose focus</a></p>
-
-<p><a href="https://issues.apache.org/jira/browse/CB-6974">Keyboard causes input focus issue</a></p>
-
-<h2>iOS 7.1 input 元素失焦问题</h2>
-
-<h3>bug 演示</h3>
-
-<p><img src="/images/2014-08-06-ios-h5-trap/ios7.1bug.gif" alt="ios7.1bug.gif" /></p>
-
-<h3>bug 分析</h3>
-
-<p>点击 input 元素（input 元素在不在浮层中不重要），弹出键盘时，当点击 Html 中的元素，致使 input 元素失去焦点，键盘收起，position:fixed 元素（演示中的浮层为 position:fixed）会导致界面错乱。</p>
-
-<p>但若点击键盘右上角的 <code>完成</code> 按钮，键盘收起，一切正常。</p>
-
-<p>也就是说，使用 iOS 系统的方式使得键盘收起，没有问题；使用其他方式，使得键盘收起，position:fixed 元素会导致界面错乱。</p>
-
-<p>该 bug，iOS >= 7.1 有问题，&lt; 7.1 无问题。正好与iOS 7.0 input 元素聚焦 bug 的情况相反。</p>
-
-<p><code>注：iOS 键盘的操作，必须由用户的操作引发，想通过 JSBridge 去让键盘收起的方案是行不通的。</code></p>
-
-<h3>解决办法</h3>
-
-<p>避免使用 position:fixed，换成 position:absolute 替代。</p>
-
-<h3>参考资料</h3>
-
-<p><a href="http://stackoverflow.com/questions/18970865/ios-7-input-elements-moving-fixed-positioned-elements">ios-7-input-elements-moving-fixed-positioned-elements</a></p>
+<p>此方法在iOS7、8上的 UIWebView 上测试通过，WKWebView 没有测试。</p>
 </div>
 
 
@@ -187,7 +165,7 @@ $(document).ready(function(event) {
   
 
 
-<time datetime="2014-08-06T17:47:30+08:00" pubdate data-updated="true">Aug 6<span>th</span>, 2014</time>
+<time datetime="2015-03-25T14:01:19+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2015</time>
       
 
 <span class="categories">
@@ -233,10 +211,8 @@ var jiathis_config = {data_track_clickback:'true'};
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/08/02/first-china-joy/" title="Previous Post: 我的第一次China Joy">&laquo; 我的第一次China Joy</a>
+        <a class="basic-alignment left" href="/blog/2015/02/19/2014summer/" title="Previous Post: 2014年终总结">&laquo; 2014年终总结</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/09/17/oc-method-swizzling/" title="Next Post: Objective-C Method Swizzling">Objective-C Method Swizzling &raquo;</a>
       
     </p>
   </footer>
