@@ -24,7 +24,7 @@ keywords: iOS UIWebView reset zoom
 const char *webViewHeightJSString = QUOTE(
 var viewportmeta = document.querySelector('meta[name="viewport"]');
 if (viewportmeta) {
-viewportmeta.content = 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no';
+viewportmeta.content = 'width=device-width, initial-scale=1.0, 		minimum-scale=1.0, maximum-scale=1.0, user-scalable=no';
 }
 );
 #undef QUOTE
