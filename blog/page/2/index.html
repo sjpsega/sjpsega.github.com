@@ -9,7 +9,7 @@
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="PhoneGap，著名的跨平台Hybrid框架，旨在让开发者使用HTML、Javascript、CSS开发跨平台的App。 最近的工作，就是做Hybrid方面的，很自然，方案就从PhoneGap入手。 下面就切入正题，分析下PhoneGap的原理，需要说明的是， &hellip;">
+  <meta name="description" content="文章地址：objc第一章 更轻量的 View Controllers 针对UITableViewController等VC，可以把对应的UITableViewDataSource、UITableViewDelegate等Protocol代码，写成单独的类， &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -77,6 +77,142 @@ $(document).ready(function(event) {
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/11/lighter-view-controllers-note/">《#1 更轻量的 View Controllers》 学习笔记</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-11T12:01:53+08:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>文章地址：<a href="http://objccn.io/issue-1/">objc第一章</a></p>
+
+<h2>更轻量的 View Controllers</h2>
+
+<ul>
+<li>针对<code>UITableViewController</code>等VC，可以把对应的<code>UITableViewDataSource</code>、<code>UITableViewDelegate</code>等<code>Protocol</code>代码，写成单独的类，再设置给VC的dataSource或deletege</li>
+<li>将业务逻辑、网络请求逻辑移到 Model 中</li>
+</ul>
+
+
+<h2>整洁的 Table View 代码</h2>
+
+<h3>添加Child View Controllers的步骤</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">ChildViewController</span> <span class="o">*</span><span class="n">childVC</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ChildViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">addChildViewController:</span><span class="n">childVC</span><span class="p">];</span>
+</span><span class='line'><span class="n">CGRect</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
+</span><span class='line'><span class="n">childVC</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="p">;</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">childVC</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="nl">didMoveToParentViewController:</span><span class="n">self</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>移除Child View Controllers的步骤</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="nl">willMoveToParentViewController:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">childVC</span><span class="p">.</span><span class="n">view</span> <span class="n">removeFromSuperview</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="n">removeFromParentViewController</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>源自：<a href="http://geeklu.com/2014/05/custom-container-view-controller/">Custom Container View Controller</a></p>
+
+<h3>分离关注点（Separating Concerns）</h3>
+
+<p>这块最好对照看下文章的代码实践：<a href="http://objccn.io/issue-1-2/">http://objccn.io/issue-1-2/</a></p>
+
+<h2>测试 View Controllers</h2>
+
+<h2>View Controller 容器</h2>
+
+<h3>过场动画 &ndash; 新老VC替换</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">toController</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">fromController</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">addChildViewController:</span><span class="n">toController</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">fromController</span> <span class="nl">willMoveToParentViewController:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">transitionFromViewController:</span><span class="n">fromController</span>
+</span><span class='line'>                  <span class="nl">toViewController:</span><span class="n">toController</span>
+</span><span class='line'>                          <span class="nl">duration:</span><span class="mf">0.2</span>
+</span><span class='line'>                           <span class="nl">options:</span><span class="n">direction</span> <span class="o">|</span> <span class="n">UIViewAnimationOptionCurveEaseIn</span>
+</span><span class='line'>                        <span class="nl">animations:</span><span class="nb">nil</span>
+</span><span class='line'>                        <span class="nl">completion:</span><span class="o">^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">finished</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                            <span class="p">[</span><span class="n">toController</span> <span class="nl">didMoveToParentViewController:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'>                            <span class="p">[</span><span class="n">fromController</span> <span class="n">removeFromParentViewController</span><span class="p">];</span>
+</span><span class='line'>                        <span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>代码学习：</h2>
+
+<p>代码地址：<a href="https://github.com/objcio/issue-1-lighter-view-controllers">https://github.com/objcio/issue-1-lighter-view-controllers</a></p>
+
+<h3>反序列化</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSData</span> <span class="nl">dataWithContentsOfURL:</span><span class="n">archiveURL</span> <span class="nl">options:</span><span class="mi">0</span> <span class="nl">error:</span><span class="nb">NULL</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSKeyedUnarchiver</span> <span class="o">*</span><span class="n">unarchiver</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSKeyedUnarchiver</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initForReadingWithData:</span><span class="n">data</span><span class="p">];</span>
+</span><span class='line'><span class="n">_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">unarchiver</span> <span class="nl">decodeObjectOfClass:</span><span class="p">[</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">]</span> <span class="nl">forKey:</span><span class="s">@&quot;users&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="n">_photos</span> <span class="o">=</span> <span class="p">[</span><span class="n">unarchiver</span> <span class="nl">decodeObjectOfClass:</span><span class="p">[</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">]</span> <span class="nl">forKey:</span><span class="s">@&quot;photos&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">unarchiver</span> <span class="n">finishDecoding</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://stackoverflow.com/questions/17301769/when-to-use-nssecurecoding">When to use NSSecureCoding</a></p>
+
+<p><a href="http://nshipster.com/nssecurecoding/">NSSecure​Coding</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -4014,66 +4150,6 @@ $(document).ready(function(event) {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/30/2013summer/">2013年终总结</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-30T22:09:20+08:00" pubdate data-updated="true">Jan 30<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>2013已经过去，先总结下去年的目标与主要的事：</h2>
-
-<ul>
-<li>花血本买了mac，开发用mac就是爽，很纯粹；</li>
-<li>买了5S，为了不换号码上4G;</li>
-<li>3月份当上了爸爸，有了一个健健康康的儿子，养孩子真不容易，好累！感谢比我更累的是我老婆。我还不是个好爸爸，陪儿子的时间不多。快到年底时，不小心又弄出了条人命，因为老婆身体素质不够好，感冒了近一个月，只能作罢…苦了老婆…</li>
-<li>js没有深入学习，很肤浅，还是基于业务层面的开发</li>
-<li>开发了一个App &ndash; <a href="http://t.cn/zRAyu4l?u=1798492244&amp;m=3629415684524998&amp;cu=1798492244">Just Do it</a>，登录了AppStore，虽然下载量不高，但还是很让人高兴的；</li>
-<li>没有去学习Ruby这样的新语言，为了开发App，学习了Object-C；</li>
-<li><a href="http://beechart.com">BeeChart</a>开源了，但只局限于开源了，现在js的图表越来越流行了，flash的图表意义不大了，不会去优化了吧；</li>
-<li>因为个人关系，换了部门，原先采购业务部门太业务了，觉得在那里意义不大，更想做移动方面的开发；换到了旺铺，希望能好好工作，提高自己的能力，发挥所长。</li>
-</ul>
-
-
-<p>总得来说去年的目标完成的非常不错，完成了90%，来年要继续努力啊。</p>
-
-<h2>想想2014要做的</h2>
-
-<ul>
-<li>继续好好学习OC，开发至少一款新应用登录AppStore；</li>
-<li>继续努力当个好爸爸，教孩子走路说话，多陪陪孩子；还要努力当个好老公…</li>
-<li>在Github上开个blog，写写技术文章与总结，希望一年至少12篇，一个月一篇吧；</li>
-<li>好好工作，收入上能再提高30%。</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -4091,6 +4167,10 @@ $(document).ready(function(event) {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/04/27/taiwanyou/">Taiwanyou</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/03/25/reset-webview-zoom-with-ios/">重置 iOS UIWebView 的缩放</a>
       </li>
     
@@ -4104,10 +4184,6 @@ $(document).ready(function(event) {
     
       <li class="post">
         <a href="/blog/2014/08/06/ios-h5-trap/">iOS H5的那些坑</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/02/first-china-joy/">我的第一次China Joy</a>
       </li>
     
   </ul>
