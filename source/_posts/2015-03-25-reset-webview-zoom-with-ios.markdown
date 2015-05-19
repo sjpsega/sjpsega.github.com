@@ -29,8 +29,8 @@ viewportmeta.content = 'width=device-width, initial-scale=1.0, 		minimum-scale=1
 );
 #undef QUOTE
 [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithUTF8String:webViewHeightJSString]];
-//设置 webView zoomScale 为 1.0
-webView.scrollView.zoomScale = 1.0;
+//设置 webView zoomScale 为 1.0，且必须设置animated为YES
+[webView.scrollView setZoomScale:1.0 animated:YES];
 ```
 
 此方法在iOS7、8上的 UIWebView 上测试通过，WKWebView 没有测试。
