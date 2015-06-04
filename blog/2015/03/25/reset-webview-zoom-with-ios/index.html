@@ -137,8 +137,8 @@ $(document).ready(function(event) {
 </span><span class='line'><span class="p">);</span>
 </span><span class='line'><span class="cp">#undef QUOTE</span>
 </span><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString:</span><span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithUTF8String:</span><span class="n">webViewHeightJSString</span><span class="p">]];</span>
-</span><span class='line'><span class="c1">//设置 webView zoomScale 为 1.0</span>
-</span><span class='line'><span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">zoomScale</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//设置 webView zoomScale 为 1.0，且必须设置animated为YES</span>
+</span><span class='line'><span class="p">[</span><span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span> <span class="nl">setZoomScale:</span><span class="mf">1.0</span> <span class="nl">animated:</span><span class="n">YES</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 

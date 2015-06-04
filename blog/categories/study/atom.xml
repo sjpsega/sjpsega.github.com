@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.com/"/>
-  <updated>2015-05-02T00:59:42+08:00</updated>
+  <updated>2015-06-04T16:58:14+08:00</updated>
   <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -45,8 +45,8 @@ viewportmeta.content = &lsquo;width=device-width, initial-scale=1.0,      minimu
 <h1>undef QUOTE</h1>
 
 <p>[webView stringByEvaluatingJavaScriptFromString:[NSString stringWithUTF8String:webViewHeightJSString]];
-//设置 webView zoomScale 为 1.0
-webView.scrollView.zoomScale = 1.0;
+//设置 webView zoomScale 为 1.0，且必须设置animated为YES
+[webView.scrollView setZoomScale:1.0 animated:YES];
 ```</p>
 
 <p>此方法在iOS7、8上的 UIWebView 上测试通过，WKWebView 没有测试。</p>
