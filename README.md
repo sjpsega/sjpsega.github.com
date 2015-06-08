@@ -1,2 +1,2 @@
-MyBlog sjpsega.com
+MyBlog sjpsega.me
 ==================
