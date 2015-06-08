@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Life | sjpsega's Blog]]></title>
-  <link href="http://sjpsega.com/blog/categories/life/atom.xml" rel="self"/>
-  <link href="http://sjpsega.com/"/>
-  <updated>2015-06-04T16:58:14+08:00</updated>
-  <id>http://sjpsega.com/</id>
+  <link href="http://sjpsega.me/blog/categories/life/atom.xml" rel="self"/>
+  <link href="http://sjpsega.me/"/>
+  <updated>2015-06-08T21:13:24+08:00</updated>
+  <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Taiwanyou]]></title>
-    <link href="http://sjpsega.com/blog/2015/04/27/taiwanyou/"/>
+    <link href="http://sjpsega.me/blog/2015/04/27/taiwanyou/"/>
     <updated>2015-04-27T01:41:49+08:00</updated>
-    <id>http://sjpsega.com/blog/2015/04/27/taiwanyou</id>
+    <id>http://sjpsega.me/blog/2015/04/27/taiwanyou</id>
     <content type="html"><![CDATA[<h1>台湾游记</h1>
 
 <p>4 月份天气不冷不热，是个出游的好时期。趁着工作上的事情暂时告一段落，忙里偷闲，本月 16 &ndash; 22日，delay 了近半年的台湾游终于成行。</p>
@@ -102,9 +102,9 @@
   
   <entry>
     <title type="html"><![CDATA[2014年终总结]]></title>
-    <link href="http://sjpsega.com/blog/2015/02/19/2014summer/"/>
+    <link href="http://sjpsega.me/blog/2015/02/19/2014summer/"/>
     <updated>2015-02-19T01:09:20+08:00</updated>
-    <id>http://sjpsega.com/blog/2015/02/19/2014summer</id>
+    <id>http://sjpsega.me/blog/2015/02/19/2014summer</id>
     <content type="html"><![CDATA[<h2>2014已经过去，先总结下去年的目标与主要的事：</h2>
 
 <ul>
@@ -135,9 +135,9 @@
   
   <entry>
     <title type="html"><![CDATA[我的第一次China Joy]]></title>
-    <link href="http://sjpsega.com/blog/2014/08/02/first-china-joy/"/>
+    <link href="http://sjpsega.me/blog/2014/08/02/first-china-joy/"/>
     <updated>2014-08-02T15:01:40+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/08/02/first-china-joy</id>
+    <id>http://sjpsega.me/blog/2014/08/02/first-china-joy</id>
     <content type="html"><![CDATA[<p>昨天，刚好是扒衣见君节，我们一行9人去ChinaJoy。</p>
 
 <p>这是我第一次去CJ，可开心啦！</p>
@@ -190,9 +190,9 @@
   
   <entry>
     <title type="html"><![CDATA[《刀塔传奇》]]></title>
-    <link href="http://sjpsega.com/blog/2014/07/05/daotachuanqi/"/>
+    <link href="http://sjpsega.me/blog/2014/07/05/daotachuanqi/"/>
     <updated>2014-07-05T00:35:42+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/07/05/daotachuanqi</id>
+    <id>http://sjpsega.me/blog/2014/07/05/daotachuanqi</id>
     <content type="html"><![CDATA[<p><img src="/images/2014-07-05-daotachuanqi/daotachuanqi.jpg" alt="刀塔传奇" /></p>
 
 <p>接触《刀塔传奇》这款手游一个半月有余，有了一些感受。</p>
@@ -326,9 +326,9 @@
   
   <entry>
     <title type="html"><![CDATA[QCon北京行（二）]]></title>
-    <link href="http://sjpsega.com/blog/2014/05/01/qcon-beijing-2/"/>
+    <link href="http://sjpsega.me/blog/2014/05/01/qcon-beijing-2/"/>
     <updated>2014-05-01T17:24:01+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/05/01/qcon-beijing-2</id>
+    <id>http://sjpsega.me/blog/2014/05/01/qcon-beijing-2</id>
     <content type="html"><![CDATA[<p>在<a href="/blog/2014/05/01/qcon-beijing-1/">上篇 QCon北京行（一）</a>中主要写了对北京的印象，现在写下关于QCon的话题。</p>
 
 <h2>代价</h2>

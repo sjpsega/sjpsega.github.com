@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
-  <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
-  <link href="http://sjpsega.com/"/>
-  <updated>2015-06-04T16:58:14+08:00</updated>
-  <id>http://sjpsega.com/</id>
+  <link href="http://sjpsega.me/blog/categories/study/atom.xml" rel="self"/>
+  <link href="http://sjpsega.me/"/>
+  <updated>2015-06-08T21:13:24+08:00</updated>
+  <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[重置 iOS UIWebView 的缩放]]></title>
-    <link href="http://sjpsega.com/blog/2015/03/25/reset-webview-zoom-with-ios/"/>
+    <link href="http://sjpsega.me/blog/2015/03/25/reset-webview-zoom-with-ios/"/>
     <updated>2015-03-25T14:01:19+08:00</updated>
-    <id>http://sjpsega.com/blog/2015/03/25/reset-webview-zoom-with-ios</id>
+    <id>http://sjpsega.me/blog/2015/03/25/reset-webview-zoom-with-ios</id>
     <content type="html"><![CDATA[<h2>需求</h2>
 
 <p>遇到一个需求，iOS webView设置了可缩放，用户缩放webView后，做某个操作，需要将webView的缩放重置。</p>
@@ -55,9 +55,9 @@ viewportmeta.content = &lsquo;width=device-width, initial-scale=1.0,      minimu
   
   <entry>
     <title type="html"><![CDATA[Objective-C Method Swizzling]]></title>
-    <link href="http://sjpsega.com/blog/2014/09/17/oc-method-swizzling/"/>
+    <link href="http://sjpsega.me/blog/2014/09/17/oc-method-swizzling/"/>
     <updated>2014-09-17T22:36:40+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/09/17/oc-method-swizzling</id>
+    <id>http://sjpsega.me/blog/2014/09/17/oc-method-swizzling</id>
     <content type="html"><![CDATA[<p>Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改方法调用的技术。是 OC 作为动态语言的典型证明。</p>
 
 <p>Method Swizzling 是 OC <code>&lt;objc/runtime.h&gt;</code> 类库提供的“黑魔法”之一。</p>
@@ -285,9 +285,9 @@ Method lastObject {</p>
   
   <entry>
     <title type="html"><![CDATA[iOS H5的那些坑]]></title>
-    <link href="http://sjpsega.com/blog/2014/08/06/ios-h5-trap/"/>
+    <link href="http://sjpsega.me/blog/2014/08/06/ios-h5-trap/"/>
     <updated>2014-08-06T17:47:30+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/08/06/ios-h5-trap</id>
+    <id>http://sjpsega.me/blog/2014/08/06/ios-h5-trap</id>
     <content type="html"><![CDATA[<p>最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。</p>
 
 <p>因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。</p>
@@ -352,9 +352,9 @@ element.on("tap", function(e){
   
   <entry>
     <title type="html"><![CDATA[《#3 Views》 学习笔记]]></title>
-    <link href="http://sjpsega.com/blog/2014/07/06/views-note/"/>
+    <link href="http://sjpsega.me/blog/2014/07/06/views-note/"/>
     <updated>2014-07-06T17:15:53+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/07/06/views-note</id>
+    <id>http://sjpsega.me/blog/2014/07/06/views-note</id>
     <content type="html"><![CDATA[<p>文章地址：<a href="http://objccn.io/issue-3/">objc第三章</a></p>
 
 <h2>绘制像素到屏幕上</h2>
@@ -766,9 +766,9 @@ NSString* const SelectedSegmentChangedNotification = @&ldquo;selectedSegmentChan
   
   <entry>
     <title type="html"><![CDATA[ARC学习笔记]]></title>
-    <link href="http://sjpsega.com/blog/2014/06/25/arc-note/"/>
+    <link href="http://sjpsega.me/blog/2014/06/25/arc-note/"/>
     <updated>2014-06-25T00:50:28+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/06/25/arc-note</id>
+    <id>http://sjpsega.me/blog/2014/06/25/arc-note</id>
     <content type="html"><![CDATA[<h2>ARC执行新规则</h2>
 
 <ul>

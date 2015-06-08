@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[sjpsega's Blog]]></title>
-  <link href="http://sjpsega.com/atom.xml" rel="self"/>
-  <link href="http://sjpsega.com/"/>
-  <updated>2015-06-04T16:58:14+08:00</updated>
-  <id>http://sjpsega.com/</id>
+  <link href="http://sjpsega.me/atom.xml" rel="self"/>
+  <link href="http://sjpsega.me/"/>
+  <updated>2015-06-08T21:13:24+08:00</updated>
+  <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Taiwanyou]]></title>
-    <link href="http://sjpsega.com/blog/2015/04/27/taiwanyou/"/>
+    <link href="http://sjpsega.me/blog/2015/04/27/taiwanyou/"/>
     <updated>2015-04-27T01:41:49+08:00</updated>
-    <id>http://sjpsega.com/blog/2015/04/27/taiwanyou</id>
+    <id>http://sjpsega.me/blog/2015/04/27/taiwanyou</id>
     <content type="html"><![CDATA[<h1>台湾游记</h1>
 
 <p>4 月份天气不冷不热，是个出游的好时期。趁着工作上的事情暂时告一段落，忙里偷闲，本月 16 &ndash; 22日，delay 了近半年的台湾游终于成行。</p>
@@ -102,9 +102,9 @@
   
   <entry>
     <title type="html"><![CDATA[重置 iOS UIWebView 的缩放]]></title>
-    <link href="http://sjpsega.com/blog/2015/03/25/reset-webview-zoom-with-ios/"/>
+    <link href="http://sjpsega.me/blog/2015/03/25/reset-webview-zoom-with-ios/"/>
     <updated>2015-03-25T14:01:19+08:00</updated>
-    <id>http://sjpsega.com/blog/2015/03/25/reset-webview-zoom-with-ios</id>
+    <id>http://sjpsega.me/blog/2015/03/25/reset-webview-zoom-with-ios</id>
     <content type="html"><![CDATA[<h2>需求</h2>
 
 <p>遇到一个需求，iOS webView设置了可缩放，用户缩放webView后，做某个操作，需要将webView的缩放重置。</p>
@@ -150,9 +150,9 @@
   
   <entry>
     <title type="html"><![CDATA[2014年终总结]]></title>
-    <link href="http://sjpsega.com/blog/2015/02/19/2014summer/"/>
+    <link href="http://sjpsega.me/blog/2015/02/19/2014summer/"/>
     <updated>2015-02-19T01:09:20+08:00</updated>
-    <id>http://sjpsega.com/blog/2015/02/19/2014summer</id>
+    <id>http://sjpsega.me/blog/2015/02/19/2014summer</id>
     <content type="html"><![CDATA[<h2>2014已经过去，先总结下去年的目标与主要的事：</h2>
 
 <ul>
@@ -183,9 +183,9 @@
   
   <entry>
     <title type="html"><![CDATA[Objective-C Method Swizzling]]></title>
-    <link href="http://sjpsega.com/blog/2014/09/17/oc-method-swizzling/"/>
+    <link href="http://sjpsega.me/blog/2014/09/17/oc-method-swizzling/"/>
     <updated>2014-09-17T22:36:40+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/09/17/oc-method-swizzling</id>
+    <id>http://sjpsega.me/blog/2014/09/17/oc-method-swizzling</id>
     <content type="html"><![CDATA[<p>Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改方法调用的技术。是 OC 作为动态语言的典型证明。</p>
 
 <p>Method Swizzling 是 OC <code>&lt;objc/runtime.h&gt;</code> 类库提供的“黑魔法”之一。</p>
@@ -460,9 +460,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS H5的那些坑]]></title>
-    <link href="http://sjpsega.com/blog/2014/08/06/ios-h5-trap/"/>
+    <link href="http://sjpsega.me/blog/2014/08/06/ios-h5-trap/"/>
     <updated>2014-08-06T17:47:30+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/08/06/ios-h5-trap</id>
+    <id>http://sjpsega.me/blog/2014/08/06/ios-h5-trap</id>
     <content type="html"><![CDATA[<p>最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。</p>
 
 <p>因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。</p>
@@ -471,7 +471,7 @@
 
 <h3>bug 演示</h3>
 
-<p><img src="http://sjpsega.com/images/2014-08-06-ios-h5-trap/ios7.0bug.gif" alt="ios7.0bug.gif" /></p>
+<p><img src="http://sjpsega.me/images/2014-08-06-ios-h5-trap/ios7.0bug.gif" alt="ios7.0bug.gif" /></p>
 
 <h3>bug 分析</h3>
 
@@ -504,7 +504,7 @@
 
 <h3>bug 演示</h3>
 
-<p><img src="http://sjpsega.com/images/2014-08-06-ios-h5-trap/ios7.1bug.gif" alt="ios7.1bug.gif" /></p>
+<p><img src="http://sjpsega.me/images/2014-08-06-ios-h5-trap/ios7.1bug.gif" alt="ios7.1bug.gif" /></p>
 
 <h3>bug 分析</h3>
 
@@ -530,9 +530,9 @@
   
   <entry>
     <title type="html"><![CDATA[我的第一次China Joy]]></title>
-    <link href="http://sjpsega.com/blog/2014/08/02/first-china-joy/"/>
+    <link href="http://sjpsega.me/blog/2014/08/02/first-china-joy/"/>
     <updated>2014-08-02T15:01:40+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/08/02/first-china-joy</id>
+    <id>http://sjpsega.me/blog/2014/08/02/first-china-joy</id>
     <content type="html"><![CDATA[<p>昨天，刚好是扒衣见君节，我们一行9人去ChinaJoy。</p>
 
 <p>这是我第一次去CJ，可开心啦！</p>
@@ -561,33 +561,33 @@
 
 <p>每个展台前，大家都把闪光灯对着美女，对展商推广的游戏视而不见。展商也顺应潮流，请了大把的美女，好多站台都是美女一字排开，才显气势。</p>
 
-<p><img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-beauty-1.png" alt="cj-beauty-1" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-beauty-2.png" alt="cj-beauty-2" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-beauty-3.png" alt="cj-beauty-3" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-beauty-4.png" alt="cj-beauty-4" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-beauty-5.png" alt="cj-beauty-5" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-beauty-6.png" alt="cj-beauty-6" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-beauty-7.png" alt="cj-beauty-7" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-beauty-8.png" alt="cj-beauty-8" /></p>
+<p><img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-beauty-1.png" alt="cj-beauty-1" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-beauty-2.png" alt="cj-beauty-2" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-beauty-3.png" alt="cj-beauty-3" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-beauty-4.png" alt="cj-beauty-4" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-beauty-5.png" alt="cj-beauty-5" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-beauty-6.png" alt="cj-beauty-6" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-beauty-7.png" alt="cj-beauty-7" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-beauty-8.png" alt="cj-beauty-8" /></p>
 
 <h2>CJ的最后希望</h2>
 
 <p>还好，因为微软的XOne和索尼的PS4都要为进入中国市场造势，所以今年都参加了CJ，而且场面很大。还好有了微软和索尼，才能在CJ上看到一点游戏……</p>
 
-<p><img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-ms-1.png" alt="cj-ms-1" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-ms-2.png" alt="cj-ms-2" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-sony-1.png" alt="cj-sony-1" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-sony-2.png" alt="cj-sony-2" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-sony-3.png" alt="cj-sony-3" />
-<img src="http://sjpsega.com/images/2014-08-02-first-china-joy/cj-sony-4.png" alt="cj-sony-4" /></p>
+<p><img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-ms-1.png" alt="cj-ms-1" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-ms-2.png" alt="cj-ms-2" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-sony-1.png" alt="cj-sony-1" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-sony-2.png" alt="cj-sony-2" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-sony-3.png" alt="cj-sony-3" />
+<img src="http://sjpsega.me/images/2014-08-02-first-china-joy/cj-sony-4.png" alt="cj-sony-4" /></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[《#3 Views》 学习笔记]]></title>
-    <link href="http://sjpsega.com/blog/2014/07/06/views-note/"/>
+    <link href="http://sjpsega.me/blog/2014/07/06/views-note/"/>
     <updated>2014-07-06T17:15:53+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/07/06/views-note</id>
+    <id>http://sjpsega.me/blog/2014/07/06/views-note</id>
     <content type="html"><![CDATA[<p>文章地址：<a href="http://objccn.io/issue-3/">objc第三章</a></p>
 
 <h2>绘制像素到屏幕上</h2>
@@ -600,7 +600,7 @@
 
 <p>每个视图都有一个 <code>bounds</code> 和 <code>frame</code>。当布局一个界面时，我们需要处理视图的 frame。这允许我们放置并设置视图的大小。视图的 frame 和 bounds 的大小总是一样的，但是他们的 origin 有可能不同。</p>
 
-<p><img src="http://sjpsega.com/images/2014-07-06-views-note/scrollview_1.png" alt="scrollview_1" /></p>
+<p><img src="http://sjpsega.me/images/2014-07-06-views-note/scrollview_1.png" alt="scrollview_1" /></p>
 
 <p>视图图片的左上角会根据它 frame 的 origin 进行偏移，并绘制到父视图的图片上：</p>
 
@@ -637,7 +637,7 @@
 
 <p>我们减少 <code>Superview.bounds.origin</code> 的值(因为他们总是0)。但是如果他们不为0呢？我们用和前一个图例相同的 frames，但是我们改变了紫色视图 bounds 的 origin 为 {-30, -30}。得到下图：</p>
 
-<p><img src="http://sjpsega.com/images/2014-07-06-views-note/scrollview_4.png" alt="scrollview_4" /></p>
+<p><img src="http://sjpsega.me/images/2014-07-06-views-note/scrollview_4.png" alt="scrollview_4" /></p>
 
 <p>现在，巧妙的是通过改变这个紫色视图的 bounds，它每一个单独的子视图都被移动了。事实上，这正是 scroll view 工作的原理。当你设置它的 contentOffset 属性时它改变 scroll view.bounds 的 origin。事实上，contentOffset 甚至不是实际存在的。代码看起来像这样：</p>
 
@@ -662,7 +662,7 @@
 
 <p>当 content size 设置为比 bounds 大的时候，用户就可以滚动视图了。</p>
 
-<p><img src="http://sjpsega.com/images/2014-07-06-views-note/scrollview_5.png" alt="scrollview_5" /></p>
+<p><img src="http://sjpsega.me/images/2014-07-06-views-note/scrollview_5.png" alt="scrollview_5" /></p>
 
 <h3>用Content Insets对窗口稍作调整</h3>
 
@@ -675,7 +675,7 @@
 </ul>
 
 
-<p><img src="http://sjpsega.com/images/2014-07-06-views-note/scrollview_6.png" alt="scrollview_6" /></p>
+<p><img src="http://sjpsega.me/images/2014-07-06-views-note/scrollview_6.png" alt="scrollview_6" /></p>
 
 <ul>
 <li>键盘出现，不遮挡可视区域</li>
@@ -684,7 +684,7 @@
 
 <p>当键盘出现在屏幕上时，设置 content inset 的底部等于键盘的高度。</p>
 
-<p><img src="http://sjpsega.com/images/2014-07-06-views-note/scrollview_7.png" alt="scrollview_7" /></p>
+<p><img src="http://sjpsega.me/images/2014-07-06-views-note/scrollview_7.png" alt="scrollview_7" /></p>
 
 <h2>自定义 Collection View 布局</h2>
 
@@ -1068,10 +1068,10 @@
   
   <entry>
     <title type="html"><![CDATA[《刀塔传奇》]]></title>
-    <link href="http://sjpsega.com/blog/2014/07/05/daotachuanqi/"/>
+    <link href="http://sjpsega.me/blog/2014/07/05/daotachuanqi/"/>
     <updated>2014-07-05T00:35:42+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/07/05/daotachuanqi</id>
-    <content type="html"><![CDATA[<p><img src="http://sjpsega.com/images/2014-07-05-daotachuanqi/daotachuanqi.jpg" alt="刀塔传奇" /></p>
+    <id>http://sjpsega.me/blog/2014/07/05/daotachuanqi</id>
+    <content type="html"><![CDATA[<p><img src="http://sjpsega.me/images/2014-07-05-daotachuanqi/daotachuanqi.jpg" alt="刀塔传奇" /></p>
 
 <p>接触《刀塔传奇》这款手游一个半月有余，有了一些感受。</p>
 
@@ -1204,9 +1204,9 @@
   
   <entry>
     <title type="html"><![CDATA[ARC学习笔记]]></title>
-    <link href="http://sjpsega.com/blog/2014/06/25/arc-note/"/>
+    <link href="http://sjpsega.me/blog/2014/06/25/arc-note/"/>
     <updated>2014-06-25T00:50:28+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/06/25/arc-note</id>
+    <id>http://sjpsega.me/blog/2014/06/25/arc-note</id>
     <content type="html"><![CDATA[<h2>ARC执行新规则</h2>
 
 <ul>
@@ -1341,9 +1341,9 @@
   
   <entry>
     <title type="html"><![CDATA[《#2 并发编程》 学习笔记]]></title>
-    <link href="http://sjpsega.com/blog/2014/06/12/concurrent-programming-note/"/>
+    <link href="http://sjpsega.me/blog/2014/06/12/concurrent-programming-note/"/>
     <updated>2014-06-12T12:49:46+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/06/12/concurrent-programming-note</id>
+    <id>http://sjpsega.me/blog/2014/06/12/concurrent-programming-note</id>
     <content type="html"><![CDATA[<p>文章地址：<a href="http://objccn.io/issue-2/">objc第二章</a></p>
 
 <h2>并发编程：API 及挑战</h2>
@@ -1823,9 +1823,9 @@
   
   <entry>
     <title type="html"><![CDATA[《#1 更轻量的 View Controllers》 学习笔记]]></title>
-    <link href="http://sjpsega.com/blog/2014/06/11/lighter-view-controllers-note/"/>
+    <link href="http://sjpsega.me/blog/2014/06/11/lighter-view-controllers-note/"/>
     <updated>2014-06-11T12:01:53+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/06/11/lighter-view-controllers-note</id>
+    <id>http://sjpsega.me/blog/2014/06/11/lighter-view-controllers-note</id>
     <content type="html"><![CDATA[<p>文章地址：<a href="http://objccn.io/issue-1/">objc第一章</a></p>
 
 <h2>更轻量的 View Controllers</h2>
@@ -1932,9 +1932,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS版PhoneGap原理分析]]></title>
-    <link href="http://sjpsega.com/blog/2014/06/01/phonegap-ios/"/>
+    <link href="http://sjpsega.me/blog/2014/06/01/phonegap-ios/"/>
     <updated>2014-06-01T00:59:15+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/06/01/phonegap-ios</id>
+    <id>http://sjpsega.me/blog/2014/06/01/phonegap-ios</id>
     <content type="html"><![CDATA[<p>PhoneGap，著名的跨平台Hybrid框架，旨在让开发者使用HTML、Javascript、CSS开发跨平台的App。</p>
 
 <p>最近的工作，就是做Hybrid方面的，很自然，方案就从PhoneGap入手。</p>
@@ -2452,7 +2452,7 @@
 
 <p>最终效果：</p>
 
-<p><img src="http://sjpsega.com/images/2014-06-01-phonegap-ios/alert.png" alt="alert" /></p>
+<p><img src="http://sjpsega.me/images/2014-06-01-phonegap-ios/alert.png" alt="alert" /></p>
 
 <p>点击&#8221;Done&#8221;，native会再回调执行js端的成功回调，这里对应的就是js里设置的alertDismissed方法。</p>
 
@@ -2480,7 +2480,7 @@
 <h2>时序图</h2>
 
 <p>以上Dialog例子中，PhoneGap js调用native的时序图：
-<img src="http://sjpsega.com/images/2014-06-01-phonegap-ios/PhoneGap.jpg" alt="PhoneGap" /></p>
+<img src="http://sjpsega.me/images/2014-06-01-phonegap-ios/PhoneGap.jpg" alt="PhoneGap" /></p>
 
 <h2>结语</h2>
 
@@ -2494,9 +2494,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS中的单例模式]]></title>
-    <link href="http://sjpsega.com/blog/2014/05/25/singleton-in-ios/"/>
+    <link href="http://sjpsega.me/blog/2014/05/25/singleton-in-ios/"/>
     <updated>2014-05-25T12:25:10+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/05/25/singleton-in-ios</id>
+    <id>http://sjpsega.me/blog/2014/05/25/singleton-in-ios</id>
     <content type="html"><![CDATA[<p>单例模式是指在一个系统中，类有且只有一个实例对象，可以通过全局的一个入口对这个实例对象进行访问。</p>
 
 <p>在 iOS 开发中，单例模式是非常常用的一种设计模式。</p>
@@ -2768,10 +2768,10 @@
   
   <entry>
     <title type="html"><![CDATA[QCon北京行（二）]]></title>
-    <link href="http://sjpsega.com/blog/2014/05/01/qcon-beijing-2/"/>
+    <link href="http://sjpsega.me/blog/2014/05/01/qcon-beijing-2/"/>
     <updated>2014-05-01T17:24:01+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/05/01/qcon-beijing-2</id>
-    <content type="html"><![CDATA[<p>在<a href="http://sjpsega.com/blog/2014/05/01/qcon-beijing-1/">上篇 QCon北京行（一）</a>中主要写了对北京的印象，现在写下关于QCon的话题。</p>
+    <id>http://sjpsega.me/blog/2014/05/01/qcon-beijing-2</id>
+    <content type="html"><![CDATA[<p>在<a href="http://sjpsega.me/blog/2014/05/01/qcon-beijing-1/">上篇 QCon北京行（一）</a>中主要写了对北京的印象，现在写下关于QCon的话题。</p>
 
 <h2>代价</h2>
 
@@ -2895,20 +2895,20 @@
 
 <p>这个策略，是只能说，你们赢了……</p>
 
-<p><img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_1.jpg" alt="beauty_1" />
-<img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_2.jpg" alt="beauty_2" />
-<img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_3.jpg" alt="beauty_3" />
-<img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_4.jpg" alt="beauty_4" />
-<img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_5.jpg" alt="beauty_5" />
-<img src="http://sjpsega.com/images/2014-05-01-qcon-beijing-2/beauty_6.jpg" alt="beauty_6" /></p>
+<p><img src="http://sjpsega.me/images/2014-05-01-qcon-beijing-2/beauty_1.jpg" alt="beauty_1" />
+<img src="http://sjpsega.me/images/2014-05-01-qcon-beijing-2/beauty_2.jpg" alt="beauty_2" />
+<img src="http://sjpsega.me/images/2014-05-01-qcon-beijing-2/beauty_3.jpg" alt="beauty_3" />
+<img src="http://sjpsega.me/images/2014-05-01-qcon-beijing-2/beauty_4.jpg" alt="beauty_4" />
+<img src="http://sjpsega.me/images/2014-05-01-qcon-beijing-2/beauty_5.jpg" alt="beauty_5" />
+<img src="http://sjpsega.me/images/2014-05-01-qcon-beijing-2/beauty_6.jpg" alt="beauty_6" /></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[QCon北京行（一）]]></title>
-    <link href="http://sjpsega.com/blog/2014/05/01/qcon-beijing-1/"/>
+    <link href="http://sjpsega.me/blog/2014/05/01/qcon-beijing-1/"/>
     <updated>2014-05-01T14:37:27+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/05/01/qcon-beijing-1</id>
+    <id>http://sjpsega.me/blog/2014/05/01/qcon-beijing-1</id>
     <content type="html"><![CDATA[<p>去年因前端方凳会上的分享得了总分第一，获得了去参加QCon的机会，这次的地点在北京，北京还没去过，去见见世面。</p>
 
 <h2>北京印象</h2>
@@ -2996,9 +2996,9 @@
   
   <entry>
     <title type="html"><![CDATA[Category添加实例变量的故事]]></title>
-    <link href="http://sjpsega.com/blog/2014/04/07/category-with-instance-variables/"/>
+    <link href="http://sjpsega.me/blog/2014/04/07/category-with-instance-variables/"/>
     <updated>2014-04-07T20:55:16+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/04/07/category-with-instance-variables</id>
+    <id>http://sjpsega.me/blog/2014/04/07/category-with-instance-variables</id>
     <content type="html"><![CDATA[<h2>起因</h2>
 
 <p>有一个需求，针对 url 字符串，需要根据传入的key获取对应参数键值对的value。例如：</p>
@@ -3178,9 +3178,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS Js与native相互通信]]></title>
-    <link href="http://sjpsega.com/blog/2014/03/08/js-communicate-with-native-in-iOS/"/>
+    <link href="http://sjpsega.me/blog/2014/03/08/js-communicate-with-native-in-iOS/"/>
     <updated>2014-03-08T21:53:16+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/03/08/js-communicate-with-native-in-iOS</id>
+    <id>http://sjpsega.me/blog/2014/03/08/js-communicate-with-native-in-iOS</id>
     <content type="html"><![CDATA[<h2>js与navive相互通信的机制</h2>
 
 <h3>js &ndash;> native</h3>
@@ -3293,9 +3293,9 @@
   
   <entry>
     <title type="html"><![CDATA[[译]iOS7最佳实践：一个天气App案例(二)]]></title>
-    <link href="http://sjpsega.com/blog/2014/02/15/yi--ios-7-best-practices-part-2/"/>
+    <link href="http://sjpsega.me/blog/2014/02/15/yi--ios-7-best-practices-part-2/"/>
     <updated>2014-02-15T16:46:02+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/02/15/yi&#8211;ios-7-best-practices-part-2</id>
+    <id>http://sjpsega.me/blog/2014/02/15/yi&#8211;ios-7-best-practices-part-2</id>
     <content type="html"><![CDATA[<p>注：本文译自：<a href="http://www.raywenderlich.com/55385/ios-7-best-practices-part-2">raywenderlich ios-7-best-practices-part-2</a>，去除了跟主题无关的寒暄部分。
 欢迎转载，保持署名</p>
 
@@ -4465,9 +4465,9 @@
   
   <entry>
     <title type="html"><![CDATA[[译]iOS7最佳实践：一个天气App案例(一)]]></title>
-    <link href="http://sjpsega.com/blog/2014/02/11/yi--ios-7-best-practices-part-1/"/>
+    <link href="http://sjpsega.me/blog/2014/02/11/yi--ios-7-best-practices-part-1/"/>
     <updated>2014-02-11T22:21:53+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/02/11/yi&#8211;ios-7-best-practices-part-1</id>
+    <id>http://sjpsega.me/blog/2014/02/11/yi&#8211;ios-7-best-practices-part-1</id>
     <content type="html"><![CDATA[<p>注：本文译自：<a href="http://www.raywenderlich.com/55384/ios-7-best-practices-part-1">raywenderlich ios-7-best-practices-part-1</a>，去除了跟主题无关的寒暄部分。
 欢迎转载，保持署名</p>
 
@@ -5600,15 +5600,15 @@
 
 <p>在这部分教程中，您使用Cocoapods设置项目，增加视图到控制器，编排视图，并建立模型来反映你抓取的气象数据。该App还没有充分发挥作用，但是你成功用纯代码创建视图，并学习了如何使用Mantle映射和转换JSON数据。</p>
 
-<p>接下来看看<a href="http://sjpsega.com/blog/2014/02/15/yi--ios-7-best-practices-part-2/">教程的第二部分</a>，你将充实你的App，从weather API获取数据，并在UI上显示。您将使用新的iOS7 <a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html">NSURLSession</a>去下载数据，以及使用<code>ReactiveCocoa</code>把位置查找，天气数据抓取和UI更新事件绑在一起。</p>
+<p>接下来看看<a href="http://sjpsega.me/blog/2014/02/15/yi--ios-7-best-practices-part-2/">教程的第二部分</a>，你将充实你的App，从weather API获取数据，并在UI上显示。您将使用新的iOS7 <a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html">NSURLSession</a>去下载数据，以及使用<code>ReactiveCocoa</code>把位置查找，天气数据抓取和UI更新事件绑在一起。</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[开始写Blog]]></title>
-    <link href="http://sjpsega.com/blog/2014/02/06/kai-shi-xie-blog/"/>
+    <link href="http://sjpsega.me/blog/2014/02/06/kai-shi-xie-blog/"/>
     <updated>2014-02-06T16:31:07+08:00</updated>
-    <id>http://sjpsega.com/blog/2014/02/06/kai-shi-xie-blog</id>
+    <id>http://sjpsega.me/blog/2014/02/06/kai-shi-xie-blog</id>
     <content type="html"><![CDATA[<p>趁着春节假期，花了点时间，在github上用<a href="http://octopress.org/">Octopress</a>搭了个个人Blog。希望自己新的一年，能写点技术Blog，多做积累，锻炼文字。</p>
 
 <p>其实以前在javaeye上也写过技术Blog，但是写得不多。在Sohu上写自己的生活Blog，写的蛮多的，现在渐渐也写得少了。</p>

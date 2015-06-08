@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://sjpsega.com/sitemap.xml 
+Sitemap: http://sjpsega.me/sitemap.xml 
