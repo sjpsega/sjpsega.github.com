@@ -41,7 +41,7 @@ Cordova是PhoneGap贡献给Apache后的开源项目，是从PhoneGap中抽离出
 
 但在切入正题前，需要先了解下iOS js与native通信的原理。了解这个原理，是理解PhoneGap代码的`关键`。
 
-具体可以看我之前写的[iOS Js与native相互通信](http://sjpsega.com/blog/2014/03/08/js-communicate-with-native-in-iOS/)，这里做简单说明。
+具体可以看我之前写的[iOS Js与native相互通信](http://sjpsega.me/blog/2014/03/08/js-communicate-with-native-in-iOS/)，这里做简单说明。
 
 ### js -> native
 
