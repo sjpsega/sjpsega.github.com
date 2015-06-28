@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>重置 iOS UIWebView 的缩放 - sjpsega's Blog</title>
+  <title>iOS UIWebView 自定义协议文件加载缓存问题 - sjpsega's Blog</title>
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="重置 iOS UIWebView 的缩放">
-  <meta name="keywords" content="iOS UIWebView reset zoom">
+  <meta name="description" content="iOS UIWebView cache bug">
+  <meta name="keywords" content="iOS UIWebView cache bug">
 
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
@@ -18,7 +18,7 @@
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
   
-  <link rel="canonical" href="http://sjpsega.me/blog/2015/03/25/reset-webview-zoom-with-ios">
+  <link rel="canonical" href="http://sjpsega.me/blog/2015/06/15/uiwebview-cache-bug-by-custom-protocol">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -80,7 +80,7 @@ $(document).ready(function(event) {
   
   <header>
     
-      <h1 class="entry-title">重置 iOS UIWebView 的缩放</h1>
+      <h1 class="entry-title">iOS UIWebView 自定义协议文件加载缓存问题</h1>
     
     
       <p class="meta">
@@ -96,24 +96,33 @@ $(document).ready(function(event) {
   
 
 
-<time datetime="2015-03-25T14:01:19+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2015</time>
+<time datetime="2015-06-15T22:56:31+08:00" pubdate data-updated="true">Jun 15<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h2>需求</h2>
+<div class="entry-content"><h2>起因</h2>
 
-<p>遇到一个需求，iOS webView设置了可缩放，用户缩放webView后，做某个操作，需要将webView的缩放重置。</p>
+<p>一个简单的需求：为了减少网络请求，一些前端资源会做本地缓存；使用 WebView 访问页面的时候，拦截特定请求，使得特定请求直接加载本地资源。</p>
 
-<h2>经过</h2>
+<p>但是做的过程中发现，当请求的资源为自定义协议的时候，比如加载的 url 为 <code>abc://xxx.com/xx.js</code> 的时候，系统会强制对该资源做缓存，并且调用系统提供的清除缓存接口，如 <code>[[NSURLCache sharedURLCache] removeAllCachedResponses]</code>， 都无法清除该缓存，除非重启 App。</p>
 
-<p>在网上找了下，看到很多很多解决方案，不论是国内的，还是国外的解决方案，但是实际使用都没有效果……</p>
+<p>这就导致该资源内容发生变化的时候，无法立即生效，这在业务中，显然是不能接受的。</p>
+
+<p><code>注</code>：该方案主要针对 <code>UIWebView</code> 有效；<code>WKWebView</code> 因为不能使用自定义 NSURLProtocol 拦截资源，方法二就不起作用。</p>
 
 <h2>解决</h2>
 
-<p>经过不断尝试，发现以下方式是有效果的：</p>
+<h3>方法一：html 模板上，资源 url 加上随机字符串</h3>
+
+<p>在 html 页面上修改 url 字符串，如 <code>abc://xxx.com/xx.js</code>，需要改成 <code>abc://xxx.com/xx.js?t=123</code>，这样系统就不会缓存该资源。
+该方法简单直接。</p>
+
+<h3>方法二：创建自定义 NSURLProtocol，拦截请求，并且在创建 response 时，修改自定义协议为 http 或 https</h3>
+
+<p>伪代码如下：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -126,23 +135,41 @@ $(document).ready(function(event) {
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//重置 webView 的 html viewport 属性，变成不可缩放，并且缩放比例为1.0，并执行javaScript</span>
-</span><span class='line'><span class="cp">#define QUOTE(...) #__VA_ARGS__</span>
-</span><span class='line'><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">webViewHeightJSString</span> <span class="o">=</span> <span class="n">QUOTE</span><span class="p">(</span>
-</span><span class='line'><span class="n">var</span> <span class="n">viewportmeta</span> <span class="o">=</span> <span class="n">document</span><span class="p">.</span><span class="n">querySelector</span><span class="p">(</span><span class="err">&#39;</span><span class="n">meta</span><span class="p">[</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span><span class="p">]</span><span class="err">&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">viewportmeta</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'><span class="n">viewportmeta</span><span class="p">.</span><span class="n">content</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">width</span><span class="o">=</span><span class="n">device</span><span class="o">-</span><span class="n">width</span><span class="p">,</span> <span class="n">initial</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>      <span class="n">minimum</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">maximum</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">user</span><span class="o">-</span><span class="n">scalable</span><span class="o">=</span><span class="n">no</span><span class="err">&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="p">);</span>
-</span><span class='line'><span class="cp">#undef QUOTE</span>
-</span><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString:</span><span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithUTF8String:</span><span class="n">webViewHeightJSString</span><span class="p">]];</span>
-</span><span class='line'><span class="c1">//设置 webView zoomScale 为 1.0，且必须设置animated为YES</span>
-</span><span class='line'><span class="p">[</span><span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span> <span class="nl">setZoomScale:</span><span class="mf">1.0</span> <span class="nl">animated:</span><span class="n">YES</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//原请求</span>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">requestURLString</span> <span class="o">=</span> <span class="s">@&quot;abc://xxx.com/xx.js&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//将原请求的自定义协议改成 http</span>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">changeURLString</span> <span class="o">=</span> <span class="s">@&quot;http://xxx.com/xx.js&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//创建 response</span>
+</span><span class='line'><span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="n">changeURLString</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSURLResponse</span><span class="o">*</span> <span class="n">response</span> <span class="o">=</span>
+</span><span class='line'><span class="p">[[</span><span class="n">NSURLResponse</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">url</span>
+</span><span class='line'>                          <span class="nl">MIMEType:</span><span class="s">@&quot;application/x-javascript&quot;</span>
+</span><span class='line'>             <span class="nl">expectedContentLength:</span><span class="n">indexJSData</span><span class="p">.</span><span class="n">length</span>
+</span><span class='line'>                  <span class="nl">textEncodingName:</span><span class="s">@&quot;UTF-8&quot;</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>此方法在iOS7、8上的 UIWebView 上测试通过，WKWebView 没有测试。</p>
+<p>本来结合方法一的解决方式，创建 response 的时候，在 url 后加上随机字符串，但是经过试验，该方案<code>无效</code>，缓存始终存在。</p>
+
+<p>使用该解决方法解决缓存问题，据个人猜测是因为，iOS 系统默认缓存数据，但针对 http 或 https 协议会根据 Cache-Control 等字段判断是否缓存。</p>
+
+<p>具体可见 <a href="https://github.com/sjpsega/CustomProtocolCacheTest">测试demo</a>，并注意 log 信息。</p>
+
+<h2>讨论</h2>
+
+<p>解决这个缓存问题，其实我还是有些疑惑，因为试了所有 iOS 给出的数据缓存 API，都不起作用。这些包括：
+* 使用 [[NSURLCache sharedURLCache] removeAllCachedResponses] 清理缓存
+* 重写了 NSURLCache 的 &ndash; (NSCachedURLResponse <em>)cachedResponseForRequest:(NSURLRequest </em>)request 方法，不返回 response 对象
+* 自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 &ndash; (NSCachedURLResponse <em>)connection:(NSURLConnection </em>)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。</p>
+
+<p>然后，方法一与方法二中，我都试验了 url 加随机字符串的方式，但是为什么 html 模板上的资源 url 加上随机字符串有效，创建 response 时候，url 加上随机字符串无效，我也赶到无解。</p>
+
+<p>感觉在 webView 资源缓存的问题，Apple 官方还是有些接口没开放，或者是我不知道&hellip;</p>
+
+<h2>参考资料</h2>
+
+<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i">URL Loading System</a>
+<a href="http://nshipster.cn/nsurlcache/">NSURLCache</a></p>
 </div>
 
 
@@ -165,7 +192,7 @@ $(document).ready(function(event) {
   
 
 
-<time datetime="2015-03-25T14:01:19+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2015</time>
+<time datetime="2015-06-15T22:56:31+08:00" pubdate data-updated="true">Jun 15<span>th</span>, 2015</time>
       
 
 <span class="categories">
@@ -211,10 +238,8 @@ var jiathis_config = {data_track_clickback:'true'};
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/02/19/2014summer/" title="Previous Post: 2014年终总结">&laquo; 2014年终总结</a>
+        <a class="basic-alignment left" href="/blog/2015/04/27/taiwanyou/" title="Previous Post: 台湾游记">&laquo; 台湾游记</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/04/27/taiwanyou/" title="Next Post: 台湾游记">台湾游记 &raquo;</a>
       
     </p>
   </footer>

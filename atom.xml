@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2015-06-09T10:41:21+08:00</updated>
+  <updated>2015-06-29T01:11:37+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -14,13 +14,86 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Taiwanyou]]></title>
+    <title type="html"><![CDATA[iOS UIWebView 自定义协议文件加载缓存问题]]></title>
+    <link href="http://sjpsega.me/blog/2015/06/15/uiwebview-cache-bug-by-custom-protocol/"/>
+    <updated>2015-06-15T22:56:31+08:00</updated>
+    <id>http://sjpsega.me/blog/2015/06/15/uiwebview-cache-bug-by-custom-protocol</id>
+    <content type="html"><![CDATA[<h2>起因</h2>
+
+<p>一个简单的需求：为了减少网络请求，一些前端资源会做本地缓存；使用 WebView 访问页面的时候，拦截特定请求，使得特定请求直接加载本地资源。</p>
+
+<p>但是做的过程中发现，当请求的资源为自定义协议的时候，比如加载的 url 为 <code>abc://xxx.com/xx.js</code> 的时候，系统会强制对该资源做缓存，并且调用系统提供的清除缓存接口，如 <code>[[NSURLCache sharedURLCache] removeAllCachedResponses]</code>， 都无法清除该缓存，除非重启 App。</p>
+
+<p>这就导致该资源内容发生变化的时候，无法立即生效，这在业务中，显然是不能接受的。</p>
+
+<p><code>注</code>：该方案主要针对 <code>UIWebView</code> 有效；<code>WKWebView</code> 因为不能使用自定义 NSURLProtocol 拦截资源，方法二就不起作用。</p>
+
+<h2>解决</h2>
+
+<h3>方法一：html 模板上，资源 url 加上随机字符串</h3>
+
+<p>在 html 页面上修改 url 字符串，如 <code>abc://xxx.com/xx.js</code>，需要改成 <code>abc://xxx.com/xx.js?t=123</code>，这样系统就不会缓存该资源。
+该方法简单直接。</p>
+
+<h3>方法二：创建自定义 NSURLProtocol，拦截请求，并且在创建 response 时，修改自定义协议为 http 或 https</h3>
+
+<p>伪代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//原请求</span>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">requestURLString</span> <span class="o">=</span> <span class="s">@&quot;abc://xxx.com/xx.js&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//将原请求的自定义协议改成 http</span>
+</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">changeURLString</span> <span class="o">=</span> <span class="s">@&quot;http://xxx.com/xx.js&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//创建 response</span>
+</span><span class='line'><span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="n">changeURLString</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSURLResponse</span><span class="o">*</span> <span class="n">response</span> <span class="o">=</span>
+</span><span class='line'><span class="p">[[</span><span class="n">NSURLResponse</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">url</span>
+</span><span class='line'>                          <span class="nl">MIMEType:</span><span class="s">@&quot;application/x-javascript&quot;</span>
+</span><span class='line'>             <span class="nl">expectedContentLength:</span><span class="n">indexJSData</span><span class="p">.</span><span class="n">length</span>
+</span><span class='line'>                  <span class="nl">textEncodingName:</span><span class="s">@&quot;UTF-8&quot;</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>本来结合方法一的解决方式，创建 response 的时候，在 url 后加上随机字符串，但是经过试验，该方案<code>无效</code>，缓存始终存在。</p>
+
+<p>使用该解决方法解决缓存问题，据个人猜测是因为，iOS 系统默认缓存数据，但针对 http 或 https 协议会根据 Cache-Control 等字段判断是否缓存。</p>
+
+<p>具体可见 <a href="https://github.com/sjpsega/CustomProtocolCacheTest">测试demo</a>，并注意 log 信息。</p>
+
+<h2>讨论</h2>
+
+<p>解决这个缓存问题，其实我还是有些疑惑，因为试了所有 iOS 给出的数据缓存 API，都不起作用。这些包括：
+* 使用 [[NSURLCache sharedURLCache] removeAllCachedResponses] 清理缓存
+* 重写了 NSURLCache 的 &ndash; (NSCachedURLResponse <em>)cachedResponseForRequest:(NSURLRequest </em>)request 方法，不返回 response 对象
+* 自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 &ndash; (NSCachedURLResponse <em>)connection:(NSURLConnection </em>)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。</p>
+
+<p>然后，方法一与方法二中，我都试验了 url 加随机字符串的方式，但是为什么 html 模板上的资源 url 加上随机字符串有效，创建 response 时候，url 加上随机字符串无效，我也赶到无解。</p>
+
+<p>感觉在 webView 资源缓存的问题，Apple 官方还是有些接口没开放，或者是我不知道&hellip;</p>
+
+<h2>参考资料</h2>
+
+<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i">URL Loading System</a>
+<a href="http://nshipster.cn/nsurlcache/">NSURLCache</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[台湾游记]]></title>
     <link href="http://sjpsega.me/blog/2015/04/27/taiwanyou/"/>
     <updated>2015-04-27T01:41:49+08:00</updated>
     <id>http://sjpsega.me/blog/2015/04/27/taiwanyou</id>
-    <content type="html"><![CDATA[<h1>台湾游记</h1>
-
-<p>4 月份天气不冷不热，是个出游的好时期。趁着工作上的事情暂时告一段落，忙里偷闲，delay 了近半年的台湾游终于成行。</p>
+    <content type="html"><![CDATA[<p>4 月份天气不冷不热，是个出游的好时期。趁着工作上的事情暂时告一段落，忙里偷闲，delay 了近半年的台湾游终于成行。</p>
 
 <h2>注意事项</h2>
 
@@ -5625,25 +5698,6 @@
 <p>在这部分教程中，您使用Cocoapods设置项目，增加视图到控制器，编排视图，并建立模型来反映你抓取的气象数据。该App还没有充分发挥作用，但是你成功用纯代码创建视图，并学习了如何使用Mantle映射和转换JSON数据。</p>
 
 <p>接下来看看<a href="http://sjpsega.me/blog/2014/02/15/yi--ios-7-best-practices-part-2/">教程的第二部分</a>，你将充实你的App，从weather API获取数据，并在UI上显示。您将使用新的iOS7 <a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html">NSURLSession</a>去下载数据，以及使用<code>ReactiveCocoa</code>把位置查找，天气数据抓取和UI更新事件绑在一起。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[开始写Blog]]></title>
-    <link href="http://sjpsega.me/blog/2014/02/06/kai-shi-xie-blog/"/>
-    <updated>2014-02-06T16:31:07+08:00</updated>
-    <id>http://sjpsega.me/blog/2014/02/06/kai-shi-xie-blog</id>
-    <content type="html"><![CDATA[<p>趁着春节假期，花了点时间，在github上用<a href="http://octopress.org/">Octopress</a>搭了个个人Blog。希望自己新的一年，能写点技术Blog，多做积累，锻炼文字。</p>
-
-<p>其实以前在javaeye上也写过技术Blog，但是写得不多。在Sohu上写自己的生活Blog，写的蛮多的，现在渐渐也写得少了。</p>
-
-<p>javaeye的Blog有个最大的缺点：编辑器不好用，生成的文章格式不好看，特别是代码块，特别难看。而且添加代码demo更加麻烦，需要上传，且不便于后期的维护与管理。</p>
-
-<p>自己搭建Blog的话，javaeye的编辑器这个缺点就不存在了，而且使用MarkDown格式写文章，很方便，很轻松就能写出格式优美的文章了。而且放在github上，更不用怕文章丢失的问题了，哈哈。</p>
-
-<p>当然自己搭建Blog的最大缺点是，流量少，缺少流量，缺少讨论；当然这个也不重要，重要的是自己的积累，如果自己写得好，肯定会有人看到的。</p>
-
-<p>刚入门<a href="http://octopress.org/">Octopress</a>，定制化蛮强的，还要好好研究下。</p>
 ]]></content>
   </entry>
   
