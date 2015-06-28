@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "taiwanyou"
+title: "台湾游记"
 date: 2015-04-27 01:41:49 +0800
 comments: true
 categories: life
@@ -8,7 +8,6 @@ description: 台湾 旅游
 keywords: 台湾 旅游
 ---
 
-# 台湾游记
 4 月份天气不冷不热，是个出游的好时期。趁着工作上的事情暂时告一段落，忙里偷闲，delay 了近半年的台湾游终于成行。
 
 ## 注意事项
