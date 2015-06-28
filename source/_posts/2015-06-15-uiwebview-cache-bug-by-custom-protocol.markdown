@@ -53,8 +53,9 @@ NSURLResponse* response =
 
 然后，方法一与方法二中，我都试验了 url 加随机字符串的方式，但是为什么 html 模板上的资源 url 加上随机字符串有效，创建 response 时候，url 加上随机字符串无效，我也赶到无解。
 
-感觉在 webView 资源缓存的问题，Apple 官方还是有些接口没开放，或者是我不知道...
+感觉在 webView 资源缓存的问题上，Apple 官方还是有些接口没开放，或者是我不知道...
 
 ## 参考资料
 [URL Loading System](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i)
+
 [NSURLCache](http://nshipster.cn/nsurlcache/)
