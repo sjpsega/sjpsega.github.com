@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2015-06-29T01:11:37+08:00</updated>
+  <updated>2015-06-29T01:14:05+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -70,12 +70,13 @@ NSURLResponse</em> response =
 
 <p>然后，方法一与方法二中，我都试验了 url 加随机字符串的方式，但是为什么 html 模板上的资源 url 加上随机字符串有效，创建 response 时候，url 加上随机字符串无效，我也赶到无解。</p>
 
-<p>感觉在 webView 资源缓存的问题，Apple 官方还是有些接口没开放，或者是我不知道&hellip;</p>
+<p>感觉在 webView 资源缓存的问题上，Apple 官方还是有些接口没开放，或者是我不知道&hellip;</p>
 
 <h2>参考资料</h2>
 
-<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i">URL Loading System</a>
-<a href="http://nshipster.cn/nsurlcache/">NSURLCache</a></p>
+<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i">URL Loading System</a></p>
+
+<p><a href="http://nshipster.cn/nsurlcache/">NSURLCache</a></p>
 ]]></content>
   </entry>
   
