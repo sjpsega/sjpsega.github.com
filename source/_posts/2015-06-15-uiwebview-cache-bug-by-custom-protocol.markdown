@@ -20,6 +20,7 @@ keywords: iOS UIWebView cache bug
 ## 解决
 ###方法一：html 模板上，资源 url 加上随机字符串
 在 html 页面上修改 url 字符串，如 `abc://xxx.com/xx.js`，需要改成 `abc://xxx.com/xx.js?t=123`，这样系统就不会缓存该资源。
+
 该方法简单直接。
 
 ###方法二：创建自定义 NSURLProtocol，拦截请求，并且在创建 response 时，修改自定义协议为 http 或 https
@@ -28,6 +29,8 @@ keywords: iOS UIWebView cache bug
 ```objc
 //原请求
 NSString *requestURLString = @"abc://xxx.com/xx.js";
+//根据原请求获得的 data 数据
+NSData *abcData = ...
 //将原请求的自定义协议改成 http
 NSString *changeURLString = @"http://xxx.com/xx.js";
 //创建 response
@@ -35,8 +38,11 @@ NSURL *url = [NSURL URLWithString:changeURLString];
 NSURLResponse* response =
 [[NSURLResponse alloc] initWithURL:url
                           MIMEType:@"application/x-javascript"
-             expectedContentLength:indexJSData.length
+             expectedContentLength:abcData.length
                   textEncodingName:@"UTF-8"];
+[[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
+[[self client] URLProtocol:self didLoadData:abcData];
+[[self client] URLProtocolDidFinishLoading:self];
 ```
 
 本来结合方法一的解决方式，创建 response 的时候，在 url 后加上随机字符串，但是经过试验，该方案`无效`，缓存始终存在。
@@ -51,7 +57,7 @@ NSURLResponse* response =
 * 重写了 NSURLCache 的 - (NSCachedURLResponse *)cachedResponseForRequest:(NSURLRequest *)request 方法，不返回 response 对象
 * 自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。
 
-然后，方法一与方法二中，我都试验了 url 加随机字符串的方式，但是为什么 html 模板上的资源 url 加上随机字符串有效，创建 response 时候，url 加上随机字符串无效，我也赶到无解。
+然后，方法一与方法二中，我都试验了 url 加随机字符串的方式，但是为什么 html 模板上的资源 url 加上随机字符串有效，创建 response 时候，url 加上随机字符串无效，我也感到无解。
 
 感觉在 webView 资源缓存的问题上，Apple 官方还是有些接口没开放，或者是我不知道...
 
