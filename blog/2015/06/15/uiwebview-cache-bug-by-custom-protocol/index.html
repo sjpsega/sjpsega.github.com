@@ -117,8 +117,9 @@ $(document).ready(function(event) {
 
 <h3>方法一：html 模板上，资源 url 加上随机字符串</h3>
 
-<p>在 html 页面上修改 url 字符串，如 <code>abc://xxx.com/xx.js</code>，需要改成 <code>abc://xxx.com/xx.js?t=123</code>，这样系统就不会缓存该资源。
-该方法简单直接。</p>
+<p>在 html 页面上修改 url 字符串，如 <code>abc://xxx.com/xx.js</code>，需要改成 <code>abc://xxx.com/xx.js?t=123</code>，这样系统就不会缓存该资源。</p>
+
+<p>该方法简单直接。</p>
 
 <h3>方法二：创建自定义 NSURLProtocol，拦截请求，并且在创建 response 时，修改自定义协议为 http 或 https</h3>
 
@@ -135,8 +136,15 @@ $(document).ready(function(event) {
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//原请求</span>
 </span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">requestURLString</span> <span class="o">=</span> <span class="s">@&quot;abc://xxx.com/xx.js&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//根据原请求获得的 data 数据</span>
+</span><span class='line'><span class="n">NSData</span> <span class="o">*</span><span class="n">abcData</span> <span class="o">=</span> <span class="p">...</span>
 </span><span class='line'><span class="c1">//将原请求的自定义协议改成 http</span>
 </span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">changeURLString</span> <span class="o">=</span> <span class="s">@&quot;http://xxx.com/xx.js&quot;</span><span class="p">;</span>
 </span><span class='line'><span class="c1">//创建 response</span>
@@ -144,8 +152,11 @@ $(document).ready(function(event) {
 </span><span class='line'><span class="n">NSURLResponse</span><span class="o">*</span> <span class="n">response</span> <span class="o">=</span>
 </span><span class='line'><span class="p">[[</span><span class="n">NSURLResponse</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">url</span>
 </span><span class='line'>                          <span class="nl">MIMEType:</span><span class="s">@&quot;application/x-javascript&quot;</span>
-</span><span class='line'>             <span class="nl">expectedContentLength:</span><span class="n">indexJSData</span><span class="p">.</span><span class="n">length</span>
+</span><span class='line'>             <span class="nl">expectedContentLength:</span><span class="n">abcData</span><span class="p">.</span><span class="n">length</span>
 </span><span class='line'>                  <span class="nl">textEncodingName:</span><span class="s">@&quot;UTF-8&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="n">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol:</span><span class="n">self</span> <span class="nl">didReceiveResponse:</span><span class="n">response</span> <span class="nl">cacheStoragePolicy:</span><span class="n">NSURLCacheStorageNotAllowed</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="n">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol:</span><span class="n">self</span> <span class="nl">didLoadData:</span><span class="n">abcData</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="n">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocolDidFinishLoading:</span><span class="n">self</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -162,7 +173,7 @@ $(document).ready(function(event) {
 * 重写了 NSURLCache 的 &ndash; (NSCachedURLResponse <em>)cachedResponseForRequest:(NSURLRequest </em>)request 方法，不返回 response 对象
 * 自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 &ndash; (NSCachedURLResponse <em>)connection:(NSURLConnection </em>)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。</p>
 
-<p>然后，方法一与方法二中，我都试验了 url 加随机字符串的方式，但是为什么 html 模板上的资源 url 加上随机字符串有效，创建 response 时候，url 加上随机字符串无效，我也赶到无解。</p>
+<p>然后，方法一与方法二中，我都试验了 url 加随机字符串的方式，但是为什么 html 模板上的资源 url 加上随机字符串有效，创建 response 时候，url 加上随机字符串无效，我也感到无解。</p>
 
 <p>感觉在 webView 资源缓存的问题上，Apple 官方还是有些接口没开放，或者是我不知道&hellip;</p>
 
