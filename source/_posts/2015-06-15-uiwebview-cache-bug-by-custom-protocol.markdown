@@ -53,6 +53,7 @@ NSURLResponse* response =
 
 ## 讨论
 解决这个缓存问题，其实我还是有些疑惑，因为试了所有 iOS 给出的数据缓存 API，都不起作用。这些包括：
+
 * 使用 [[NSURLCache sharedURLCache] removeAllCachedResponses] 清理缓存
 * 重写了 NSURLCache 的 - (NSCachedURLResponse *)cachedResponseForRequest:(NSURLRequest *)request 方法，不返回 response 对象
 * 自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。
