@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>[译]iOS7最佳实践：一个天气App案例(一) - sjpsega's Blog</title>
@@ -14,13 +14,15 @@
 Manual layout in code( &hellip;">
   <meta name="keywords" content="iOS7, Cocoapods, ReactiveCocoa, Mantle">
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me/blog/2014/02/11/yi--ios-7-best-practices-part-1">
+  <link rel="canonical" href="http://sjpsega.me/blog/2014/02/11/yi--ios-7-best-practices-part-1/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -33,18 +35,18 @@ Manual layout in code( &hellip;">
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -61,7 +63,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -91,14 +93,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-02-11T22:21:53+08:00" pubdate data-updated="true">Feb 11<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-02-11T22:21:53+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:21 pm</span></time>
         
       </p>
     
@@ -277,11 +272,11 @@ $(document).ready(function(event) {
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="c1">// Remove this later</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">redColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">redColor</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -311,15 +306,15 @@ $(document).ready(function(event) {
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="nv">application</span> <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIWindow</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame:</span><span class="p">[[</span><span class="n">UIScreen</span> <span class="n">mainScreen</span><span class="p">]</span> <span class="n">bounds</span><span class="p">]];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="bp">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="nv">application</span> <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIWindow</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:[[</span><span class="bp">UIScreen</span> <span class="n">mainScreen</span><span class="p">]</span> <span class="n">bounds</span><span class="p">]];</span>
 </span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WXController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="n">makeKeyAndVisible</span><span class="p">];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WXController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">window</span> <span class="n">makeKeyAndVisible</span><span class="p">];</span>
 </span><span class='line'>    <span class="c1">// 2</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">TSMessage</span> <span class="nl">setDefaultViewController:</span> <span class="n">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">TSMessage</span> <span class="nl">setDefaultViewController</span><span class="p">:</span> <span class="nb">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -343,7 +338,7 @@ $(document).ready(function(event) {
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">UIStatusBarStyle</span><span class="p">)</span><span class="nf">preferredStatusBarStyle</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">UIStatusBarStyle</span><span class="p">)</span><span class="nf">preferredStatusBarStyle</span> <span class="p">{</span>
 </span><span class='line'>    <span class="k">return</span> <span class="n">UIStatusBarStyleLightContent</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -362,7 +357,7 @@ $(document).ready(function(event) {
 <p>打开<code>WXController.h</code>, 添加如下委托协议：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;</span><span class="n">UITableViewDataSource</span><span class="p">,</span> <span class="n">UITableViewDelegate</span><span class="p">,</span> <span class="n">UIScrollViewDelegate</span><span class="o">&gt;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;</span><span class="bp">UITableViewDataSource</span><span class="p">,</span> <span class="bp">UITableViewDelegate</span><span class="p">,</span> <span class="bp">UIScrollViewDelegate</span><span class="o">&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -389,10 +384,10 @@ $(document).ready(function(event) {
 <span class='line-number'>8</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">WXController</span> <span class="p">()</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">UIImageView</span> <span class="o">*</span><span class="n">backgroundImageView</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">UIImageView</span> <span class="o">*</span><span class="n">blurredImageView</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">UITableView</span> <span class="o">*</span><span class="n">tableView</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">screenHeight</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">UIImageView</span> <span class="o">*</span><span class="n">backgroundImageView</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">UIImageView</span> <span class="o">*</span><span class="n">blurredImageView</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">UITableView</span> <span class="o">*</span><span class="n">tableView</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">screenHeight</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">@end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -434,30 +429,30 @@ $(document).ready(function(event) {
 <span class='line-number'>24</span>
 <span class='line-number'>25</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">screenHeight</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIScreen</span> <span class="n">mainScreen</span><span class="p">].</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">screenHeight</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIScreen</span> <span class="n">mainScreen</span><span class="p">].</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">UIImage</span> <span class="o">*</span><span class="n">background</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;bg&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="bp">UIImage</span> <span class="o">*</span><span class="n">background</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:</span><span class="s">@&quot;bg&quot;</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">backgroundImageView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="n">background</span><span class="p">];</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFill</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">];</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImageView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage</span><span class="p">:</span><span class="n">background</span><span class="p">];</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFill</span><span class="p">;</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">blurredImageView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFill</span><span class="p">;</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">blurredImageView</span> <span class="nl">setImageToBlur:</span><span class="n">background</span> <span class="nl">blurRadius:</span><span class="mi">10</span> <span class="nl">completionBlock:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">];</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFill</span><span class="p">;</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span> <span class="nl">setImageToBlur</span><span class="p">:</span><span class="n">background</span> <span class="nl">blurRadius</span><span class="p">:</span><span class="mi">10</span> <span class="nl">completionBlock</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 4</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">tableView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UITableView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">dataSource</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">separatorColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithWhite:</span><span class="mi">1</span> <span class="nl">alpha:</span><span class="mf">0.2</span><span class="p">];</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">pagingEnabled</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">];</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UITableView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">dataSource</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">separatorColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithWhite</span><span class="p">:</span><span class="mi">1</span> <span class="nl">alpha</span><span class="p">:</span><span class="mf">0.2</span><span class="p">];</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">pagingEnabled</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -515,28 +510,28 @@ $(document).ready(function(event) {
 </span><span class='line'><span class="cp">#pragma mark - UITableViewDataSource</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSInteger</span><span class="p">)</span><span class="nf">numberOfSectionsInTableView:</span><span class="p">(</span><span class="n">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="p">{</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nf">numberOfSectionsInTableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="p">{</span>
 </span><span class='line'>    <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSInteger</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="n">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">numberOfRowsInSection:</span><span class="p">(</span><span class="n">NSInteger</span><span class="p">)</span><span class="nv">section</span> <span class="p">{</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">numberOfRowsInSection:</span><span class="p">(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nv">section</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1">// TODO: Return count of forecast</span>
 </span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">UITableViewCell</span> <span class="o">*</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="n">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">cellForRowAtIndexPath:</span><span class="p">(</span><span class="n">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">CellIdentifier</span> <span class="o">=</span> <span class="s">@&quot;CellIdentifier&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">UITableViewCell</span> <span class="o">*</span><span class="n">cell</span> <span class="o">=</span> <span class="p">[</span><span class="n">tableView</span> <span class="nl">dequeueReusableCellWithIdentifier:</span><span class="n">CellIdentifier</span><span class="p">];</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">UITableViewCell</span> <span class="o">*</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">cellForRowAtIndexPath:</span><span class="p">(</span><span class="bp">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">static</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">CellIdentifier</span> <span class="o">=</span> <span class="s">@&quot;CellIdentifier&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="bp">UITableViewCell</span> <span class="o">*</span><span class="n">cell</span> <span class="o">=</span> <span class="p">[</span><span class="n">tableView</span> <span class="nl">dequeueReusableCellWithIdentifier</span><span class="p">:</span><span class="n">CellIdentifier</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">cell</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">cell</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UITableViewCell</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithStyle:</span><span class="n">UITableViewCellStyleValue1</span> <span class="nl">reuseIdentifier:</span><span class="n">CellIdentifier</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">cell</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UITableViewCell</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithStyle</span><span class="p">:</span><span class="n">UITableViewCellStyleValue1</span> <span class="nl">reuseIdentifier</span><span class="p">:</span><span class="n">CellIdentifier</span><span class="p">];</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="c1">// 3</span>
 </span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">selectionStyle</span> <span class="o">=</span> <span class="n">UITableViewCellSelectionStyleNone</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithWhite:</span><span class="mi">0</span> <span class="nl">alpha:</span><span class="mf">0.2</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">textLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">detailTextLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithWhite</span><span class="p">:</span><span class="mi">0</span> <span class="nl">alpha</span><span class="p">:</span><span class="mf">0.2</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">textLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">detailTextLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="c1">// TODO: Setup the cell</span>
 </span><span class='line'>
@@ -545,7 +540,7 @@ $(document).ready(function(event) {
 </span><span class='line'>
 </span><span class='line'><span class="cp">#pragma mark - UITableViewDelegate</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="n">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">heightForRowAtIndexPath:</span><span class="p">(</span><span class="n">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span> <span class="p">{</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">heightForRowAtIndexPath:</span><span class="p">(</span><span class="bp">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1">// TODO: Determine cell height based on screen</span>
 </span><span class='line'>    <span class="k">return</span> <span class="mi">44</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
@@ -575,14 +570,14 @@ $(document).ready(function(event) {
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewWillLayoutSubviews</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewWillLayoutSubviews</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewWillLayoutSubviews</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewWillLayoutSubviews</span><span class="p">];</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="n">CGRect</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
+</span><span class='line'>    <span class="bp">CGRect</span> <span class="n">bounds</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -625,7 +620,7 @@ $(document).ready(function(event) {
 <span class='line-number'>26</span>
 <span class='line-number'>27</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="n">CGRect</span> <span class="n">headerFrame</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIScreen</span> <span class="n">mainScreen</span><span class="p">].</span><span class="n">bounds</span><span class="p">;</span>
+</span><span class='line'><span class="bp">CGRect</span> <span class="n">headerFrame</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIScreen</span> <span class="n">mainScreen</span><span class="p">].</span><span class="n">bounds</span><span class="p">;</span>
 </span><span class='line'><span class="c1">// 2</span>
 </span><span class='line'><span class="n">CGFloat</span> <span class="n">inset</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
 </span><span class='line'><span class="c1">// 3</span>
@@ -633,23 +628,23 @@ $(document).ready(function(event) {
 </span><span class='line'><span class="n">CGFloat</span> <span class="n">hiloHeight</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
 </span><span class='line'><span class="n">CGFloat</span> <span class="n">iconHeight</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
 </span><span class='line'><span class="c1">// 4</span>
-</span><span class='line'><span class="n">CGRect</span> <span class="n">hiloFrame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">inset</span><span class="p">,</span>
+</span><span class='line'><span class="bp">CGRect</span> <span class="n">hiloFrame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">inset</span><span class="p">,</span>
 </span><span class='line'>                              <span class="n">headerFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">hiloHeight</span><span class="p">,</span>
 </span><span class='line'>                              <span class="n">headerFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">inset</span><span class="p">),</span>
 </span><span class='line'>                              <span class="n">hiloHeight</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">CGRect</span> <span class="n">temperatureFrame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">inset</span><span class="p">,</span>
+</span><span class='line'><span class="bp">CGRect</span> <span class="n">temperatureFrame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">inset</span><span class="p">,</span>
 </span><span class='line'>                                     <span class="n">headerFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="p">(</span><span class="n">temperatureHeight</span> <span class="o">+</span> <span class="n">hiloHeight</span><span class="p">),</span>
 </span><span class='line'>                                     <span class="n">headerFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">inset</span><span class="p">),</span>
 </span><span class='line'>                                     <span class="n">temperatureHeight</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">CGRect</span> <span class="n">iconFrame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">inset</span><span class="p">,</span>
+</span><span class='line'><span class="bp">CGRect</span> <span class="n">iconFrame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">inset</span><span class="p">,</span>
 </span><span class='line'>                              <span class="n">temperatureFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">iconHeight</span><span class="p">,</span>
 </span><span class='line'>                              <span class="n">iconHeight</span><span class="p">,</span>
 </span><span class='line'>                              <span class="n">iconHeight</span><span class="p">);</span>
 </span><span class='line'><span class="c1">// 5</span>
-</span><span class='line'><span class="n">CGRect</span> <span class="n">conditionsFrame</span> <span class="o">=</span> <span class="n">iconFrame</span><span class="p">;</span>
-</span><span class='line'><span class="n">conditionsFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="p">(((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">inset</span><span class="p">)</span> <span class="o">+</span> <span class="n">iconHeight</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="p">);</span>
+</span><span class='line'><span class="bp">CGRect</span> <span class="n">conditionsFrame</span> <span class="o">=</span> <span class="n">iconFrame</span><span class="p">;</span>
+</span><span class='line'><span class="n">conditionsFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="p">(((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">inset</span><span class="p">)</span> <span class="o">+</span> <span class="n">iconHeight</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="p">);</span>
 </span><span class='line'><span class="n">conditionsFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">iconFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">iconHeight</span> <span class="o">+</span> <span class="mi">10</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -711,48 +706,48 @@ $(document).ready(function(event) {
 <span class='line-number'>42</span>
 <span class='line-number'>43</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="n">UIView</span> <span class="o">*</span><span class="n">header</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame:</span><span class="n">headerFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">header</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">tableHeaderView</span> <span class="o">=</span> <span class="n">header</span><span class="p">;</span>
+</span><span class='line'><span class="bp">UIView</span> <span class="o">*</span><span class="n">header</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">headerFrame</span><span class="p">];</span>
+</span><span class='line'><span class="n">header</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">tableHeaderView</span> <span class="o">=</span> <span class="n">header</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 2</span>
 </span><span class='line'><span class="c1">// bottom left</span>
-</span><span class='line'><span class="n">UILabel</span> <span class="o">*</span><span class="n">temperatureLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame:</span><span class="n">temperatureFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'><span class="bp">UILabel</span> <span class="o">*</span><span class="n">temperatureLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">temperatureFrame</span><span class="p">];</span>
+</span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
+</span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
 </span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&quot;0°&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nl">fontWithName:</span><span class="s">@&quot;HelveticaNeue-UltraLight&quot;</span> <span class="nl">size:</span><span class="mi">120</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview:</span><span class="n">temperatureLabel</span><span class="p">];</span>
+</span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-UltraLight&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">120</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">temperatureLabel</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// bottom left</span>
-</span><span class='line'><span class="n">UILabel</span> <span class="o">*</span><span class="n">hiloLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame:</span><span class="n">hiloFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'><span class="bp">UILabel</span> <span class="o">*</span><span class="n">hiloLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">hiloFrame</span><span class="p">];</span>
+</span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
+</span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
 </span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&quot;0° / 0°&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nl">fontWithName:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size:</span><span class="mi">28</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview:</span><span class="n">hiloLabel</span><span class="p">];</span>
+</span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">28</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">hiloLabel</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// top</span>
-</span><span class='line'><span class="n">UILabel</span> <span class="o">*</span><span class="n">cityLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">30</span><span class="p">)];</span>
-</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'><span class="bp">UILabel</span> <span class="o">*</span><span class="n">cityLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">30</span><span class="p">)];</span>
+</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
+</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
 </span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&quot;Loading...&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nl">fontWithName:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size:</span><span class="mi">18</span><span class="p">];</span>
+</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">18</span><span class="p">];</span>
 </span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">textAlignment</span> <span class="o">=</span> <span class="n">NSTextAlignmentCenter</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview:</span><span class="n">cityLabel</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">cityLabel</span><span class="p">];</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">UILabel</span> <span class="o">*</span><span class="n">conditionsLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame:</span><span class="n">conditionsFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">conditionsLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">conditionsLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nl">fontWithName:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size:</span><span class="mi">18</span><span class="p">];</span>
-</span><span class='line'><span class="n">conditionsLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview:</span><span class="n">conditionsLabel</span><span class="p">];</span>
+</span><span class='line'><span class="bp">UILabel</span> <span class="o">*</span><span class="n">conditionsLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">conditionsFrame</span><span class="p">];</span>
+</span><span class='line'><span class="n">conditionsLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
+</span><span class='line'><span class="n">conditionsLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">18</span><span class="p">];</span>
+</span><span class='line'><span class="n">conditionsLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">conditionsLabel</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 3</span>
 </span><span class='line'><span class="c1">// bottom left</span>
-</span><span class='line'><span class="n">UIImageView</span> <span class="o">*</span><span class="n">iconView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame:</span><span class="n">iconFrame</span><span class="p">];</span>
+</span><span class='line'><span class="bp">UIImageView</span> <span class="o">*</span><span class="n">iconView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">iconFrame</span><span class="p">];</span>
 </span><span class='line'><span class="n">iconView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFit</span><span class="p">;</span>
-</span><span class='line'><span class="n">iconView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview:</span><span class="n">iconView</span><span class="p">];</span>
+</span><span class='line'><span class="n">iconView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">iconView</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -775,7 +770,7 @@ $(document).ready(function(event) {
 
 <p>你会注意到，App显示“Loading&hellip;”，但它不是真正地在工作。是时候获取一些真正的天气数据。</p>
 
-<p>你会从<a href="http://openweathermap.org/">OpenWeatherMap</a>的API拉取数据。 OpenWeatherMap是一个非常棒的服务，旨在提供实时，准确，免费的天气数据给任何人。虽然有很多天气API，但他们大多要么使用较旧的数据格式，如XML，或是有偿服务 &ndash; 并且有时还相当昂贵。</p>
+<p>你会从<a href="http://openweathermap.org/">OpenWeatherMap</a>的API拉取数据。 OpenWeatherMap是一个非常棒的服务，旨在提供实时，准确，免费的天气数据给任何人。虽然有很多天气API，但他们大多要么使用较旧的数据格式，如XML，或是有偿服务 - 并且有时还相当昂贵。</p>
 
 <p>你会遵循以下基本步骤，来获你设备的位置的气象数据：</p>
 
@@ -832,22 +827,22 @@ $(document).ready(function(event) {
 </span><span class='line'><span class="k">@interface</span> <span class="nc">WXCondition</span> : <span class="nc">MTLModel</span> <span class="o">&lt;</span><span class="n">MTLJSONSerializing</span><span class="o">&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSDate</span> <span class="o">*</span><span class="n">date</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSNumber</span> <span class="o">*</span><span class="n">humidity</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSNumber</span> <span class="o">*</span><span class="n">temperature</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSNumber</span> <span class="o">*</span><span class="n">tempHigh</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSNumber</span> <span class="o">*</span><span class="n">tempLow</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">locationName</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSDate</span> <span class="o">*</span><span class="n">sunrise</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSDate</span> <span class="o">*</span><span class="n">sunset</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">conditionDescription</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">condition</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSNumber</span> <span class="o">*</span><span class="n">windBearing</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSNumber</span> <span class="o">*</span><span class="n">windSpeed</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">icon</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSDate</span> <span class="o">*</span><span class="n">date</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">humidity</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">temperature</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">tempHigh</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">tempLow</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">locationName</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSDate</span> <span class="o">*</span><span class="n">sunrise</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSDate</span> <span class="o">*</span><span class="n">sunset</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">conditionDescription</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">condition</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">windBearing</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">windSpeed</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">icon</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">imageName</span><span class="p">;</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">imageName</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">@end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -903,12 +898,12 @@ $(document).ready(function(event) {
 <span class='line-number'>31</span>
 <span class='line-number'>32</span>
 <span class='line-number'>33</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">imageMap</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">imageMap</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">_imageMap</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">static</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">_imageMap</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
 </span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">_imageMap</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">// 2</span>
-</span><span class='line'>        <span class="n">_imageMap</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">_imageMap</span> <span class="o">=</span> <span class="l">@{</span>
 </span><span class='line'>                      <span class="s">@&quot;01d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-clear&quot;</span><span class="p">,</span>
 </span><span class='line'>                      <span class="s">@&quot;02d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-few&quot;</span><span class="p">,</span>
 </span><span class='line'>                      <span class="s">@&quot;03d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-few&quot;</span><span class="p">,</span>
@@ -927,14 +922,14 @@ $(document).ready(function(event) {
 </span><span class='line'>                      <span class="s">@&quot;11n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-tstorm&quot;</span><span class="p">,</span>
 </span><span class='line'>                      <span class="s">@&quot;13n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-snow&quot;</span><span class="p">,</span>
 </span><span class='line'>                      <span class="s">@&quot;50n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-mist&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="p">};</span>
+</span><span class='line'>                      <span class="l">}</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="k">return</span> <span class="n">_imageMap</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">imageName</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">WXCondition</span> <span class="n">imageMap</span><span class="p">][</span><span class="n">self</span><span class="p">.</span><span class="n">icon</span><span class="p">];</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">imageName</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">WXCondition</span> <span class="n">imageMap</span><span class="p">][</span><span class="nb">self</span><span class="p">.</span><span class="n">icon</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1014,8 +1009,8 @@ $(document).ready(function(event) {
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">JSONKeyPathsByPropertyKey</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="err">@</span><span class="p">{</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">JSONKeyPathsByPropertyKey</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="l">@{</span>
 </span><span class='line'>             <span class="s">@&quot;date&quot;</span><span class="o">:</span> <span class="s">@&quot;dt&quot;</span><span class="p">,</span>
 </span><span class='line'>             <span class="s">@&quot;locationName&quot;</span><span class="o">:</span> <span class="s">@&quot;name&quot;</span><span class="p">,</span>
 </span><span class='line'>             <span class="s">@&quot;humidity&quot;</span><span class="o">:</span> <span class="s">@&quot;main.humidity&quot;</span><span class="p">,</span>
@@ -1029,7 +1024,7 @@ $(document).ready(function(event) {
 </span><span class='line'>             <span class="s">@&quot;icon&quot;</span><span class="o">:</span> <span class="s">@&quot;weather.icon&quot;</span><span class="p">,</span>
 </span><span class='line'>             <span class="s">@&quot;windBearing&quot;</span><span class="o">:</span> <span class="s">@&quot;wind.deg&quot;</span><span class="p">,</span>
 </span><span class='line'>             <span class="s">@&quot;windSpeed&quot;</span><span class="o">:</span> <span class="s">@&quot;wind.speed&quot;</span>
-</span><span class='line'>             <span class="p">};</span>
+</span><span class='line'>             <span class="l">}</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1060,22 +1055,22 @@ $(document).ready(function(event) {
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">dateJSONTransformer</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">dateJSONTransformer</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">MTLValueTransformer</span> <span class="nl">reversibleTransformerWithForwardBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="n">NSDate</span> <span class="nl">dateWithTimeIntervalSince1970:</span><span class="n">str</span><span class="p">.</span><span class="n">floatValue</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span> <span class="nl">reverseBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSDate</span> <span class="o">*</span><span class="n">date</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;%f&quot;</span><span class="p">,[</span><span class="n">date</span> <span class="n">timeIntervalSince1970</span><span class="p">]];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">MTLValueTransformer</span> <span class="nl">reversibleTransformerWithForwardBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="bp">NSDate</span> <span class="nl">dateWithTimeIntervalSince1970</span><span class="p">:</span><span class="n">str</span><span class="p">.</span><span class="n">floatValue</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span> <span class="nl">reverseBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSDate</span> <span class="o">*</span><span class="n">date</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%f&quot;</span><span class="p">,[</span><span class="n">date</span> <span class="n">timeIntervalSince1970</span><span class="p">]];</span>
 </span><span class='line'>    <span class="p">}];</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">sunriseJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">self</span> <span class="n">dateJSONTransformer</span><span class="p">];</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">sunriseJSONTransformer</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">dateJSONTransformer</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">sunsetJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">self</span> <span class="n">dateJSONTransformer</span><span class="p">];</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">sunsetJSONTransformer</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">dateJSONTransformer</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1105,20 +1100,20 @@ $(document).ready(function(event) {
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">conditionDescriptionJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">MTLValueTransformer</span> <span class="nl">reversibleTransformerWithForwardBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="n">values</span><span class="p">)</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">conditionDescriptionJSONTransformer</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">MTLValueTransformer</span> <span class="nl">reversibleTransformerWithForwardBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="n">values</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="n">values</span> <span class="n">firstObject</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span> <span class="nl">reverseBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="err">@</span><span class="p">[</span><span class="n">str</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span> <span class="nl">reverseBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="l">@[</span><span class="n">str</span><span class="l">]</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}];</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">conditionJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">self</span> <span class="n">conditionDescriptionJSONTransformer</span><span class="p">];</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">conditionJSONTransformer</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">conditionDescriptionJSONTransformer</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">iconJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">self</span> <span class="n">conditionDescriptionJSONTransformer</span><span class="p">];</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">iconJSONTransformer</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">conditionDescriptionJSONTransformer</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1138,11 +1133,11 @@ $(document).ready(function(event) {
 <span class='line-number'>9</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#define MPS_TO_MPH 2.23694f</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">windSpeedJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">MTLValueTransformer</span> <span class="nl">reversibleTransformerWithForwardBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="n">num</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="err">@</span><span class="p">(</span><span class="n">num</span><span class="p">.</span><span class="n">floatValue</span><span class="o">*</span><span class="n">MPS_TO_MPH</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="nl">reverseBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="n">speed</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="err">@</span><span class="p">(</span><span class="n">speed</span><span class="p">.</span><span class="n">floatValue</span><span class="o">/</span><span class="n">MPS_TO_MPH</span><span class="p">);</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">windSpeedJSONTransformer</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">MTLValueTransformer</span> <span class="nl">reversibleTransformerWithForwardBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSNumber</span> <span class="o">*</span><span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="l">@(</span><span class="n">num</span><span class="p">.</span><span class="n">floatValue</span><span class="o">*</span><span class="n">MPS_TO_MPH</span><span class="l">)</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="nl">reverseBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSNumber</span> <span class="o">*</span><span class="n">speed</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="l">@(</span><span class="n">speed</span><span class="p">.</span><span class="n">floatValue</span><span class="o">/</span><span class="n">MPS_TO_MPH</span><span class="l">)</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}];</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1208,9 +1203,9 @@ $(document).ready(function(event) {
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">JSONKeyPathsByPropertyKey</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">JSONKeyPathsByPropertyKey</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="n">paths</span> <span class="o">=</span> <span class="p">[[</span><span class="n">super</span> <span class="n">JSONKeyPathsByPropertyKey</span><span class="p">]</span> <span class="n">mutableCopy</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSMutableDictionary</span> <span class="o">*</span><span class="n">paths</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">super</span> <span class="n">JSONKeyPathsByPropertyKey</span><span class="p">]</span> <span class="n">mutableCopy</span><span class="p">];</span>
 </span><span class='line'>    <span class="c1">// 2</span>
 </span><span class='line'>    <span class="n">paths</span><span class="p">[</span><span class="s">@&quot;tempHigh&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">@&quot;temp.max&quot;</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">paths</span><span class="p">[</span><span class="s">@&quot;tempLow&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">@&quot;temp.min&quot;</span><span class="p">;</span>
@@ -1253,14 +1248,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-02-11T22:21:53+08:00" pubdate data-updated="true">Feb 11<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-02-11T22:21:53+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:21 pm</span></time>
       
 
 <span class="categories">

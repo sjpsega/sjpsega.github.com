@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>Blog Archive - sjpsega's Blog</title>
@@ -15,13 +15,15 @@ Apr 27 2015 posted in life 重置 iOS UIWebView 的缩放
 Mar 25 2015 posted in &hellip;">
   
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me/blog/archives">
+  <link rel="canonical" href="http://sjpsega.me/blog/archives/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -34,18 +36,18 @@ Mar 25 2015 posted in &hellip;">
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -62,7 +64,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>

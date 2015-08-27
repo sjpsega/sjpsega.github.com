@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>sjpsega's Blog</title>
@@ -12,13 +12,15 @@
   <meta name="description" content="起因 一个简单的需求：为了减少网络请求，一些前端资源会做本地缓存；使用 WebView 访问页面的时候，拦截特定请求，使得特定请求直接加载本地资源。 但是做的过程中发现，当请求的资源为自定义协议的时候，比如加载的 url 为 abc://xxx.com/xx.js 的时候，系统会强制对该资源做缓存 &hellip;">
   
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me">
+  <link rel="canonical" href="http://sjpsega.me/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -31,18 +33,18 @@
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -59,7 +61,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -92,14 +94,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2015-06-15T22:56:31+08:00" pubdate data-updated="true">Jun 15<span>th</span>, 2015</time>
+<time class='entry-date' datetime='2015-06-15T22:56:31+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:56 pm</span></time>
         
       </p>
     
@@ -145,21 +140,21 @@ $(document).ready(function(event) {
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//原请求</span>
-</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">requestURLString</span> <span class="o">=</span> <span class="s">@&quot;abc://xxx.com/xx.js&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">requestURLString</span> <span class="o">=</span> <span class="s">@&quot;abc://xxx.com/xx.js&quot;</span><span class="p">;</span>
 </span><span class='line'><span class="c1">//根据原请求获得的 data 数据</span>
-</span><span class='line'><span class="n">NSData</span> <span class="o">*</span><span class="n">abcData</span> <span class="o">=</span> <span class="p">...</span>
+</span><span class='line'><span class="bp">NSData</span> <span class="o">*</span><span class="n">abcData</span> <span class="o">=</span> <span class="p">...</span>
 </span><span class='line'><span class="c1">//将原请求的自定义协议改成 http</span>
-</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">changeURLString</span> <span class="o">=</span> <span class="s">@&quot;http://xxx.com/xx.js&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">changeURLString</span> <span class="o">=</span> <span class="s">@&quot;http://xxx.com/xx.js&quot;</span><span class="p">;</span>
 </span><span class='line'><span class="c1">//创建 response</span>
-</span><span class='line'><span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="n">changeURLString</span><span class="p">];</span>
-</span><span class='line'><span class="n">NSURLResponse</span><span class="o">*</span> <span class="n">response</span> <span class="o">=</span>
-</span><span class='line'><span class="p">[[</span><span class="n">NSURLResponse</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">url</span>
-</span><span class='line'>                          <span class="nl">MIMEType:</span><span class="s">@&quot;application/x-javascript&quot;</span>
-</span><span class='line'>             <span class="nl">expectedContentLength:</span><span class="n">abcData</span><span class="p">.</span><span class="n">length</span>
-</span><span class='line'>                  <span class="nl">textEncodingName:</span><span class="s">@&quot;UTF-8&quot;</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="n">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol:</span><span class="n">self</span> <span class="nl">didReceiveResponse:</span><span class="n">response</span> <span class="nl">cacheStoragePolicy:</span><span class="n">NSURLCacheStorageNotAllowed</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="n">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol:</span><span class="n">self</span> <span class="nl">didLoadData:</span><span class="n">abcData</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="n">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocolDidFinishLoading:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'><span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">changeURLString</span><span class="p">];</span>
+</span><span class='line'><span class="bp">NSURLResponse</span><span class="o">*</span> <span class="n">response</span> <span class="o">=</span>
+</span><span class='line'><span class="p">[[</span><span class="bp">NSURLResponse</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL</span><span class="p">:</span><span class="n">url</span>
+</span><span class='line'>                          <span class="nl">MIMEType</span><span class="p">:</span><span class="s">@&quot;application/x-javascript&quot;</span>
+</span><span class='line'>             <span class="nl">expectedContentLength</span><span class="p">:</span><span class="n">abcData</span><span class="p">.</span><span class="n">length</span>
+</span><span class='line'>                  <span class="nl">textEncodingName</span><span class="p">:</span><span class="s">@&quot;UTF-8&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didReceiveResponse</span><span class="p">:</span><span class="n">response</span> <span class="nl">cacheStoragePolicy</span><span class="p">:</span><span class="n">NSURLCacheStorageNotAllowed</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didLoadData</span><span class="p">:</span><span class="n">abcData</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocolDidFinishLoading</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -175,8 +170,8 @@ $(document).ready(function(event) {
 
 <ul>
 <li>使用 [[NSURLCache sharedURLCache] removeAllCachedResponses] 清理缓存</li>
-<li>重写了 NSURLCache 的 &ndash; (NSCachedURLResponse <em>)cachedResponseForRequest:(NSURLRequest </em>)request 方法，不返回 response 对象</li>
-<li>自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 &ndash; (NSCachedURLResponse <em>)connection:(NSURLConnection </em>)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。</li>
+<li>重写了 NSURLCache 的 - (NSCachedURLResponse <em>)cachedResponseForRequest:(NSURLRequest </em>)request 方法，不返回 response 对象</li>
+<li>自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 - (NSCachedURLResponse <em>)connection:(NSURLConnection </em>)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。</li>
 </ul>
 
 
@@ -210,14 +205,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2015-04-27T01:41:49+08:00" pubdate data-updated="true">Apr 27<span>th</span>, 2015</time>
+<time class='entry-date' datetime='2015-04-27T01:41:49+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:41 am</span></time>
         
       </p>
     
@@ -246,7 +234,7 @@ $(document).ready(function(event) {
 
 <h3>day 1</h3>
 
-<p>第二天的路线是：国父纪念馆 &ndash;> 101大厦 &ndash;> 士林夜市 &ndash;> 福华大酒店
+<p>第二天的路线是：国父纪念馆 -> 101大厦 -> 士林夜市 -> 福华大酒店
 我们从桃园机场着陆，到达宝岛台湾，坐车很快就到了台北，台湾的城市比较小，从一个城市开车很快就到另一个城市了，在大陆是不可想象的。</p>
 
 <ul>
@@ -259,7 +247,7 @@ $(document).ready(function(event) {
 
 <h3>day 2</h3>
 
-<p>第二天的路线是：士林官邸 &ndash;> 台北故宫博物馆 &ndash;> 维格饼屋 &ndash;> 日月潭大酒店</p>
+<p>第二天的路线是：士林官邸 -> 台北故宫博物馆 -> 维格饼屋 -> 日月潭大酒店</p>
 
 <ul>
 <li>士林官邸是老蒋的住处，地方很大，环境优美，有教堂，有花园，是个养人的好地方。</li>
@@ -274,7 +262,7 @@ $(document).ready(function(event) {
 
 <h3>day 3</h3>
 
-<p>第三天的行程：日月潭 &ndash;> 九族文化村 &ndash;> 钰通大饭店</p>
+<p>第三天的行程：日月潭 -> 九族文化村 -> 钰通大饭店</p>
 
 <ul>
 <li>日月潭蛮大的，湖水是湛蓝的，水深达700余米，感觉像云南的洱海，天蓝水蓝，浑然一体。早上一团人坐游艇在日月潭里兜了一圈，游览了玄光寺。值得一说的是，玄光寺这里买的凤梨是本次在台湾吃到的最好吃的，很甜。</li>
@@ -285,7 +273,7 @@ $(document).ready(function(event) {
 
 <h3>day 4</h3>
 
-<p>第四天的行程：阿里山 &ndash;> yuyupas 邹族文化园区 &ndash;> 高雄85大楼君鸿大酒店 &ndash;> 六合夜市</p>
+<p>第四天的行程：阿里山 -> yuyupas 邹族文化园区 -> 高雄85大楼君鸿大酒店 -> 六合夜市</p>
 
 <ul>
 <li>早晨早早起床，6点半出发前往阿里山，看了阿里山神木。因为是跟团游，大巴上山，大巴下山，少了爬山的感觉，对阿里山的感觉一般，再加上大陆的名山大川很多。</li>
@@ -297,11 +285,11 @@ $(document).ready(function(event) {
 
 <h3>day 5</h3>
 
-<p>第五天的行程：旗津海岸公园 &ndash;> 猫鼻头公园 &ndash;> 恒春渔港吃海鲜 &ndash;> 关山看日落 &ndash;> 福华度假酒店 &ndash;> 垦丁大街</p>
+<p>第五天的行程：旗津海岸公园 -> 猫鼻头公园 -> 恒春渔港吃海鲜 -> 关山看日落 -> 福华度假酒店 -> 垦丁大街</p>
 
 <ul>
 <li>早上轮渡到旗津看海，因为天气有点燥热，加上没随身带凉鞋，拍了拍照就走了。看了一间庙宇，在旁边的一间冰铺吃了好吃的芒果刨冰。</li>
-<li>坐车来到台湾岛南端 &ndash; 垦丁，一路上看到好多凤梨、香蕉树，在猫鼻头公园看了天蓝海蓝的美景。</li>
+<li>坐车来到台湾岛南端 - 垦丁，一路上看到好多凤梨、香蕉树，在猫鼻头公园看了天蓝海蓝的美景。</li>
 <li>来到恒春的一个小渔港吃海鲜，因为这里来吃的不仅有游客，还有台湾本地人，所以价格还不错；特别是生鱼片，100新台币有近20片，但是我对生鱼片无爱啊&hellip;在这里吃了两个打海鲜，共花了2500新台币，是在台湾最奢侈的一餐了。</li>
 <li>吃完海鲜，5点前往关山看日落。在天蓝海蓝的地方看日落真美。</li>
 <li>晚上入住福华度假酒店，酒店里的土著木雕、椅子等，很特别。</li>
@@ -311,7 +299,7 @@ $(document).ready(function(event) {
 
 <h3>day 6</h3>
 
-<p>第五天的行程：台湾最南点 &ndash;> 龙磐公园 &ndash;> 恒春古城 &ndash;> 高雄国际机场</p>
+<p>第五天的行程：台湾最南点 -> 龙磐公园 -> 恒春古城 -> 高雄国际机场</p>
 
 <ul>
 <li>在台湾岛最南端，走过一处幽静的小路，看到最南端的标志建筑。</li>
@@ -346,14 +334,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2015-03-25T14:01:19+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2015</time>
+<time class='entry-date' datetime='2015-03-25T14:01:19+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>2:01 pm</span></time>
         
       </p>
     
@@ -393,9 +374,9 @@ $(document).ready(function(event) {
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="p">);</span>
 </span><span class='line'><span class="cp">#undef QUOTE</span>
-</span><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString:</span><span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithUTF8String:</span><span class="n">webViewHeightJSString</span><span class="p">]];</span>
+</span><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString</span><span class="p">:[</span><span class="bp">NSString</span> <span class="nl">stringWithUTF8String</span><span class="p">:</span><span class="n">webViewHeightJSString</span><span class="p">]];</span>
 </span><span class='line'><span class="c1">//设置 webView zoomScale 为 1.0，且必须设置animated为YES</span>
-</span><span class='line'><span class="p">[</span><span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span> <span class="nl">setZoomScale:</span><span class="mf">1.0</span> <span class="nl">animated:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span> <span class="nl">setZoomScale</span><span class="p">:</span><span class="mf">1.0</span> <span class="nl">animated</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -421,14 +402,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2015-02-19T01:09:20+08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2015</time>
+<time class='entry-date' datetime='2015-02-19T01:09:20+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:09 am</span></time>
         
       </p>
     
@@ -481,14 +455,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-09-17T22:36:40+08:00" pubdate data-updated="true">Sep 17<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-09-17T22:36:40+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:36 pm</span></time>
         
       </p>
     
@@ -504,7 +471,7 @@ $(document).ready(function(event) {
 <p>以替换 NSArray 的 lastObject 方法为例：</p>
 
 <ul>
-<li>在 NSArray 中添加需要替换 lastObject 的方法 &ndash; xxx_lastObject方法：</li>
+<li>在 NSArray 中添加需要替换 lastObject 的方法 - xxx_lastObject方法：</li>
 </ul>
 
 
@@ -521,11 +488,11 @@ $(document).ready(function(event) {
 <span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;  </span>
 </span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">NSArray</span> <span class="nl">(Swizzle)</span>
+</span><span class='line'><span class="k">@implementation</span> <span class="bp">NSArray</span> <span class="nl">(Swizzle)</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">xxx_lastObject</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">xxx_lastObject</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">id</span> <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">xxx_lastObject</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">id</span> <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">xxx_lastObject</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;**********  myLastObject ***********&quot;</span><span class="p">);</span>
 </span><span class='line'>    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
@@ -549,8 +516,8 @@ $(document).ready(function(event) {
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;  </span>
 </span><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
-</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
 </span><span class='line'><span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">ori_Method</span><span class="p">,</span> <span class="n">my_Method</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -573,8 +540,8 @@ $(document).ready(function(event) {
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;</span>
 </span><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">NSArray</span> <span class="o">*</span><span class="n">array</span> <span class="o">=</span> <span class="err">@</span><span class="p">[</span><span class="s">@&quot;0&quot;</span><span class="p">,</span><span class="s">@&quot;1&quot;</span><span class="p">,</span><span class="s">@&quot;2&quot;</span><span class="p">,</span><span class="s">@&quot;3&quot;</span><span class="p">];</span>
-</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span> <span class="n">lastObject</span><span class="p">];</span>
+</span><span class='line'><span class="bp">NSArray</span> <span class="o">*</span><span class="n">array</span> <span class="o">=</span> <span class="l">@[</span><span class="s">@&quot;0&quot;</span><span class="p">,</span><span class="s">@&quot;1&quot;</span><span class="p">,</span><span class="s">@&quot;2&quot;</span><span class="p">,</span><span class="s">@&quot;3&quot;</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span> <span class="n">lastObject</span><span class="p">];</span>
 </span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;TEST RESULT : %@&quot;</span><span class="p">,</span><span class="n">string</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -584,7 +551,7 @@ $(document).ready(function(event) {
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">**********</span>  <span class="n">myLastObject</span> <span class="o">***********</span>
-</span><span class='line'><span class="n">TEST</span> <span class="n">RESULT</span> <span class="o">:</span> <span class="mi">3</span>
+</span><span class='line'><span class="n">TEST</span> <span class="nl">RESULT</span> <span class="p">:</span> <span class="mi">3</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -616,16 +583,16 @@ $(document).ready(function(event) {
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//向类中添加Method</span>
-</span><span class='line'><span class="kt">BOOL</span> <span class="nf">class_addMethod</span><span class="p">(</span><span class="n">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="n">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
+</span><span class='line'><span class="kt">BOOL</span> <span class="nf">class_addMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="kt">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">//修改类的Method</span>
-</span><span class='line'><span class="n">IMP</span> <span class="n">class_replaceMethod</span><span class="p">(</span><span class="n">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="n">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
+</span><span class='line'><span class="kt">IMP</span> <span class="n">class_replaceMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="kt">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">//交换2个方法中的IMP</span>
 </span><span class='line'><span class="kt">void</span> <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">Method</span> <span class="n">m1</span><span class="p">,</span> <span class="n">Method</span> <span class="n">m2</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">//获取类的某个实例方法</span>
-</span><span class='line'><span class="n">Method</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="n">Class</span> <span class="n">aClass</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">aSelector</span><span class="p">);</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">aClass</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">aSelector</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -641,7 +608,7 @@ $(document).ready(function(event) {
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">struct</span> <span class="n">objc_method</span>
 </span><span class='line'>   <span class="kt">SEL</span> <span class="n">method_name</span>         <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
 </span><span class='line'>   <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span>      <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
-</span><span class='line'>   <span class="n">IMP</span> <span class="n">method_imp</span>          <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+</span><span class='line'>   <span class="kt">IMP</span> <span class="n">method_imp</span>          <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -675,14 +642,14 @@ $(document).ready(function(event) {
 <span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">lastObject</span> <span class="p">{</span>
 </span><span class='line'>      <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">)</span>
-</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="err">@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值void, 参数id(self)，selector(_cmd)</span>
-</span><span class='line'>      <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
+</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="p">@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值void, 参数id(self)，selector(_cmd)</span>
+</span><span class='line'>      <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">Method</span> <span class="n">xxx_lastObject</span> <span class="p">{</span>
 </span><span class='line'>       <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">swizzle_originalMethodName</span><span class="p">)</span>
-</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="err">@</span><span class="o">:</span><span class="err">”</span>
-</span><span class='line'>       <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
+</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="p">@</span><span class="o">:</span><span class="err">”</span>
+</span><span class='line'>       <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -695,8 +662,8 @@ $(document).ready(function(event) {
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
-</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
 </span><span class='line'><span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">ori_Method</span><span class="p">,</span> <span class="n">my_Method</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -719,14 +686,14 @@ $(document).ready(function(event) {
 <span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">lastObject</span> <span class="p">{</span>
 </span><span class='line'>      <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">)</span>
-</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“@@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值id, 参数id(self)，selector(_cmd)</span>
-</span><span class='line'>      <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
+</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="p">@@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值id, 参数id(self)，selector(_cmd)</span>
+</span><span class='line'>      <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">Method</span> <span class="n">xxx_lastObject</span> <span class="p">{</span>
 </span><span class='line'>       <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">swizzle_originalMethodName</span><span class="p">)</span>
-</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“@@</span><span class="o">:</span><span class="err">”</span>
-</span><span class='line'>       <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
+</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="p">@@</span><span class="o">:</span><span class="err">”</span>
+</span><span class='line'>       <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -785,14 +752,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-08-06T17:47:30+08:00" pubdate data-updated="true">Aug 6<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-08-06T17:47:30+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:47 pm</span></time>
         
       </p>
     
@@ -882,14 +842,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-08-02T15:01:40+08:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2014</time>
+<time class='entry-date' datetime='2014-08-02T15:01:40+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:01 pm</span></time>
         
       </p>
     
@@ -964,14 +917,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-07-06T17:15:53+08:00" pubdate data-updated="true">Jul 6<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-07-06T17:15:53+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:15 pm</span></time>
         
       </p>
     
@@ -1037,11 +983,11 @@ $(document).ready(function(event) {
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setContentOffset:</span><span class="p">(</span><span class="n">CGPoint</span><span class="p">)</span><span class="nv">offset</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setContentOffset:</span><span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nv">offset</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">CGRect</span> <span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">bounds</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">CGRect</span> <span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">bounds</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">bounds</span><span class="p">.</span><span class="n">origin</span> <span class="o">=</span> <span class="n">offset</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">setBounds:</span><span class="n">bounds</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="nl">setBounds</span><span class="p">:</span><span class="n">bounds</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1228,7 +1174,7 @@ $(document).ready(function(event) {
 <p>自定义视图中：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">sendActionsForControlEvents:</span><span class="n">UIControlEventValueChanged</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="nb">self</span> <span class="nl">sendActionsForControlEvents</span><span class="p">:</span><span class="n">UIControlEventValueChanged</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1245,16 +1191,16 @@ $(document).ready(function(event) {
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="nl">addTarget:</span><span class="n">self</span>
-</span><span class='line'>                  <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">updateSelection:</span><span class="p">)</span>
-</span><span class='line'>        <span class="nl">forControlEvents:</span><span class="n">UIControlEventValueChanged</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span>
+</span><span class='line'>                  <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">updateSelection</span><span class="p">:)</span>
+</span><span class='line'>        <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventValueChanged</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">updateSelection:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">updateSelection:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">selectedSector</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">selectedSector</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1268,7 +1214,7 @@ $(document).ready(function(event) {
 <p>自定义视图中：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">delegate</span> <span class="nl">pieChart:</span><span class="n">self</span> <span class="nl">didSelectSector:</span><span class="n">self</span><span class="p">.</span><span class="n">selectedSector</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">delegate</span> <span class="nl">pieChart</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didSelectSector</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">selectedSector</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1293,10 +1239,10 @@ $(document).ready(function(event) {
 </span><span class='line'>
 </span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">setupPieChart</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">pieChart:</span><span class="p">(</span><span class="n">PieChart</span><span class="o">*</span><span class="p">)</span><span class="n">pieChart</span> <span class="nl">didSelectSector:</span><span class="p">(</span><span class="n">PieChartSector</span><span class="o">*</span><span class="p">)</span><span class="n">sector</span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">pieChart</span><span class="p">:(</span><span class="n">PieChart</span><span class="o">*</span><span class="p">)</span><span class="n">pieChart</span> <span class="nl">didSelectSector</span><span class="p">:(</span><span class="n">PieChartSector</span><span class="o">*</span><span class="p">)</span><span class="n">sector</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="c1">// 处理区块</span>
 </span><span class='line'><span class="p">}</span>
@@ -1314,9 +1260,9 @@ $(document).ready(function(event) {
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">PieChart</span> : <span class="nc">UIControl</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">PieChart</span> : <span class="bp">UIControl</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span><span class="n">copy</span><span class="p">)</span> <span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="n">selectionHandler</span><span class="p">)(</span><span class="n">PieChartSection</span><span class="o">*</span> <span class="n">selectedSection</span><span class="p">);</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span><span class="k">copy</span><span class="p">)</span> <span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="n">selectionHandler</span><span class="p">)(</span><span class="n">PieChartSection</span><span class="o">*</span> <span class="n">selectedSection</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">@end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1330,9 +1276,9 @@ $(document).ready(function(event) {
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">selectionHandler</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">PieChartSection</span><span class="o">*</span> <span class="n">section</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">selectionHandler</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">PieChartSection</span><span class="o">*</span> <span class="n">section</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">// 处理区块</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
@@ -1346,7 +1292,7 @@ $(document).ready(function(event) {
 <p>编写代码:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">selectedSegment</span> <span class="o">=</span> <span class="n">theNewSelectedSegment</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">selectedSegment</span> <span class="o">=</span> <span class="n">theNewSelectedSegment</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1363,14 +1309,14 @@ $(document).ready(function(event) {
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="nl">addObserver:</span><span class="n">self</span> <span class="nl">forKeyPath:</span><span class="s">@&quot;selectedSegment&quot;</span> <span class="nl">options:</span><span class="mi">0</span> <span class="nl">context:</span><span class="nb">NULL</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="nl">addObserver</span><span class="p">:</span><span class="nb">self</span> <span class="nl">forKeyPath</span><span class="p">:</span><span class="s">@&quot;selectedSegment&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">context</span><span class="p">:</span><span class="nb">NULL</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">observeValueForKeyPath:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyPath</span> <span class="nf">ofObject:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">object</span> <span class="nf">change:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">change</span> <span class="nf">context:</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">observeValueForKeyPath:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyPath</span> <span class="nf">ofObject:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">object</span> <span class="nf">change:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">change</span> <span class="nf">context:</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">object</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">keyPath</span> <span class="nl">isEqualToString:</span><span class="s">@&quot;selectedSegment&quot;</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">object</span> <span class="o">==</span> <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">keyPath</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="s">@&quot;selectedSegment&quot;</span><span class="p">])</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">// 处理改变</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
@@ -1382,7 +1328,7 @@ $(document).ready(function(event) {
 <p>视图头文件中：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">extern</span> <span class="n">NSString</span><span class="o">*</span> <span class="k">const</span> <span class="n">SelectedSegmentChangedNotification</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">extern</span> <span class="bp">NSString</span><span class="o">*</span> <span class="k">const</span> <span class="n">SelectedSegmentChangedNotification</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1396,13 +1342,13 @@ $(document).ready(function(event) {
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSString</span><span class="o">*</span> <span class="k">const</span> <span class="n">SelectedSegmentChangedNotification</span> <span class="o">=</span> <span class="s">@&quot;selectedSegmentChangedNotification&quot;</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSString</span><span class="o">*</span> <span class="k">const</span> <span class="n">SelectedSegmentChangedNotification</span> <span class="o">=</span> <span class="s">@&quot;selectedSegmentChangedNotification&quot;</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">...</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">notifyAboutChanges</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">postNotificationName:</span><span class="n">SelectedSegmentChangedNotification</span> <span class="nl">object:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[[</span><span class="bp">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">postNotificationName</span><span class="p">:</span><span class="n">SelectedSegmentChangedNotification</span> <span class="nl">object</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1423,18 +1369,18 @@ $(document).ready(function(event) {
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">addObserver:</span><span class="n">self</span>
-</span><span class='line'>                                       <span class="nl">selector:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">segmentChanged:</span><span class="p">)</span>
-</span><span class='line'>                                           <span class="nl">name:</span><span class="n">SelectedSegmentChangedNotification</span>
-</span><span class='line'>                                          <span class="nl">object:</span><span class="n">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[[</span><span class="bp">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">addObserver</span><span class="p">:</span><span class="nb">self</span>
+</span><span class='line'>                                       <span class="nl">selector</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">segmentChanged</span><span class="p">:)</span>
+</span><span class='line'>                                           <span class="nl">name</span><span class="p">:</span><span class="n">SelectedSegmentChangedNotification</span>
+</span><span class='line'>                                          <span class="nl">object</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">...</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">segmentChanged:</span><span class="p">(</span><span class="n">NSNotification</span><span class="o">*</span><span class="p">)</span><span class="nv">note</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">segmentChanged:</span><span class="p">(</span><span class="bp">NSNotification</span><span class="o">*</span><span class="p">)</span><span class="nv">note</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1474,14 +1420,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-07-05T00:35:42+08:00" pubdate data-updated="true">Jul 5<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-07-05T00:35:42+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:35 am</span></time>
         
       </p>
     
@@ -1509,7 +1448,7 @@ $(document).ready(function(event) {
 
 <h2>RMB玩家</h2>
 
-<p>玩的第二天就决定充值了，一下子就进入了RBM玩家的行列，主要是入门门槛非常低，<code>25元的月卡</code> &ndash; 300钻 + 每天领120钻，感觉超值，就立马付款了，还升级到了VIP3，给人的感觉很舒服。</p>
+<p>玩的第二天就决定充值了，一下子就进入了RBM玩家的行列，主要是入门门槛非常低，<code>25元的月卡</code> - 300钻 + 每天领120钻，感觉超值，就立马付款了，还升级到了VIP3，给人的感觉很舒服。</p>
 
 <p>上周日，因为揶揄V10的两次远征（金钱的主要来源，获得英雄卡牌的好途径），再加上每天买6次体力（与升级有关，打装备），钻石渐渐不够了，就一狠心充了钱，累计充值达到1000，达到了V10。</p>
 
@@ -1529,7 +1468,7 @@ $(document).ready(function(event) {
 <p>玩了一段时间，对游戏有点感觉了，也有点心得，感觉卡牌类游戏，归根结底，还是养成类游戏。在《刀塔传奇》游戏中，卡牌升级有两个纬度：</p>
 
 <ul>
-<li>卡牌颜色，按照 白 &ndash;> 黄 &ndash;> 蓝 &ndash;> 紫 &ndash;> 橙 进阶。需要升级卡片等级，穿必须装备，进行升级。这个升阶相对星级，较为容易，只有少数装备比较难刷。</li>
+<li>卡牌颜色，按照 白 -> 黄 -> 蓝 -> 紫 -> 橙 进阶。需要升级卡片等级，穿必须装备，进行升级。这个升阶相对星级，较为容易，只有少数装备比较难刷。</li>
 <li>卡牌星级，从一星到五星升级，需要收集对应英雄的灵魂石碎片来升级。一星到五星分别需要，10，20、50、100、150个灵魂石，共330个灵魂石。这个比较难，超级耗时间。假设每天拿到1个灵魂石，那就需要330天，才能把英雄从一星练到五星，也就是说需要一年啊。</li>
 </ul>
 
@@ -1608,7 +1547,7 @@ $(document).ready(function(event) {
 
 <ul>
 <li>坑爹的帐号体系，iOS与android的帐号不互通，在iPhone手机上玩的帐号，在android手机上不能登录……</li>
-<li>PVP系统薄弱，目前唯一的PVP系统 &ndash; 竞技场，只能进行自动战斗，缺少了一定的可操作性</li>
+<li>PVP系统薄弱，目前唯一的PVP系统 - 竞技场，只能进行自动战斗，缺少了一定的可操作性</li>
 <li>奇怪的开服策略，目前开服务器非常快，我是App76区的，现在已经开到了125区……因为游戏中的竞技场系统和工会系统，老服务器的新玩家很难立足，所以，大多新玩家都回去新服务器玩；如果玩家想新开帐号，也会优先选择新服务器，这就导致老服务器端人越来越少，工会招不到人，交流的乐趣少了，也容易让人放弃，这是种恶性循环。</li>
 </ul>
 
@@ -1637,14 +1576,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-06-25T00:50:28+08:00" pubdate data-updated="true">Jun 25<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-06-25T00:50:28+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:50 am</span></time>
         
       </p>
     
@@ -1672,10 +1604,10 @@ $(document).ready(function(event) {
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// Won&#39;t work:</span>
-</span><span class='line'><span class="k">@property</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">newTitle</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">newTitle</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// Works:</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">getter</span><span class="o">=</span><span class="n">theNewTitle</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">newTitle</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">getter</span><span class="o">=</span><span class="n">theNewTitle</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">newTitle</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1710,10 +1642,10 @@ $(document).ready(function(event) {
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="n">__block</span> <span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__block</span> <span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
 </span><span class='line'><span class="c1">// ...</span>
-</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="n">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">myController</span> <span class="nl">dismissViewControllerAnimated:</span><span class="n">YES</span> <span class="nl">completion:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">myController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">myController</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
 </span><span class='line'><span class="p">};</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -1732,9 +1664,9 @@ $(document).ready(function(event) {
 <span class='line-number'>6</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span><span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
 </span><span class='line'><span class="c1">// ...</span>
-</span><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="n">__weak</span> <span class="n">weakMyViewController</span> <span class="o">=</span> <span class="n">myController</span><span class="p">;</span>
-</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="n">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">weakMyViewController</span> <span class="nl">dismissViewControllerAnimated:</span><span class="n">YES</span> <span class="nl">completion:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__weak</span> <span class="n">weakMyViewController</span> <span class="o">=</span> <span class="n">myController</span><span class="p">;</span>
+</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">weakMyViewController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
 </span><span class='line'><span class="p">};</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -1760,12 +1692,12 @@ $(document).ready(function(event) {
 <span class='line-number'>14</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span><span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
 </span><span class='line'><span class="c1">// ...</span>
-</span><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="n">__weak</span> <span class="n">weakMyController</span> <span class="o">=</span> <span class="n">myController</span><span class="p">;</span>
-</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="n">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__weak</span> <span class="n">weakMyController</span> <span class="o">=</span> <span class="n">myController</span><span class="p">;</span>
+</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>    <span class="n">MyViewController</span> <span class="o">*</span><span class="n">strongMyController</span> <span class="o">=</span> <span class="n">weakMyController</span><span class="p">;</span>
 </span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">strongMyController</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">// ...</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">strongMyController</span> <span class="nl">dismissViewControllerAnimated:</span><span class="n">YES</span> <span class="nl">completion:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">strongMyController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
 </span><span class='line'>        <span class="c1">// ...</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="k">else</span> <span class="p">{</span>
@@ -1789,7 +1721,7 @@ $(document).ready(function(event) {
   
   <div class="pagination">
     
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
+      <a class="prev" href="/posts/2">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2015-08-27T20:07:39+08:00</updated>
+  <updated>2015-08-27T21:53:14+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -39,27 +39,24 @@
 <h3>方法二：创建自定义 NSURLProtocol，拦截请求，并且在创建 response 时，修改自定义协议为 http 或 https</h3>
 
 <p>伪代码如下：
-```objc
+<code>objc
 //原请求
-NSString <em>requestURLString = @&ldquo;abc://xxx.com/xx.js&rdquo;;
+NSString *requestURLString = @"abc://xxx.com/xx.js";
 //根据原请求获得的 data 数据
-NSData </em>abcData = &hellip;
+NSData *abcData = ...
 //将原请求的自定义协议改成 http
-NSString <em>changeURLString = @&ldquo;<a href="http://xxx.com/xx.js">http://xxx.com/xx.js</a>&rdquo;;
+NSString *changeURLString = @"http://xxx.com/xx.js";
 //创建 response
-NSURL </em>url = [NSURL URLWithString:changeURLString];
+NSURL *url = [NSURL URLWithString:changeURLString];
 NSURLResponse* response =
-[[NSURLResponse alloc] initWithURL:url</p>
-
-<pre><code>                      MIMEType:@"application/x-javascript"
-         expectedContentLength:abcData.length
-              textEncodingName:@"UTF-8"];
-</code></pre>
-
-<p>[[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
+[[NSURLResponse alloc] initWithURL:url
+                          MIMEType:@"application/x-javascript"
+             expectedContentLength:abcData.length
+                  textEncodingName:@"UTF-8"];
+[[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
 [[self client] URLProtocol:self didLoadData:abcData];
 [[self client] URLProtocolDidFinishLoading:self];
-```</p>
+</code></p>
 
 <p>本来结合方法一的解决方式，创建 response 的时候，在 url 后加上随机字符串，但是经过试验，该方案<code>无效</code>，缓存始终存在。</p>
 
@@ -73,8 +70,8 @@ NSURLResponse* response =
 
 <ul>
 <li>使用 [[NSURLCache sharedURLCache] removeAllCachedResponses] 清理缓存</li>
-<li>重写了 NSURLCache 的 &ndash; (NSCachedURLResponse <em>)cachedResponseForRequest:(NSURLRequest </em>)request 方法，不返回 response 对象</li>
-<li>自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 &ndash; (NSCachedURLResponse <em>)connection:(NSURLConnection </em>)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。</li>
+<li>重写了 NSURLCache 的 - (NSCachedURLResponse <em>)cachedResponseForRequest:(NSURLRequest </em>)request 方法，不返回 response 对象</li>
+<li>自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 - (NSCachedURLResponse <em>)connection:(NSURLConnection </em>)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。</li>
 </ul>
 
 
@@ -107,24 +104,19 @@ NSURLResponse* response =
 
 <p>经过不断尝试，发现以下方式是有效果的：</p>
 
-<p>```objc
-//重置 webView 的 html viewport 属性，变成不可缩放，并且缩放比例为1.0，并执行javaScript</p>
-
-<h1>define QUOTE(&hellip;) #<strong>VA_ARGS</strong></h1>
-
-<p>const char *webViewHeightJSString = QUOTE(
-var viewportmeta = document.querySelector(&lsquo;meta[name=&ldquo;viewport&rdquo;]&rsquo;);
+<pre><code class="objc">//重置 webView 的 html viewport 属性，变成不可缩放，并且缩放比例为1.0，并执行javaScript
+#define QUOTE(...) #__VA_ARGS__
+const char *webViewHeightJSString = QUOTE(
+var viewportmeta = document.querySelector('meta[name="viewport"]');
 if (viewportmeta) {
-viewportmeta.content = &lsquo;width=device-width, initial-scale=1.0,      minimum-scale=1.0, maximum-scale=1.0, user-scalable=no&rsquo;;
+viewportmeta.content = 'width=device-width, initial-scale=1.0,      minimum-scale=1.0, maximum-scale=1.0, user-scalable=no';
 }
-);</p>
-
-<h1>undef QUOTE</h1>
-
-<p>[webView stringByEvaluatingJavaScriptFromString:[NSString stringWithUTF8String:webViewHeightJSString]];
+);
+#undef QUOTE
+[webView stringByEvaluatingJavaScriptFromString:[NSString stringWithUTF8String:webViewHeightJSString]];
 //设置 webView zoomScale 为 1.0，且必须设置animated为YES
 [webView.scrollView setZoomScale:1.0 animated:YES];
-```</p>
+</code></pre>
 
 <p>此方法在iOS7、8上的 UIWebView 上测试通过，WKWebView 没有测试。</p>
 ]]></content>
@@ -144,27 +136,22 @@ viewportmeta.content = &lsquo;width=device-width, initial-scale=1.0,      minimu
 <p>以替换 NSArray 的 lastObject 方法为例：</p>
 
 <ul>
-<li>在 NSArray 中添加需要替换 lastObject 的方法 &ndash; xxx_lastObject方法：</li>
+<li>在 NSArray 中添加需要替换 lastObject 的方法 - xxx_lastObject方法：</li>
 </ul>
 
 
-<p>```objc</p>
+<pre><code class="objc">#import "NSArray+Swizzle.h"  
 
-<h1>import &ldquo;NSArray+Swizzle.h&rdquo;</h1>
+@implementation NSArray (Swizzle)  
 
-<p>@implementation NSArray (Swizzle)</p>
-
-<ul>
-<li>(id)xxx_lastObject<br/>
-{<br/>
-  id ret = [self xxx_lastObject];<br/>
-  NSLog(@&ldquo;<strong><strong><strong><strong><strong>  myLastObject </strong></strong></strong></strong></strong>*&rdquo;);<br/>
-  return ret;<br/>
-}<br/>
-@end<br/>
-```</li>
-</ul>
-
+- (id)xxx_lastObject  
+{  
+    id ret = [self xxx_lastObject];  
+    NSLog(@"**********  myLastObject ***********");  
+    return ret;  
+}  
+@end  
+</code></pre>
 
 <p>注意这里的写法，xxx_lastObject 方法的方法体中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。</p>
 
@@ -173,17 +160,15 @@ viewportmeta.content = &lsquo;width=device-width, initial-scale=1.0,      minimu
 </ul>
 
 
-<p>```objc</p>
+<pre><code class="objc">#import &lt;objc/runtime.h&gt;  
+#import "NSArray+Swizzle.h"
 
-<h1>import &lt;objc/runtime.h></h1>
+Method ori_Method =  class_getInstanceMethod([NSArray class], @selector(lastObject));  
+Method my_Method = class_getInstanceMethod([NSArray class], @selector(xxx_lastObject));  
+method_exchangeImplementations(ori_Method, my_Method);  
+</code></pre>
 
-<h1>import &ldquo;NSArray+Swizzle.h&rdquo;</h1>
-
-<p>Method ori_Method =  class_getInstanceMethod([NSArray class], @selector(lastObject));<br/>
-Method my_Method = class_getInstanceMethod([NSArray class], @selector(xxx_lastObject));<br/>
-method_exchangeImplementations(ori_Method, my_Method);<br/>
-<code>``
-注意这里需要引入</code>&lt;objc/runtime.h>`，否则会报错，因为使用了 runtime 中的 method_exchangeImplementations 方法。</p>
+<p>注意这里需要引入 <code>&lt;objc/runtime.h&gt;</code>，否则会报错，因为使用了 runtime 中的 method_exchangeImplementations 方法。</p>
 
 <p>使用 <code>method_exchangeImplementations</code> 交换了 xxx_lastObject 与 lastObject 的 IMP。后面会讲解更深层次的原理。</p>
 
@@ -192,23 +177,19 @@ method_exchangeImplementations(ori_Method, my_Method);<br/>
 </ul>
 
 
-<p>```objc</p>
+<pre><code class="objc">#import &lt;objc/runtime.h&gt;
+#import "NSArray+Swizzle.h"
 
-<h1>import &lt;objc/runtime.h></h1>
-
-<h1>import &ldquo;NSArray+Swizzle.h&rdquo;</h1>
-
-<p>NSArray <em>array = @[@&ldquo;0&rdquo;,@&ldquo;1&rdquo;,@&ldquo;2&rdquo;,@&ldquo;3&rdquo;];<br/>
-NSString </em>string = [array lastObject];<br/>
-NSLog(@&ldquo;TEST RESULT : %@&rdquo;,string);<br/>
-```</p>
+NSArray *array = @[@"0",@"1",@"2",@"3"];  
+NSString *string = [array lastObject];  
+NSLog(@"TEST RESULT : %@",string);  
+</code></pre>
 
 <p>输出结果为:</p>
 
-<p><code>objc
-**********  myLastObject ***********
+<pre><code class="objc">**********  myLastObject ***********
 TEST RESULT : 3
-</code></p>
+</code></pre>
 
 <p>很明显，这里调用 lastObject 方法，其实是调用了我们添加的 xxx_lastObject 方法。</p>
 
@@ -226,31 +207,29 @@ TEST RESULT : 3
 
 <p>相关常用方法，都在<code>&lt;objc/runtime.h&gt;</code>包内：</p>
 
-<p>```objc
-//向类中添加Method
-BOOL class_addMethod(Class cls, SEL name, IMP imp, const char *types)</p>
+<pre><code class="objc">//向类中添加Method
+BOOL class_addMethod(Class cls, SEL name, IMP imp, const char *types)
 
-<p>//修改类的Method
-IMP class_replaceMethod(Class cls, SEL name, IMP imp, const char *types)</p>
+//修改类的Method
+IMP class_replaceMethod(Class cls, SEL name, IMP imp, const char *types)
 
-<p>//交换2个方法中的IMP
-void method_exchangeImplementations(Method m1, Method m2)</p>
+//交换2个方法中的IMP
+void method_exchangeImplementations(Method m1, Method m2)
 
-<p>//获取类的某个实例方法
+//获取类的某个实例方法
 Method class_getInstanceMethod(Class aClass, SEL aSelector);
-```</p>
+</code></pre>
 
 <h2>底层原理</h2>
 
 <p>在运行时，OC 的方法是一种叫 <code>Method</code> 的结构体，这种 <code>objc_method</code> 类型的结构体定义为：</p>
 
-<p><code>objc
-struct objc_method
+<pre><code class="objc">struct objc_method
    SEL method_name         OBJC2_UNAVAILABLE;
    char *method_types      OBJC2_UNAVAILABLE;
    IMP method_imp          OBJC2_UNAVAILABLE;
 }
-</code></p>
+</code></pre>
 
 <ul>
 <li>method_name 是方法的 selector，可以理解为运行时的方法名；</li>
@@ -268,61 +247,46 @@ struct objc_method
 </ul>
 
 
-<p>```objc
-Method lastObject {</p>
+<pre><code class="objc">Method lastObject {
+      SEL method_name = @selector(lastObject)
+      char *method_types = “v@:“ //返回值void, 参数id(self)，selector(_cmd)
+      IMP method_imp = 0x000FFFF //指向([NSArray lastObject])
+}
 
-<pre><code>  SEL method_name = @selector(lastObject)
-  char *method_types = “v@:“ //返回值void, 参数id(self)，selector(_cmd)
-  IMP method_imp = 0x000FFFF //指向([NSArray lastObject])
+Method xxx_lastObject {
+       SEL method_name = @selector(swizzle_originalMethodName)
+       char *method_types = “v@:”
+       IMP method_imp = 0x1234AABA //指向([NSArray xxx_lastObject])
+}
 </code></pre>
-
-<p>}</p>
-
-<p>Method xxx_lastObject {</p>
-
-<pre><code>   SEL method_name = @selector(swizzle_originalMethodName)
-   char *method_types = “v@:”
-   IMP method_imp = 0x1234AABA //指向([NSArray xxx_lastObject])
-</code></pre>
-
-<p>}
-```</p>
 
 <ul>
 <li>调用 <code>void method_exchangeImplementations(Method m1, Method m2)</code> ,交换两者的实现：</li>
 </ul>
 
 
-<p><code>objc
-Method ori_Method =  class_getInstanceMethod([NSArray class], @selector(lastObject));  
+<pre><code class="objc">Method ori_Method =  class_getInstanceMethod([NSArray class], @selector(lastObject));  
 Method my_Method = class_getInstanceMethod([NSArray class], @selector(xxx_lastObject));  
 method_exchangeImplementations(ori_Method, my_Method);
-</code></p>
+</code></pre>
 
 <ul>
 <li>调换后的 Method 结构体：</li>
 </ul>
 
 
-<p>```objc
-Method lastObject {</p>
+<pre><code class="objc">Method lastObject {
+      SEL method_name = @selector(lastObject)
+      char *method_types = “@@:“ //返回值id, 参数id(self)，selector(_cmd)
+      IMP method_imp = 0x1234AABA //指向([NSArray xxx_lastObject])
+}
 
-<pre><code>  SEL method_name = @selector(lastObject)
-  char *method_types = “@@:“ //返回值id, 参数id(self)，selector(_cmd)
-  IMP method_imp = 0x1234AABA //指向([NSArray xxx_lastObject])
+Method xxx_lastObject {
+       SEL method_name = @selector(swizzle_originalMethodName)
+       char *method_types = “@@:”
+       IMP method_imp = 0x000FFFF //指向([NSArray lastObject])
+}
 </code></pre>
-
-<p>}</p>
-
-<p>Method xxx_lastObject {</p>
-
-<pre><code>   SEL method_name = @selector(swizzle_originalMethodName)
-   char *method_types = “@@:”
-   IMP method_imp = 0x000FFFF //指向([NSArray lastObject])
-</code></pre>
-
-<p>}
-```</p>
 
 <p>可以看到使用<code>void method_exchangeImplementations(Method m1, Method m2)</code>的实质是交换了xxx_lastObject 与 lastObject 的 IMP，实现了在运行时做方法的替换。使得当执行 [array lastObject] 的时候，实际会去执行 [array xxx_lastObject] 的方法实现。</p>
 
@@ -387,11 +351,10 @@ Method lastObject {</p>
 
 <p>办法有点猥琐，要通过 js，去强制 input 元素获得焦点。</p>
 
-<p><code>javascript
-element.on("tap", function(e){
+<pre><code class="javascript">element.on("tap", function(e){
   element.focus();
 });
-</code></p>
+</code></pre>
 
 <h3>参考资料</h3>
 
@@ -448,27 +411,24 @@ element.on("tap", function(e){
 
 <p>视图图片的左上角会根据它 frame 的 origin 进行偏移，并绘制到父视图的图片上：</p>
 
-<p>```objc
-CompositedPosition.x = View.frame.origin.x &ndash; Superview.bounds.origin.x;</p>
+<pre><code class="objc">CompositedPosition.x = View.frame.origin.x - Superview.bounds.origin.x;
 
-<p>CompositedPosition.y = View.frame.origin.y &ndash; Superview.bounds.origin.y;
-```</p>
+CompositedPosition.y = View.frame.origin.y - Superview.bounds.origin.y;
+</code></pre>
 
 <p>正如之前所说的，如果一个视图 bounds 的 origin 是 {0,0}。那么，我们得到这个公式：</p>
 
-<p>```objc
-CompositedPosition.x = View.frame.origin.x;</p>
+<pre><code class="objc">CompositedPosition.x = View.frame.origin.x;
 
-<p>CompositedPosition.y = View.frame.origin.y;
-```</p>
+CompositedPosition.y = View.frame.origin.y;
+</code></pre>
 
 <h3>Scroll View的Content Offset</h3>
 
-<p>```objc
-CompositedPosition.x = View.frame.origin.x &ndash; Superview.bounds.origin.x;</p>
+<pre><code class="objc">CompositedPosition.x = View.frame.origin.x - Superview.bounds.origin.x;
 
-<p>CompositedPosition.y = View.frame.origin.y &ndash; Superview.bounds.origin.y;
-```</p>
+CompositedPosition.y = View.frame.origin.y - Superview.bounds.origin.y;
+</code></pre>
 
 <p>我们减少 <code>Superview.bounds.origin</code> 的值(因为他们总是0)。但是如果他们不为0呢？我们用和前一个图例相同的 frames，但是我们改变了紫色视图 bounds 的 origin 为 {-30, -30}。得到下图：</p>
 
@@ -476,17 +436,13 @@ CompositedPosition.x = View.frame.origin.x &ndash; Superview.bounds.origin.x;</p
 
 <p>现在，巧妙的是通过改变这个紫色视图的 bounds，它每一个单独的子视图都被移动了。事实上，这正是 scroll view 工作的原理。当你设置它的 contentOffset 属性时它改变 scroll view.bounds 的 origin。事实上，contentOffset 甚至不是实际存在的。代码看起来像这样：</p>
 
-<p>```objc
-&ndash; (void)setContentOffset:(CGPoint)offset
-{</p>
-
-<pre><code>CGRect bounds = [self bounds];
-bounds.origin = offset;
-[self setBounds:bounds];
+<pre><code class="objc">- (void)setContentOffset:(CGPoint)offset
+{
+    CGRect bounds = [self bounds];
+    bounds.origin = offset;
+    [self setBounds:bounds];
+}
 </code></pre>
-
-<p>}
-```</p>
 
 <h3>Content Size</h3>
 
@@ -673,23 +629,31 @@ bounds.origin = offset;
 </code></p>
 
 <p>视图控制器中：
-```objc
-&ndash; (void)setupPieChart
-{</p>
-
-<pre><code>[self.pieChart addTarget:self
-              action:@selector(updateSelection:)
-    forControlEvents:UIControlEventValueChanged];
-</code></pre>
-
-<p>}</p>
-
-<ul>
-<li>(void)updateSelection:(id)sender
-{
-  NSLog(@&ldquo;%@&rdquo;, self.pieChart.selectedSector);
-}
-```
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span>
+</span><span class='line'>                  <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">updateSelection</span><span class="p">:)</span>
+</span><span class='line'>        <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventValueChanged</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">updateSelection</span><span class="p">:(</span><span class="kt">id</span><span class="p">)</span><span class="n">sender</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">NSLog</span><span class="p">(@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">%</span><span class="p">@</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">selectedSector</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 这么做的好处是在自定义视图子类中需要做的事情很少，并且自动获得多目标支持。</li>
 </ul>
 
@@ -704,21 +668,33 @@ bounds.origin = offset;
 </code></p>
 
 <p>视图控制器中:
-```objc
-@interface MyViewController <PieChartDelegate></p>
-
-<p> &hellip;</p>
-
-<ul>
-<li><p>(void)setupPieChart
-{
-  self.pieChart.delegate = self;
-}</p></li>
-<li><p>(void)pieChart:(PieChart<em>)pieChart didSelectSector:(PieChartSector</em>)sector
-{
-  // 处理区块
-}
-```
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">MyViewController</span> <span class="o">&lt;</span><span class="n">PieChartDelegate</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">setupPieChart</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">pieChart</span><span class="p">:(</span><span class="n">PieChart</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">pieChart</span> <span class="nl">didSelectSector</span><span class="p">:(</span><span class="n">PieChartSector</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">sector</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// 处理区块</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 当你想要做更多复杂的工作而不仅仅是通知所有者值发生了变化时，这么做显然更合适。</p></li>
 </ul>
 
@@ -727,27 +703,22 @@ bounds.origin = offset;
 
 <p>自定义视图中：</p>
 
-<p>```objc
-@interface PieChart : UIControl</p>
+<pre><code class="objc">@interface PieChart : UIControl
 
-<p>@property (nonatomic,copy) void(^selectionHandler)(PieChartSection* selectedSection);</p>
+@property (nonatomic,copy) void(^selectionHandler)(PieChartSection* selectedSection);
 
-<p>@end
-```</p>
+@end
+</code></pre>
 
 <p><code>Block</code> 的好处是可以把相关的代码整合在视图控制器中:</p>
 
-<p>```objc
-&ndash; (void)setupPieChart
-{</p>
-
-<pre><code>self.pieChart.selectionHandler = ^(PieChartSection* section) {
-    // 处理区块
+<pre><code class="objc">- (void)setupPieChart
+{
+    self.pieChart.selectionHandler = ^(PieChartSection* section) {
+        // 处理区块
+    }
 }
 </code></pre>
-
-<p>}
-```</p>
 
 <p>一旦 block 中的代码要失去控制 (比如 block 中要处理的事情太多，导致 block 中的代码过多)，你还应该将它们抽离成独立的方法，这种情况的话可能用代理会更好一些。</p>
 
@@ -755,28 +726,35 @@ bounds.origin = offset;
 
 <p>编写代码:</p>
 
-<p><code>objc
-self.selectedSegment = theNewSelectedSegment;
-</code></p>
-
-<p>当使用合成属性，KVO 会拦截到该变化并发出通知。在视图控制器中，编写类似的代码:
-```objc
-&ndash; (void)setupPieChart
-{</p>
-
-<pre><code>[self.pieChart addObserver:self forKeyPath:@"selectedSegment" options:0 context:NULL];
+<pre><code class="objc">self.selectedSegment = theNewSelectedSegment;
 </code></pre>
 
-<p>}</p>
-
-<ul>
-<li>(void)observeValueForKeyPath:(NSString <em>)keyPath ofObject:(id)object change:(NSDictionary </em>)change context:(void *)context
-{
-  if(object == self.pieChart &amp;&amp; [keyPath isEqualToString:@&ldquo;selectedSegment&rdquo;]) {
-      // 处理改变
-  }
-}
-```</li>
+<p>当使用合成属性，KVO 会拦截到该变化并发出通知。在视图控制器中，编写类似的代码:
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="nl">addObserver</span><span class="p">:</span><span class="nb">self</span> <span class="nl">forKeyPath</span><span class="p">:@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">selectedSegment</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">context</span><span class="p">:</span><span class="nb">NULL</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">observeValueForKeyPath</span><span class="p">:(</span><span class="bp">NSString</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">keyPath</span> <span class="nl">ofObject</span><span class="p">:(</span><span class="kt">id</span><span class="p">)</span><span class="n">object</span> <span class="nl">change</span><span class="p">:(</span><span class="bp">NSDictionary</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">change</span> <span class="nl">context</span><span class="p">:(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">context</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">object</span> <span class="o">==</span> <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="p">[</span><span class="n">keyPath</span> <span class="nl">isEqualToString</span><span class="p">:@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">selectedSegment</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;])</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// 处理改变</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></li>
 </ul>
 
 
@@ -788,40 +766,60 @@ extern NSString* const SelectedSegmentChangedNotification;
 </code></p>
 
 <p>在实现文件中：
-```objc
-NSString* const SelectedSegmentChangedNotification = @&ldquo;selectedSegmentChangedNotification&rdquo;;</p>
-
-<p>&hellip;</p>
-
-<ul>
-<li>(void)notifyAboutChanges
-{
-  [[NSNotificationCenter defaultCenter] postNotificationName:SelectedSegmentChangedNotification object:self];
-}
-```</li>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSString</span><span class="o">*</span> <span class="k">const</span> <span class="n">SelectedSegmentChangedNotification</span> <span class="o">=</span> <span class="p">@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">selectedSegmentChangedNotification</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&amp;</span><span class="n">hellip</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">notifyAboutChanges</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="p">[[</span><span class="bp">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">postNotificationName</span><span class="p">:</span><span class="n">SelectedSegmentChangedNotification</span> <span class="nl">object</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></li>
 </ul>
 
 
 <p>现在订阅通知，在视图控制器中：
-```objc
-&ndash; (void)setupPieChart
-{</p>
-
-<pre><code>[[NSNotificationCenter defaultCenter] addObserver:self
-                                   selector:@selector(segmentChanged:)
-                                       name:SelectedSegmentChangedNotification
-                                      object:self.pieChart];
-</code></pre>
-
-<p>}</p>
-
-<p>&hellip;</p>
-
-<ul>
-<li>(void)segmentChanged:(NSNotification*)note
-{
-}
-```</li>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[[</span><span class="bp">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">addObserver</span><span class="p">:</span><span class="nb">self</span>
+</span><span class='line'>                                       <span class="nl">selector</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">segmentChanged</span><span class="p">:)</span>
+</span><span class='line'>                                           <span class="nl">name</span><span class="p">:</span><span class="n">SelectedSegmentChangedNotification</span>
+</span><span class='line'>                                          <span class="nl">object</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">];</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&amp;</span><span class="n">hellip</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">segmentChanged</span><span class="p">:(</span><span class="bp">NSNotification</span><span class="o">*</span><span class="p">)</span><span class="n">note</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></li>
 </ul>
 
 

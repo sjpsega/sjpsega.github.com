@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>《#2 并发编程》 学习笔记 - sjpsega's Blog</title>
@@ -12,13 +12,15 @@
   <meta name="description" content="文章地址：objc第二章 并发编程：API 及挑战 OS X 和 iOS 中的并发编程 Grand Central Dispatch(GCD) GCD 在后端管理着一个线程池，可以将开发者从线程管理的工作中解放出来，通过集中的管理线程，来缓解大量线程被创建的问题。在日常开发中，最好使用 GCD &hellip;">
   <meta name="keywords" content="iOS GCD 并发">
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me/blog/2014/06/12/concurrent-programming-note">
+  <link rel="canonical" href="http://sjpsega.me/blog/2014/06/12/concurrent-programming-note/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -31,18 +33,18 @@
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -59,7 +61,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -89,14 +91,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-06-12T12:49:46+08:00" pubdate data-updated="true">Jun 12<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-06-12T12:49:46+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:49 pm</span></time>
         
       </p>
     
@@ -220,12 +215,12 @@ $(document).ready(function(event) {
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">UIColor</span> <span class="o">*</span><span class="p">)</span><span class="nf">boringColor</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">UIColor</span> <span class="o">*</span><span class="p">)</span><span class="nf">boringColor</span><span class="p">;</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">UIColor</span> <span class="o">*</span><span class="n">color</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">static</span> <span class="bp">UIColor</span> <span class="o">*</span><span class="n">color</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">0.380f</span> <span class="nl">green:</span><span class="mf">0.376f</span> <span class="nl">blue:</span><span class="mf">0.376f</span> <span class="nl">alpha:</span><span class="mf">1.000f</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithRed</span><span class="p">:</span><span class="mf">0.380f</span> <span class="nl">green</span><span class="p">:</span><span class="mf">0.376f</span> <span class="nl">blue</span><span class="p">:</span><span class="mf">0.376f</span> <span class="nl">alpha</span><span class="p">:</span><span class="mf">1.000f</span><span class="p">];</span>
 </span><span class='line'>    <span class="p">});</span>
 </span><span class='line'>    <span class="k">return</span> <span class="n">color</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
@@ -248,12 +243,12 @@ $(document).ready(function(event) {
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">foo</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">foo</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="kt">double</span> <span class="n">delayInSeconds</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">dispatch_time_t</span> <span class="n">popTime</span> <span class="o">=</span> <span class="n">dispatch_time</span><span class="p">(</span><span class="n">DISPATCH_TIME_NOW</span><span class="p">,</span> <span class="p">(</span><span class="n">int64_t</span><span class="p">)</span> <span class="p">(</span><span class="n">delayInSeconds</span> <span class="o">*</span> <span class="n">NSEC_PER_SEC</span><span class="p">));</span>
+</span><span class='line'>    <span class="kt">dispatch_time_t</span> <span class="n">popTime</span> <span class="o">=</span> <span class="n">dispatch_time</span><span class="p">(</span><span class="n">DISPATCH_TIME_NOW</span><span class="p">,</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span> <span class="p">(</span><span class="n">delayInSeconds</span> <span class="o">*</span> <span class="n">NSEC_PER_SEC</span><span class="p">));</span>
 </span><span class='line'>    <span class="n">dispatch_after</span><span class="p">(</span><span class="n">popTime</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="n">bar</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="n">bar</span><span class="p">];</span>
 </span><span class='line'>    <span class="p">});</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -279,17 +274,17 @@ $(document).ready(function(event) {
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">self</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">NSString</span> <span class="o">*</span><span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;%@.isolation.%p&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">self</span> <span class="n">class</span><span class="p">],</span> <span class="n">self</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">self</span><span class="p">.</span><span class="n">isolationQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">([</span><span class="n">label</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">self</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="bp">NSString</span> <span class="o">*</span><span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%@.isolation.%p&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="nb">self</span><span class="p">];</span>
+</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">isolationQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">([</span><span class="n">label</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>        <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithFormat:</span><span class="s">@&quot;%@.work.%p&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">self</span> <span class="n">class</span><span class="p">],</span> <span class="n">self</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">self</span><span class="p">.</span><span class="n">workQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">([</span><span class="n">label</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%@.work.%p&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="nb">self</span><span class="p">];</span>
+</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">workQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">([</span><span class="n">label</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>
 </span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -325,12 +320,12 @@ $(document).ready(function(event) {
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processImage:</span><span class="p">(</span><span class="n">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span> <span class="nf">completionHandler:</span><span class="p">(</span><span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">BOOL</span> <span class="n">success</span><span class="p">))</span><span class="nv">handler</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processImage:</span><span class="p">(</span><span class="bp">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span> <span class="nf">completionHandler:</span><span class="p">(</span><span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">BOOL</span> <span class="n">success</span><span class="p">))</span><span class="nv">handler</span><span class="p">;</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">isolationQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span><span class='line'>    <span class="n">dispatch_async</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">isolationQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
 </span><span class='line'>        <span class="c1">// do actual processing here</span>
-</span><span class='line'>        <span class="n">dispatch_async</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">resultQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
-</span><span class='line'>            <span class="n">handler</span><span class="p">(</span><span class="n">YES</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">dispatch_async</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">resultQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">handler</span><span class="p">(</span><span class="nb">YES</span><span class="p">);</span>
 </span><span class='line'>        <span class="p">});</span>
 </span><span class='line'>    <span class="p">});</span>
 </span><span class='line'><span class="p">}</span>
@@ -346,8 +341,8 @@ $(document).ready(function(event) {
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">;</span> <span class="o">++</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">;</span> <span class="o">++</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">// Do something with x and y here</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
@@ -361,8 +356,8 @@ $(document).ready(function(event) {
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_apply</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">(</span><span class="n">size_t</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="n">x</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_apply</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="n">x</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">// Do something with x and y here</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'><span class="p">});</span>
@@ -394,28 +389,28 @@ $(document).ready(function(event) {
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_group_t</span> <span class="n">group</span> <span class="o">=</span> <span class="n">dispatch_group_create</span><span class="p">();</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="kt">dispatch_group_t</span> <span class="n">group</span> <span class="o">=</span> <span class="n">dispatch_group_create</span><span class="p">();</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">dispatch_queue_t</span> <span class="n">queue</span> <span class="o">=</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="kt">dispatch_queue_t</span> <span class="n">queue</span> <span class="o">=</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span><span class='line'><span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="o">^</span><span class="p">(){</span>
 </span><span class='line'>    <span class="c1">// Do something that takes a while</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">doSomeFoo</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="n">doSomeFoo</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">(){</span>
-</span><span class='line'>        <span class="n">self</span><span class="p">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">});</span>
 </span><span class='line'><span class="p">});</span>
 </span><span class='line'><span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="o">^</span><span class="p">(){</span>
 </span><span class='line'>    <span class="c1">// Do something else that takes a while</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="n">doSomeBar</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="n">doSomeBar</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">(){</span>
-</span><span class='line'>        <span class="n">self</span><span class="p">.</span><span class="n">bar</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">bar</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">});</span>
 </span><span class='line'><span class="p">});</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// This block will run once everything above is done:</span>
 </span><span class='line'><span class="n">dispatch_group_notify</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">(){</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;foo: %d&quot;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">foo</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;bar: %d&quot;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">bar</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;foo: %d&quot;</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">foo</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;bar: %d&quot;</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">bar</span><span class="p">);</span>
 </span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -441,20 +436,20 @@ $(document).ready(function(event) {
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">withGroup:</span><span class="p">(</span><span class="n">dispatch_group_t</span><span class="p">)</span><span class="nv">group</span>
-</span><span class='line'>        <span class="nf">sendAsynchronousRequest:</span><span class="p">(</span><span class="n">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="nv">request</span>
-</span><span class='line'>        <span class="nf">queue:</span><span class="p">(</span><span class="n">NSOperationQueue</span> <span class="o">*</span><span class="p">)</span><span class="nv">queue</span>
-</span><span class='line'>        <span class="nf">completionHandler:</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLResponse</span><span class="o">*</span><span class="p">,</span> <span class="n">NSData</span><span class="o">*</span><span class="p">,</span> <span class="n">NSError</span><span class="o">*</span><span class="p">))</span><span class="nv">handler</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">withGroup:</span><span class="p">(</span><span class="kt">dispatch_group_t</span><span class="p">)</span><span class="nv">group</span>
+</span><span class='line'>        <span class="nf">sendAsynchronousRequest:</span><span class="p">(</span><span class="bp">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="nv">request</span>
+</span><span class='line'>        <span class="nf">queue:</span><span class="p">(</span><span class="bp">NSOperationQueue</span> <span class="o">*</span><span class="p">)</span><span class="nv">queue</span>
+</span><span class='line'>        <span class="nf">completionHandler:</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="bp">NSURLResponse</span><span class="o">*</span><span class="p">,</span> <span class="bp">NSData</span><span class="o">*</span><span class="p">,</span> <span class="bp">NSError</span><span class="o">*</span><span class="p">))</span><span class="nv">handler</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">group</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="nl">sendAsynchronousRequest:</span><span class="n">request</span>
-</span><span class='line'>                                <span class="nl">queue:</span><span class="n">queue</span>
-</span><span class='line'>                    <span class="nl">completionHandler:</span><span class="n">handler</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="nl">sendAsynchronousRequest</span><span class="p">:</span><span class="n">request</span>
+</span><span class='line'>                                <span class="nl">queue</span><span class="p">:</span><span class="n">queue</span>
+</span><span class='line'>                    <span class="nl">completionHandler</span><span class="p">:</span><span class="n">handler</span><span class="p">];</span>
 </span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">dispatch_group_enter</span><span class="p">(</span><span class="n">group</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="nl">sendAsynchronousRequest:</span><span class="n">request</span>
-</span><span class='line'>                                <span class="nl">queue:</span><span class="n">queue</span>
-</span><span class='line'>                    <span class="nl">completionHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">NSURLResponse</span> <span class="o">*</span><span class="n">response</span><span class="p">,</span> <span class="n">NSData</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">){</span>
+</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="nl">sendAsynchronousRequest</span><span class="p">:</span><span class="n">request</span>
+</span><span class='line'>                                <span class="nl">queue</span><span class="p">:</span><span class="n">queue</span>
+</span><span class='line'>                    <span class="nl">completionHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSURLResponse</span> <span class="o">*</span><span class="n">response</span><span class="p">,</span> <span class="bp">NSData</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">){</span>
 </span><span class='line'>            <span class="n">handler</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
 </span><span class='line'>            <span class="n">dispatch_group_leave</span><span class="p">(</span><span class="n">group</span><span class="p">);</span>
 </span><span class='line'>        <span class="p">}];</span>
@@ -500,7 +495,7 @@ $(document).ready(function(event) {
 <p>能够测量给定的代码执行的平均的纳秒数。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">uint64_t</span> <span class="nf">dispatch_benchmark</span><span class="p">(</span><span class="n">size_t</span> <span class="n">count</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="n">block</span><span class="p">)(</span><span class="kt">void</span><span class="p">));</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="kt">uint64_t</span> <span class="nf">dispatch_benchmark</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">count</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="n">block</span><span class="p">)(</span><span class="kt">void</span><span class="p">));</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -592,14 +587,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-06-12T12:49:46+08:00" pubdate data-updated="true">Jun 12<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-06-12T12:49:46+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:49 pm</span></time>
       
 
 <span class="categories">

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>Objective-C Method Swizzling - sjpsega's Blog</title>
@@ -12,13 +12,15 @@
   <meta name="description" content="Method Swizzling">
   <meta name="keywords" content="Method Swizzling">
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me/blog/2014/09/17/oc-method-swizzling">
+  <link rel="canonical" href="http://sjpsega.me/blog/2014/09/17/oc-method-swizzling/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -31,18 +33,18 @@
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -59,7 +61,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -89,14 +91,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-09-17T22:36:40+08:00" pubdate data-updated="true">Sep 17<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-09-17T22:36:40+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:36 pm</span></time>
         
       </p>
     
@@ -112,7 +107,7 @@ $(document).ready(function(event) {
 <p>以替换 NSArray 的 lastObject 方法为例：</p>
 
 <ul>
-<li>在 NSArray 中添加需要替换 lastObject 的方法 &ndash; xxx_lastObject方法：</li>
+<li>在 NSArray 中添加需要替换 lastObject 的方法 - xxx_lastObject方法：</li>
 </ul>
 
 
@@ -129,11 +124,11 @@ $(document).ready(function(event) {
 <span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;  </span>
 </span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">NSArray</span> <span class="nl">(Swizzle)</span>
+</span><span class='line'><span class="k">@implementation</span> <span class="bp">NSArray</span> <span class="nl">(Swizzle)</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">xxx_lastObject</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">xxx_lastObject</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">id</span> <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">xxx_lastObject</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">id</span> <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">xxx_lastObject</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;**********  myLastObject ***********&quot;</span><span class="p">);</span>
 </span><span class='line'>    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
@@ -157,8 +152,8 @@ $(document).ready(function(event) {
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;  </span>
 </span><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
-</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
 </span><span class='line'><span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">ori_Method</span><span class="p">,</span> <span class="n">my_Method</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -181,8 +176,8 @@ $(document).ready(function(event) {
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;</span>
 </span><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">NSArray</span> <span class="o">*</span><span class="n">array</span> <span class="o">=</span> <span class="err">@</span><span class="p">[</span><span class="s">@&quot;0&quot;</span><span class="p">,</span><span class="s">@&quot;1&quot;</span><span class="p">,</span><span class="s">@&quot;2&quot;</span><span class="p">,</span><span class="s">@&quot;3&quot;</span><span class="p">];</span>
-</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span> <span class="n">lastObject</span><span class="p">];</span>
+</span><span class='line'><span class="bp">NSArray</span> <span class="o">*</span><span class="n">array</span> <span class="o">=</span> <span class="l">@[</span><span class="s">@&quot;0&quot;</span><span class="p">,</span><span class="s">@&quot;1&quot;</span><span class="p">,</span><span class="s">@&quot;2&quot;</span><span class="p">,</span><span class="s">@&quot;3&quot;</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span> <span class="n">lastObject</span><span class="p">];</span>
 </span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;TEST RESULT : %@&quot;</span><span class="p">,</span><span class="n">string</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -192,7 +187,7 @@ $(document).ready(function(event) {
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">**********</span>  <span class="n">myLastObject</span> <span class="o">***********</span>
-</span><span class='line'><span class="n">TEST</span> <span class="n">RESULT</span> <span class="o">:</span> <span class="mi">3</span>
+</span><span class='line'><span class="n">TEST</span> <span class="nl">RESULT</span> <span class="p">:</span> <span class="mi">3</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -224,16 +219,16 @@ $(document).ready(function(event) {
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//向类中添加Method</span>
-</span><span class='line'><span class="kt">BOOL</span> <span class="nf">class_addMethod</span><span class="p">(</span><span class="n">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="n">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
+</span><span class='line'><span class="kt">BOOL</span> <span class="nf">class_addMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="kt">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">//修改类的Method</span>
-</span><span class='line'><span class="n">IMP</span> <span class="n">class_replaceMethod</span><span class="p">(</span><span class="n">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="n">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
+</span><span class='line'><span class="kt">IMP</span> <span class="n">class_replaceMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="kt">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">//交换2个方法中的IMP</span>
 </span><span class='line'><span class="kt">void</span> <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">Method</span> <span class="n">m1</span><span class="p">,</span> <span class="n">Method</span> <span class="n">m2</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">//获取类的某个实例方法</span>
-</span><span class='line'><span class="n">Method</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="n">Class</span> <span class="n">aClass</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">aSelector</span><span class="p">);</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">aClass</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">aSelector</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -249,7 +244,7 @@ $(document).ready(function(event) {
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">struct</span> <span class="n">objc_method</span>
 </span><span class='line'>   <span class="kt">SEL</span> <span class="n">method_name</span>         <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
 </span><span class='line'>   <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span>      <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
-</span><span class='line'>   <span class="n">IMP</span> <span class="n">method_imp</span>          <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+</span><span class='line'>   <span class="kt">IMP</span> <span class="n">method_imp</span>          <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -283,14 +278,14 @@ $(document).ready(function(event) {
 <span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">lastObject</span> <span class="p">{</span>
 </span><span class='line'>      <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">)</span>
-</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="err">@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值void, 参数id(self)，selector(_cmd)</span>
-</span><span class='line'>      <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
+</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="p">@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值void, 参数id(self)，selector(_cmd)</span>
+</span><span class='line'>      <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">Method</span> <span class="n">xxx_lastObject</span> <span class="p">{</span>
 </span><span class='line'>       <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">swizzle_originalMethodName</span><span class="p">)</span>
-</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="err">@</span><span class="o">:</span><span class="err">”</span>
-</span><span class='line'>       <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
+</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="p">@</span><span class="o">:</span><span class="err">”</span>
+</span><span class='line'>       <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -303,8 +298,8 @@ $(document).ready(function(event) {
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
-</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
 </span><span class='line'><span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">ori_Method</span><span class="p">,</span> <span class="n">my_Method</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -327,14 +322,14 @@ $(document).ready(function(event) {
 <span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">lastObject</span> <span class="p">{</span>
 </span><span class='line'>      <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">)</span>
-</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“@@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值id, 参数id(self)，selector(_cmd)</span>
-</span><span class='line'>      <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
+</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="p">@@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值id, 参数id(self)，selector(_cmd)</span>
+</span><span class='line'>      <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">Method</span> <span class="n">xxx_lastObject</span> <span class="p">{</span>
 </span><span class='line'>       <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">swizzle_originalMethodName</span><span class="p">)</span>
-</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“@@</span><span class="o">:</span><span class="err">”</span>
-</span><span class='line'>       <span class="n">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
+</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="p">@@</span><span class="o">:</span><span class="err">”</span>
+</span><span class='line'>       <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -387,14 +382,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-09-17T22:36:40+08:00" pubdate data-updated="true">Sep 17<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-09-17T22:36:40+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:36 pm</span></time>
       
 
 <span class="categories">

@@ -2,24 +2,26 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>iOS Js与native相互通信 - sjpsega's Blog</title>
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="js与navive相互通信的机制 js &ndash;> native 目前，截止至iOS7，iOS原生并没有提供js直接调用native的方式，只能通过UIWebView相关的UIWebViewDelegate协议的 1
+  <meta name="description" content="js与navive相互通信的机制 js -> native 目前，截止至iOS7，iOS原生并没有提供js直接调用native的方式，只能通过UIWebView相关的UIWebViewDelegate协议的 1
 - (BOOL)webView:(UIWebView *)webView &hellip;">
   <meta name="keywords" content="iOS, js, native, WebViewJavascriptBridge">
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me/blog/2014/03/08/js-communicate-with-native-in-iOS">
+  <link rel="canonical" href="http://sjpsega.me/blog/2014/03/08/js-communicate-with-native-in-iOS/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -32,18 +34,18 @@
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -60,7 +62,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -90,14 +92,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-03-08T21:53:16+08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-03-08T21:53:16+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:53 pm</span></time>
         
       </p>
     
@@ -106,12 +101,12 @@ $(document).ready(function(event) {
 
 <div class="entry-content"><h2>js与navive相互通信的机制</h2>
 
-<h3>js &ndash;> native</h3>
+<h3>js -> native</h3>
 
 <p>目前，截止至iOS7，iOS原生并没有提供js直接调用native的方式，只能通过UIWebView相关的UIWebViewDelegate协议的</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="n">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">shouldStartLoadWithRequest:</span><span class="p">(</span><span class="n">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="nv">request</span> <span class="nf">navigationType:</span><span class="p">(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="nv">navigationType</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">shouldStartLoadWithRequest:</span><span class="p">(</span><span class="bp">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="nv">request</span> <span class="nf">navigationType:</span><span class="p">(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="nv">navigationType</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -138,21 +133,21 @@ $(document).ready(function(event) {
 <span class='line-number'>19</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">/*</span>
 </span><span class='line'><span class="o">*</span> <span class="err">方法的返回值是</span><span class="kt">BOOL</span><span class="err">值。</span>
-</span><span class='line'><span class="o">*</span> <span class="err">返回</span><span class="n">YES</span><span class="err">：表示让浏览器执行默认操作，比如某个</span><span class="n">a</span><span class="err">链接跳转</span>
-</span><span class='line'><span class="o">*</span> <span class="err">返回</span><span class="n">NO</span><span class="err">：表示不执行浏览器的默认操作，这里因为通过</span><span class="n">url</span><span class="err">协议来判断</span><span class="n">js</span><span class="err">执行</span><span class="n">native</span><span class="err">的操作，肯定不是浏览器默认操作，故返回</span><span class="n">NO</span>
+</span><span class='line'><span class="o">*</span> <span class="err">返回</span><span class="nb">YES</span><span class="err">：表示让浏览器执行默认操作，比如某个</span><span class="n">a</span><span class="err">链接跳转</span>
+</span><span class='line'><span class="o">*</span> <span class="err">返回</span><span class="nb">NO</span><span class="err">：表示不执行浏览器的默认操作，这里因为通过</span><span class="n">url</span><span class="err">协议来判断</span><span class="n">js</span><span class="err">执行</span><span class="n">native</span><span class="err">的操作，肯定不是浏览器默认操作，故返回</span><span class="nb">NO</span>
 </span><span class='line'><span class="o">*</span> <span class="o">/</span>
-</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">webView:</span><span class="p">(</span><span class="n">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="n">webView</span> <span class="nl">shouldStartLoadWithRequest:</span><span class="p">(</span><span class="n">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="n">request</span> <span class="nl">navigationType:</span><span class="p">(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="n">navigationType</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">request</span> <span class="n">URL</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">([[</span><span class="n">url</span> <span class="n">scheme</span><span class="p">]</span> <span class="nl">isEqualToString:</span><span class="s">@&quot;callFunction&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">webView</span><span class="p">:(</span><span class="bp">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="n">webView</span> <span class="nl">shouldStartLoadWithRequest</span><span class="p">:(</span><span class="bp">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="n">request</span> <span class="nl">navigationType</span><span class="p">:(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="n">navigationType</span> <span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">request</span> <span class="n">URL</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">([[</span><span class="n">url</span> <span class="n">scheme</span><span class="p">]</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="s">@&quot;callFunction&quot;</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">//调用原生方法</span>
 </span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(([[</span><span class="n">url</span> <span class="n">scheme</span><span class="p">]</span> <span class="nl">isEqualToString:</span><span class="s">@&quot;sendEvent&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(([[</span><span class="n">url</span> <span class="n">scheme</span><span class="p">]</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="s">@&quot;sendEvent&quot;</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">//触发事件</span>
 </span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -185,12 +180,12 @@ $(document).ready(function(event) {
 
 <p>通过查看phoneGap源码的iOSExec方法，还有使用XMLHttpRequest或修改hash的方式来触发方法拦截，但是因为有bug或其他原因，不推荐。</p>
 
-<h3>native &ndash;> js</h3>
+<h3>native -> js</h3>
 
 <p>native调用js非常简洁方便，只需要</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString:</span><span class="s">@&quot;alert(&#39;hello world!&#39;)&quot;</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString</span><span class="p">:</span><span class="s">@&quot;alert(&#39;hello world!&#39;)&quot;</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -226,14 +221,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-03-08T21:53:16+08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-03-08T21:53:16+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:53 pm</span></time>
       
 
 <span class="categories">

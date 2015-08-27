@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>iOS UIWebView 自定义协议文件加载缓存问题 - sjpsega's Blog</title>
@@ -12,13 +12,15 @@
   <meta name="description" content="iOS UIWebView cache bug">
   <meta name="keywords" content="iOS UIWebView cache bug">
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me/blog/2015/06/15/uiwebview-cache-bug-by-custom-protocol">
+  <link rel="canonical" href="http://sjpsega.me/blog/2015/06/15/uiwebview-cache-bug-by-custom-protocol/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -31,18 +33,18 @@
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -59,7 +61,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -89,14 +91,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2015-06-15T22:56:31+08:00" pubdate data-updated="true">Jun 15<span>th</span>, 2015</time>
+<time class='entry-date' datetime='2015-06-15T22:56:31+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:56 pm</span></time>
         
       </p>
     
@@ -142,21 +137,21 @@ $(document).ready(function(event) {
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//原请求</span>
-</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">requestURLString</span> <span class="o">=</span> <span class="s">@&quot;abc://xxx.com/xx.js&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">requestURLString</span> <span class="o">=</span> <span class="s">@&quot;abc://xxx.com/xx.js&quot;</span><span class="p">;</span>
 </span><span class='line'><span class="c1">//根据原请求获得的 data 数据</span>
-</span><span class='line'><span class="n">NSData</span> <span class="o">*</span><span class="n">abcData</span> <span class="o">=</span> <span class="p">...</span>
+</span><span class='line'><span class="bp">NSData</span> <span class="o">*</span><span class="n">abcData</span> <span class="o">=</span> <span class="p">...</span>
 </span><span class='line'><span class="c1">//将原请求的自定义协议改成 http</span>
-</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">changeURLString</span> <span class="o">=</span> <span class="s">@&quot;http://xxx.com/xx.js&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">changeURLString</span> <span class="o">=</span> <span class="s">@&quot;http://xxx.com/xx.js&quot;</span><span class="p">;</span>
 </span><span class='line'><span class="c1">//创建 response</span>
-</span><span class='line'><span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="n">changeURLString</span><span class="p">];</span>
-</span><span class='line'><span class="n">NSURLResponse</span><span class="o">*</span> <span class="n">response</span> <span class="o">=</span>
-</span><span class='line'><span class="p">[[</span><span class="n">NSURLResponse</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">url</span>
-</span><span class='line'>                          <span class="nl">MIMEType:</span><span class="s">@&quot;application/x-javascript&quot;</span>
-</span><span class='line'>             <span class="nl">expectedContentLength:</span><span class="n">abcData</span><span class="p">.</span><span class="n">length</span>
-</span><span class='line'>                  <span class="nl">textEncodingName:</span><span class="s">@&quot;UTF-8&quot;</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="n">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol:</span><span class="n">self</span> <span class="nl">didReceiveResponse:</span><span class="n">response</span> <span class="nl">cacheStoragePolicy:</span><span class="n">NSURLCacheStorageNotAllowed</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="n">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol:</span><span class="n">self</span> <span class="nl">didLoadData:</span><span class="n">abcData</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="n">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocolDidFinishLoading:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'><span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">changeURLString</span><span class="p">];</span>
+</span><span class='line'><span class="bp">NSURLResponse</span><span class="o">*</span> <span class="n">response</span> <span class="o">=</span>
+</span><span class='line'><span class="p">[[</span><span class="bp">NSURLResponse</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL</span><span class="p">:</span><span class="n">url</span>
+</span><span class='line'>                          <span class="nl">MIMEType</span><span class="p">:</span><span class="s">@&quot;application/x-javascript&quot;</span>
+</span><span class='line'>             <span class="nl">expectedContentLength</span><span class="p">:</span><span class="n">abcData</span><span class="p">.</span><span class="n">length</span>
+</span><span class='line'>                  <span class="nl">textEncodingName</span><span class="p">:</span><span class="s">@&quot;UTF-8&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didReceiveResponse</span><span class="p">:</span><span class="n">response</span> <span class="nl">cacheStoragePolicy</span><span class="p">:</span><span class="n">NSURLCacheStorageNotAllowed</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didLoadData</span><span class="p">:</span><span class="n">abcData</span><span class="p">];</span>
+</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocolDidFinishLoading</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -172,8 +167,8 @@ $(document).ready(function(event) {
 
 <ul>
 <li>使用 [[NSURLCache sharedURLCache] removeAllCachedResponses] 清理缓存</li>
-<li>重写了 NSURLCache 的 &ndash; (NSCachedURLResponse <em>)cachedResponseForRequest:(NSURLRequest </em>)request 方法，不返回 response 对象</li>
-<li>自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 &ndash; (NSCachedURLResponse <em>)connection:(NSURLConnection </em>)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。</li>
+<li>重写了 NSURLCache 的 - (NSCachedURLResponse <em>)cachedResponseForRequest:(NSURLRequest </em>)request 方法，不返回 response 对象</li>
+<li>自定义 NSURLProtocol 中，使用 NSURLConnection 加载数据，实现 NSURLConnectionDelegate 的 - (NSCachedURLResponse <em>)connection:(NSURLConnection </em>)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse 方法，返回 nil，不做对应 url 数据的缓存。</li>
 </ul>
 
 
@@ -201,14 +196,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2015-06-15T22:56:31+08:00" pubdate data-updated="true">Jun 15<span>th</span>, 2015</time>
+<time class='entry-date' datetime='2015-06-15T22:56:31+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:56 pm</span></time>
       
 
 <span class="categories">

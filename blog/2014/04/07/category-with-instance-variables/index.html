@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>Category添加实例变量的故事 - sjpsega's Blog</title>
@@ -16,13 +16,15 @@ NSString *urlString = @&quot;http://www.1688.com?key1=val1&amp;key2=val2&quot;;
 NSURL *url &hellip;">
   <meta name="keywords" content="iOS, Category, Instance variables">
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me/blog/2014/04/07/category-with-instance-variables">
+  <link rel="canonical" href="http://sjpsega.me/blog/2014/04/07/category-with-instance-variables/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -35,18 +37,18 @@ NSURL *url &hellip;">
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -63,7 +65,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -93,14 +95,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-04-07T20:55:16+08:00" pubdate data-updated="true">Apr 7<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-04-07T20:55:16+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:55 pm</span></time>
         
       </p>
     
@@ -114,9 +109,9 @@ $(document).ready(function(event) {
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">urlString</span> <span class="o">=</span> <span class="s">@&quot;http://www.1688.com?key1=val1&amp;key2=val2&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="n">urlString</span><span class="p">];</span>
-</span><span class='line'><span class="n">NSString</span> <span class="o">*</span><span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="n">url</span> <span class="nl">paramWithKey:</span><span class="s">@&quot;key1&quot;</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">urlString</span> <span class="o">=</span> <span class="s">@&quot;http://www.1688.com?key1=val1&amp;key2=val2&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">urlString</span><span class="p">];</span>
+</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="n">url</span> <span class="nl">paramWithKey</span><span class="p">:</span><span class="s">@&quot;key1&quot;</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -133,8 +128,8 @@ $(document).ready(function(event) {
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">NSURL</span> <span class="nl">(WingQueryDictionary)</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span> <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="bp">NSURL</span> <span class="nl">(WingQueryDictionary)</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">copy</span><span class="p">)</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
 </span><span class='line'><span class="k">@end</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -147,8 +142,8 @@ $(document).ready(function(event) {
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@implementation</span> <span class="nc">NSURL</span> <span class="nl">(QueryDictionary)</span><span class="p">{</span>
-</span><span class='line'>  <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@implementation</span> <span class="bp">NSURL</span> <span class="nl">(QueryDictionary)</span><span class="p">{</span>
+</span><span class='line'>  <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="k">@end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -171,17 +166,17 @@ $(document).ready(function(event) {
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">NSURL</span><span class="p">(){</span>
-</span><span class='line'>    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="bp">NSURL</span><span class="p">(){</span>
+</span><span class='line'>    <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="k">@end</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">NSURL</span> <span class="nl">(QueryDictionary)</span><span class="p">{</span>
-</span><span class='line'>  <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
+</span><span class='line'><span class="k">@implementation</span> <span class="bp">NSURL</span> <span class="nl">(QueryDictionary)</span><span class="p">{</span>
+</span><span class='line'>  <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nl">paramWithKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">key</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">queryDictionary</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">paramWithKey:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="n">queryDictionary</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="k">@end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -195,9 +190,9 @@ $(document).ready(function(event) {
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">queryDictionary</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">NSURL</span> <span class="nl">(WingQueryDictionary)</span>
+</span><span class='line'><span class="k">@implementation</span> <span class="bp">NSURL</span> <span class="nl">(WingQueryDictionary)</span>
 </span><span class='line'><span class="k">@end</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -227,12 +222,12 @@ $(document).ready(function(event) {
 </span><span class='line'>
 </span><span class='line'><span class="k">static</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">varKey</span> <span class="o">=</span> <span class="s">&quot;queryDictionary&quot;</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">queryDictionary</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="n">objc_getAssociatedObject</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">varKey</span><span class="p">);</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">queryDictionary</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="n">objc_getAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">varKey</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setQueryDictionary:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">queryDictionary</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">varKey</span><span class="p">,</span> <span class="n">queryDictionary</span><span class="p">,</span> <span class="n">OBJC_ASSOCIATION_RETAIN_NONATOMIC</span><span class="p">);</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setQueryDictionary:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">queryDictionary</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">varKey</span><span class="p">,</span> <span class="n">queryDictionary</span><span class="p">,</span> <span class="n">OBJC_ASSOCIATION_RETAIN_NONATOMIC</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -296,14 +291,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-04-07T20:55:16+08:00" pubdate data-updated="true">Apr 7<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-04-07T20:55:16+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:55 pm</span></time>
       
 
 <span class="categories">

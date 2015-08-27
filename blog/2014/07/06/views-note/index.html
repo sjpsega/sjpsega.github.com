@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>《#3 Views》 学习笔记 - sjpsega's Blog</title>
@@ -12,13 +12,15 @@
   <meta name="description" content="objc view scroll">
   <meta name="keywords" content="iOS 视图">
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me/blog/2014/07/06/views-note">
+  <link rel="canonical" href="http://sjpsega.me/blog/2014/07/06/views-note/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -31,18 +33,18 @@
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -59,7 +61,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -89,14 +91,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-07-06T17:15:53+08:00" pubdate data-updated="true">Jul 6<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-07-06T17:15:53+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:15 pm</span></time>
         
       </p>
     
@@ -162,11 +157,11 @@ $(document).ready(function(event) {
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setContentOffset:</span><span class="p">(</span><span class="n">CGPoint</span><span class="p">)</span><span class="nv">offset</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setContentOffset:</span><span class="p">(</span><span class="bp">CGPoint</span><span class="p">)</span><span class="nv">offset</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">CGRect</span> <span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">bounds</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">CGRect</span> <span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">bounds</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">bounds</span><span class="p">.</span><span class="n">origin</span> <span class="o">=</span> <span class="n">offset</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">setBounds:</span><span class="n">bounds</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="nl">setBounds</span><span class="p">:</span><span class="n">bounds</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -353,7 +348,7 @@ $(document).ready(function(event) {
 <p>自定义视图中：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">sendActionsForControlEvents:</span><span class="n">UIControlEventValueChanged</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="nb">self</span> <span class="nl">sendActionsForControlEvents</span><span class="p">:</span><span class="n">UIControlEventValueChanged</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -370,16 +365,16 @@ $(document).ready(function(event) {
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="nl">addTarget:</span><span class="n">self</span>
-</span><span class='line'>                  <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">updateSelection:</span><span class="p">)</span>
-</span><span class='line'>        <span class="nl">forControlEvents:</span><span class="n">UIControlEventValueChanged</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span>
+</span><span class='line'>                  <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">updateSelection</span><span class="p">:)</span>
+</span><span class='line'>        <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventValueChanged</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">updateSelection:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">updateSelection:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">selectedSector</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">selectedSector</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -393,7 +388,7 @@ $(document).ready(function(event) {
 <p>自定义视图中：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">delegate</span> <span class="nl">pieChart:</span><span class="n">self</span> <span class="nl">didSelectSector:</span><span class="n">self</span><span class="p">.</span><span class="n">selectedSector</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">delegate</span> <span class="nl">pieChart</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didSelectSector</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">selectedSector</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -418,10 +413,10 @@ $(document).ready(function(event) {
 </span><span class='line'>
 </span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">setupPieChart</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">pieChart:</span><span class="p">(</span><span class="n">PieChart</span><span class="o">*</span><span class="p">)</span><span class="n">pieChart</span> <span class="nl">didSelectSector:</span><span class="p">(</span><span class="n">PieChartSector</span><span class="o">*</span><span class="p">)</span><span class="n">sector</span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">pieChart</span><span class="p">:(</span><span class="n">PieChart</span><span class="o">*</span><span class="p">)</span><span class="n">pieChart</span> <span class="nl">didSelectSector</span><span class="p">:(</span><span class="n">PieChartSector</span><span class="o">*</span><span class="p">)</span><span class="n">sector</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="c1">// 处理区块</span>
 </span><span class='line'><span class="p">}</span>
@@ -439,9 +434,9 @@ $(document).ready(function(event) {
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">PieChart</span> : <span class="nc">UIControl</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">PieChart</span> : <span class="bp">UIControl</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span><span class="n">copy</span><span class="p">)</span> <span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="n">selectionHandler</span><span class="p">)(</span><span class="n">PieChartSection</span><span class="o">*</span> <span class="n">selectedSection</span><span class="p">);</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span><span class="k">copy</span><span class="p">)</span> <span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="n">selectionHandler</span><span class="p">)(</span><span class="n">PieChartSection</span><span class="o">*</span> <span class="n">selectedSection</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">@end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -455,9 +450,9 @@ $(document).ready(function(event) {
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">selectionHandler</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">PieChartSection</span><span class="o">*</span> <span class="n">section</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">.</span><span class="n">selectionHandler</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">PieChartSection</span><span class="o">*</span> <span class="n">section</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">// 处理区块</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
@@ -471,7 +466,7 @@ $(document).ready(function(event) {
 <p>编写代码:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">self</span><span class="p">.</span><span class="n">selectedSegment</span> <span class="o">=</span> <span class="n">theNewSelectedSegment</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">selectedSegment</span> <span class="o">=</span> <span class="n">theNewSelectedSegment</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -488,14 +483,14 @@ $(document).ready(function(event) {
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="nl">addObserver:</span><span class="n">self</span> <span class="nl">forKeyPath:</span><span class="s">@&quot;selectedSegment&quot;</span> <span class="nl">options:</span><span class="mi">0</span> <span class="nl">context:</span><span class="nb">NULL</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="nl">addObserver</span><span class="p">:</span><span class="nb">self</span> <span class="nl">forKeyPath</span><span class="p">:</span><span class="s">@&quot;selectedSegment&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">context</span><span class="p">:</span><span class="nb">NULL</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">observeValueForKeyPath:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyPath</span> <span class="nf">ofObject:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">object</span> <span class="nf">change:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">change</span> <span class="nf">context:</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">observeValueForKeyPath:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyPath</span> <span class="nf">ofObject:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">object</span> <span class="nf">change:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">change</span> <span class="nf">context:</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">object</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">keyPath</span> <span class="nl">isEqualToString:</span><span class="s">@&quot;selectedSegment&quot;</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">object</span> <span class="o">==</span> <span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">keyPath</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="s">@&quot;selectedSegment&quot;</span><span class="p">])</span> <span class="p">{</span>
 </span><span class='line'>        <span class="c1">// 处理改变</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
@@ -507,7 +502,7 @@ $(document).ready(function(event) {
 <p>视图头文件中：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">extern</span> <span class="n">NSString</span><span class="o">*</span> <span class="k">const</span> <span class="n">SelectedSegmentChangedNotification</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">extern</span> <span class="bp">NSString</span><span class="o">*</span> <span class="k">const</span> <span class="n">SelectedSegmentChangedNotification</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -521,13 +516,13 @@ $(document).ready(function(event) {
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSString</span><span class="o">*</span> <span class="k">const</span> <span class="n">SelectedSegmentChangedNotification</span> <span class="o">=</span> <span class="s">@&quot;selectedSegmentChangedNotification&quot;</span><span class="p">;</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSString</span><span class="o">*</span> <span class="k">const</span> <span class="n">SelectedSegmentChangedNotification</span> <span class="o">=</span> <span class="s">@&quot;selectedSegmentChangedNotification&quot;</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">...</span>
 </span><span class='line'>
 </span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">notifyAboutChanges</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">postNotificationName:</span><span class="n">SelectedSegmentChangedNotification</span> <span class="nl">object:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[[</span><span class="bp">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">postNotificationName</span><span class="p">:</span><span class="n">SelectedSegmentChangedNotification</span> <span class="nl">object</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -548,18 +543,18 @@ $(document).ready(function(event) {
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setupPieChart</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">addObserver:</span><span class="n">self</span>
-</span><span class='line'>                                       <span class="nl">selector:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">segmentChanged:</span><span class="p">)</span>
-</span><span class='line'>                                           <span class="nl">name:</span><span class="n">SelectedSegmentChangedNotification</span>
-</span><span class='line'>                                          <span class="nl">object:</span><span class="n">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[[</span><span class="bp">NSNotificationCenter</span> <span class="n">defaultCenter</span><span class="p">]</span> <span class="nl">addObserver</span><span class="p">:</span><span class="nb">self</span>
+</span><span class='line'>                                       <span class="nl">selector</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">segmentChanged</span><span class="p">:)</span>
+</span><span class='line'>                                           <span class="nl">name</span><span class="p">:</span><span class="n">SelectedSegmentChangedNotification</span>
+</span><span class='line'>                                          <span class="nl">object</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">pieChart</span><span class="p">];</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">...</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">segmentChanged:</span><span class="p">(</span><span class="n">NSNotification</span><span class="o">*</span><span class="p">)</span><span class="nv">note</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">segmentChanged:</span><span class="p">(</span><span class="bp">NSNotification</span><span class="o">*</span><span class="p">)</span><span class="nv">note</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -593,14 +588,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-07-06T17:15:53+08:00" pubdate data-updated="true">Jul 6<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-07-06T17:15:53+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:15 pm</span></time>
       
 
 <span class="categories">

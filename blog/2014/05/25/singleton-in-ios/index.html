@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>iOS中的单例模式 - sjpsega's Blog</title>
@@ -12,13 +12,15 @@
   <meta name="description" content="单例模式是指在一个系统中，类有且只有一个实例对象，可以通过全局的一个入口对这个实例对象进行访问。 在 iOS 开发中，单例模式是非常常用的一种设计模式。 ARC下的实现 iOS5.0 以后就开始可以使用ARC（Automatic Reference Counting：自动引用计数） &hellip;">
   <meta name="keywords" content="设计模式 单例 singleton iOS">
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me/blog/2014/05/25/singleton-in-ios">
+  <link rel="canonical" href="http://sjpsega.me/blog/2014/05/25/singleton-in-ios/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -31,18 +33,18 @@
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -59,7 +61,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -89,14 +91,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-05-25T12:25:10+08:00" pubdate data-updated="true">May 25<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-05-25T12:25:10+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:25 pm</span></time>
         
       </p>
     
@@ -134,9 +129,9 @@ $(document).ready(function(event) {
 </span><span class='line'>
 </span><span class='line'><span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">@interface</span> <span class="nc">Singleton</span> : <span class="nc">NSObject</span>
+</span><span class='line'><span class="k">@interface</span> <span class="nc">Singleton</span> : <span class="bp">NSObject</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">;</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">@end</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -178,21 +173,21 @@ $(document).ready(function(event) {
 </span><span class='line'>
 </span><span class='line'><span class="k">@implementation</span> <span class="nc">Singleton</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
 </span><span class='line'>    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">singleton</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">dispatch_once_t</span> <span class="n">token</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">token</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">token</span><span class="p">,</span><span class="o">^</span><span class="p">{</span>
 </span><span class='line'>        <span class="n">singleton</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Singleton</span> <span class="n">alloc</span><span class="p">]</span><span class="n">init</span><span class="p">];</span>
 </span><span class='line'>    <span class="p">});</span>
 </span><span class='line'>    <span class="k">return</span> <span class="n">singleton</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span><span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">self</span><span class="p">){</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span><span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nb">self</span><span class="p">){</span>
 </span><span class='line'>        <span class="c1">//在这里可以进行类的初始化工作</span>
 </span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">@end</span>
@@ -276,9 +271,9 @@ $(document).ready(function(event) {
 </span><span class='line'>
 </span><span class='line'><span class="k">@implementation</span> <span class="nc">Singleton</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
 </span><span class='line'>    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">singleton</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">dispatch_once_t</span> <span class="n">token</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">token</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">token</span><span class="p">,</span><span class="o">^</span><span class="p">{</span>
 </span><span class='line'>        <span class="c1">//这里调用私有的initSingle方法</span>
 </span><span class='line'>        <span class="n">singleton</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Singleton</span> <span class="n">alloc</span><span class="p">]</span><span class="n">initSingle</span><span class="p">];</span>
@@ -287,15 +282,15 @@ $(document).ready(function(event) {
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">//只是把原来在init方法中的代码，全都搬到initSingle</span>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">initSingle</span><span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">self</span><span class="p">){</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">initSingle</span><span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nb">self</span><span class="p">){</span>
 </span><span class='line'>        <span class="c1">//在这里可以进行类的初始化工作</span>
 </span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span><span class="p">{</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span><span class="p">{</span>
 </span><span class='line'>    <span class="c1">//改为调用[Singleton sharedInstance]</span>
 </span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">Singleton</span> <span class="n">sharedInstance</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
@@ -341,17 +336,17 @@ $(document).ready(function(event) {
 </span><span class='line'><span class="cp">#import &quot;Singleton.h&quot;</span>
 </span><span class='line'><span class="k">@implementation</span> <span class="nc">Singleton</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
 </span><span class='line'>    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">_singleton</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">_singleton</span> <span class="o">=</span> <span class="p">[[</span><span class="n">super</span> <span class="nl">allocWithZone:</span><span class="nb">NULL</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">_singleton</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">super</span> <span class="nl">allocWithZone</span><span class="p">:</span><span class="nb">NULL</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
 </span><span class='line'>    <span class="p">});</span>
 </span><span class='line'>    <span class="k">return</span> <span class="n">_singleton</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">allocWithZone:</span><span class="p">(</span><span class="k">struct</span> <span class="n">_NSZone</span> <span class="o">*</span><span class="p">)</span><span class="nv">zone</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">self</span> <span class="n">sharedInstance</span><span class="p">];</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">allocWithZone:</span><span class="p">(</span><span class="k">struct</span> <span class="bp">_NSZone</span> <span class="o">*</span><span class="p">)</span><span class="nv">zone</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">sharedInstance</span><span class="p">];</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -384,14 +379,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-05-25T12:25:10+08:00" pubdate data-updated="true">May 25<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-05-25T12:25:10+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:25 pm</span></time>
       
 
 <span class="categories">

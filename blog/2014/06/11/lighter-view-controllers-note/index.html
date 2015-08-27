@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <title>《#1 更轻量的 View Controllers》 学习笔记 - sjpsega's Blog</title>
@@ -12,13 +12,15 @@
   <meta name="description" content="文章地址：objc第一章 更轻量的 View Controllers 针对UITableViewController等VC，可以把对应的UITableViewDataSource、UITableViewDelegate等Protocol代码，写成单独的类， &hellip;">
   <meta name="keywords" content="iOS ViewController">
 
+  <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--友言验证-->
   <meta name="uyan_auth" content="7d2af41cee" />
+
   
-  <link rel="canonical" href="http://sjpsega.me/blog/2014/06/11/lighter-view-controllers-note">
+  <link rel="canonical" href="http://sjpsega.me/blog/2014/06/11/lighter-view-controllers-note/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="sjpsega's Blog" type="application/atom+xml">
@@ -31,18 +33,18 @@
 -->
   
 
-</head>
-<script type="text/javascript">
-//链接新开窗口
-function addBlankTargetForLinks () {
-  $('a[href^="http"]').each(function(){
-      $(this).attr('target', '_blank');
+  <script type="text/javascript">
+  //链接新开窗口
+  function addBlankTargetForLinks () {
+      $('a[href^="http"]').each(function(){
+          $(this).attr('target', '_blank');
+      });
+  }
+  $(document).ready(function(event) {
+      addBlankTargetForLinks();
   });
-}
-$(document).ready(function(event) {
-  addBlankTargetForLinks();
-});
-</script>
+  </script>
+
 <body   >
   <header role="banner"><hgroup>
   <h1><a href="/">sjpsega's Blog</a></h1>
@@ -59,7 +61,7 @@ $(document).ready(function(event) {
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sjpsega.me" />
+    <input type="hidden" name="sitesearch" value="sjpsega.me">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -89,14 +91,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-06-11T12:01:53+08:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-06-11T12:01:53+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:01 pm</span></time>
         
       </p>
     
@@ -124,11 +119,11 @@ $(document).ready(function(event) {
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">ChildViewController</span> <span class="o">*</span><span class="n">childVC</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ChildViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">addChildViewController:</span><span class="n">childVC</span><span class="p">];</span>
-</span><span class='line'><span class="n">CGRect</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span> <span class="nl">addChildViewController</span><span class="p">:</span><span class="n">childVC</span><span class="p">];</span>
+</span><span class='line'><span class="bp">CGRect</span> <span class="n">frame</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
 </span><span class='line'><span class="n">childVC</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">childVC</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="nl">didMoveToParentViewController:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">childVC</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="nl">didMoveToParentViewController</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -137,7 +132,7 @@ $(document).ready(function(event) {
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="nl">willMoveToParentViewController:</span><span class="nb">nil</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="nl">willMoveToParentViewController</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
 </span><span class='line'><span class="p">[</span><span class="n">childVC</span><span class="p">.</span><span class="n">view</span> <span class="n">removeFromSuperview</span><span class="p">];</span>
 </span><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="n">removeFromParentViewController</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -153,7 +148,7 @@ $(document).ready(function(event) {
 
 <h2>View Controller 容器</h2>
 
-<h3>过场动画 &ndash; 新老VC替换</h3>
+<h3>过场动画 - 新老VC替换</h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -168,15 +163,15 @@ $(document).ready(function(event) {
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 </pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">toController</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">fromController</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">addChildViewController:</span><span class="n">toController</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">fromController</span> <span class="nl">willMoveToParentViewController:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">transitionFromViewController:</span><span class="n">fromController</span>
-</span><span class='line'>                  <span class="nl">toViewController:</span><span class="n">toController</span>
-</span><span class='line'>                          <span class="nl">duration:</span><span class="mf">0.2</span>
-</span><span class='line'>                           <span class="nl">options:</span><span class="n">direction</span> <span class="o">|</span> <span class="n">UIViewAnimationOptionCurveEaseIn</span>
-</span><span class='line'>                        <span class="nl">animations:</span><span class="nb">nil</span>
-</span><span class='line'>                        <span class="nl">completion:</span><span class="o">^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">finished</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                            <span class="p">[</span><span class="n">toController</span> <span class="nl">didMoveToParentViewController:</span><span class="n">self</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span> <span class="nl">addChildViewController</span><span class="p">:</span><span class="n">toController</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">fromController</span> <span class="nl">willMoveToParentViewController</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span> <span class="nl">transitionFromViewController</span><span class="p">:</span><span class="n">fromController</span>
+</span><span class='line'>                  <span class="nl">toViewController</span><span class="p">:</span><span class="n">toController</span>
+</span><span class='line'>                          <span class="nl">duration</span><span class="p">:</span><span class="mf">0.2</span>
+</span><span class='line'>                           <span class="nl">options</span><span class="p">:</span><span class="n">direction</span> <span class="o">|</span> <span class="n">UIViewAnimationOptionCurveEaseIn</span>
+</span><span class='line'>                        <span class="nl">animations</span><span class="p">:</span><span class="nb">nil</span>
+</span><span class='line'>                        <span class="nl">completion</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">finished</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                            <span class="p">[</span><span class="n">toController</span> <span class="nl">didMoveToParentViewController</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
 </span><span class='line'>                            <span class="p">[</span><span class="n">fromController</span> <span class="n">removeFromParentViewController</span><span class="p">];</span>
 </span><span class='line'>                        <span class="p">}];</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -193,10 +188,10 @@ $(document).ready(function(event) {
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSData</span> <span class="nl">dataWithContentsOfURL:</span><span class="n">archiveURL</span> <span class="nl">options:</span><span class="mi">0</span> <span class="nl">error:</span><span class="nb">NULL</span><span class="p">];</span>
-</span><span class='line'><span class="n">NSKeyedUnarchiver</span> <span class="o">*</span><span class="n">unarchiver</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSKeyedUnarchiver</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initForReadingWithData:</span><span class="n">data</span><span class="p">];</span>
-</span><span class='line'><span class="n">_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">unarchiver</span> <span class="nl">decodeObjectOfClass:</span><span class="p">[</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">]</span> <span class="nl">forKey:</span><span class="s">@&quot;users&quot;</span><span class="p">];</span>
-</span><span class='line'><span class="n">_photos</span> <span class="o">=</span> <span class="p">[</span><span class="n">unarchiver</span> <span class="nl">decodeObjectOfClass:</span><span class="p">[</span><span class="n">NSArray</span> <span class="n">class</span><span class="p">]</span> <span class="nl">forKey:</span><span class="s">@&quot;photos&quot;</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSData</span> <span class="nl">dataWithContentsOfURL</span><span class="p">:</span><span class="n">archiveURL</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">error</span><span class="p">:</span><span class="nb">NULL</span><span class="p">];</span>
+</span><span class='line'><span class="bp">NSKeyedUnarchiver</span> <span class="o">*</span><span class="n">unarchiver</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSKeyedUnarchiver</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initForReadingWithData</span><span class="p">:</span><span class="n">data</span><span class="p">];</span>
+</span><span class='line'><span class="n">_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">unarchiver</span> <span class="nl">decodeObjectOfClass</span><span class="p">:[</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">]</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&quot;users&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="n">_photos</span> <span class="o">=</span> <span class="p">[</span><span class="n">unarchiver</span> <span class="nl">decodeObjectOfClass</span><span class="p">:[</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">]</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&quot;photos&quot;</span><span class="p">];</span>
 </span><span class='line'><span class="p">[</span><span class="n">unarchiver</span> <span class="n">finishDecoding</span><span class="p">];</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -219,14 +214,7 @@ $(document).ready(function(event) {
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2014-06-11T12:01:53+08:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-06-11T12:01:53+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:01 pm</span></time>
       
 
 <span class="categories">
