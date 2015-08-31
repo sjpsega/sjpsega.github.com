@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://sjpsega.me/blog/2015/08/31/gcd-study/</loc>
+    <lastmod>2015-08-31T00:08:49+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://sjpsega.me/blog/2015/06/15/uiwebview-cache-bug-by-custom-protocol/</loc>
     <lastmod>2015-06-15T22:56:31+08:00</lastmod>
   </url>
