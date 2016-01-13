@@ -26,6 +26,9 @@ keywords: isEqual hash
 * 实现 isEqual 和 hash 方法，遵守两者关系，尽量避免 hash 碰撞的情况发生
 * 实现 NSCopying 协议，接口：`- (void)setObject:(ObjectType)anObject forKey:(KeyType <NSCopying>)aKey;`
 
+## 测试 Demo
+[测试 Demo](https://github.com/sjpsega/EqualAndHashTest)
+
 ## 参考资料
 [Equality](http://nshipster.com/equality/)
 
