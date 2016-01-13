@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2015-08-31T22:29:17+08:00</updated>
+  <updated>2016-01-14T01:20:16+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[isEqual 与 Hash]]></title>
+    <link href="http://sjpsega.me/blog/2016/01/14/isequalandhash/"/>
+    <updated>2016-01-14T01:17:56+08:00</updated>
+    <id>http://sjpsega.me/blog/2016/01/14/isequalandhash</id>
+    <content type="html"><![CDATA[<h2>最佳实践</h2>
+
+<ul>
+<li>实现 <code>isEqualTo__ClassName__</code></li>
+<li>重写 isEqual 方法，同时重写 hash 方法。</li>
+</ul>
+
+
+<h2>关系</h2>
+
+<ul>
+<li>两个对象 isEqual 相等，hash 必须也相等</li>
+<li>两个对象 hash 相同，isEqual 则不一定相等</li>
+</ul>
+
+
+<h2>碰撞</h2>
+
+<p>当对象存入集合对象时（Array，Set，HashTable等），内部会使用对象的 hash 值来作为 key 来存入。
+当两个不相等的对象，有相同的 hash 值，存入集合对象，就会发生<code>碰撞</code>现象。
+发生碰撞现象，对使得存取数据变慢，所以需要尽量避免这个现象，但不可能完全避免。</p>
+
+<h2>作为集合对象 key 的注意点</h2>
+
+<ul>
+<li>实现 isEqual 和 hash 方法，遵守两者关系，尽量避免 hash 碰撞的情况发生</li>
+<li>实现 NSCopying 协议，接口：<code>- (void)setObject:(ObjectType)anObject forKey:(KeyType &lt;NSCopying&gt;)aKey;</code></li>
+</ul>
+
+
+<h2>参考资料</h2>
+
+<p><a href="http://nshipster.com/equality/">Equality</a></p>
+
+<p><a href="https://mikeash.com/pyblog/friday-qa-2010-06-18-implementing-equality-and-hashing.html">Implementing Equality and Hashing</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[GCD 学习]]></title>
@@ -557,72 +600,6 @@ Method xxx_lastObject {
 <p><a href="http://blog.csdn.net/yiyaaixuexi/article/details/9374411">Objective-C的hook方案（一）:  Method Swizzling</a></p>
 
 <p><a href="http://blog.jobbole.com/45963/">Objective-C 的动态提示和技巧</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS H5的那些坑]]></title>
-    <link href="http://sjpsega.me/blog/2014/08/06/ios-h5-trap/"/>
-    <updated>2014-08-06T17:47:30+08:00</updated>
-    <id>http://sjpsega.me/blog/2014/08/06/ios-h5-trap</id>
-    <content type="html"><![CDATA[<p>最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。</p>
-
-<p>因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。</p>
-
-<h2>iOS 7.0 input 元素聚焦问题</h2>
-
-<h3>bug 演示</h3>
-
-<p><img src="/images/2014-08-06-ios-h5-trap/ios7.0bug.gif" alt="ios7.0bug.gif" /></p>
-
-<h3>bug 分析</h3>
-
-<p>点击屏幕下方的input元素，且该元素在键盘弹起的区域内；当键盘弹起时，input 元素未获得焦点，且 input 元素不在可视范围内，没有进行自动定位调整。</p>
-
-<p>但 input 元素不在键盘弹起的区域内，当键盘弹起时，一切正常。</p>
-
-<p>该 bug，iOS &lt; 7.1 有问题，>=7.1 无问题。</p>
-
-<h3>解决办法</h3>
-
-<p>办法有点猥琐，要通过 js，去强制 input 元素获得焦点。</p>
-
-<pre><code class="javascript">element.on("tap", function(e){
-  element.focus();
-});
-</code></pre>
-
-<h3>参考资料</h3>
-
-<p><a href="http://stackoverflow.com/questions/16149083/keyboardshrinksview-makes-lose-focus">KeyboardShrinksView makes lose focus</a></p>
-
-<p><a href="https://issues.apache.org/jira/browse/CB-6974">Keyboard causes input focus issue</a></p>
-
-<h2>iOS 7.1 input 元素失焦问题</h2>
-
-<h3>bug 演示</h3>
-
-<p><img src="/images/2014-08-06-ios-h5-trap/ios7.1bug.gif" alt="ios7.1bug.gif" /></p>
-
-<h3>bug 分析</h3>
-
-<p>点击 input 元素（input 元素在不在浮层中不重要），弹出键盘时，当点击 Html 中的元素，致使 input 元素失去焦点，键盘收起，position:fixed 元素（演示中的浮层为 position:fixed）会导致界面错乱。</p>
-
-<p>但若点击键盘右上角的 <code>完成</code> 按钮，键盘收起，一切正常。</p>
-
-<p>也就是说，使用 iOS 系统的方式使得键盘收起，没有问题；使用其他方式，使得键盘收起，position:fixed 元素会导致界面错乱。</p>
-
-<p>该 bug，iOS >= 7.1 有问题，&lt; 7.1 无问题。正好与iOS 7.0 input 元素聚焦 bug 的情况相反。</p>
-
-<p><code>注：iOS 键盘的操作，必须由用户的操作引发，想通过 JSBridge 去让键盘收起的方案是行不通的。</code></p>
-
-<h3>解决办法</h3>
-
-<p>避免使用 position:fixed，换成 position:absolute 替代。</p>
-
-<h3>参考资料</h3>
-
-<p><a href="http://stackoverflow.com/questions/18970865/ios-7-input-elements-moving-fixed-positioned-elements">ios-7-input-elements-moving-fixed-positioned-elements</a></p>
 ]]></content>
   </entry>
   
