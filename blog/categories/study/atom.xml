@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2016-01-14T01:20:16+08:00</updated>
+  <updated>2016-01-14T01:28:50+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -47,6 +47,10 @@
 <li>实现 NSCopying 协议，接口：<code>- (void)setObject:(ObjectType)anObject forKey:(KeyType &lt;NSCopying&gt;)aKey;</code></li>
 </ul>
 
+
+<h2>测试 Demo</h2>
+
+<p><a href="https://github.com/sjpsega/EqualAndHashTest">测试 Demo</a></p>
 
 <h2>参考资料</h2>
 
