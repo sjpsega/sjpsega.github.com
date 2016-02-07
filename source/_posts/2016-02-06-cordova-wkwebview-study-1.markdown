@@ -7,12 +7,12 @@ categories: study
 description: cordova wkwebview
 keywords: cordova wkwebview
 ---
-
 ## WKWebView
 Apple 从 iOS 8 开始，引入了新的 WebView 类 `WKWebView`，试图替换已经老迈的 UIWebView。
 
 ### 优点
 通过官方的描述，和自己实际测试，WKWebView功能相当强大，对比 UIWebView 的优点很多：
+
 * 更少的内存使用，渲染相同页面，占用内存基本只有 UIWebView 的 1/3 ~ 1/4，并且大大减少了内存泄露的情况
 * 使用与 Safari 一样的性能强大的 Nirtro JS 引擎
 * 异常强大的 app 与 web 的内容传递
@@ -22,6 +22,7 @@ Apple 从 iOS 8 开始，引入了新的 WebView 类 `WKWebView`，试图替换�
 ### 限制
 官方的描述基本是溢美之词，他不会告诉你 WKWebView 的一些问题，但是这些问题，在做 Hybrid 应用的时候，影响很大，纯 wap 无影响。
 估计是切换底层实现的关系，这些问题在 UIWebView 上不存在：
+
 * 无能加载本地文件，只能通过内建一个 WebServer 实现功能。（直到 iOS 9 才新开了一个loadFileURL:allowingReadAccessToURL: 接口，原生实现该功能）
 * 不能注册自定义 NSURLProtocol，导致大量 URL 拦截功能难以实现，比如页面展示本地图片
 * 不能使用 NSHTTPCookieStorage 设置 WebView 的 Cookie
