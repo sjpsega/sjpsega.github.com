@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2016-01-14T01:28:50+08:00</updated>
+  <updated>2016-02-07T23:48:05+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,68 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cordova WKWebView 学习笔记（一）]]></title>
+    <link href="http://sjpsega.me/blog/2016/02/06/cordova-wkwebview-study-1/"/>
+    <updated>2016-02-06T13:43:47+08:00</updated>
+    <id>http://sjpsega.me/blog/2016/02/06/cordova-wkwebview-study-1</id>
+    <content type="html"><![CDATA[<h2>WKWebView</h2>
+
+<p>Apple 从 iOS 8 开始，引入了新的 WebView 类 <code>WKWebView</code>，试图替换已经老迈的 UIWebView。</p>
+
+<h3>优点</h3>
+
+<p>通过官方的描述，和自己实际测试，WKWebView功能相当强大，对比 UIWebView 的优点很多：
+* 更少的内存使用，渲染相同页面，占用内存基本只有 UIWebView 的 1/3 ~ 1/4，并且大大减少了内存泄露的情况
+* 使用与 Safari 一样的性能强大的 Nirtro JS 引擎
+* 异常强大的 app 与 web 的内容传递
+    * 可以使用 <code>WKUserContentController</code> 在 Native 端注入用户自定义脚本 JS
+    * web 端可以使用 <code>window.webkit.messageHandlers.{NAME}.postMessage()</code>，直接向 Native 端发送消息。UIWebView 只能使用 iframe 等方案 hack</p>
+
+<h3>限制</h3>
+
+<p>官方的描述基本是溢美之词，他不会告诉你 WKWebView 的一些问题，但是这些问题，在做 Hybrid 应用的时候，影响很大，纯 wap 无影响。
+估计是切换底层实现的关系，这些问题在 UIWebView 上不存在：
+* 无能加载本地文件，只能通过内建一个 WebServer 实现功能。（直到 iOS 9 才新开了一个loadFileURL:allowingReadAccessToURL: 接口，原生实现该功能）
+* 不能注册自定义 NSURLProtocol，导致大量 URL 拦截功能难以实现，比如页面展示本地图片
+* 不能使用 NSHTTPCookieStorage 设置 WebView 的 Cookie</p>
+
+<p>还有其他在实际开发中，可能爆出的 bug。</p>
+
+<h2>Cordova WKWebview 现状</h2>
+
+<p>Cordova 开发了<a href="https://github.com/apache/cordova-plugin-wkwebview-engine">一个插件</a>来支持 WKWebview，用户可以自行在 WKWebview 与 UIWebView 中选择。</p>
+
+<p>但因为 WKWebView 存在的种种问题，WKWebView 还不是 Cordova 的默认选择。</p>
+
+<p><a href="https://shazronatadobe.wordpress.com/2015/03/03/wkwebview-and-apache-cordova/">cordova 关于 WKWebView 的一些说明</a></p>
+
+<h2>结论</h2>
+
+<ul>
+<li>纯 wap 页面，WKWebView 毫无问题，会有很好的表现</li>
+<li>Hybrid 应用，因为现在存在的一些问题，以及会导致实现 Camera、PhotoList 等 JSBridge 的功能上会有较大限制，选择 WKWebView 需要慎重</li>
+</ul>
+
+
+<h2>相关代码</h2>
+
+<p><a href="https://github.com/apache/cordova-plugin-wkwebview-engine">cordova-plugin-wkwebview-engine</a></p>
+
+<p><a href="https://github.com/crosswalk-project/ios-extensions-crosswalk">CrossWalk Cordova Plugin Support</a></p>
+
+<h2>相关资料</h2>
+
+<p><a href="http://docs.telerik.com/platform/appbuilder/cordova/configuring-your-app/configure-web-views">Telerik Platform Documentation - Configure the Web Views</a></p>
+
+<p><a href="http://plugins.telerik.com/cordova/plugin/wkwebview">Cordova Plugins - WKWebView</a></p>
+
+<p><a href="https://crosswalk-project.org/documentation/ios/cordova_plugin_support.html">CrossWalk - Cordova Plugin Support</a></p>
+
+<p><a href="http://stackoverflow.com/questions/29268433/is-there-support-in-cordova-to-wkwebview">Is there support in Cordova to WKWebView?</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[isEqual 与 Hash]]></title>
@@ -402,208 +464,6 @@ viewportmeta.content = 'width=device-width, initial-scale=1.0,      minimum-scal
 </code></pre>
 
 <p>此方法在iOS7、8上的 UIWebView 上测试通过，WKWebView 没有测试。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Objective-C Method Swizzling]]></title>
-    <link href="http://sjpsega.me/blog/2014/09/17/oc-method-swizzling/"/>
-    <updated>2014-09-17T22:36:40+08:00</updated>
-    <id>http://sjpsega.me/blog/2014/09/17/oc-method-swizzling</id>
-    <content type="html"><![CDATA[<p>Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改方法调用的技术。是 OC 作为动态语言的典型证明。</p>
-
-<p>Method Swizzling 是 OC <code>&lt;objc/runtime.h&gt;</code> 类库提供的“黑魔法”之一。</p>
-
-<h2>例子</h2>
-
-<p>以替换 NSArray 的 lastObject 方法为例：</p>
-
-<ul>
-<li>在 NSArray 中添加需要替换 lastObject 的方法 - xxx_lastObject方法：</li>
-</ul>
-
-
-<pre><code class="objc">#import "NSArray+Swizzle.h"  
-
-@implementation NSArray (Swizzle)  
-
-- (id)xxx_lastObject  
-{  
-    id ret = [self xxx_lastObject];  
-    NSLog(@"**********  myLastObject ***********");  
-    return ret;  
-}  
-@end  
-</code></pre>
-
-<p>注意这里的写法，xxx_lastObject 方法的方法体中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。</p>
-
-<ul>
-<li>调换 IMP</li>
-</ul>
-
-
-<pre><code class="objc">#import &lt;objc/runtime.h&gt;  
-#import "NSArray+Swizzle.h"
-
-Method ori_Method =  class_getInstanceMethod([NSArray class], @selector(lastObject));  
-Method my_Method = class_getInstanceMethod([NSArray class], @selector(xxx_lastObject));  
-method_exchangeImplementations(ori_Method, my_Method);  
-</code></pre>
-
-<p>注意这里需要引入 <code>&lt;objc/runtime.h&gt;</code>，否则会报错，因为使用了 runtime 中的 method_exchangeImplementations 方法。</p>
-
-<p>使用 <code>method_exchangeImplementations</code> 交换了 xxx_lastObject 与 lastObject 的 IMP。后面会讲解更深层次的原理。</p>
-
-<ul>
-<li>尝试调用 lastObject</li>
-</ul>
-
-
-<pre><code class="objc">#import &lt;objc/runtime.h&gt;
-#import "NSArray+Swizzle.h"
-
-NSArray *array = @[@"0",@"1",@"2",@"3"];  
-NSString *string = [array lastObject];  
-NSLog(@"TEST RESULT : %@",string);  
-</code></pre>
-
-<p>输出结果为:</p>
-
-<pre><code class="objc">**********  myLastObject ***********
-TEST RESULT : 3
-</code></pre>
-
-<p>很明显，这里调用 lastObject 方法，其实是调用了我们添加的 xxx_lastObject 方法。</p>
-
-<h2>用处</h2>
-
-<p>Method Swizzling 非常强大，主要作用有：</p>
-
-<ul>
-<li>在不修改 iOS 系统类库或第三方类库的源码基础上，修改原有调用逻辑</li>
-<li>动态添加、修改方法，修复线上 bug（如果 Apple 官方允许的话）</li>
-</ul>
-
-
-<h2>常用 API</h2>
-
-<p>相关常用方法，都在<code>&lt;objc/runtime.h&gt;</code>包内：</p>
-
-<pre><code class="objc">//向类中添加Method
-BOOL class_addMethod(Class cls, SEL name, IMP imp, const char *types)
-
-//修改类的Method
-IMP class_replaceMethod(Class cls, SEL name, IMP imp, const char *types)
-
-//交换2个方法中的IMP
-void method_exchangeImplementations(Method m1, Method m2)
-
-//获取类的某个实例方法
-Method class_getInstanceMethod(Class aClass, SEL aSelector);
-</code></pre>
-
-<h2>底层原理</h2>
-
-<p>在运行时，OC 的方法是一种叫 <code>Method</code> 的结构体，这种 <code>objc_method</code> 类型的结构体定义为：</p>
-
-<pre><code class="objc">struct objc_method
-   SEL method_name         OBJC2_UNAVAILABLE;
-   char *method_types      OBJC2_UNAVAILABLE;
-   IMP method_imp          OBJC2_UNAVAILABLE;
-}
-</code></pre>
-
-<ul>
-<li>method_name 是方法的 selector，可以理解为运行时的方法名；</li>
-<li>*method_types 是一个参数和返回值类型<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html">编码</a>的字符串；</li>
-<li>method_imp 是指向方法实现的指针。</li>
-</ul>
-
-
-<p><code>Method Swizzling 的实质是在运行时，访问对象的方法结构体，并改变它的底层实现。</code></p>
-
-<p>我们以上节修改 NSArray 的 lastObject 为例做说明。</p>
-
-<ul>
-<li>初始时，lastObject 与 xxx_lastObject 方法的 Method 结构体：</li>
-</ul>
-
-
-<pre><code class="objc">Method lastObject {
-      SEL method_name = @selector(lastObject)
-      char *method_types = “v@:“ //返回值void, 参数id(self)，selector(_cmd)
-      IMP method_imp = 0x000FFFF //指向([NSArray lastObject])
-}
-
-Method xxx_lastObject {
-       SEL method_name = @selector(swizzle_originalMethodName)
-       char *method_types = “v@:”
-       IMP method_imp = 0x1234AABA //指向([NSArray xxx_lastObject])
-}
-</code></pre>
-
-<ul>
-<li>调用 <code>void method_exchangeImplementations(Method m1, Method m2)</code> ,交换两者的实现：</li>
-</ul>
-
-
-<pre><code class="objc">Method ori_Method =  class_getInstanceMethod([NSArray class], @selector(lastObject));  
-Method my_Method = class_getInstanceMethod([NSArray class], @selector(xxx_lastObject));  
-method_exchangeImplementations(ori_Method, my_Method);
-</code></pre>
-
-<ul>
-<li>调换后的 Method 结构体：</li>
-</ul>
-
-
-<pre><code class="objc">Method lastObject {
-      SEL method_name = @selector(lastObject)
-      char *method_types = “@@:“ //返回值id, 参数id(self)，selector(_cmd)
-      IMP method_imp = 0x1234AABA //指向([NSArray xxx_lastObject])
-}
-
-Method xxx_lastObject {
-       SEL method_name = @selector(swizzle_originalMethodName)
-       char *method_types = “@@:”
-       IMP method_imp = 0x000FFFF //指向([NSArray lastObject])
-}
-</code></pre>
-
-<p>可以看到使用<code>void method_exchangeImplementations(Method m1, Method m2)</code>的实质是交换了xxx_lastObject 与 lastObject 的 IMP，实现了在运行时做方法的替换。使得当执行 [array lastObject] 的时候，实际会去执行 [array xxx_lastObject] 的方法实现。</p>
-
-<h2>其他提示</h2>
-
-<h3>+load</h3>
-
-<p>Swizzling 的处理，在类的 <code>+load</code> 方法中完成。</p>
-
-<p>因为 <code>+load</code> 方法会在类被添加到 OC 运行时执行，且只会被调用一次，保证了 Swizzling 方法的及时处理。</p>
-
-<h3>dispatch_once</h3>
-
-<p>Swizzling 的处理，<code>dispatch_once</code> 中完成。保证只执行一次。</p>
-
-<h3>prefix</h3>
-
-<p>Swizzling 方法添加前缀，避免方法名称冲突。</p>
-
-<h2>代码示例</h2>
-
-<p><a href="https://github.com/sjpsega/SwizzleTest">代码示例</a></p>
-
-<h2>参考资料</h2>
-
-<p><a href="http://nshipster.com/method-swizzling/">Method Swizzling</a></p>
-
-<p><a href="http://stackoverflow.com/questions/3267506/how-to-swizzle-a-class-method-on-ios">How to swizzle a class method on iOS?</a></p>
-
-<p><a href="http://www.friday.com/bbum/2011/03/17/ios-4-3-imp_implementationwithblock/">iOS 4.3: imp_implementationWithBlock()</a></p>
-
-<p><a href="http://blog.csdn.net/yiyaaixuexi/article/details/9374411">Objective-C的hook方案（一）:  Method Swizzling</a></p>
-
-<p><a href="http://blog.jobbole.com/45963/">Objective-C 的动态提示和技巧</a></p>
 ]]></content>
   </entry>
   
