@@ -26,6 +26,7 @@ Apple 从 iOS 8 开始，引入了新的 WebView 类 `WKWebView`，试图替换�
 * 无能加载本地文件，只能通过内建一个 WebServer 实现功能。（直到 iOS 9 才新开了一个loadFileURL:allowingReadAccessToURL: 接口，原生实现该功能）
 * 不能注册自定义 NSURLProtocol，导致大量 URL 拦截功能难以实现，比如页面展示本地图片
 * 不能使用 NSHTTPCookieStorage 设置 WebView 的 Cookie
+* 必须 iOS8 及以上版本，Cordova 只支持 iOS9 及以上
 
 还有其他在实际开发中，可能爆出的 bug。
 
@@ -46,6 +47,8 @@ Cordova 开发了[一个插件](https://github.com/apache/cordova-plugin-wkwebvi
 [CrossWalk Cordova Plugin Support](https://github.com/crosswalk-project/ios-extensions-crosswalk)
 
 ## 相关资料
+[WKWeb​View](http://nshipster.cn/wkwebkit/)
+
 [Telerik Platform Documentation - Configure the Web Views](http://docs.telerik.com/platform/appbuilder/cordova/configuring-your-app/configure-web-views)
 
 [Cordova Plugins - WKWebView](http://plugins.telerik.com/cordova/plugin/wkwebview)
