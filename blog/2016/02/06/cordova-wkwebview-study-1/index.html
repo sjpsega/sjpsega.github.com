@@ -128,6 +128,7 @@
 <li>无能加载本地文件，只能通过内建一个 WebServer 实现功能。（直到 iOS 9 才新开了一个loadFileURL:allowingReadAccessToURL: 接口，原生实现该功能）</li>
 <li>不能注册自定义 NSURLProtocol，导致大量 URL 拦截功能难以实现，比如页面展示本地图片</li>
 <li>不能使用 NSHTTPCookieStorage 设置 WebView 的 Cookie</li>
+<li>必须 iOS8 及以上版本，Cordova 只支持 iOS9 及以上</li>
 </ul>
 
 
@@ -156,6 +157,8 @@
 <p><a href="https://github.com/crosswalk-project/ios-extensions-crosswalk">CrossWalk Cordova Plugin Support</a></p>
 
 <h2>相关资料</h2>
+
+<p><a href="http://nshipster.cn/wkwebkit/">WKWeb​View</a></p>
 
 <p><a href="http://docs.telerik.com/platform/appbuilder/cordova/configuring-your-app/configure-web-views">Telerik Platform Documentation - Configure the Web Views</a></p>
 
@@ -239,6 +242,10 @@ var uyan_config = {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/02/15/cordova-wkwebview-study-2/">Cordova WKWebView 学习笔记（二）</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/02/07/2015summary/">2015年终总结</a>
       </li>
     
@@ -252,10 +259,6 @@ var uyan_config = {
     
       <li class="post">
         <a href="/blog/2015/08/31/gcd-study/">GCD 学习</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/06/15/uiwebview-cache-bug-by-custom-protocol/">iOS UIWebView 自定义协议文件加载缓存问题</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2016-02-07T23:51:08+08:00</updated>
+  <updated>2016-02-15T00:40:13+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,254 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cordova WKWebView 学习笔记（二）]]></title>
+    <link href="http://sjpsega.me/blog/2016/02/15/cordova-wkwebview-study-2/"/>
+    <updated>2016-02-15T00:11:47+08:00</updated>
+    <id>http://sjpsega.me/blog/2016/02/15/cordova-wkwebview-study-2</id>
+    <content type="html"><![CDATA[<p>这篇主要是代码学习。</p>
+
+<p>官方代码地址：<a href="https://github.com/apache/cordova-plugin-wkwebview-engine">cordova-plugin-wkwebview-engine</a></p>
+
+<p>我的测试代码：<a href="https://github.com/sjpsega/CordovaWKWebViewTest">CordovaWKWebViewTest</a>，融合了一个 Device JSBridge 的例子，该例子参考自<a href="https://crosswalk-project.org/documentation/ios/cordova_plugin_support.html">CrossWalk - Cordova Plugin Support</a></p>
+
+<h3>WKWebView JSBridge 事件传递</h3>
+
+<p>在 WKWebView 中，开始原生支持 web 向 Native 发送消息，是通过 messageHandler 实现的。</p>
+
+<p>在 UIWebView 时代，实现 web 向 app 发送消息，通常是通过 iframe 发起一个特殊请求，UIWebView 通过在拦截方法中，拦截这个特殊请求，使用这种类似 hack 的方式曲线救国的。</p>
+
+<h4>实现步骤</h4>
+
+<ul>
+<li>Native 端添加 messageHandler
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="n">WKUserContentController</span><span class="o">*</span> <span class="n">userContentController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKUserContentController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="c1">// 关键代码，添加 messageHandler，名字为 cordova</span>
+</span><span class='line'><span class="p">[</span><span class="n">userContentController</span> <span class="nl">addScriptMessageHandler</span><span class="p">:</span><span class="nb">self</span> <span class="nl">name</span><span class="p">:@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">cordova</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;];</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">WKWebViewConfiguration</span><span class="o">*</span> <span class="n">configuration</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKWebViewConfiguration</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="n">configuration</span><span class="p">.</span><span class="n">userContentController</span> <span class="o">=</span> <span class="n">userContentController</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">WKWebView</span><span class="o">*</span> <span class="n">wkWebView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKWebView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">frame</span> <span class="nl">configuration</span><span class="p">:</span><span class="n">configuration</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<ul>
+<li><p>JS 端调用
+<code>javascript
+//调用名为 cordova 的 messageHandler，与 Native 端进行通信
+window.webkit.messageHandlers.cordova.postMessage(command);
+</code></p></li>
+<li><p>Native 接收
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//实现 WKScriptMessageHandler 接口&lt;/p&gt;&lt;/li&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">userContentController</span><span class="p">:(</span><span class="n">WKUserContentController</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">userContentController</span> <span class="nl">didReceiveScriptMessage</span><span class="p">:(</span><span class="n">WKScriptMessage</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">message</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">NSLog</span><span class="p">(@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">%</span><span class="p">@</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="n">message</span><span class="p">.</span><span class="n">name</span><span class="p">);</span> <span class="c1">//cordova</span>
+</span><span class='line'>  <span class="n">NSLog</span><span class="p">(@</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">%</span><span class="p">@</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="n">message</span><span class="p">.</span><span class="n">body</span><span class="p">);</span> <span class="c1">//JSBridge 内容体</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span> <span class="c1">//实现调用 Native 代码</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></li>
+</ul>
+
+
+<p>一个 messageHandler 一个通道，Cordova 统一使用 cordova 这个通道来通信。</p>
+
+<h3>新增一个插件的实现步骤</h3>
+
+<p>目录结构（列出关键目录与文件）：
+<code>
+|wkwvtest
+    |Staging
+        config.xml
+        |www
+            cordova_plugins.js
+            |plugins //JS Plugihns
+    |Plugins // Native Plugins
+</code></p>
+
+<p>已实现一个 Device 插件为例：</p>
+
+<ul>
+<li><p>在 Staging/www/plugins 目录下，新增一个 device.js 文件，添加 JS 代码
+<code>javascript
+cordova.define("org.apache.cordova.device.device", function(require, exports, module) {
+  function Device() {
+  //...
+  }
+  //...
+  Device.prototype.getInfo = function(successCallback, errorCallback) {
+      //调用 JSBridge，调用名为 Device 的 Native 类 getDeviceInfo 方法
+      exec(successCallback, errorCallback, "Device", "getDeviceInfo", []);
+  };
+  module.exports = new Device();
+});
+</code></p></li>
+<li><p>在 Staging/www/cordova_plugins.js 文件中注册 device.js
+<code>javascript
+cordova.define('cordova/plugin_list', function(require, exports, module) {
+  module.exports = [
+      {
+          "file": "plugins/device.js",//写明相对 cordova_plugins.js 的文件路径
+          "id": "org.apache.cordova.device.device",
+          "clobbers": [
+               "device" //全局命名空间，会注册为 window.device
+          ]
+      }
+  ];
+  module.exports.metadata =
+  {
+      "org.apache.cordova.device": "0.3.0"
+  }
+});
+</code></p></li>
+<li><p>添加在 plugins 目录下，新增 CDVDevice 类，继承于 CDVPlugin
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@interface</span> <span class="nc">CDVDevice</span> : <span class="nc">CDVPlugin</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">getDeviceInfo</span><span class="p">:(</span><span class="n">CDVInvokedUrlCommand</span><span class="o">*</span><span class="p">)</span><span class="n">command</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure></p></li>
+<li><p>在 Staging/config.xml 中注册 CDVDevice
+<code>xml
+&lt;widget id="my.project.wkwvtest" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"&gt;
+  &lt;feature name="Device"&gt;
+      &lt;param name="ios-package" value="CDVDevice" /&gt;
+  &lt;/feature&gt;
+&lt;/widget&gt;
+</code></p></li>
+</ul>
+
+
+<p>完成这步骤，便可以通过 web 端，调用 <code>exec(successCallback, errorCallback, "Device", "getDeviceInfo", []);</code>，调用 Device 这个 Native 类的 getDeviceInfo 方法</p>
+
+<p>详见：<a href="https://github.com/sjpsega/CordovaWKWebViewTest">CordovaWKWebViewTest</a></p>
+
+<h3>&ldquo;同步&rdquo; JSBridge 代码执行</h3>
+
+<p>这里的"同步"需要打引号，虽然 WKWebView 提供了原生 web 向 Native 发送消息的方案，但是注意，这里是发送消息，还不是同步回调。</p>
+
+<p>Cordova 新版本的插件机制，通过多重事件机制的方式，使得一种类型的 JSBridge 同步成为可能 - webView 打开页面后，需要调用 Native 端获取环境变量的 JSBridge。比如上例的 Device 这个 JSBridge 就是典型。</p>
+
+<p>Cordova 启动的几个重要事件：</p>
+
+<ul>
+<li>onNativeReady</li>
+<li>onDOMContentLoaded</li>
+<li>onPluginsReady</li>
+<li>onCordovaReady</li>
+<li>onDeviceReady</li>
+</ul>
+
+
+<p>通常是从上往下依次进行，并且 web 开始调用 JSBridge，必须监听 <code>deviceready</code> 事件，所以 onDeviceReady 始终最后执行，代表 Cordova 插件环境完全准备完毕。</p>
+
+<p>所以，这种"同步" JSBridge 就是利用这个特性，做了一些文章。</p>
+
+<p>看关键代码：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cordova</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">org</span><span class="p">.</span><span class="nx">apache</span><span class="p">.</span><span class="nx">cordova</span><span class="p">.</span><span class="nx">device</span><span class="p">.</span><span class="nx">device</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">channel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">cordova</span><span class="o">/</span><span class="nx">channel</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;),</span>
+</span><span class='line'>    <span class="nx">exec</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">cordova</span><span class="o">/</span><span class="nx">exec</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;),</span>
+</span><span class='line'>    <span class="c1">//注册名为 onCordovaInfoReady 的 Sticky 类型的事件</span>
+</span><span class='line'>    <span class="nx">channel</span><span class="p">.</span><span class="nx">createSticky</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">onCordovaInfoReady</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+</span><span class='line'>    <span class="c1">//告诉系统，必须等待 CordovaInfoReady 事件发送</span>
+</span><span class='line'>    <span class="nx">channel</span><span class="p">.</span><span class="nx">waitForInitialization</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">onCordovaInfoReady</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">Device</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">//在 onCordovaReady 事件中，注册回调，使得系统初始化便调用该回调，并且 onCordovaReady 在 onPluginsReady 事件后 fire</span>
+</span><span class='line'>    <span class="nx">channel</span><span class="p">.</span><span class="nx">onCordovaReady</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//调用 JSBridge</span>
+</span><span class='line'>        <span class="nx">me</span><span class="p">.</span><span class="nx">getInfo</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">//调用 JSBridge 成功回调用，fire onCordovaInfoReady 事件</span>
+</span><span class='line'>            <span class="nx">channel</span><span class="p">.</span><span class="nx">onCordovaInfoReady</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">},</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Device</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">exec</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">,</span> <span class="s2">&quot;Device&quot;</span><span class="p">,</span> <span class="s2">&quot;getDeviceInfo&quot;</span><span class="p">,</span> <span class="p">[]);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Device</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>web 端调用 Device 的代码：
+<code>javascript
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+    console.log(device.uuid);
+}
+</code>
+可以看到，deviceready 的时候，便可以直接调用 device 这个全局变量。
+这是因为之前在 cordova_plugins.js 这个文件中，做了申明，会把 device 变为全局变量
+<code>javascript
+"clobbers": [
+    "device" //全局命名空间，会注册为 window.device
+]
+</code></p>
+
+<p>这种设计非常巧妙，但是以我的经验，这种形式的 JSBridge 使用比较局限，主要缺点有：</p>
+
+<ul>
+<li>只能对整个 App 周期，固定不变的值使用。如果使用中，这个值会变化则无法使用，如地理位置信息就不行</li>
+<li>只能针对属性使用，不能对方法使用</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Cordova WKWebView 学习笔记（一）]]></title>
@@ -48,6 +296,7 @@
 <li>无能加载本地文件，只能通过内建一个 WebServer 实现功能。（直到 iOS 9 才新开了一个loadFileURL:allowingReadAccessToURL: 接口，原生实现该功能）</li>
 <li>不能注册自定义 NSURLProtocol，导致大量 URL 拦截功能难以实现，比如页面展示本地图片</li>
 <li>不能使用 NSHTTPCookieStorage 设置 WebView 的 Cookie</li>
+<li>必须 iOS8 及以上版本，Cordova 只支持 iOS9 及以上</li>
 </ul>
 
 
@@ -76,6 +325,8 @@
 <p><a href="https://github.com/crosswalk-project/ios-extensions-crosswalk">CrossWalk Cordova Plugin Support</a></p>
 
 <h2>相关资料</h2>
+
+<p><a href="http://nshipster.cn/wkwebkit/">WKWeb​View</a></p>
 
 <p><a href="http://docs.telerik.com/platform/appbuilder/cordova/configuring-your-app/configure-web-views">Telerik Platform Documentation - Configure the Web Views</a></p>
 
@@ -441,41 +692,6 @@ NSURLResponse* response =
 <p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i">URL Loading System</a></p>
 
 <p><a href="http://nshipster.cn/nsurlcache/">NSURLCache</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[重置 iOS UIWebView 的缩放]]></title>
-    <link href="http://sjpsega.me/blog/2015/03/25/reset-webview-zoom-with-ios/"/>
-    <updated>2015-03-25T14:01:19+08:00</updated>
-    <id>http://sjpsega.me/blog/2015/03/25/reset-webview-zoom-with-ios</id>
-    <content type="html"><![CDATA[<h2>需求</h2>
-
-<p>遇到一个需求，iOS webView设置了可缩放，用户缩放webView后，做某个操作，需要将webView的缩放重置。</p>
-
-<h2>经过</h2>
-
-<p>在网上找了下，看到很多很多解决方案，不论是国内的，还是国外的解决方案，但是实际使用都没有效果……</p>
-
-<h2>解决</h2>
-
-<p>经过不断尝试，发现以下方式是有效果的：</p>
-
-<pre><code class="objc">//重置 webView 的 html viewport 属性，变成不可缩放，并且缩放比例为1.0，并执行javaScript
-#define QUOTE(...) #__VA_ARGS__
-const char *webViewHeightJSString = QUOTE(
-var viewportmeta = document.querySelector('meta[name="viewport"]');
-if (viewportmeta) {
-viewportmeta.content = 'width=device-width, initial-scale=1.0,      minimum-scale=1.0, maximum-scale=1.0, user-scalable=no';
-}
-);
-#undef QUOTE
-[webView stringByEvaluatingJavaScriptFromString:[NSString stringWithUTF8String:webViewHeightJSString]];
-//设置 webView zoomScale 为 1.0，且必须设置animated为YES
-[webView.scrollView setZoomScale:1.0 animated:YES];
-</code></pre>
-
-<p>此方法在iOS7、8上的 UIWebView 上测试通过，WKWebView 没有测试。</p>
 ]]></content>
   </entry>
   
