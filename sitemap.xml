@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://sjpsega.me/blog/2016/04/18/jspatch-study/</loc>
+    <lastmod>2016-04-18T00:19:13+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://sjpsega.me/blog/2016/02/15/cordova-wkwebview-study-2/</loc>
     <lastmod>2016-02-15T00:11:47+08:00</lastmod>
   </url>
@@ -126,5 +130,11 @@
   </url>
   <url>
     <loc>http://sjpsega.me/blog/categories/study/</loc>
+  </url>
+  <url>
+    <loc>http://sjpsega.me/posts/2/</loc>
+  </url>
+  <url>
+    <loc>http://sjpsega.me/posts/3/</loc>
   </url>
 </urlset>

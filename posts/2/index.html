@@ -9,7 +9,7 @@
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。 因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。 iOS 7.0 input 元素聚焦问题 bug 演示 bug &hellip;">
+  <meta name="description" content="Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改方法调用的技术。是 OC 作为动态语言的典型证明。 Method Swizzling 是 OC &lt;objc/runtime.h&gt; 类库提供的“黑魔法”之一。 例子 以替换 NSArray 的 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,303 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/17/oc-method-swizzling/">Objective-C Method Swizzling</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-17T22:36:40+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:36 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改方法调用的技术。是 OC 作为动态语言的典型证明。</p>
+
+<p>Method Swizzling 是 OC <code>&lt;objc/runtime.h&gt;</code> 类库提供的“黑魔法”之一。</p>
+
+<h2>例子</h2>
+
+<p>以替换 NSArray 的 lastObject 方法为例：</p>
+
+<ul>
+<li>在 NSArray 中添加需要替换 lastObject 的方法 - xxx_lastObject方法：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;  </span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="bp">NSArray</span> <span class="nl">(Swizzle)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">xxx_lastObject</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">id</span> <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">xxx_lastObject</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;**********  myLastObject ***********&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意这里的写法，xxx_lastObject 方法的方法体中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。</p>
+
+<ul>
+<li>调换 IMP</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;  </span>
+</span><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">ori_Method</span><span class="p">,</span> <span class="n">my_Method</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意这里需要引入 <code>&lt;objc/runtime.h&gt;</code>，否则会报错，因为使用了 runtime 中的 method_exchangeImplementations 方法。</p>
+
+<p>使用 <code>method_exchangeImplementations</code> 交换了 xxx_lastObject 与 lastObject 的 IMP。后面会讲解更深层次的原理。</p>
+
+<ul>
+<li>尝试调用 lastObject</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;</span>
+</span><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="bp">NSArray</span> <span class="o">*</span><span class="n">array</span> <span class="o">=</span> <span class="l">@[</span><span class="s">@&quot;0&quot;</span><span class="p">,</span><span class="s">@&quot;1&quot;</span><span class="p">,</span><span class="s">@&quot;2&quot;</span><span class="p">,</span><span class="s">@&quot;3&quot;</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span> <span class="n">lastObject</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;TEST RESULT : %@&quot;</span><span class="p">,</span><span class="n">string</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>输出结果为:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">**********</span>  <span class="n">myLastObject</span> <span class="o">***********</span>
+</span><span class='line'><span class="n">TEST</span> <span class="nl">RESULT</span> <span class="p">:</span> <span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>很明显，这里调用 lastObject 方法，其实是调用了我们添加的 xxx_lastObject 方法。</p>
+
+<h2>用处</h2>
+
+<p>Method Swizzling 非常强大，主要作用有：</p>
+
+<ul>
+<li>在不修改 iOS 系统类库或第三方类库的源码基础上，修改原有调用逻辑</li>
+<li>动态添加、修改方法，修复线上 bug（如果 Apple 官方允许的话）</li>
+</ul>
+
+
+<h2>常用 API</h2>
+
+<p>相关常用方法，都在<code>&lt;objc/runtime.h&gt;</code>包内：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//向类中添加Method</span>
+</span><span class='line'><span class="kt">BOOL</span> <span class="nf">class_addMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="kt">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//修改类的Method</span>
+</span><span class='line'><span class="kt">IMP</span> <span class="n">class_replaceMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="kt">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//交换2个方法中的IMP</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">Method</span> <span class="n">m1</span><span class="p">,</span> <span class="n">Method</span> <span class="n">m2</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//获取类的某个实例方法</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">aClass</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">aSelector</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>底层原理</h2>
+
+<p>在运行时，OC 的方法是一种叫 <code>Method</code> 的结构体，这种 <code>objc_method</code> 类型的结构体定义为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">struct</span> <span class="n">objc_method</span>
+</span><span class='line'>   <span class="kt">SEL</span> <span class="n">method_name</span>         <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+</span><span class='line'>   <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span>      <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+</span><span class='line'>   <span class="kt">IMP</span> <span class="n">method_imp</span>          <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>method_name 是方法的 selector，可以理解为运行时的方法名；</li>
+<li>*method_types 是一个参数和返回值类型<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html">编码</a>的字符串；</li>
+<li>method_imp 是指向方法实现的指针。</li>
+</ul>
+
+
+<p><code>Method Swizzling 的实质是在运行时，访问对象的方法结构体，并改变它的底层实现。</code></p>
+
+<p>我们以上节修改 NSArray 的 lastObject 为例做说明。</p>
+
+<ul>
+<li>初始时，lastObject 与 xxx_lastObject 方法的 Method 结构体：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">lastObject</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">)</span>
+</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="p">@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值void, 参数id(self)，selector(_cmd)</span>
+</span><span class='line'>      <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Method</span> <span class="n">xxx_lastObject</span> <span class="p">{</span>
+</span><span class='line'>       <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">swizzle_originalMethodName</span><span class="p">)</span>
+</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="p">@</span><span class="o">:</span><span class="err">”</span>
+</span><span class='line'>       <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>调用 <code>void method_exchangeImplementations(Method m1, Method m2)</code> ,交换两者的实现：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
+</span><span class='line'><span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">ori_Method</span><span class="p">,</span> <span class="n">my_Method</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>调换后的 Method 结构体：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">lastObject</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">)</span>
+</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="p">@@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值id, 参数id(self)，selector(_cmd)</span>
+</span><span class='line'>      <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Method</span> <span class="n">xxx_lastObject</span> <span class="p">{</span>
+</span><span class='line'>       <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">swizzle_originalMethodName</span><span class="p">)</span>
+</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="p">@@</span><span class="o">:</span><span class="err">”</span>
+</span><span class='line'>       <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到使用<code>void method_exchangeImplementations(Method m1, Method m2)</code>的实质是交换了xxx_lastObject 与 lastObject 的 IMP，实现了在运行时做方法的替换。使得当执行 [array lastObject] 的时候，实际会去执行 [array xxx_lastObject] 的方法实现。</p>
+
+<h2>其他提示</h2>
+
+<h3>+load</h3>
+
+<p>Swizzling 的处理，在类的 <code>+load</code> 方法中完成。</p>
+
+<p>因为 <code>+load</code> 方法会在类被添加到 OC 运行时执行，且只会被调用一次，保证了 Swizzling 方法的及时处理。</p>
+
+<h3>dispatch_once</h3>
+
+<p>Swizzling 的处理，<code>dispatch_once</code> 中完成。保证只执行一次。</p>
+
+<h3>prefix</h3>
+
+<p>Swizzling 方法添加前缀，避免方法名称冲突。</p>
+
+<h2>代码示例</h2>
+
+<p><a href="https://github.com/sjpsega/SwizzleTest">代码示例</a></p>
+
+<h2>参考资料</h2>
+
+<p><a href="http://nshipster.com/method-swizzling/">Method Swizzling</a></p>
+
+<p><a href="http://stackoverflow.com/questions/3267506/how-to-swizzle-a-class-method-on-ios">How to swizzle a class method on iOS?</a></p>
+
+<p><a href="http://www.friday.com/bbum/2011/03/17/ios-4-3-imp_implementationwithblock/">iOS 4.3: imp_implementationWithBlock()</a></p>
+
+<p><a href="http://blog.csdn.net/yiyaaixuexi/article/details/9374411">Objective-C的hook方案（一）:  Method Swizzling</a></p>
+
+<p><a href="http://blog.jobbole.com/45963/">Objective-C 的动态提示和技巧</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -2568,164 +2865,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/01/qcon-beijing-2/">QCon北京行（二）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-05-01T17:24:01+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>5:24 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在<a href="/blog/2014/05/01/qcon-beijing-1/">上篇 QCon北京行（一）</a>中主要写了对北京的印象，现在写下关于QCon的话题。</p>
-
-<h2>代价</h2>
-
-<p>来之前，看了QCon的门票价格，我看了都吓了一跳：<code>3840 - 8折</code>，好贵！而且据说门票还早早销罄了……</p>
-
-<p>简单算下我一个人来北京参加QCon，公司付出的费用：</p>
-
-<ul>
-<li>门票 3840</li>
-<li>来回机票 1000 * 2</li>
-<li>住宿 500 * 4</li>
-</ul>
-
-
-<p>不算交通与餐费，这样就7800了，算上的话，总体费用差不多要到8500了。所以来之前我就想，要好好听课，不能浪费钱。</p>
-
-<h2>事与愿违</h2>
-
-<p>我的专长是前端与iOS，三天的QCon，只有第二天有前端的专题，可是干货很少，这不仅仅是我个人的感受，其他参会者也有这样的感觉。毕竟平均每个分享者只有1个小时的时间，而内容的深度往往超过这一个小时的深度，再加上演讲水平等因素，往往给人带来水的印象；而且有些参会者的主要目的是来宣传公司或产品的……</p>
-
-<p>所以，之后我主要记录印象比较深的话题与内容。</p>
-
-<h2>《产品设计中的逆向思维》</h2>
-
-<p>主题的演讲者是<a href="http://guopengliang.com/">梁国鹏</a>，iOS上著名的记账软件DailyCost的作者，一人业余时间独立完成了产品、设计、开发和运营。</p>
-
-<ul>
-<li>极致
-
-<ul>
-<li>要找到问题的关键、本源</li>
-</ul>
-</li>
-<li>思维陷阱
-
-<ul>
-<li>肥皂很滑，容易掉地上，如何解决捡肥皂的问题？做捡肥皂的工具么？防滑手套，还是捡肥皂的夹子？不，最简单的是使用沐浴液</li>
-<li>解决问题的思路往往需要跳出原有的条条框框</li>
-</ul>
-</li>
-<li>小白精神
-
-<ul>
-<li>市面上的几张软件太复杂，如挖财、随手记等，产品都高大上，功能很全，记一笔账步骤太多</li>
-<li>DailyCost的切入点是化繁为简，用最少的步骤记账，让小白也能轻松使用</li>
-</ul>
-</li>
-<li>保持克制
-
-<ul>
-<li>产品上线，用户反馈了很多问题，提了很多需求，要仔细甄别，开发最有价值的功能</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>《跨端组件实践》</h2>
-
-<p>主题演讲者是王集鹄，百度资深研发工程师，来自社区基础技术部 FEX。</p>
-
-<p>自动响应端能力的组件
-<img src="http://fex.baidu.com/img/light-component/light-component-ui.png" alt="light-component-ui" /></p>
-
-<ul>
-<li>受到响应式网页设计理念的启发，界面布局可以根据运行环境自动响应和调整，那么本地能力也可以这样</li>
-<li>如在普通浏览器里使用 HTML5 / CSS3 构造组件，在提供本地能力的环境里使用 Native View 构造组件。</li>
-<li>在提供本地能力的环境里，界面会更流畅；在没有本地能力的环境里应用是完整的。</li>
-</ul>
-
-
-<p>跨端组件解决的问题：</p>
-
-<ul>
-<li>满足 UI 需要局部流畅的需求</li>
-<li>满足运行在各种环境的需求</li>
-</ul>
-
-
-<p>特点：</p>
-
-<ul>
-<li>同一套 API</li>
-<li>更好地使用运行环境提供的能力</li>
-</ul>
-
-
-<p>哪些组件适合做跨端组件？
-计算量大，需要流畅:</p>
-
-<ul>
-<li>图册浏览</li>
-<li>地图</li>
-<li>多媒体播放器</li>
-<li>3D渲染</li>
-<li>图像识别，二维码识别、手势识别</li>
-</ul>
-
-
-<p>这篇分享的记录这么详细，其实是因为原作者出了<a href="http://fex.baidu.com/blog/2014/05/light-component/">blog</a>&hellip;</p>
-
-<p>因为工作中，也在做这方面的工作，跟我们的方案与思路有一些契合点，该方案的优缺点：</p>
-
-<p>优点：</p>
-
-<ul>
-<li>在各种端都有良好的用户体验</li>
-<li>跨平台不用修改HTML代码</li>
-</ul>
-
-
-<p>缺点：</p>
-
-<ul>
-<li>工作量大，每个端都要去适配，写对应的组件代码</li>
-</ul>
-
-
-<h2>ChinaJoy般的QCon</h2>
-
-<p>这次来QCon的展台主要是云服务与安全的，可是大家一开始就用美女来吸引眼球……</p>
-
-<p>这个策略，是只能说，你们赢了……</p>
-
-<p><img src="/images/2014-05-01-qcon-beijing-2/beauty_1.jpg" alt="beauty_1" />
-<img src="/images/2014-05-01-qcon-beijing-2/beauty_2.jpg" alt="beauty_2" />
-<img src="/images/2014-05-01-qcon-beijing-2/beauty_3.jpg" alt="beauty_3" />
-<img src="/images/2014-05-01-qcon-beijing-2/beauty_4.jpg" alt="beauty_4" />
-<img src="/images/2014-05-01-qcon-beijing-2/beauty_5.jpg" alt="beauty_5" />
-<img src="/images/2014-05-01-qcon-beijing-2/beauty_6.jpg" alt="beauty_6" /></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -2743,6 +2882,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/18/jspatch-study/">JSPatch 学习</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/02/15/cordova-wkwebview-study-2/">Cordova WKWebView 学习笔记（二）</a>
       </li>
     
@@ -2756,10 +2899,6 @@
     
       <li class="post">
         <a href="/blog/2016/01/14/isequalandhash/">isEqual 与 Hash</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/08/31/gcd-study/">GCD 学习</a>
       </li>
     
   </ul>
