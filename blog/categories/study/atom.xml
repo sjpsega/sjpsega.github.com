@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/blog/categories/study/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2016-04-18T00:27:15+08:00</updated>
+  <updated>2016-09-17T22:15:53+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -14,17 +14,95 @@
 
   
   <entry>
+    <title type="html"><![CDATA[iOS 仿淘宝详情页分页组件]]></title>
+    <link href="http://sjpsega.me/blog/2016/09/17/paging/"/>
+    <updated>2016-09-17T21:42:08+08:00</updated>
+    <id>http://sjpsega.me/blog/2016/09/17/paging</id>
+    <content type="html"><![CDATA[<p>本例 <a href="https://github.com/sjpsega/Paging">Demo</a>。</p>
+
+<p>淘宝详情页的分页交互效果是一个经典的实现，隔离了淘宝商品基本属性页和图文详情页，即给用户一个良好的使用体验，也通过分页懒加载图文信息，提高了页面首屏加载速度，也减少了不必要的流量损耗。</p>
+
+<p>下面说说怎么实现这个效果。</p>
+
+<h2>效果预览</h2>
+
+<p><img src="/images/2016-09-17-paging/paging-demo.gif" alt="main-flow" /></p>
+
+<h2>实现</h2>
+
+<p>先想一下实现分页的步骤，其实很简单，就两步:</p>
+
+<ol>
+<li>将需要分页的页面添加到分页组件上</li>
+<li>页面滚动，当检测到达页面边缘，通过动画滚动到下一页或上一页</li>
+</ol>
+
+
+<h3>利用自带的 ScrollView</h3>
+
+<p>想到滚动和分页，第一时间想到的肯定是自带的 UIScrollView。
+因为 UIScrollView 不仅有滚动效果，并且本身已经自带了一些分页的 API，比如 <code>pagingEnabled</code> 等。</p>
+
+<p>但是，想一下，直接使用 <code>pagingEnabled</code> 这个属性，然后添加上需要分页的页面，能实现我们的分页效果么？
+答案显然是不能的，因为我们的详情页面的基本属性页和图文详情页本身就是大页面，自身就有滚动效果，如果直接使用 UIScrollView ，两个滚动效果叠加，肯定会出现问题的。</p>
+
+<p>经过实践，我的做法是，使用 <code>UIScrollView</code> 来当做分页的容器，是利用相关的滚动 API，来实现翻页的效果。</p>
+
+<h3>实现中遇到的问题</h3>
+
+<p>主要是两个问题：</p>
+
+<ol>
+<li>需要分页的子页面，如何判断滚动到最底部</li>
+<li>翻页的效果如何实现</li>
+</ol>
+
+
+<p>问题 1 很好解决，仔细研究下 UIScrollView 的属性就有答案了，就是一个数学问题。</p>
+
+<p>图例：</p>
+
+<p><img src="/images/2016-09-17-paging/UIScrollView-structure.jpg" alt="UIScrollView-structure" /></p>
+
+<p>代码：</p>
+
+<pre><code class="objectivec">- (CGFloat)contentOffsetBottom:(UIScrollView*)scrollView{
+    return scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height + scrollView.contentInset.bottom);
+}
+</code></pre>
+
+<p>问题 2 也很简单，就是利用了 UIScrollView 自带的一个 API <code>- (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;</code> 便可。</p>
+
+<h2>继续优化</h2>
+
+<p>现在我们的代码实现了分页的效果，但是缺少淘宝详情页的那样分页提示文字，要实现这个也不难。</p>
+
+<ul>
+<li>需要翻到下一页，可以在该页的最后加上“继续拖动，查看图文详情”的提示 label。</li>
+<li>需要返回到上一页，因为页面是 UIScrollView，可以使用 <a href="https://github.com/CoderMJLee/MJRefresh">MJRefresh</a> 加上一个自定义的 header 加上提示文字便可。</li>
+</ul>
+
+
+<h2>参考资料</h2>
+
+<p><a href="http://tech.glowing.com/cn/practice-in-uiscrollview/">UIScrollView 实践经验</a></p>
+
+<p><a href="https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/UIScrollView_pg/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008179-CH1-SW1">About Scroll View Programming</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[JSPatch 学习]]></title>
     <link href="http://sjpsega.me/blog/2016/04/18/jspatch-study/"/>
     <updated>2016-04-18T00:19:13+08:00</updated>
     <id>http://sjpsega.me/blog/2016/04/18/jspatch-study</id>
     <content type="html"><![CDATA[<h2>主体流程</h2>
 
-<p><img src="/images/2016-04-18-jspatch-study/main-flow.jpg" alt="dispatch_barrier" /></p>
+<p><img src="/images/2016-04-18-jspatch-study/main-flow.jpg" alt="main-flow" /></p>
 
 <h2>JS 调用 OC 代码</h2>
 
-<p><img src="/images/2016-04-18-jspatch-study/js2oc.jpg" alt="dispatch_barrier" /></p>
+<p><img src="/images/2016-04-18-jspatch-study/js2oc.jpg" alt="js2oc" /></p>
 ]]></content>
   </entry>
   
@@ -397,242 +475,6 @@ function onDeviceReady() {
 <p><a href="http://nshipster.com/equality/">Equality</a></p>
 
 <p><a href="https://mikeash.com/pyblog/friday-qa-2010-06-18-implementing-equality-and-hashing.html">Implementing Equality and Hashing</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[GCD 学习]]></title>
-    <link href="http://sjpsega.me/blog/2015/08/31/gcd-study/"/>
-    <updated>2015-08-31T00:08:49+08:00</updated>
-    <id>http://sjpsega.me/blog/2015/08/31/gcd-study</id>
-    <content type="html"><![CDATA[<p>Grand Central Dispatch （GCD）是 Apple 开发的一个多核编程的解决方法。</p>
-
-<p>底层、轻量，是 iOS 上常用的多线程解决方案。</p>
-
-<h2>基本操作</h2>
-
-<h3>sync、async</h3>
-
-<p>dispatch_sync （同步）添加任务到一个队列并等待，直到任务完成，再执行原有队列上的任务。</p>
-
-<p>dispatch_async （异步）添加任务到一个队列，但继续执行原有队列上的任务，在队列中按照 FIFO 的规则执行。</p>
-
-<pre><code class="objc">dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSLog(@"log 1");
-    });
-NSLog(@"log 2");
-/* 输出:
- * log 1
- * log 2
- * /
-</code></pre>
-
-<pre><code class="objc">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSLog(@"log 1");
-    });
-NSLog(@"log 2");
-/* 输出绝大多数情况为:
- * log 2
- * log 1
- * /
-</code></pre>
-
-<p><code>注：不能在串行（主线程是一种串行队列）线程队列的任务中，再使用 dispatch_sync 添加任务到同一个串行队列中，否则必定发生死锁。</code></p>
-
-<pre><code class="objc">dispatch_async(dispatch_get_main_queue(), ^{
-    //必定发生死锁
-    dispatch_sync(dispatch_get_main_queue(), ^{
-    });
-});
-</code></pre>
-
-<h3>dispatch_once</h3>
-
-<p>dispatch_once 线程安全的方式执行任务且仅执行其代码块一次。</p>
-
-<p>在单例模式中普遍使用。</p>
-
-<pre><code class="objc">static dispatch_once_t onceToken;
-dispatch_once(&amp;onceToken, ^{
-    NSLog(@"log 1");
-});
-dispatch_once(&amp;onceToken, ^{
-    NSLog(@"log 2");
-});
-/* 输出:
- * log 1
- * /
-</code></pre>
-
-<h3>dispatch_after</h3>
-
-<p>dispatch_after 延后一定时间，异步执行任务</p>
-
-<pre><code class="objc">dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSLog(@"log 1");
-    });
-NSLog(@"log 2");
-/* 输出:
- * log 2
- * log 1
- * /
-</code></pre>
-
-<h2>group</h2>
-
-<p>通常使用分组来关联一组相关的任务，任务全部完成后，再做相关操作。</p>
-
-<h3>group_enter、group_leave</h3>
-
-<p>使用 dispatch_group_enter、dispatch_group_leave 来手动设置一个组任务的开始和结束，用来控制复杂情况下的任务完成情况。</p>
-
-<p>必须保证 dispatch_group_enter 和 dispatch_group_leave <code>成对出现</code>，否则会遇到崩溃问题。</p>
-
-<p>实例：</p>
-
-<p>a）不使用 dispatch_group_enter、dispatch_group_leave 的情况
-<code>objc
-- (void)testGCDWithGroup{
-    __block int count = 0;
-    __block BOOL isDone = NO;
-    // 1
-    dispatch_group_t group = dispatch_group_create();
-    // 2
-    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSLog(@"CGD 1 .");
-        // 3
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSLog(@"CGD 1 after.");
-            count++;
-        });
-    });
-    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        NSLog(@"done !!!");
-        // 4
-        isDone = YES;
-        expect(count).to.equal(1);
-    });
-    // 5
-    expect(isDone).will.beTruthy();
-}
-</code>
-该测试用例执行步骤为:</p>
-
-<ol>
-<li>生成一个自定义组</li>
-<li>在自定义组上，添加任务到子线程上执行</li>
-<li>子线程上的任务为执行一个延时任务，使得 count + 1</li>
-<li>当一个组内的任务全部完成，设置 isDone 为 YES，并期望 count 为 1</li>
-<li>异步执行，期望 isDone 为 YES</li>
-</ol>
-
-
-<p>期望4、5处的测试均能通过，但测试结果为：</p>
-
-<ol>
-<li>5 的测试 case 为通过</li>
-<li>4 的测试 case <code>不通过</code>，count 不为 1</li>
-</ol>
-
-
-<p>因为在这个例子中，执行完毕 dispatch_group_async 中的任务，就算任务完成了；而不是等到 dispatch_group_async 中的 dispatch_after 任务完成，才算任务完成。</p>
-
-<p>b）使用 dispatch_group_enter、dispatch_group_leave 的情况
-<code>objc
-- (void)testGCDWithGroupEnterAndLeave{
-    __block int count = 0;
-    __block BOOL isDone = NO;
-    dispatch_group_t group = dispatch_group_create();
-    dispatch_group_enter(group);
-    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSLog(@"CGD 1 .");
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSLog(@"CGD 1 after.");
-            dispatch_group_leave(group);
-            count++;
-        });
-    });
-    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        NSLog(@"done !!!");
-        isDone = YES;
-        expect(count).to.equal(1);
-    });
-    expect(isDone).will.beTruthy();
-}
-</code>
-这个测试用例的全部通过，使用手动控制组任务的开始和结束，完美解决了例子 a 中碰到的问题。</p>
-
-<p>使用 dispatch_group_enter、dispatch_group_leave，用来处理复杂的异步任务非常有效。</p>
-
-<h2>queue</h2>
-
-<h3>串行、并发</h3>
-
-<p>串行队列每次只有一个任务被执行，并发队列在同一时间可以有多个任务被执行。</p>
-
-<p>主线程是系统提供的一个特殊的队列，是一个<code>串行</code>队列，是唯一可用与更新 UI 的线程。</p>
-
-<p>除了主线程，其他均为子线程，通常用来执行与 UI 无关的操作。
-实际编码中，通常使用 <code>dispatch_get_global_queue(long identifier, unsigned long flags)</code> 来获取子线程队列。通过该方法获取的是<code>并发</code>的全局调度队列，并且可以设置四个不同优先级的队列：high、default、low、background，若没有特殊原因，只使用 default 级别的队列。</p>
-
-<p>用户还可以使用 <code>dispatch_queue_create(const char *label, dispatch_queue_attr_t attr)</code> 来创建自定义的串行或并发队列。
-主线程是系统提供的<code>串行</code>队列。</p>
-
-<pre><code class="objc">//创建自定义并发队列
-dispatch_queue_t concurrentQueue = dispatch_queue_create("com.sjpsega", DISPATCH_QUEUE_CONCURRENT);
-//创建自定义创兴队列
-dispatch_queue_t serialQueue = dispatch_queue_create("com.sjpsega", DISPATCH_QUEUE_SERIAL);
-</code></pre>
-
-<h2>dispatch_barrier</h2>
-
-<p>barrier 意为“障碍”。dispatch_barrier 在并发队列上工作时扮演一个串行式的瓶颈。当提交的任务开始执行时，该 API 保障这个时刻队列里只执行当前任务，不会执行其他任务。</p>
-
-<p><img src="/images/2015-08-31-gcd-study/dispatch_barrier.png" alt="dispatch_barrier" /></p>
-
-<p>使用 dispatch_barrier API 最佳的方式是使用<code>自定义并发队列</code>执行。</p>
-
-<p>下面以使用 dispatch_barrier 保证类类变量线程安全为例：</p>
-
-<pre><code class="objc">- (void)addStudents:(Student *)student{
-    dispatch_barrier_async(_concurrentQueue, ^{
-        [_students addObject:student];
-    });
-}
-
-- (NSArray *)students{
-    __block NSArray *copyObj;
-    dispatch_sync(_concurrentQueue, ^{
-        copyObj =  [_students copy];
-    });
-    return copyObj;
-}
-</code></pre>
-
-<p>但是，通常保证类变量线程安全，若不是高并发的情况下，比较简单的方式是使用 <code>synchronized</code> 关键字：</p>
-
-<pre><code class="objc">- (void)addStudents:(Student *)student{
-    @synchronized(_students){
-        [_students addObject:student];
-    }
-}
-
-- (NSArray *)students{
-    @synchronized(_students){
-        return [_students copy];
-    }
-}
-</code></pre>
-
-<h2>测试 Demo</h2>
-
-<p><a href="https://github.com/sjpsega/GCDTest">测试 Demo</a></p>
-
-<h2>参考资料</h2>
-
-<p><a href="https://github.com/nixzhu/dev-blog/blob/master/2014-04-19-grand-central-dispatch-in-depth-part-1.md">GCD 深入理解：第一部分</a></p>
-
-<p><a href="https://github.com/nixzhu/dev-blog/blob/master/2014-05-14-grand-central-dispatch-in-depth-part-2.md">GCD 深入理解：第二部分</a></p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2016-04-18T00:27:15+08:00</updated>
+  <updated>2016-09-17T22:15:53+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -14,17 +14,99 @@
 
   
   <entry>
+    <title type="html"><![CDATA[iOS 仿淘宝详情页分页组件]]></title>
+    <link href="http://sjpsega.me/blog/2016/09/17/paging/"/>
+    <updated>2016-09-17T21:42:08+08:00</updated>
+    <id>http://sjpsega.me/blog/2016/09/17/paging</id>
+    <content type="html"><![CDATA[<p>本例 <a href="https://github.com/sjpsega/Paging">Demo</a>。</p>
+
+<p>淘宝详情页的分页交互效果是一个经典的实现，隔离了淘宝商品基本属性页和图文详情页，即给用户一个良好的使用体验，也通过分页懒加载图文信息，提高了页面首屏加载速度，也减少了不必要的流量损耗。</p>
+
+<p>下面说说怎么实现这个效果。</p>
+
+<h2>效果预览</h2>
+
+<p><img src="http://sjpsega.me/images/2016-09-17-paging/paging-demo.gif" alt="main-flow" /></p>
+
+<h2>实现</h2>
+
+<p>先想一下实现分页的步骤，其实很简单，就两步:</p>
+
+<ol>
+<li>将需要分页的页面添加到分页组件上</li>
+<li>页面滚动，当检测到达页面边缘，通过动画滚动到下一页或上一页</li>
+</ol>
+
+
+<h3>利用自带的 ScrollView</h3>
+
+<p>想到滚动和分页，第一时间想到的肯定是自带的 UIScrollView。
+因为 UIScrollView 不仅有滚动效果，并且本身已经自带了一些分页的 API，比如 <code>pagingEnabled</code> 等。</p>
+
+<p>但是，想一下，直接使用 <code>pagingEnabled</code> 这个属性，然后添加上需要分页的页面，能实现我们的分页效果么？
+答案显然是不能的，因为我们的详情页面的基本属性页和图文详情页本身就是大页面，自身就有滚动效果，如果直接使用 UIScrollView ，两个滚动效果叠加，肯定会出现问题的。</p>
+
+<p>经过实践，我的做法是，使用 <code>UIScrollView</code> 来当做分页的容器，是利用相关的滚动 API，来实现翻页的效果。</p>
+
+<h3>实现中遇到的问题</h3>
+
+<p>主要是两个问题：</p>
+
+<ol>
+<li>需要分页的子页面，如何判断滚动到最底部</li>
+<li>翻页的效果如何实现</li>
+</ol>
+
+
+<p>问题 1 很好解决，仔细研究下 UIScrollView 的属性就有答案了，就是一个数学问题。</p>
+
+<p>图例：</p>
+
+<p><img src="http://sjpsega.me/images/2016-09-17-paging/UIScrollView-structure.jpg" alt="UIScrollView-structure" /></p>
+
+<p>代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nf">contentOffsetBottom:</span><span class="p">(</span><span class="bp">UIScrollView</span><span class="o">*</span><span class="p">)</span><span class="nv">scrollView</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">scrollView</span><span class="p">.</span><span class="n">contentOffset</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">scrollView</span><span class="p">.</span><span class="n">contentSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">scrollView</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">scrollView</span><span class="p">.</span><span class="n">contentInset</span><span class="p">.</span><span class="n">bottom</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>问题 2 也很简单，就是利用了 UIScrollView 自带的一个 API <code>- (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;</code> 便可。</p>
+
+<h2>继续优化</h2>
+
+<p>现在我们的代码实现了分页的效果，但是缺少淘宝详情页的那样分页提示文字，要实现这个也不难。</p>
+
+<ul>
+<li>需要翻到下一页，可以在该页的最后加上“继续拖动，查看图文详情”的提示 label。</li>
+<li>需要返回到上一页，因为页面是 UIScrollView，可以使用 <a href="https://github.com/CoderMJLee/MJRefresh">MJRefresh</a> 加上一个自定义的 header 加上提示文字便可。</li>
+</ul>
+
+
+<h2>参考资料</h2>
+
+<p><a href="http://tech.glowing.com/cn/practice-in-uiscrollview/">UIScrollView 实践经验</a></p>
+
+<p><a href="https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/UIScrollView_pg/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008179-CH1-SW1">About Scroll View Programming</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[JSPatch 学习]]></title>
     <link href="http://sjpsega.me/blog/2016/04/18/jspatch-study/"/>
     <updated>2016-04-18T00:19:13+08:00</updated>
     <id>http://sjpsega.me/blog/2016/04/18/jspatch-study</id>
     <content type="html"><![CDATA[<h2>主体流程</h2>
 
-<p><img src="http://sjpsega.me/images/2016-04-18-jspatch-study/main-flow.jpg" alt="dispatch_barrier" /></p>
+<p><img src="http://sjpsega.me/images/2016-04-18-jspatch-study/main-flow.jpg" alt="main-flow" /></p>
 
 <h2>JS 调用 OC 代码</h2>
 
-<p><img src="http://sjpsega.me/images/2016-04-18-jspatch-study/js2oc.jpg" alt="dispatch_barrier" /></p>
+<p><img src="http://sjpsega.me/images/2016-04-18-jspatch-study/js2oc.jpg" alt="js2oc" /></p>
 ]]></content>
   </entry>
   
@@ -3453,280 +3535,6 @@
 <p>iOS端因为没有提供js调用native的直接方法，做的处理也算合理到位。</p>
 
 <p>特别是插件化的支持做的很好，但是文档着实不够给力。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS中的单例模式]]></title>
-    <link href="http://sjpsega.me/blog/2014/05/25/singleton-in-ios/"/>
-    <updated>2014-05-25T12:25:10+08:00</updated>
-    <id>http://sjpsega.me/blog/2014/05/25/singleton-in-ios</id>
-    <content type="html"><![CDATA[<p>单例模式是指在一个系统中，类有且只有一个实例对象，可以通过全局的一个入口对这个实例对象进行访问。</p>
-
-<p>在 iOS 开发中，单例模式是非常常用的一种设计模式。</p>
-
-<h2>ARC下的实现</h2>
-
-<p>iOS5.0 以后就开始可以使用ARC（Automatic Reference Counting：自动引用计数）来代替之前的MRC（Manual Reference Counting：人工引用计数）。</p>
-
-<p>使用 ARC 会减少很多代码和忘了释放对象的苦恼。</p>
-
-<p>慢慢 ARC 会成为主流，我入门 iOS 也是学 ARC 的，所以这里只写 ARC 的单例实现。</p>
-
-<p><code>Singleton.h:</code></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Singleton.h</span>
-</span><span class='line'><span class="c1">//  Singleton</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@interface</span> <span class="nc">Singleton</span> : <span class="bp">NSObject</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>Singleton.m:</code></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Singleton.m</span>
-</span><span class='line'><span class="c1">//  Singleton</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#import &quot;Singleton.h&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">Singleton</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">singleton</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">token</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">token</span><span class="p">,</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">singleton</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Singleton</span> <span class="n">alloc</span><span class="p">]</span><span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">singleton</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span><span class="p">{</span>
-</span><span class='line'>    <span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nb">self</span><span class="p">){</span>
-</span><span class='line'>        <span class="c1">//在这里可以进行类的初始化工作</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在这个实现中，核心是使用了GCD（Grand Central Dispatch）的<code>dispatch_once</code>方法，该方法可以保证Singleton只被实例化一次，并且该方法<code>线程安全</code>。</p>
-
-<h2>纰漏</h2>
-
-<p>以上实现有一个纰漏，Singleton 继承于 <code>NSObject</code>，<code>NSObject</code> 有一个公开的初始化方法 <code>-(id)init</code>，所以若使用者不小心，他完全可以使用 <code>[[Singleton alloc] init]</code> 来创建多个实例对象，这样轻易就破坏了单例的实现。</p>
-
-<p>例如：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Singleton</span> <span class="o">*</span><span class="n">single1</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Singleton</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="n">Singleton</span> <span class="o">*</span><span class="n">single2</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Singleton</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="c1">//结果为0，即NO，两者不是同一个实例</span>
-</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,</span><span class="n">single1</span> <span class="o">==</span> <span class="n">single2</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>2014-10-10 更新：</code></p>
-
-<p><code>摒弃之前的实现方式：</code></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">## 更好的实现</span>
-</span><span class='line'><span class="err">其实是要对</span> <span class="err">`</span><span class="n">Singleton</span><span class="p">.</span><span class="n">m</span><span class="err">`</span> <span class="err">做一点改变，就能封住这个纰漏：</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">```</span><span class="n">objc</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Singleton.m</span>
-</span><span class='line'><span class="c1">//  Singleton</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#import &quot;Singleton.h&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">Singleton</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">singleton</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">token</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">token</span><span class="p">,</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="c1">//这里调用私有的initSingle方法</span>
-</span><span class='line'>        <span class="n">singleton</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Singleton</span> <span class="n">alloc</span><span class="p">]</span><span class="n">initSingle</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">singleton</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//只是把原来在init方法中的代码，全都搬到initSingle</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">initSingle</span><span class="p">{</span>
-</span><span class='line'>    <span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nb">self</span><span class="p">){</span>
-</span><span class='line'>        <span class="c1">//在这里可以进行类的初始化工作</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span><span class="p">{</span>
-</span><span class='line'>    <span class="c1">//改为调用[Singleton sharedInstance]</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">Singleton</span> <span class="n">sharedInstance</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span><span class='line'><span class="err">```</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">*</span> <span class="err">新建私有的</span><span class="n">initSingle</span><span class="err">方法，将原来</span><span class="n">init</span><span class="err">中的实现，全部搬入</span>
-</span><span class='line'><span class="o">*</span> <span class="n">sharedInstance</span><span class="err">中的</span><span class="n">singleton</span><span class="err">初始化，调用</span><span class="n">initSingle</span><span class="err">方法</span>
-</span><span class='line'><span class="o">*</span> <span class="n">init</span><span class="err">方法中，调用</span><span class="p">[</span><span class="n">Singleton</span> <span class="n">sharedInstance</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>更好的实现：</code></p>
-
-<p>最佳的实现方式是重写 <code>+allocWithZone</code> 方法，使得在给对象分配内存空间的时候，就指向同一份数据，并且 <code>+alloc</code> 默认调用的是 <code>+allocWithZone</code> 方法，重写 <code>+allocWithZone</code> 是最根本的解决方案。</p>
-
-<p>在内存分配阶段就指向同一份数据了，如果外界调用 alloc 与 init 来新建对象，自然还是指向同一份数据，问题自然解决了。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Singleton.m</span>
-</span><span class='line'><span class="c1">//  Singleton</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#import &quot;Singleton.h&quot;</span>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">Singleton</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">_singleton</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">_singleton</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">super</span> <span class="nl">allocWithZone</span><span class="p">:</span><span class="nb">NULL</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">_singleton</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">allocWithZone:</span><span class="p">(</span><span class="k">struct</span> <span class="bp">_NSZone</span> <span class="o">*</span><span class="p">)</span><span class="nv">zone</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">sharedInstance</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>代码示例</h2>
-
-<p><a href="https://github.com/sjpsega/SingletonTest">代码示例</a></p>
-
-<h2>参考资料</h2>
-
-<p><a href="https://developer.apple.com/legacy/library/documentation/Cocoa/Conceptual/CocoaFundamentals/CocoaObjects/CocoaObjects.html#//apple_ref/doc/uid/TP40002974-CH4-SW32">Creating a Singleton Instance</a></p>
-
-<p><a href="http://cocoa.venj.me/blog/singleton-in-objc/">Objective-C中单例模式的实现</a></p>
-
-<p><a href="http://www.justinyan.me/post/1306">从 Objective-C 里的 Alloc 和 AllocWithZone 谈起</a></p>
-
-<p><a href="http://www.cnblogs.com/yudigege/p/3943898.html">iOS_单例</a></p>
 ]]></content>
   </entry>
   
