@@ -11,8 +11,5 @@ source/_stash
 source/stylesheets/screen.css
 vendor
 node_modules
-<<<<<<< HEAD
 Thumbs.db
-=======
 Gemfile.lock
->>>>>>> d684a65e4286532789a3f8b160df80ee5801a4a1

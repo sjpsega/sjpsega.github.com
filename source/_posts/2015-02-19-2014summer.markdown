@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "2014年终总结"
+title: "2014 年终总结"
 date: 2015-02-19 01:09:20 +0800
 comments: true
 categories: life
-keywords: 2014, 总结
+keywords: 2014 总结
 ---
 
 ## 2014已经过去，先总结下去年的目标与主要的事：
