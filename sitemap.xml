@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://sjpsega.me/blog/2017/01/27/2016summary/</loc>
+    <lastmod>2017-01-27T15:34:17+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://sjpsega.me/blog/2016/09/17/paging/</loc>
     <lastmod>2016-09-17T21:42:08+08:00</lastmod>
   </url>
@@ -134,5 +138,14 @@
   </url>
   <url>
     <loc>http://sjpsega.me/blog/categories/study/</loc>
+  </url>
+  <url>
+    <loc>http://sjpsega.me/posts/2/</loc>
+  </url>
+  <url>
+    <loc>http://sjpsega.me/posts/3/</loc>
+  </url>
+  <url>
+    <loc>http://sjpsega.me/posts/4/</loc>
   </url>
 </urlset>
