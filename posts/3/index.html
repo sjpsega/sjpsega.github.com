@@ -9,7 +9,7 @@
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="文章地址：objc第一章 更轻量的 View Controllers 针对UITableViewController等VC，可以把对应的UITableViewDataSource、UITableViewDelegate等Protocol代码，写成单独的类， &hellip;">
+  <meta name="description" content="文章地址：objc第二章 并发编程：API 及挑战 OS X 和 iOS 中的并发编程 Grand Central Dispatch(GCD) GCD 在后端管理着一个线程池，可以将开发者从线程管理的工作中解放出来，通过集中的管理线程，来缓解大量线程被创建的问题。在日常开发中，最好使用 GCD &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,508 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/12/concurrent-programming-note/">《#2 并发编程》 学习笔记</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-06-12T12:49:46+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:49 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>文章地址：<a href="http://objccn.io/issue-2/">objc第二章</a></p>
+
+<h2>并发编程：API 及挑战</h2>
+
+<h3>OS X 和 iOS 中的并发编程</h3>
+
+<h4>Grand Central Dispatch(GCD)</h4>
+
+<p>GCD 在后端管理着一个线程池，可以将开发者从线程管理的工作中解放出来，通过集中的管理线程，来缓解大量线程被创建的问题。在日常开发中，最好使用 GCD 来做线程方面的工作。</p>
+
+<p>GCD 公开有 5 个不同的队列：运行在主线程中的 main queue，3 个不同优先级的后台队列，以及一个优先级更低的后台队列（用于 I/O）</p>
+
+<p>使用不同优先级的若干个队列乍听起来非常直接，不过，我们强烈建议，<code>在绝大多数情况下使用默认的优先级队列就可以了</code>。</p>
+
+<p><img src="http://img.objccn.io/issue-2/gcd-queues.png" alt="http://img.objccn.io/issue-2/gcd-queues.png" /></p>
+
+<h4>Operation Queues</h4>
+
+<p>操作队列（operation queue）是由 GCD 提供的一个队列模型的 Cocoa 抽象。GCD 提供了更加底层的控制，而操作队列则在 GCD 之上实现了一些方便的功能，这些功能对于 app 的开发者来说通常是最好最安全的选择。</p>
+
+<p><code>NSOperationQueue</code> 有两种不同类型的队列：主队列和自定义队列。主队列运行在主线程之上，而自定义队列在后台执行。在两种类型中，这些队列所处理的任务都使用 <code>NSOperation</code> 的子类来表述。</p>
+
+<h4>Run Loops</h4>
+
+<p>Run loop并不像 GCD 或者操作队列那样是一种并发机制，因为它并不能并行执行任务。不过在主 dispatch/operation 队列中， run loop 将直接配合任务的执行，它提供了一种异步执行代码的机制。</p>
+
+<p>Run loop 比起操作队列或者 GCD 来说容易使用得多，因为通过 run loop ，你不必处理并发中的复杂情况，就能异步地执行任务。</p>
+
+<h3>并发编程中面临的挑战</h3>
+
+<h4>资源共享</h4>
+
+<p>并发编程中许多问题的根源就是在多线程中访问共享资源。</p>
+
+<p>在多线程中任何一个共享的资源都可能是一个潜在的冲突点，你必须精心设计以防止这种冲突的发生。</p>
+
+<p>为了防止出现这样的问题，多线程需要一种互斥的机制来访问共享资源。</p>
+
+<h4>互斥锁</h4>
+
+<p>互斥访问的意思就是同一时刻，只允许一个线程访问某个特定资源。</p>
+
+<p>从语言层面来说，在 Objective-C 中将属性以 atomic 的形式来声明，就能支持互斥锁了。事实上在默认情况下，属性就是 atomic 的。将一个属性声明为 atomic 表示每次访问该属性都会进行隐式的加锁和解锁操作。虽然最把稳的做法就是将所有的属性都声明为 atomic，但是加解锁这也会付出一定的代价。</p>
+
+<h4>死锁</h4>
+
+<p>互斥锁解决了竞态条件的问题，但很不幸同时这也引入了一些其他问题，其中一个就是死锁。当多个线程在相互等待着对方的结束时，就会发生死锁，这时程序可能会被卡住。</p>
+
+<h4>资源饥饿（Starvation）</h4>
+
+<p>大多数情况下，限制资源一次只能有一个线程进行读取访问其实是非常浪费的。因此，在资源上没有写入锁的时候，持有一个读取锁是被允许的。这种情况下，如果一个持有读取锁的线程在等待获取写入锁的时候，其他希望读取资源的线程则因为无法获得这个读取锁而导致资源饥饿的发生。</p>
+
+<h4>优先级反转</h4>
+
+<p>优先级反转是指程序在运行时低优先级的任务阻塞了高优先级的任务，有效的反转了任务的优先级。</p>
+
+<p>解决这个问题的方法，通常就是不要使用不同的优先级。通常最后你都会以让高优先级的代码等待低优先级的代码来解决问题。<code>当你使用 GCD 时，总是使用默认的优先级队列（直接使用，或者作为目标队列）</code>。如果你使用不同的优先级，很可能实际情况会让事情变得更糟糕。</p>
+
+<h3>总结</h3>
+
+<p>建议采纳的安全模式：从主线程中提取出要使用到的数据，并利用一个操作队列在后台处理相关的数据，最后回到主队列中来发送你在后台队列中得到的结果。使用这种方式，你不需要自己做任何锁操作，这也就大大减少了犯错误的几率。</p>
+
+<h2>常见的后台实践</h2>
+
+<h3>操作队列 (Operation Queues) 还是 GCD ?</h3>
+
+<p><code>GCD 是基于 C 的底层的 API ，而操作队列则是 GCD 实现的 Objective-C API。</code></p>
+
+<p><code>操作队列可以取消在任务处理队列中的任务</code>，而在 GCD 中不容易实现。</p>
+
+<h4>后台的 Core Data</h4>
+
+<p><code>Core Data</code>不熟悉</p>
+
+<h3>后台 UI 代码</h3>
+
+<p><code>UIKit 只能在主线程上运行。</code>而那部分不与 UIKit 直接相关，却会消耗大量时间的 UI 代码可以被移动到后台去处理。</p>
+
+<h3>异步网络请求处理</h3>
+
+<ul>
+<li>所有网络请求都应该采取异步的方式完成。</li>
+<li>可以使用 <code>NSURLConnection</code> 的异步方法，并且把所有操作转化为 operation 来执行。通过这种方法，我们可以从操作队列的强大功能和便利中获益良多：我们能轻易地控制并发操作的数量，添加依赖，以及取消操作。</li>
+<li>使用像 <a href="http://afnetworking.com/">AFNetworking</a> 这样的框架：建立一个独立的线程，为建立的线程设置自己的 run loop，然后在其中调度 URL 连接。但是并不推荐你自己去实现这些事情。</li>
+</ul>
+
+
+<h3>进阶：后台文件 I/O</h3>
+
+<p>大体上逐行读取一个文件的模式是这样的：</p>
+
+<ol>
+<li>建立一个中间缓冲层以提供，当没有找到换行符号的时候可以向其中添加数据</li>
+<li>从 stream 中读取一块数据</li>
+<li>对于这块数据中发现的每一个换行符，取中间缓冲层，向其中添加数据，直到（并包括）这个换行符，并将其输出</li>
+<li>将剩余的字节添加到中间缓冲层去</li>
+<li>回到 2，直到 stream 关闭</li>
+</ol>
+
+
+<h3>总结</h3>
+
+<p>在主队列中接收事件或者数据，然后用后台操作队列来执行实际操作，然后回到主队列去传递结果，遵循这样的原则来编写尽量简单的并行代码，将是保证高效正确的不二法则。</p>
+
+<h2>底层并发 API</h2>
+
+<h3>dispatch_once</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">UIColor</span> <span class="o">*</span><span class="p">)</span><span class="nf">boringColor</span><span class="p">;</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">static</span> <span class="bp">UIColor</span> <span class="o">*</span><span class="n">color</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithRed</span><span class="p">:</span><span class="mf">0.380f</span> <span class="nl">green</span><span class="p">:</span><span class="mf">0.376f</span> <span class="nl">blue</span><span class="p">:</span><span class="mf">0.376f</span> <span class="nl">alpha</span><span class="p">:</span><span class="mf">1.000f</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">color</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的 block 只会运行一次。并且在连续的调用中，这种检查是很高效的。你能使用它来初始化全局数据比如单例。要注意的是，使用 <code>dispatch_once_t</code> 会使得测试变得非常困难（单例和测试不是很好配合）。</p>
+
+<p><code>要确保 onceToken 被声明为 static ，或者有全局作用域。任何其他的情况都会导致无法预知的行为。</code></p>
+
+<h3>dispatch_after</h3>
+
+<p>它使工作延后执行。它是很强大的，但是要注意：你很容易就陷入到一堆麻烦中。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">foo</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">double</span> <span class="n">delayInSeconds</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">dispatch_time_t</span> <span class="n">popTime</span> <span class="o">=</span> <span class="n">dispatch_time</span><span class="p">(</span><span class="n">DISPATCH_TIME_NOW</span><span class="p">,</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)</span> <span class="p">(</span><span class="n">delayInSeconds</span> <span class="o">*</span> <span class="n">NSEC_PER_SEC</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">dispatch_after</span><span class="p">(</span><span class="n">popTime</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="n">bar</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里存在一些缺点。我们<code>不能（直接）取消我们已经提交到 dispatch_after 的代码，它将会运行</code>。</p>
+
+<p>如果你需要一些事情在某个特定的时刻运行，那么 <code>dispatch_after</code> 或许会是个好的选择。确保同时考虑了 <code>NSTimer</code>，这个API虽然有点笨重，但是它<code>允许你取消定时器的触发</code>。</p>
+
+<h3>队列</h3>
+
+<p>GCD 中一个基本的代码块就是队列。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">self</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="bp">NSString</span> <span class="o">*</span><span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%@.isolation.%p&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="nb">self</span><span class="p">];</span>
+</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">isolationQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">([</span><span class="n">label</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%@.work.%p&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="nb">self</span><span class="p">];</span>
+</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">workQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">([</span><span class="n">label</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>队列可以是并行也可以是串行的，也可以是并行的。默认情况下，是串行的。</p>
+
+<p>GCD 队列的内部使用的是线程。</p>
+
+<h4>目标队列</h4>
+
+<p>你能够为你创建的任何一个队列设置一个目标队列。</p>
+
+<p>为一个类创建它自己的队列而不是使用全局的队列被普遍认为是一种好的风格。这种方式下，你可以设置队列的名字，这让调试变得轻松许多—— Xcode 可以让你在 Debug Navigator 中看到所有的队列名字，如果你直接使用 lldb。(lldb) thread list 命令将会在控制台打印出所有队列的名字。一旦你使用大量的异步内容，这会是非常有用的帮助。</p>
+
+<h3>隔离</h3>
+
+<h4>资源保护</h4>
+
+<p>多线程编程中，最常见的情形是你有一个资源，每次只有一个线程被允许访问这个资源。</p>
+
+<h4>全都使用异步分发</h4>
+
+<h4>如何写出好的异步 API</h4>
+
+<p>如果你的方法或函数有一个返回值，异步地将其传递给一个回调处理程序。这个 API 应该是这样的，你的方法或函数同时持有一个结果 block 和一个将结果传递过去的队列。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">processImage:</span><span class="p">(</span><span class="bp">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="nv">image</span> <span class="nf">completionHandler:</span><span class="p">(</span><span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="kt">BOOL</span> <span class="n">success</span><span class="p">))</span><span class="nv">handler</span><span class="p">;</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">dispatch_async</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">isolationQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span><span class='line'>        <span class="c1">// do actual processing here</span>
+</span><span class='line'>        <span class="n">dispatch_async</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">resultQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">handler</span><span class="p">(</span><span class="nb">YES</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>迭代执行</h3>
+
+<p>dispatch_apply</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">;</span> <span class="o">++</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Do something with x and y here</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>小小的改动或许就可以让它运行的更快：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_apply</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="n">x</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Do something with x and y here</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>组</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="kt">dispatch_group_t</span> <span class="n">group</span> <span class="o">=</span> <span class="n">dispatch_group_create</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">dispatch_queue_t</span> <span class="n">queue</span> <span class="o">=</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="o">^</span><span class="p">(){</span>
+</span><span class='line'>    <span class="c1">// Do something that takes a while</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="n">doSomeFoo</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">(){</span>
+</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="o">^</span><span class="p">(){</span>
+</span><span class='line'>    <span class="c1">// Do something else that takes a while</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="n">doSomeBar</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">(){</span>
+</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">bar</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// This block will run once everything above is done:</span>
+</span><span class='line'><span class="n">dispatch_group_notify</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">(){</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;foo: %d&quot;</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">foo</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;bar: %d&quot;</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">bar</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>对现有API使用 dispatch_group_t</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">withGroup:</span><span class="p">(</span><span class="kt">dispatch_group_t</span><span class="p">)</span><span class="nv">group</span>
+</span><span class='line'>        <span class="nf">sendAsynchronousRequest:</span><span class="p">(</span><span class="bp">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="nv">request</span>
+</span><span class='line'>        <span class="nf">queue:</span><span class="p">(</span><span class="bp">NSOperationQueue</span> <span class="o">*</span><span class="p">)</span><span class="nv">queue</span>
+</span><span class='line'>        <span class="nf">completionHandler:</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="bp">NSURLResponse</span><span class="o">*</span><span class="p">,</span> <span class="bp">NSData</span><span class="o">*</span><span class="p">,</span> <span class="bp">NSError</span><span class="o">*</span><span class="p">))</span><span class="nv">handler</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">group</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="nl">sendAsynchronousRequest</span><span class="p">:</span><span class="n">request</span>
+</span><span class='line'>                                <span class="nl">queue</span><span class="p">:</span><span class="n">queue</span>
+</span><span class='line'>                    <span class="nl">completionHandler</span><span class="p">:</span><span class="n">handler</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">dispatch_group_enter</span><span class="p">(</span><span class="n">group</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="nl">sendAsynchronousRequest</span><span class="p">:</span><span class="n">request</span>
+</span><span class='line'>                                <span class="nl">queue</span><span class="p">:</span><span class="n">queue</span>
+</span><span class='line'>                    <span class="nl">completionHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSURLResponse</span> <span class="o">*</span><span class="n">response</span><span class="p">,</span> <span class="bp">NSData</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">){</span>
+</span><span class='line'>            <span class="n">handler</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">dispatch_group_leave</span><span class="p">(</span><span class="n">group</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>为了能正常工作，你需要确保:
+* dispatch_group_enter() 必须要在 dispatch_group_leave()之前运行。
+* dispatch_group_enter() 和 dispatch_group_leave() 一直是成对出现的。</p>
+
+<h3>事件源</h3>
+
+<p>GCD 有一个较少人知道的特性：事件源 <code>dispatch_source_t</code>。</p>
+
+<p>当你需要用到它时，它会变得极其有用。它的一些使用是秘传招数，我们将会接触到一部分的使用。但是大部分事件源在 iOS 平台不是很有用，因为在 iOS 平台有诸多限制，你无法启动进程（因此就没有必要监视进程），也不能在你的 app bundle 之外写数据（因此也就没有必要去监视文件）等等。</p>
+
+<p>GCD 事件源是以极其资源高效的方式实现的。</p>
+
+<h4>监视进程</h4>
+
+<h4>监视文件</h4>
+
+<h4>定时器</h4>
+
+<h4>取消</h4>
+
+<h3>输入输出</h3>
+
+<p>写出能够在繁重的 I/O 处理情况下运行良好的代码是一件非常棘手的事情。</p>
+
+<h4>GCD 和缓冲区</h4>
+
+<p>最直接了当的方法是使用数据缓冲区。GCD 有一个 <code>dispatch_data_t</code> 类型，在某种程度上和 Objective-C 的 NSData 类型很相似。但是它能做别的事情，而且更通用。</p>
+
+<h4>读和写</h4>
+
+<p>在 GCD 的核心里，调度 I/O（译注：原文为 Dispatch I/O） 与所谓的通道有关。调度 I/O 通道提供了一种与从文件描述符中读写不同的方式。</p>
+
+<h3>基准测试</h3>
+
+<p>能够测量给定的代码执行的平均的纳秒数。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="kt">uint64_t</span> <span class="nf">dispatch_benchmark</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">count</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="n">block</span><span class="p">)(</span><span class="kt">void</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>原子操作</h3>
+
+<p>头文件 <code>libkern/OSAtomic.h</code> 里有许多强大的函数，专门用来底层多线程编程。尽管它是内核头文件的一部分，它也能够在内核之外来帮助编程。</p>
+
+<h4>计数器</h4>
+
+<h4>原子队列</h4>
+
+<h4>自旋锁</h4>
+
+<p>OSAtomic.h 头文件定义了使用自旋锁的函数：OSSpinLock。</p>
+
+<h2>线程安全类的设计</h2>
+
+<h3>线程安全</h3>
+
+<h4>Apple 的框架</h4>
+
+<p>一般来说除非特别声明，大多数的类默认都<code>不是</code>线程安全的。</p>
+
+<p>Apple没有把 UIKit 设计为线程安全的类是有意为之的，将其打造为线程安全的话会使很多操作变慢。而事实上 UIKit 是和主线程绑定的，这一特点使得编写并发程序以及使用 UIKit 十分容易的，你唯一需要确保的就是对于 UIKit 的调用总是在主线程中来进行。</p>
+
+<h4>为什么 UIKit 不是线程安全的？</h4>
+
+<p>对于一个像 UIKit 这样的大型框架，确保它的线程安全将会带来巨大的工作量和成本。</p>
+
+<h4>内存回收 (deallocation) 问题</h4>
+
+<p>另一个在后台使用 UIKit 对象的的危险之处在于“内存回收问题”。</p>
+
+<h4>Collection 类</h4>
+
+<p>总的来说，比如 <code>NSArry 这样不可变类是线程安全的</code>。然而它们的可变版本，比如 <code>NSMutableArray 是线程不安全的</code>。</p>
+
+<p>一个好习惯是写类似于 <code>return [array copy]</code> 这样的代码来确保返回的对象事实上是不可变对象。</p>
+
+<h4>原子属性 (Atomic Properties)</h4>
+
+<h5>为何不用 @synchronized ？</h5>
+
+<p><code>@synchonized(self)</code> 更适合使用在你需要确保在发生错误时代码不会死锁，而是抛出异常的时候。</p>
+
+<h4>你自己的类</h4>
+
+<p>单独使用原子属性并不会使你的类变成线程安全。它不能保护你应用的逻辑，只能保护你免于在 setter 中遭遇到竞态条件的困扰。</p>
+
+<p>一个简单的解决办法是使用 <code>@synchronize</code>。其他的方式都非常非常可能使你误入歧途，已经有太多聪明人在这种尝试上一次又一次地以失败告终。</p>
+
+<h5>可行的线程安全设计</h5>
+
+<p>对于那些肯定应该线程安全的代码（一个好例子是负责缓存的类）来说，一个不错的设计是使用并发的 dispatch_queue 作为读/写锁，并且确保只锁着那些真的需要被锁住的部分，以此来最大化性能。</p>
+
+<h3>GCD 的陷阱</h3>
+
+<p>对于大多数上锁的需求来说，GCD 就足够好了。它简单迅速，并且基于 block 的 API 使得粗心大意造成非平衡锁操作的概率下降了不少。</p>
+
+<h4>将 GCD 当作递归锁使用</h4>
+
+<p>GCD 是一个对共享资源的访问进行串行化的队列。这个特性可以被当作锁来使用，但实际上它和 @synchronized 有很大区别。</p>
+
+<h4>用 dispatch_async 修复时序问题</h4>
+
+<h4>在性能关键的代码中混用 dispatchsync 和 dispatchasync</h4>
+
+<h4>使用 dispatch_async 来派发内存敏感的操作</h4>
+
+<h2>测试并发程序</h2>
+
+<p>以 SenTestingKit 为例子，在XCode5中已经不再使用。</p>
+
+<p><a href="http://www.cnblogs.com/yjg2014/p/yjg.html">http://www.cnblogs.com/yjg2014/p/yjg.html</a></p>
+
+<p><a href="http://m.blog.csdn.net/blog/againbike/11870459">http://m.blog.csdn.net/blog/againbike/11870459</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -4043,45 +4545,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/06/kai-shi-xie-blog/">开始写Blog</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-02-06T16:31:07+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:31 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>趁着春节假期，花了点时间，在github上用<a href="http://octopress.org/">Octopress</a>搭了个个人Blog。希望自己新的一年，能写点技术Blog，多做积累，锻炼文字。</p>
-
-<p>其实以前在javaeye上也写过技术Blog，但是写得不多。在Sohu上写自己的生活Blog，写的蛮多的，现在渐渐也写得少了。</p>
-
-<p>javaeye的Blog有个最大的缺点：编辑器不好用，生成的文章格式不好看，特别是代码块，特别难看。而且添加代码demo更加麻烦，需要上传，且不便于后期的维护与管理。</p>
-
-<p>自己搭建Blog的话，javaeye的编辑器这个缺点就不存在了，而且使用MarkDown格式写文章，很方便，很轻松就能写出格式优美的文章了。而且放在github上，更不用怕文章丢失的问题了，哈哈。</p>
-
-<p>当然自己搭建Blog的最大缺点是，流量少，缺少流量，缺少讨论；当然这个也不重要，重要的是自己的积累，如果自己写得好，肯定会有人看到的。</p>
-
-<p>刚入门<a href="http://octopress.org/">Octopress</a>，定制化蛮强的，还要好好研究下。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -4099,6 +4562,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2019/01/01/2018summary/">2018 年终总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/02/14/2017summary/">2017 年终总结</a>
       </li>
     
@@ -4112,10 +4579,6 @@
     
       <li class="post">
         <a href="/blog/2016/04/18/jspatch-study/">JSPatch 学习</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/02/15/cordova-wkwebview-study-2/">Cordova WKWebView 学习笔记（二）</a>
       </li>
     
   </ul>
@@ -4133,7 +4596,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2018 - sjpsega -
+  Copyright &copy; 2019 - sjpsega -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
