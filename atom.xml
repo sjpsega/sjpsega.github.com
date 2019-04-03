@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2019-01-08T00:57:22+08:00</updated>
+  <updated>2019-04-04T00:32:47+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[用错误的方法赚到钱，迟早要还]]></title>
+    <link href="http://sjpsega.me/blog/2019/04/04/payout/"/>
+    <updated>2019-04-04T00:17:35+08:00</updated>
+    <id>http://sjpsega.me/blog/2019/04/04/payout</id>
+    <content type="html"><![CDATA[<p><img src="http://sjpsega.me/images/2019-04-04-payout/20190404_us_stock.jpg" alt="20190404_us_stock" /></p>
+
+<p>昨晚，美股做空，第一次收到了「平仓」预警信息。</p>
+
+<p>去年下半年，做空美股，赚了 40%+。今年，中港美股市，都大涨，美股都快涨到前高了，太可怕了……</p>
+
+<p>因为做空，还有杠杆，且杠杆高，现在已经把去年赚的钱，连本带利都亏进去了。</p>
+
+<p>我觉得，我真的印证了这句话「用错误的方法赚到钱，迟早要还」。</p>
+
+<p>也慢慢懂了，别人说的「永远不要做空美股」这句话。</p>
+
+<p>还有，自己缺少政治敏感，我印象中，1 月初，出了美国要暂停加息的消息。其实，那个时候，就应该平仓了，不该全力空了，把自己暴露到不断扩大的风险当中。</p>
+
+<p>去年做空，赚了钱，自大了。需要学习与复盘，就算做空，一顶一顶要控制仓位。可能，最终，我做空是对的，但我中途可能就爆仓了……</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2018 年终总结]]></title>
@@ -2446,143 +2469,6 @@
 <h2>结语</h2>
 
 <p>玩了一个半月，总体感觉还不错，我相信我还是会继续玩下去的，希望游戏越做越好，越来越好玩。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ARC学习笔记]]></title>
-    <link href="http://sjpsega.me/blog/2014/06/25/arc-note/"/>
-    <updated>2014-06-25T00:50:28+08:00</updated>
-    <id>http://sjpsega.me/blog/2014/06/25/arc-note</id>
-    <content type="html"><![CDATA[<h2>ARC执行新规则</h2>
-
-<ul>
-<li>开发者不能显示调用 <code>dealloc</code>；不能实现和调用 retain、release、retainCount 和 autorelease。</li>
-<li>不能使用 NSAllocateObject 或者 NSDeallocateObject 。开发者创建对象使用alloc，运行时环境负责销毁对象。</li>
-<li>在 C 数据结构中，不能使用对象指针。可以使用 OC 类来代替 C 的 struct。</li>
-<li>id 和 void * 没有自动转换。</li>
-<li>开发者不能使用 NSAutoreleasePool 对象。ARC 下使用 @autoreleasepool，它比 NSAtuoreleasePool 更有效率。</li>
-<li>开发者不能使用内存zones。不用再使用 NSZone 了。</li>
-</ul>
-
-
-<p>为了配合手动引用计数，ARC 的方法命名有限制：
-* 访问器方法不能以 new 开头，开发者不能声明一个以 new 开头的属性，除非你给你指定一个getter：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// Won&#39;t work:</span>
-</span><span class='line'><span class="k">@property</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">newTitle</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Works:</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">getter</span><span class="o">=</span><span class="n">theNewTitle</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">newTitle</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>ARC引入新的生命周期修饰符</h2>
-
-<h3>变量修饰符</h3>
-
-<ul>
-<li><code>__strong</code> 是默认的，只要对象还有强引用，他就一直存在。</li>
-<li><code>__weak</code> 指向一个不会保持被引用对象一直存在的引用。当没有强引用指向它，弱引用将被设置为 nil。</li>
-<li><code>__unsafe_unretained</code> 指向一个不会保持被引用对象一直存在的引用，它<code>不会</code>被设置为 nil，当没有强引用指向它。如果它引用的对象被释放，指针会变成野指针。</li>
-<li><code>__autoreleasing</code> 用于标识id *的引用参数，并且在返回的时候自动释放。</li>
-</ul>
-
-
-<h3>使用生命周期修饰符，避免循环引用</h3>
-
-<p>在MRC下，<code>__block id x;</code>这样的写法，不会对x进行retain。</p>
-
-<p>在ARC下，<code>__block id x;</code>默认retain x（就像其他变量一样）。</p>
-
-<p>如果想在ARC模式下，得到手动引用计数的效果，开发者可以使用<code>__unsafe_unretained __block id x;</code>。顾名思义，<code>__unsafe_unretained是危险的</code>(因为他可能导致野指针)，因此也不建议使用。<code>好的解决方案是：使用__weak或者将__block的值设置为nil，来打断retain循环</code>。</p>
-
-<ul>
-<li>使用 <code>__block</code> ，然后设置为 <code>nil</code>：</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__block</span> <span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
-</span><span class='line'><span class="c1">// ...</span>
-</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">myController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">myController</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>使用 <code>__weak</code> 修饰符 ：</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span><span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
-</span><span class='line'><span class="c1">// ...</span>
-</span><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__weak</span> <span class="n">weakMyViewController</span> <span class="o">=</span> <span class="n">myController</span><span class="p">;</span>
-</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">weakMyViewController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>对于复杂场景：</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span><span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
-</span><span class='line'><span class="c1">// ...</span>
-</span><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__weak</span> <span class="n">weakMyController</span> <span class="o">=</span> <span class="n">myController</span><span class="p">;</span>
-</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">MyViewController</span> <span class="o">*</span><span class="n">strongMyController</span> <span class="o">=</span> <span class="n">weakMyController</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">strongMyController</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// ...</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">strongMyController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>        <span class="c1">// ...</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Probably nothing...</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>相关资料</h2>
-
-<p><a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html">Transitioning to ARC Release Notes</a></p>
-
-<p><a href="http://www.cocoachina.com/applenews/devnews/2013/1209/7497.html">转向ARC的说明</a></p>
 ]]></content>
   </entry>
   

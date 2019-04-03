@@ -9,7 +9,7 @@
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="起因 一个简单的需求：为了减少网络请求，一些前端资源会做本地缓存；使用 WebView 访问页面的时候，拦截特定请求，使得特定请求直接加载本地资源。 但是做的过程中发现，当请求的资源为自定义协议的时候，比如加载的 url 为 abc://xxx.com/xx.js 的时候，系统会强制对该资源做缓存 &hellip;">
+  <meta name="description" content="Grand Central Dispatch （GCD）是 Apple 开发的一个多核编程的解决方法。 底层、轻量，是 iOS 上常用的多线程解决方案。 基本操作 sync、async dispatch_sync （同步）添加任务到一个队列并等待，直到任务完成，再执行原有队列上的任务。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,386 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/08/31/gcd-study/">GCD 学习</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-08-31T00:08:49+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>12:08 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Grand Central Dispatch （GCD）是 Apple 开发的一个多核编程的解决方法。</p>
+
+<p>底层、轻量，是 iOS 上常用的多线程解决方案。</p>
+
+<h2>基本操作</h2>
+
+<h3>sync、async</h3>
+
+<p>dispatch_sync （同步）添加任务到一个队列并等待，直到任务完成，再执行原有队列上的任务。</p>
+
+<p>dispatch_async （异步）添加任务到一个队列，但继续执行原有队列上的任务，在队列中按照 FIFO 的规则执行。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_sync</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 1&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 2&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="o">/*</span> <span class="err">输出</span><span class="o">:</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">1</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">2</span>
+</span><span class='line'> <span class="o">*</span> <span class="o">/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 1&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 2&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="o">/*</span> <span class="err">输出绝大多数情况为</span><span class="o">:</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">2</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">1</span>
+</span><span class='line'> <span class="o">*</span> <span class="o">/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>注：不能在串行（主线程是一种串行队列）线程队列的任务中，再使用 dispatch_sync 添加任务到同一个串行队列中，否则必定发生死锁。</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="c1">//必定发生死锁</span>
+</span><span class='line'>    <span class="n">dispatch_sync</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>dispatch_once</h3>
+
+<p>dispatch_once 线程安全的方式执行任务且仅执行其代码块一次。</p>
+
+<p>在单例模式中普遍使用。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
+</span><span class='line'><span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 1&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 2&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="o">/*</span> <span class="err">输出</span><span class="o">:</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">1</span>
+</span><span class='line'> <span class="o">*</span> <span class="o">/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>dispatch_after</h3>
+
+<p>dispatch_after 延后一定时间，异步执行任务</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_after</span><span class="p">(</span><span class="n">dispatch_time</span><span class="p">(</span><span class="n">DISPATCH_TIME_NOW</span><span class="p">,</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">NSEC_PER_SEC</span><span class="p">)),</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 1&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 2&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="o">/*</span> <span class="err">输出</span><span class="o">:</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">2</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">1</span>
+</span><span class='line'> <span class="o">*</span> <span class="o">/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>group</h2>
+
+<p>通常使用分组来关联一组相关的任务，任务全部完成后，再做相关操作。</p>
+
+<h3>group_enter、group_leave</h3>
+
+<p>使用 dispatch_group_enter、dispatch_group_leave 来手动设置一个组任务的开始和结束，用来控制复杂情况下的任务完成情况。</p>
+
+<p>必须保证 dispatch_group_enter 和 dispatch_group_leave <code>成对出现</code>，否则会遇到崩溃问题。</p>
+
+<p>实例：</p>
+
+<p>a）不使用 dispatch_group_enter、dispatch_group_leave 的情况</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">testGCDWithGroup</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">__block</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">__block</span> <span class="kt">BOOL</span> <span class="n">isDone</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// 1</span>
+</span><span class='line'>    <span class="kt">dispatch_group_t</span> <span class="n">group</span> <span class="o">=</span> <span class="n">dispatch_group_create</span><span class="p">();</span>
+</span><span class='line'>    <span class="c1">// 2</span>
+</span><span class='line'>    <span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;CGD 1 .&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="c1">// 3</span>
+</span><span class='line'>        <span class="n">dispatch_after</span><span class="p">(</span><span class="n">dispatch_time</span><span class="p">(</span><span class="n">DISPATCH_TIME_NOW</span><span class="p">,</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)(</span><span class="mf">0.3</span> <span class="o">*</span> <span class="n">NSEC_PER_SEC</span><span class="p">)),</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;CGD 1 after.&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="n">dispatch_group_notify</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;done !!!&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="c1">// 4</span>
+</span><span class='line'>        <span class="n">isDone</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">expect</span><span class="p">(</span><span class="n">count</span><span class="p">).</span><span class="n">to</span><span class="p">.</span><span class="n">equal</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="c1">// 5</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">isDone</span><span class="p">).</span><span class="n">will</span><span class="p">.</span><span class="n">beTruthy</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该测试用例执行步骤为:</p>
+
+<ol>
+<li>生成一个自定义组</li>
+<li>在自定义组上，添加任务到子线程上执行</li>
+<li>子线程上的任务为执行一个延时任务，使得 count + 1</li>
+<li>当一个组内的任务全部完成，设置 isDone 为 YES，并期望 count 为 1</li>
+<li>异步执行，期望 isDone 为 YES</li>
+</ol>
+
+
+<p>期望4、5处的测试均能通过，但测试结果为：</p>
+
+<ol>
+<li>5 的测试 case 为通过</li>
+<li>4 的测试 case <code>不通过</code>，count 不为 1</li>
+</ol>
+
+
+<p>因为在这个例子中，执行完毕 dispatch_group_async 中的任务，就算任务完成了；而不是等到 dispatch_group_async 中的 dispatch_after 任务完成，才算任务完成。</p>
+
+<p>b）使用 dispatch_group_enter、dispatch_group_leave 的情况</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">testGCDWithGroupEnterAndLeave</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">__block</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">__block</span> <span class="kt">BOOL</span> <span class="n">isDone</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">dispatch_group_t</span> <span class="n">group</span> <span class="o">=</span> <span class="n">dispatch_group_create</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">dispatch_group_enter</span><span class="p">(</span><span class="n">group</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;CGD 1 .&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">dispatch_after</span><span class="p">(</span><span class="n">dispatch_time</span><span class="p">(</span><span class="n">DISPATCH_TIME_NOW</span><span class="p">,</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)(</span><span class="mf">0.3</span> <span class="o">*</span> <span class="n">NSEC_PER_SEC</span><span class="p">)),</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;CGD 1 after.&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">dispatch_group_leave</span><span class="p">(</span><span class="n">group</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="n">dispatch_group_notify</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;done !!!&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">isDone</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">expect</span><span class="p">(</span><span class="n">count</span><span class="p">).</span><span class="n">to</span><span class="p">.</span><span class="n">equal</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">isDone</span><span class="p">).</span><span class="n">will</span><span class="p">.</span><span class="n">beTruthy</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个测试用例的全部通过，使用手动控制组任务的开始和结束，完美解决了例子 a 中碰到的问题。</p>
+
+<p>使用 dispatch_group_enter、dispatch_group_leave，用来处理复杂的异步任务非常有效。</p>
+
+<h2>queue</h2>
+
+<h3>串行、并发</h3>
+
+<p>串行队列每次只有一个任务被执行，并发队列在同一时间可以有多个任务被执行。</p>
+
+<p>主线程是系统提供的一个特殊的队列，是一个<code>串行</code>队列，是唯一可用与更新 UI 的线程。</p>
+
+<p>除了主线程，其他均为子线程，通常用来执行与 UI 无关的操作。
+实际编码中，通常使用 <code>dispatch_get_global_queue(long identifier, unsigned long flags)</code> 来获取子线程队列。通过该方法获取的是<code>并发</code>的全局调度队列，并且可以设置四个不同优先级的队列：high、default、low、background，若没有特殊原因，只使用 default 级别的队列。</p>
+
+<p>用户还可以使用 <code>dispatch_queue_create(const char *label, dispatch_queue_attr_t attr)</code> 来创建自定义的串行或并发队列。
+主线程是系统提供的<code>串行</code>队列。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//创建自定义并发队列</span>
+</span><span class='line'><span class="kt">dispatch_queue_t</span> <span class="n">concurrentQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">(</span><span class="s">&quot;com.sjpsega&quot;</span><span class="p">,</span> <span class="n">DISPATCH_QUEUE_CONCURRENT</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//创建自定义创兴队列</span>
+</span><span class='line'><span class="kt">dispatch_queue_t</span> <span class="n">serialQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">(</span><span class="s">&quot;com.sjpsega&quot;</span><span class="p">,</span> <span class="n">DISPATCH_QUEUE_SERIAL</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>dispatch_barrier</h2>
+
+<p>barrier 意为“障碍”。dispatch_barrier 在并发队列上工作时扮演一个串行式的瓶颈。当提交的任务开始执行时，该 API 保障这个时刻队列里只执行当前任务，不会执行其他任务。</p>
+
+<p><img src="/images/2015-08-31-gcd-study/dispatch_barrier.png" alt="dispatch_barrier" /></p>
+
+<p>使用 dispatch_barrier API 最佳的方式是使用<code>自定义并发队列</code>执行。</p>
+
+<p>下面以使用 dispatch_barrier 保证类类变量线程安全为例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addStudents:</span><span class="p">(</span><span class="n">Student</span> <span class="o">*</span><span class="p">)</span><span class="nv">student</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">dispatch_barrier_async</span><span class="p">(</span><span class="n">_concurrentQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">_students</span> <span class="nl">addObject</span><span class="p">:</span><span class="n">student</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">students</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">__block</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">copyObj</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">dispatch_sync</span><span class="p">(</span><span class="n">_concurrentQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">copyObj</span> <span class="o">=</span>  <span class="p">[</span><span class="n">_students</span> <span class="k">copy</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">copyObj</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是，通常保证类变量线程安全，若不是高并发的情况下，比较简单的方式是使用 <code>synchronized</code> 关键字：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addStudents:</span><span class="p">(</span><span class="n">Student</span> <span class="o">*</span><span class="p">)</span><span class="nv">student</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">@synchronized</span><span class="p">(</span><span class="n">_students</span><span class="p">){</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">_students</span> <span class="nl">addObject</span><span class="p">:</span><span class="n">student</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">students</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">@synchronized</span><span class="p">(</span><span class="n">_students</span><span class="p">){</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="n">_students</span> <span class="k">copy</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>测试 Demo</h2>
+
+<p><a href="https://github.com/sjpsega/GCDTest">测试 Demo</a></p>
+
+<h2>参考资料</h2>
+
+<p><a href="https://github.com/nixzhu/dev-blog/blob/master/2014-04-19-grand-central-dispatch-in-depth-part-1.md">GCD 深入理解：第一部分</a></p>
+
+<p><a href="https://github.com/nixzhu/dev-blog/blob/master/2014-05-14-grand-central-dispatch-in-depth-part-2.md">GCD 深入理解：第二部分</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1562,163 +1942,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/25/arc-note/">ARC学习笔记</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-06-25T00:50:28+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:50 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>ARC执行新规则</h2>
-
-<ul>
-<li>开发者不能显示调用 <code>dealloc</code>；不能实现和调用 retain、release、retainCount 和 autorelease。</li>
-<li>不能使用 NSAllocateObject 或者 NSDeallocateObject 。开发者创建对象使用alloc，运行时环境负责销毁对象。</li>
-<li>在 C 数据结构中，不能使用对象指针。可以使用 OC 类来代替 C 的 struct。</li>
-<li>id 和 void * 没有自动转换。</li>
-<li>开发者不能使用 NSAutoreleasePool 对象。ARC 下使用 @autoreleasepool，它比 NSAtuoreleasePool 更有效率。</li>
-<li>开发者不能使用内存zones。不用再使用 NSZone 了。</li>
-</ul>
-
-
-<p>为了配合手动引用计数，ARC 的方法命名有限制：
-* 访问器方法不能以 new 开头，开发者不能声明一个以 new 开头的属性，除非你给你指定一个getter：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// Won&#39;t work:</span>
-</span><span class='line'><span class="k">@property</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">newTitle</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Works:</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">getter</span><span class="o">=</span><span class="n">theNewTitle</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">newTitle</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>ARC引入新的生命周期修饰符</h2>
-
-<h3>变量修饰符</h3>
-
-<ul>
-<li><code>__strong</code> 是默认的，只要对象还有强引用，他就一直存在。</li>
-<li><code>__weak</code> 指向一个不会保持被引用对象一直存在的引用。当没有强引用指向它，弱引用将被设置为 nil。</li>
-<li><code>__unsafe_unretained</code> 指向一个不会保持被引用对象一直存在的引用，它<code>不会</code>被设置为 nil，当没有强引用指向它。如果它引用的对象被释放，指针会变成野指针。</li>
-<li><code>__autoreleasing</code> 用于标识id *的引用参数，并且在返回的时候自动释放。</li>
-</ul>
-
-
-<h3>使用生命周期修饰符，避免循环引用</h3>
-
-<p>在MRC下，<code>__block id x;</code>这样的写法，不会对x进行retain。</p>
-
-<p>在ARC下，<code>__block id x;</code>默认retain x（就像其他变量一样）。</p>
-
-<p>如果想在ARC模式下，得到手动引用计数的效果，开发者可以使用<code>__unsafe_unretained __block id x;</code>。顾名思义，<code>__unsafe_unretained是危险的</code>(因为他可能导致野指针)，因此也不建议使用。<code>好的解决方案是：使用__weak或者将__block的值设置为nil，来打断retain循环</code>。</p>
-
-<ul>
-<li>使用 <code>__block</code> ，然后设置为 <code>nil</code>：</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__block</span> <span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
-</span><span class='line'><span class="c1">// ...</span>
-</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">myController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">myController</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>使用 <code>__weak</code> 修饰符 ：</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span><span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
-</span><span class='line'><span class="c1">// ...</span>
-</span><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__weak</span> <span class="n">weakMyViewController</span> <span class="o">=</span> <span class="n">myController</span><span class="p">;</span>
-</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">weakMyViewController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>对于复杂场景：</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span><span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
-</span><span class='line'><span class="c1">// ...</span>
-</span><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__weak</span> <span class="n">weakMyController</span> <span class="o">=</span> <span class="n">myController</span><span class="p">;</span>
-</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">MyViewController</span> <span class="o">*</span><span class="n">strongMyController</span> <span class="o">=</span> <span class="n">weakMyController</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">strongMyController</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// ...</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">strongMyController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>        <span class="c1">// ...</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Probably nothing...</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>相关资料</h2>
-
-<p><a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html">Transitioning to ARC Release Notes</a></p>
-
-<p><a href="http://www.cocoachina.com/applenews/devnews/2013/1209/7497.html">转向ARC的说明</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -1736,6 +1959,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2019/04/04/payout/">用错误的方法赚到钱，迟早要还</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2019/01/01/2018summary/">2018 年终总结</a>
       </li>
     
@@ -1749,10 +1976,6 @@
     
       <li class="post">
         <a href="/blog/2016/09/17/paging/">iOS 仿淘宝详情页分页组件</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/04/18/jspatch-study/">JSPatch 学习</a>
       </li>
     
   </ul>

@@ -9,7 +9,8 @@
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="文章地址：objc第二章 并发编程：API 及挑战 OS X 和 iOS 中的并发编程 Grand Central Dispatch(GCD) GCD 在后端管理着一个线程池，可以将开发者从线程管理的工作中解放出来，通过集中的管理线程，来缓解大量线程被创建的问题。在日常开发中，最好使用 GCD &hellip;">
+  <meta name="description" content="ARC执行新规则 开发者不能显示调用 dealloc；不能实现和调用 retain、release、retainCount 和 autorelease。
+不能使用 NSAllocateObject 或者 NSDeallocateObject 。开发者创建对象使用alloc，运行时环境负责销毁对象 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,163 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/25/arc-note/">ARC学习笔记</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-06-25T00:50:28+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:50 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>ARC执行新规则</h2>
+
+<ul>
+<li>开发者不能显示调用 <code>dealloc</code>；不能实现和调用 retain、release、retainCount 和 autorelease。</li>
+<li>不能使用 NSAllocateObject 或者 NSDeallocateObject 。开发者创建对象使用alloc，运行时环境负责销毁对象。</li>
+<li>在 C 数据结构中，不能使用对象指针。可以使用 OC 类来代替 C 的 struct。</li>
+<li>id 和 void * 没有自动转换。</li>
+<li>开发者不能使用 NSAutoreleasePool 对象。ARC 下使用 @autoreleasepool，它比 NSAtuoreleasePool 更有效率。</li>
+<li>开发者不能使用内存zones。不用再使用 NSZone 了。</li>
+</ul>
+
+
+<p>为了配合手动引用计数，ARC 的方法命名有限制：
+* 访问器方法不能以 new 开头，开发者不能声明一个以 new 开头的属性，除非你给你指定一个getter：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// Won&#39;t work:</span>
+</span><span class='line'><span class="k">@property</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">newTitle</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Works:</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">getter</span><span class="o">=</span><span class="n">theNewTitle</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">newTitle</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>ARC引入新的生命周期修饰符</h2>
+
+<h3>变量修饰符</h3>
+
+<ul>
+<li><code>__strong</code> 是默认的，只要对象还有强引用，他就一直存在。</li>
+<li><code>__weak</code> 指向一个不会保持被引用对象一直存在的引用。当没有强引用指向它，弱引用将被设置为 nil。</li>
+<li><code>__unsafe_unretained</code> 指向一个不会保持被引用对象一直存在的引用，它<code>不会</code>被设置为 nil，当没有强引用指向它。如果它引用的对象被释放，指针会变成野指针。</li>
+<li><code>__autoreleasing</code> 用于标识id *的引用参数，并且在返回的时候自动释放。</li>
+</ul>
+
+
+<h3>使用生命周期修饰符，避免循环引用</h3>
+
+<p>在MRC下，<code>__block id x;</code>这样的写法，不会对x进行retain。</p>
+
+<p>在ARC下，<code>__block id x;</code>默认retain x（就像其他变量一样）。</p>
+
+<p>如果想在ARC模式下，得到手动引用计数的效果，开发者可以使用<code>__unsafe_unretained __block id x;</code>。顾名思义，<code>__unsafe_unretained是危险的</code>(因为他可能导致野指针)，因此也不建议使用。<code>好的解决方案是：使用__weak或者将__block的值设置为nil，来打断retain循环</code>。</p>
+
+<ul>
+<li>使用 <code>__block</code> ，然后设置为 <code>nil</code>：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__block</span> <span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
+</span><span class='line'><span class="c1">// ...</span>
+</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">myController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">myController</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>使用 <code>__weak</code> 修饰符 ：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span><span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
+</span><span class='line'><span class="c1">// ...</span>
+</span><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__weak</span> <span class="n">weakMyViewController</span> <span class="o">=</span> <span class="n">myController</span><span class="p">;</span>
+</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">weakMyViewController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>对于复杂场景：</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">MyViewController</span> <span class="o">*</span><span class="n">myController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="err">…</span><span class="p">];</span>
+</span><span class='line'><span class="c1">// ...</span>
+</span><span class='line'><span class="n">MyViewController</span> <span class="o">*</span> <span class="k">__weak</span> <span class="n">weakMyController</span> <span class="o">=</span> <span class="n">myController</span><span class="p">;</span>
+</span><span class='line'><span class="n">myController</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span>  <span class="o">^</span><span class="p">(</span><span class="bp">NSInteger</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">MyViewController</span> <span class="o">*</span><span class="n">strongMyController</span> <span class="o">=</span> <span class="n">weakMyController</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">strongMyController</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// ...</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">strongMyController</span> <span class="nl">dismissViewControllerAnimated</span><span class="p">:</span><span class="nb">YES</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>        <span class="c1">// ...</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Probably nothing...</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>相关资料</h2>
+
+<p><a href="https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html">Transitioning to ARC Release Notes</a></p>
+
+<p><a href="http://www.cocoachina.com/applenews/devnews/2013/1209/7497.html">转向ARC的说明</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -3384,1167 +3542,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/11/yi--ios-7-best-practices-part-1/">[译]iOS7最佳实践：一个天气App案例(一)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-02-11T22:21:53+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:21 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>注：本文译自：<a href="http://www.raywenderlich.com/55384/ios-7-best-practices-part-1">raywenderlich ios-7-best-practices-part-1</a>，去除了跟主题无关的寒暄部分。
-欢迎转载，保持署名</p>
-
-<p>在这个两部分的系列教程中，您将探索如何使用以下工具和技术来创建自己的App：</p>
-
-<ul>
-<li><a href="http://cocoapods.org/">Cocoapods</a></li>
-<li>Manual layout in code(纯代码布局)</li>
-<li><a href="https://github.com/ReactiveCocoa/ReactiveCocoa">ReactiveCocoa</a></li>
-<li><a href="http://openweathermap.org/">OpenWeatherMap</a></li>
-</ul>
-
-
-<p>本教程专为熟悉基本知识的、但还没有接触到太多高级主题的中级开发者而设计。本教程也是想要去探索Objective-C<a href="http://en.wikipedia.org/wiki/Functional_programming">函数编程</a>一个很好的开始。</p>
-
-<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/weather3.gif" alt="Finished Weather App" /></p>
-
-<h2>开始</h2>
-
-<p>打开Xcode并执行<code>File\New\Project</code>。选择<code>Application\Empty Application</code>。将项目命名为<code>SimpleWeather</code>，单击下一步，选择一个目录去保存你的项目，然后点击Create。
-现在，你的基础项目已经完成。下一步是集成你的第三方工具。但首先你要<code>关闭Xcode</code>，确保他不会影响下一步。</p>
-
-<h3>Cocoapods</h3>
-
-<p>你将要下载<a href="http://cocoapods.org/">Cocoapods</a>的代码，在Xcode项目中添加文件来使用，并配置项目需要的设置。</p>
-
-<h3>Mantle</h3>
-
-<p><a href="https://github.com/MantleFramework/Mantle">Mantle</a>是由于Github团队开发的，目的是去除Objective-C把JSON数据转为NSObject子类的所有样板代码。Mantle也能做数据转换，通过一种神奇的方式把JSON原始数据(strings, ints, floats)转换为复杂数据，比如NSDate, NSURL, 甚至是自定义类。</p>
-
-<h3>LBBlurredImage</h3>
-
-<p><a href="https://github.com/lukabernardi/LBBlurredImage">LBBlurredImage</a>是一个继承自UIImageView，轻而易举使图像模糊的项目。你将仅仅用一行代码来创建一个神奇的模糊效果。</p>
-
-<h3>TSMessages</h3>
-
-<p><a href="https://github.com/toursprung/TSMessages">TSMessages</a> 是另一个非常简单的库，用来显示浮层警告和通知。当出现错误信息而不直接影响用户的时候，最好使用浮层来代替模态窗口(例如UIAlertView)，这样你将尽可能减少对用户的影响。</p>
-
-<p>你将只用TSMessages，在网络失去连接或API错误的时候。如果发生错误，你将看到类似这样的一个浮层：</p>
-
-<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/12/TSMessage.png" alt="TSMessages Error" /></p>
-
-<h3>ReactiveCocoa</h3>
-
-<p>最后，你将使用到<a href="https://github.com/ReactiveCocoa/ReactiveCocoa">ReactiveCocoa</a>，他也来自于GitHub团队。ReactiveCocoa给Objective-C带来了函数编程，类似与.NET的<a href="http://msdn.microsoft.com/en-us/data/gg577609.aspx">Reactive Extensions</a>。你将在第二部分花费大部分时间去实现ReactiveCocoa。</p>
-
-<h2>设置你的Cocoapods</h2>
-
-<p>设置你的Cocoapods，先要确保你已经安装了Cocoapods。为此，打开命令行程序，并输入。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>which pod</span></code></pre></td></tr></table></div></figure>
-
-
-<p>你将会看到类似这样的输出:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/usr/bin/pod</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这决定于你如何管理Ruby gems，例如你使用<a href="http://rbenv.org/">rbenv</a>或<a href="http://rvm.io/">RVM</a>,路径可能有所不同。</p>
-
-<p>如果命令行简单的返回提示，或显示<code>pod not found</code>，表示Cocoapods未安装在你的机器上。可以查看我们的<a href="http://www.raywenderlich.com/12139/introduction-to-cocoapods">Cocoapods教程</a>作为安装说明。这也是一个很好的资源，如果你想更多得了解Cocoapods的话。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sjpsega注:Cocoapods中文安装教程可以看这篇 http://geeklu.com/2013/06/cocoapods-101/</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href="http://guides.cocoapods.org/syntax/podfile.html">Podfiles</a>是用来告诉Cocoapods哪些开源项目需要导入。</p>
-
-<p>要创建你的第一个Cocoapod，首先在命令行中用<code>cd</code>命令导航到你的XCode项目所在的文件夹，在命令行中启动编辑器，输入</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>platform :ios, '7.0'
-</span><span class='line'> 
-</span><span class='line'>pod 'Mantle'
-</span><span class='line'>pod 'LBBlurredImage'
-</span><span class='line'>pod 'TSMessages'
-</span><span class='line'>pod 'ReactiveCocoa'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这文件做了两件事情：</p>
-
-<ul>
-<li>告诉Cocoapods你的目标平台与版本，这里的你目标是iOS 7.0。</li>
-<li>列给Cocoapods一个项目所有需要引入和安装的三方库清单。</li>
-</ul>
-
-
-<p>在命令行中输入<code>pod install</code>进行安装。</p>
-
-<p>这可能需要花一到两分钟的时间去安装各种包。你的命令行应该输出如下所示:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ pod install
-</span><span class='line'>Analyzing dependencies
-</span><span class='line'> 
-</span><span class='line'>CocoaPods 0.28.0 is available.
-</span><span class='line'> 
-</span><span class='line'>Downloading dependencies
-</span><span class='line'>Installing HexColors (2.2.1)
-</span><span class='line'>Installing LBBlurredImage (0.1.0)
-</span><span class='line'>Installing Mantle (1.3.1)
-</span><span class='line'> 
-</span><span class='line'>Installing ReactiveCocoa (2.1.7)
-</span><span class='line'>Installing TSMessages (0.9.4)
-</span><span class='line'>Generating Pods project
-</span><span class='line'>Integrating client project
-</span><span class='line'> 
-</span><span class='line'>[!] From now on use `SimpleWeather.xcworkspace`.</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sjpsega注:若你之前安装过Cocoapods的话，这里安装报错的话，可以看看http://blog.cocoapods.org/Repairing-Our-Broken-Specs-Repository/ 修复问题</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Cocoapods会在你的项目目录中创建一堆新文件，但是，只有一个需要你关心，<code>SimpleWeather.xcworkspace</code>。</p>
-
-<p>用Xcode打开<code>SimpleWeather.xcworkspace</code>。看看你的项目设置，现在有一个Pods项目在你的项目工作区，以及在Pods文件夹放着每一个你引入的库，如下所示：</p>
-
-<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/12/SimpleWeather-Cocoapods.jpg" alt="Cocoapods Project" /></p>
-
-<p>确保你已经选择SimpleWeather项目，如图所示：
-<img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/12/SimpleWeather-Project.jpg" alt="Select SimpleWeather Project" /></p>
-
-<p>构建并运行您的App，以确保一切工作正常：</p>
-
-<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/blank-app.jpg" width="320" alt="Blank App" /></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>提示：您可能会注意到有一些项目生成警告。因为Cocoapods引入的项目，是由不同的开发者开发，并且不同的开发者对生成警告有不同的态度。通常，你应该可以忽略它们。只要确保没有任何编译器错误！</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>创建你的主视图控制器</h2>
-
-<p>虽然这个App看起来复杂，但它还会通过一个单一的View Controller完成。现在，你将添加他。</p>
-
-<p>选中<code>SimpleWeather</code>项目，单击<code>File\New\File</code>，并且选择<code>Cocoa Touch\Objective-C class</code>. 命名为<code>WXController</code>，并设置为<code>UIViewController</code>的子类。</p>
-
-<p>确保<code>Targeted for iPad</code>和<code>With XIB for user interface</code>都没有选中，如下图所示：
-<img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/create-controller.jpg" alt="Create WXController" /></p>
-
-<p>打开<code>WXController.m</code>然后用如下所示替换<code>-viewDidLoad</code>方法：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Remove this later</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">redColor</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在打开<code>AppDelegate.m</code>，并且引入如下两个class:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;WXController.h&quot;</span>
-</span><span class='line'><span class="cp">#import &lt;TSMessage.h&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>眼尖的读者会注意到<code>WXController</code>使用引号引入，<code>TSMessage</code>使用单括号引入。</p>
-
-<p>回头看下当你创建Podfile的时候，你使用Cocoapods引入<code>TSMessage</code>。Cocoapods创建TSMessage项目，并把它加入到工作空间。既然你从工作区的其他项目导入，可以使用尖括号代替引号。</p>
-
-<p>代替<code>-application:didFinishLaunchingWithOptions</code>的内容：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="bp">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="nv">application</span> <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIWindow</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:[[</span><span class="bp">UIScreen</span> <span class="n">mainScreen</span><span class="p">]</span> <span class="n">bounds</span><span class="p">]];</span>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WXController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">window</span> <span class="n">makeKeyAndVisible</span><span class="p">];</span>
-</span><span class='line'>    <span class="c1">// 2</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">TSMessage</span> <span class="nl">setDefaultViewController</span><span class="p">:</span> <span class="nb">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>标号注释的解释：</p>
-
-<ol>
-<li>初始化并设置<code>WXController</code>实例作为App的根视图控制器。通常这个控制器是一个的<code>UINavigationController</code>或<code>UITabBarController</code>，但在当前情况下，你使用<code>WXController</code>的单个实例。</li>
-<li>设置默认的视图控制器来显示你的TSMessages。这样做，你将不再需要手动指定要使用的控制器来显示警告。</li>
-</ol>
-
-
-<p>构建并运行，看看你的新视图控制器起作用了。</p>
-
-<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/wxcontroller-red.jpg" width="320" alt="WXController" /></p>
-
-<p>在红色背景下，状态栏有点不够清晰。幸运的是，有一个简单的方法，使状态栏更清晰易读。</p>
-
-<p>在iOS7，<a href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIViewController_Class/Reference/Reference.html#//apple_ref/occ/instm/UIViewController/preferredStatusBarStyle">UIViewController</a>有一个新的API，用来控制状态栏的外观。打开<code>WXController</code>，直接添加下面的代码到<code>-viewDidLoad:</code>方法下：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">UIStatusBarStyle</span><span class="p">)</span><span class="nf">preferredStatusBarStyle</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">UIStatusBarStyleLightContent</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>再次构建并运行，你将看到状态栏如下的变化:</p>
-
-<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/wxcontroller-red-status.jpg" width="320" alt="Create WXController with Light Status Bar" /></p>
-
-<h2>设置你的App视图</h2>
-
-<p>现在是时候让你的App接近生活。下载这个项目的<a href="http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/Images.zip">图片</a>，并解压缩到一个合适的位置。这个压缩包的背景图片出自Flickr用户<a href="http://www.flickr.com/photos/52547323@N00/5637648252">idleformat</a>之手，天气图片出自Dribbble用户<a href="http://dribbble.com/shots/1247177-Weather-icons?list=users">heeyeun</a>之手。</p>
-
-<p>切换回Xcode，单击<code>File\Add Files to “SimpleWeather”</code>&hellip;.定位到你刚刚解压缩的图片文件夹并选择它。选择<code>Copy items into destination group’s folder (if needed)</code>，然后单击<code>Add</code>。</p>
-
-<p>打开<code>WXController.h</code>, 添加如下委托协议：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;</span><span class="bp">UITableViewDataSource</span><span class="p">,</span> <span class="bp">UITableViewDelegate</span><span class="p">,</span> <span class="bp">UIScrollViewDelegate</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在打开<code>WXController.m</code>。 小提示：你可以使用<code>Control-Command-Up</code>的快捷键来实现<code>.h</code>和<code>.m</code>文件之间的快速切换。</p>
-
-<p>添加如下代码到<code>WXController.m</code>顶部:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;LBBlurredImage/UIImageView+LBBlurredImage.h&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>LBBlurredImage.h</code>包含在Cocoapods引入的<code>LBBlurredImage</code>项目，你会使用这个库来模糊背景图片。</p>
-
-<p>应该有一个空的私有接口样板在<code>WXController</code> imports的下方。它具有以下属性：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">WXController</span> <span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">UIImageView</span> <span class="o">*</span><span class="n">backgroundImageView</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">UIImageView</span> <span class="o">*</span><span class="n">blurredImageView</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">UITableView</span> <span class="o">*</span><span class="n">tableView</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">)</span> <span class="n">CGFloat</span> <span class="n">screenHeight</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>现在，是时候在项目中创建并设置视图。</p>
-
-<p>下面是你App的分解图，记住，table view将是透明的：</p>
-
-<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/screens.jpg" alt="Exploded Screens" /></p>
-
-<p>为了实现动态模糊效果，在你的App中，你会根据App的滚动来改变模糊图像的alpha值。</p>
-
-<p>打开<code>WXController.m</code>，使用如下代码来，替换掉<code>-viewDidLoad</code>中设置背景色的代码：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">screenHeight</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIScreen</span> <span class="n">mainScreen</span><span class="p">].</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="bp">UIImage</span> <span class="o">*</span><span class="n">background</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:</span><span class="s">@&quot;bg&quot;</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImageView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage</span><span class="p">:</span><span class="n">background</span><span class="p">];</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFill</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFill</span><span class="p">;</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span> <span class="nl">setImageToBlur</span><span class="p">:</span><span class="n">background</span> <span class="nl">blurRadius</span><span class="p">:</span><span class="mi">10</span> <span class="nl">completionBlock</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 4</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UITableView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">dataSource</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">separatorColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithWhite</span><span class="p">:</span><span class="mi">1</span> <span class="nl">alpha</span><span class="p">:</span><span class="mf">0.2</span><span class="p">];</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">pagingEnabled</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这是非常简单的代码：</p>
-
-<ol>
-<li>获取并存储屏幕高度。之后，你将在用分页的方式来显示所有天气​​数据时，使用它。</li>
-<li>创建一个静态的背景图，并添加到视图上。</li>
-<li>使用LBBlurredImage来创建一个模糊的背景图像，并设置alpha为0，使得开始<code>backgroundImageView</code>是可见的。</li>
-<li>创建tableview来处理所有的数据呈现。 设置WXController为delegate和dataSource，以及滚动视图的delegate。请注意，设置<code>pagingEnabled</code>为<code>YES</code>。</li>
-</ol>
-
-
-<p>添加如下UITableView的delegate和dataSource的代码到<code>WXController.m</code>的<code>@implementation</code>块中：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="cp">#pragma mark - UITableViewDataSource</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nf">numberOfSectionsInTableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">numberOfRowsInSection:</span><span class="p">(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nv">section</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// TODO: Return count of forecast</span>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">UITableViewCell</span> <span class="o">*</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">cellForRowAtIndexPath:</span><span class="p">(</span><span class="bp">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">CellIdentifier</span> <span class="o">=</span> <span class="s">@&quot;CellIdentifier&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="bp">UITableViewCell</span> <span class="o">*</span><span class="n">cell</span> <span class="o">=</span> <span class="p">[</span><span class="n">tableView</span> <span class="nl">dequeueReusableCellWithIdentifier</span><span class="p">:</span><span class="n">CellIdentifier</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">cell</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">cell</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UITableViewCell</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithStyle</span><span class="p">:</span><span class="n">UITableViewCellStyleValue1</span> <span class="nl">reuseIdentifier</span><span class="p">:</span><span class="n">CellIdentifier</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 3</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">selectionStyle</span> <span class="o">=</span> <span class="n">UITableViewCellSelectionStyleNone</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithWhite</span><span class="p">:</span><span class="mi">0</span> <span class="nl">alpha</span><span class="p">:</span><span class="mf">0.2</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">textLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">detailTextLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// TODO: Setup the cell</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="n">cell</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#pragma mark - UITableViewDelegate</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">heightForRowAtIndexPath:</span><span class="p">(</span><span class="bp">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// TODO: Determine cell height based on screen</span>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">44</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li><code>Pragma mark</code>是<a href="http://nshipster.com/pragma/">组织代码</a>的很好的一种方式。</li>
-<li>你的table view有两个部分，一个是每小时的天气预报，另一个用于每日播报。table view的section数目，设置为2。</li>
-<li>天气预报的cell是不可选择的。给他们一个半透明的黑色背景和白色文字。</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="err">注意：使用格式化的注释</span> <span class="c1">// TODO：可以帮助Xcode找到需要以后完成的代码。你还可以使用 Show Document Items(Control-6)来查看TODO项。</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>最后，添加如下代码到<code>WXController.m</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewWillLayoutSubviews</span> <span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewWillLayoutSubviews</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="bp">CGRect</span> <span class="n">bounds</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">;</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">;</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在<code>WXController.m</code>中，你的视图控制器调用该方法来编排其子视图。</p>
-
-<p>构建并运行你的App，看看你的视图如何堆叠。</p>
-
-<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/11/background.jpg" width="320" alt="Image Background" /></p>
-
-<p>仔细看，你会看到所有空的table cell的cell分隔线。</p>
-
-<p>仍然在<code>-viewDidLoad</code>中，添加下面的代码来设置你的布局框架和边距：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="bp">CGRect</span> <span class="n">headerFrame</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIScreen</span> <span class="n">mainScreen</span><span class="p">].</span><span class="n">bounds</span><span class="p">;</span>
-</span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="n">CGFloat</span> <span class="n">inset</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
-</span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="n">CGFloat</span> <span class="n">temperatureHeight</span> <span class="o">=</span> <span class="mi">110</span><span class="p">;</span>
-</span><span class='line'><span class="n">CGFloat</span> <span class="n">hiloHeight</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
-</span><span class='line'><span class="n">CGFloat</span> <span class="n">iconHeight</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
-</span><span class='line'><span class="c1">// 4</span>
-</span><span class='line'><span class="bp">CGRect</span> <span class="n">hiloFrame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">inset</span><span class="p">,</span>
-</span><span class='line'>                              <span class="n">headerFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">hiloHeight</span><span class="p">,</span>
-</span><span class='line'>                              <span class="n">headerFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">inset</span><span class="p">),</span>
-</span><span class='line'>                              <span class="n">hiloHeight</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="bp">CGRect</span> <span class="n">temperatureFrame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">inset</span><span class="p">,</span>
-</span><span class='line'>                                     <span class="n">headerFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="p">(</span><span class="n">temperatureHeight</span> <span class="o">+</span> <span class="n">hiloHeight</span><span class="p">),</span>
-</span><span class='line'>                                     <span class="n">headerFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">inset</span><span class="p">),</span>
-</span><span class='line'>                                     <span class="n">temperatureHeight</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="bp">CGRect</span> <span class="n">iconFrame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">inset</span><span class="p">,</span>
-</span><span class='line'>                              <span class="n">temperatureFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">iconHeight</span><span class="p">,</span>
-</span><span class='line'>                              <span class="n">iconHeight</span><span class="p">,</span>
-</span><span class='line'>                              <span class="n">iconHeight</span><span class="p">);</span>
-</span><span class='line'><span class="c1">// 5</span>
-</span><span class='line'><span class="bp">CGRect</span> <span class="n">conditionsFrame</span> <span class="o">=</span> <span class="n">iconFrame</span><span class="p">;</span>
-</span><span class='line'><span class="n">conditionsFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="p">(((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">inset</span><span class="p">)</span> <span class="o">+</span> <span class="n">iconHeight</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="p">);</span>
-</span><span class='line'><span class="n">conditionsFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">iconFrame</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">iconHeight</span> <span class="o">+</span> <span class="mi">10</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这是相当常规设置代码，但这里是怎么回事：</p>
-
-<ol>
-<li>设置table的header大小与屏幕相同。你将利用的UITableView的分页来分隔页面页头和每日每时的天气预报部分。</li>
-<li>创建inset（或padding）变量，以便您的所有标签均匀分布并居中。</li>
-<li>创建并初始化为各种视图创建的高度变量。设置这些值作为常量，使得可以很容易地在需要的时候，配置和更改您的视图设置。</li>
-<li>使用常量和inset变量，为label和view创建框架。</li>
-<li>复制图标框，调整它，使文本具有一定的扩展空间，并将其移动到该图标的右侧。当我们把标签添加到视图，你会看到布局的效果。</li>
-</ol>
-
-
-<p>添加如下代码到<code>-viewDidLoad</code>：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="bp">UIView</span> <span class="o">*</span><span class="n">header</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">headerFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">header</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span><span class="p">.</span><span class="n">tableHeaderView</span> <span class="o">=</span> <span class="n">header</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="c1">// bottom left</span>
-</span><span class='line'><span class="bp">UILabel</span> <span class="o">*</span><span class="n">temperatureLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">temperatureFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&quot;0°&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">temperatureLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-UltraLight&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">120</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">temperatureLabel</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// bottom left</span>
-</span><span class='line'><span class="bp">UILabel</span> <span class="o">*</span><span class="n">hiloLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">hiloFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&quot;0° / 0°&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">hiloLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">28</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">hiloLabel</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// top</span>
-</span><span class='line'><span class="bp">UILabel</span> <span class="o">*</span><span class="n">cityLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="mi">30</span><span class="p">)];</span>
-</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&quot;Loading...&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">18</span><span class="p">];</span>
-</span><span class='line'><span class="n">cityLabel</span><span class="p">.</span><span class="n">textAlignment</span> <span class="o">=</span> <span class="n">NSTextAlignmentCenter</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">cityLabel</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="bp">UILabel</span> <span class="o">*</span><span class="n">conditionsLabel</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">conditionsFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">conditionsLabel</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="n">conditionsLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">18</span><span class="p">];</span>
-</span><span class='line'><span class="n">conditionsLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">conditionsLabel</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="c1">// bottom left</span>
-</span><span class='line'><span class="bp">UIImageView</span> <span class="o">*</span><span class="n">iconView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIImageView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">iconFrame</span><span class="p">];</span>
-</span><span class='line'><span class="n">iconView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFit</span><span class="p">;</span>
-</span><span class='line'><span class="n">iconView</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">header</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">iconView</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这是相当长的一块代码，但它真的只是在做设置各种控件的繁重工作。简单的说：</p>
-
-<ol>
-<li>设置当前view为你的table header。</li>
-<li>构建每一个显示气象数据的标签。</li>
-<li>添加一个天气图标的图像视图。</li>
-</ol>
-
-
-<p>构建并运行你的App，你应该可以看到你之前布局的所有所有view。下面的屏幕截图显示了使用手工布局的、所有标签框在视觉上的显示。</p>
-
-<p><img src="http://cdn1.raywenderlich.com/wp-content/uploads/2013/12/built-layout.jpg" width="500" alt="Labels and Views" /></p>
-
-<p>用手指轻轻推动table，当你滚动它的时候，应该会反弹。</p>
-
-<h2>获取气象数据</h2>
-
-<p>你会注意到，App显示“Loading&hellip;”，但它不是真正地在工作。是时候获取一些真正的天气数据。</p>
-
-<p>你会从<a href="http://openweathermap.org/">OpenWeatherMap</a>的API拉取数据。 OpenWeatherMap是一个非常棒的服务，旨在提供实时，准确，免费的天气数据给任何人。虽然有很多天气API，但他们大多要么使用较旧的数据格式，如XML，或是有偿服务 - 并且有时还相当昂贵。</p>
-
-<p>你会遵循以下基本步骤，来获你设备的位置的气象数据：</p>
-
-<ol>
-<li>找到设备的位置</li>
-<li>从<a href="http://api.openweathermap.org/data/2.5/weather?lat=37.785834&amp;lon=-122.406417&amp;units=imperial">API端</a>下载JSON数据</li>
-<li>映射JSON到<code>WXConditions</code>和<code>WXDailyForecasts</code></li>
-<li>告诉UI有新数据了</li>
-</ol>
-
-
-<p>开始创建你的天气模型和数据管理类。单击<code>File\New\File…</code>并选择<code>Cocoa Touch\Objective-C class</code>。命名为<code>WXClient</code>并使其为<code>NSObject</code>的子类。</p>
-
-<p>这样再做三次创建以下类：</p>
-
-<ul>
-<li><code>WXManager</code>作为<code>NSObject</code>的子类</li>
-<li><code>WXCondition</code>作为<code>MTLModel</code>的子类</li>
-<li><code>WXDailyForecast</code>作为<code>WXCondition</code>的子类</li>
-</ul>
-
-
-<p>全部完成？现在，你可以开始下一节，其中涉及映射和转换您的天气数据。</p>
-
-<h2>创建你的天气模型</h2>
-
-<p>你的模型将使用<a href="https://github.com/github/Mantle">Mantle</a>，这使得数据映射和转型非常简单。</p>
-
-<p>打开<code>WXCondition.h</code>如下列代码，修改接口：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="k">@interface</span> <span class="nc">WXCondition</span> : <span class="nc">MTLModel</span> <span class="o">&lt;</span><span class="n">MTLJSONSerializing</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSDate</span> <span class="o">*</span><span class="n">date</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">humidity</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">temperature</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">tempHigh</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">tempLow</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">locationName</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSDate</span> <span class="o">*</span><span class="n">sunrise</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSDate</span> <span class="o">*</span><span class="n">sunset</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">conditionDescription</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">condition</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">windBearing</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">windSpeed</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">icon</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">imageName</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li><code>MTLJSONSerializing</code>协议告诉Mantle序列化该对象如何从JSON映射到Objective-C的属性。</li>
-<li>这些都是你的天气数据的属性。你将会使用这些属性的get set方法，但是当你要扩展App，这是一种很好的方法来访问数据。</li>
-<li>这是一个简单的辅助方法，从天气状况映射到图像文件。</li>
-</ol>
-
-
-<p>构建并运行App。失败了……</p>
-
-<p>原因是你没有从你的Cocoapods项目中引入<code>Mantle</code>。解决方法是，在<code>WXCondition.h</code>中，你需要把<code>MTLModel.h</code>替换为<code>#import &lt;Mantle.h&gt;</code>。</p>
-
-<p>现在构建并运行App。成功了。你会看到一些新的警告，但你可以忽略他们。</p>
-
-<p>首先，你需要处理未实现的<code>-imageName</code>方法。</p>
-
-<p>打开<code>WXCondition.m</code>，添加如下方法：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">imageMap</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="k">static</span> <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">_imageMap</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">_imageMap</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 2</span>
-</span><span class='line'>        <span class="n">_imageMap</span> <span class="o">=</span> <span class="l">@{</span>
-</span><span class='line'>                      <span class="s">@&quot;01d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-clear&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;02d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-few&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;03d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-few&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;04d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-broken&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;09d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-shower&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;10d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-rain&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;11d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-tstorm&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;13d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-snow&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;50d&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-mist&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;01n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-moon&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;02n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-few-night&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;03n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-few-night&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;04n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-broken&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;09n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-shower&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;10n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-rain-night&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;11n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-tstorm&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;13n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-snow&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="s">@&quot;50n&quot;</span> <span class="o">:</span> <span class="s">@&quot;weather-mist&quot;</span><span class="p">,</span>
-</span><span class='line'>                      <span class="l">}</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">_imageMap</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">imageName</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">WXCondition</span> <span class="n">imageMap</span><span class="p">][</span><span class="nb">self</span><span class="p">.</span><span class="n">icon</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>创建一个静态的NSDictionary，因为WXCondition的每个实例都将使用相同的数据映射。</li>
-<li>天气状况与图像文件的关系（例如“01d”代表“weather-clear.png”）。</li>
-<li>声明获取图像文件名的公有方法。</li>
-</ol>
-
-
-<p>看一看从OpenWeatherMap返回的JSON响应数据：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;dt&quot;</span><span class="p">:</span> <span class="mi">1384279857</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">5391959</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;main&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nt">&quot;humidity&quot;</span><span class="p">:</span> <span class="mi">69</span><span class="p">,</span>
-</span><span class='line'>        <span class="nt">&quot;pressure&quot;</span><span class="p">:</span> <span class="mi">1025</span><span class="p">,</span>
-</span><span class='line'>        <span class="nt">&quot;temp&quot;</span><span class="p">:</span> <span class="mf">62.29</span><span class="p">,</span>
-</span><span class='line'>        <span class="nt">&quot;temp_max&quot;</span><span class="p">:</span> <span class="mf">69.01</span><span class="p">,</span>
-</span><span class='line'>        <span class="nt">&quot;temp_min&quot;</span><span class="p">:</span> <span class="mf">57.2</span>
-</span><span class='line'>    <span class="p">},</span>
-</span><span class='line'>    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;San Francisco&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;weather&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>        <span class="p">{</span>
-</span><span class='line'>            <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;haze&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="nt">&quot;icon&quot;</span><span class="p">:</span> <span class="s2">&quot;50d&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">721</span><span class="p">,</span>
-</span><span class='line'>            <span class="nt">&quot;main&quot;</span><span class="p">:</span> <span class="s2">&quot;Haze&quot;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">]</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>你需要把嵌套的JSON值映射到Objective-C的属性。嵌套的JSON值是元素，如温度，即上面看到的<code>main</code>节点。</p>
-
-<p>要做到这一点，你将利用的Objective-C的<a href="https://developer.apple.com/library/ios/documentation/cocoa/conceptual/KeyValueCoding/Articles/BasicPrinciples.html">Key-Value Coding</a>和Mantle<a href="https://github.com/MantleFramework/Mantle/blob/master/Mantle/MTLJSONAdapter.h">的MTLJSONAdapter</a>。</p>
-
-<p>还在<code>WXCondition.m</code>，通过添加<code>+JSONKeyPathsByPropertyKey</code>方法，“JSON到模型属性”的映射，且该方法是<code>MTLJSONSerializing</code>协议的<a href="https://github.com/MantleFramework/Mantle/blob/master/Mantle/MTLJSONAdapter.h#L17-28">require</a>。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">JSONKeyPathsByPropertyKey</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="l">@{</span>
-</span><span class='line'>             <span class="s">@&quot;date&quot;</span><span class="o">:</span> <span class="s">@&quot;dt&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;locationName&quot;</span><span class="o">:</span> <span class="s">@&quot;name&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;humidity&quot;</span><span class="o">:</span> <span class="s">@&quot;main.humidity&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;temperature&quot;</span><span class="o">:</span> <span class="s">@&quot;main.temp&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;tempHigh&quot;</span><span class="o">:</span> <span class="s">@&quot;main.temp_max&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;tempLow&quot;</span><span class="o">:</span> <span class="s">@&quot;main.temp_min&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;sunrise&quot;</span><span class="o">:</span> <span class="s">@&quot;sys.sunrise&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;sunset&quot;</span><span class="o">:</span> <span class="s">@&quot;sys.sunset&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;conditionDescription&quot;</span><span class="o">:</span> <span class="s">@&quot;weather.description&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;condition&quot;</span><span class="o">:</span> <span class="s">@&quot;weather.main&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;icon&quot;</span><span class="o">:</span> <span class="s">@&quot;weather.icon&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;windBearing&quot;</span><span class="o">:</span> <span class="s">@&quot;wind.deg&quot;</span><span class="p">,</span>
-</span><span class='line'>             <span class="s">@&quot;windSpeed&quot;</span><span class="o">:</span> <span class="s">@&quot;wind.speed&quot;</span>
-</span><span class='line'>             <span class="l">}</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在这个方法里，dictionary的key是<code>WXCondition</code>的属性名称，而dictionary的value是JSON的路径。</p>
-
-<p>您可能已经注意到，这里有一个从JSON数据映射到Objective-C属性的问题。属性<code>date</code>是<code>NSDate</code>类型的，但JSON有一个Unix时间类型(sjpsega注:即从1970年1月1日0时0分0秒起至现在的总秒数)的NSInteger值。你需要完成两者之间的转换。</p>
-
-<p>Mantle正好有一个功能来为你解决这个问题：<a href="https://github.com/github/Mantle/blob/master/Mantle/MTLValueTransformer.h">MTLValueTransformer</a>。这个类允许你声明一个block，详细说明值的相互转换。</p>
-
-<p>Mantle的转换器语法有点怪。要创建一个为一个特定属性的转换器，，您可以添加一个以属性名开头和<code>JSONTransformer</code>结尾的类方法。
-可能看实际代码比试图解释它更容易理解，所以在<code>WXCondition.m</code>中添加以下为NSDate属性设置的转换器。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">dateJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">MTLValueTransformer</span> <span class="nl">reversibleTransformerWithForwardBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="bp">NSDate</span> <span class="nl">dateWithTimeIntervalSince1970</span><span class="p">:</span><span class="n">str</span><span class="p">.</span><span class="n">floatValue</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span> <span class="nl">reverseBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSDate</span> <span class="o">*</span><span class="n">date</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%f&quot;</span><span class="p">,[</span><span class="n">date</span> <span class="n">timeIntervalSince1970</span><span class="p">]];</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">sunriseJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">dateJSONTransformer</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">sunsetJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">dateJSONTransformer</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>使用blocks做属性的转换的工作，并返回一个MTLValueTransformer返回值。</li>
-<li>您只需要详细说明Unix时间和NSDate之间进行转换一次，就可以重用<code>-dateJSONTransformer</code>方法为sunrise和sunset属性做转换。</li>
-</ol>
-
-
-<p>下一个值转型有点讨厌，但它只是使用OpenWeatherMap的API，并自己的格式化JSON响应方式的结果。<code>weather</code>键对应的值是一个JSON数组，但你只关注单一的天气状况。</p>
-
-<p>在<code>WXCondition.m</code>中，使用<code>dateJSONTransformer</code>相同的结构，您可以创建一个NSArray和NSString的之间的转换。该解决方案提供如下：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">conditionDescriptionJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">MTLValueTransformer</span> <span class="nl">reversibleTransformerWithForwardBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="n">values</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="n">values</span> <span class="n">firstObject</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span> <span class="nl">reverseBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="l">@[</span><span class="n">str</span><span class="l">]</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">conditionJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">conditionDescriptionJSONTransformer</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">iconJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">conditionDescriptionJSONTransformer</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>最后的转换器只是为了格式化。 OpenWeatherAPI使用每秒/米的风速。由于您的App使用英制系统，你需要将其转换为每小时/英里。</p>
-
-<p>在<code>WXCondition.m</code>的实现中添加以下转换器的方法和宏定义。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#define MPS_TO_MPH 2.23694f</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSValueTransformer</span> <span class="o">*</span><span class="p">)</span><span class="nf">windSpeedJSONTransformer</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">MTLValueTransformer</span> <span class="nl">reversibleTransformerWithForwardBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSNumber</span> <span class="o">*</span><span class="n">num</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="l">@(</span><span class="n">num</span><span class="p">.</span><span class="n">floatValue</span><span class="o">*</span><span class="n">MPS_TO_MPH</span><span class="l">)</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span> <span class="nl">reverseBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSNumber</span> <span class="o">*</span><span class="n">speed</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="l">@(</span><span class="n">speed</span><span class="p">.</span><span class="n">floatValue</span><span class="o">/</span><span class="n">MPS_TO_MPH</span><span class="l">)</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在OpenWeatherMap的API中有一个小的差异，你必须处理。看一看在位于<a href="http://api.openweathermap.org/data/2.5/weather?lat=37.785834&amp;lon=-122.406417&amp;units=imperial">当前状况的响应</a>和<a href="http://api.openweathermap.org/data/2.5/forecast/daily?lat=37.785834&amp;lon=-122.406417&amp;units=imperial&amp;cnt=7">每日预测反应</a>之间的温度：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="err">//</span> <span class="err">current</span>
-</span><span class='line'><span class="s2">&quot;main&quot;</span><span class="err">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;grnd_level&quot;</span><span class="p">:</span> <span class="mf">1021.87</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;humidity&quot;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;pressure&quot;</span><span class="p">:</span> <span class="mf">1021.87</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;sea_level&quot;</span><span class="p">:</span> <span class="mf">1030.6</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;temp&quot;</span><span class="p">:</span> <span class="mf">58.09</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;temp_max&quot;</span><span class="p">:</span> <span class="mf">58.09</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;temp_min&quot;</span><span class="p">:</span> <span class="mf">58.09</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">//</span> <span class="err">daily</span> <span class="err">forecast</span>
-</span><span class='line'><span class="s2">&quot;temp&quot;</span><span class="err">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;day&quot;</span><span class="p">:</span> <span class="mf">58.14</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;eve&quot;</span><span class="p">:</span> <span class="mf">58.14</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;max&quot;</span><span class="p">:</span> <span class="mf">58.14</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;min&quot;</span><span class="p">:</span> <span class="mf">57.18</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;morn&quot;</span><span class="p">:</span> <span class="mf">58.14</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;night&quot;</span><span class="p">:</span> <span class="mf">57.18</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>current</code>的第一个key是<code>main</code>，最高温度存储在key <code>temp_max</code>中，而<code>daily forecast</code>的第一个key是<code>temp</code>，最高温度存储在key <code>max</code>中。</p>
-
-<p>key Temperature的差异放在一边，其他都一样。所以，你真正需要做的是修改daily forecasts的键映射。</p>
-
-<p>打开<code>WXDailyForecast.m</code>重写<code>+JSONKeyPathsByPropertyKey</code>方法：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">JSONKeyPathsByPropertyKey</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="bp">NSMutableDictionary</span> <span class="o">*</span><span class="n">paths</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">super</span> <span class="n">JSONKeyPathsByPropertyKey</span><span class="p">]</span> <span class="n">mutableCopy</span><span class="p">];</span>
-</span><span class='line'>    <span class="c1">// 2</span>
-</span><span class='line'>    <span class="n">paths</span><span class="p">[</span><span class="s">@&quot;tempHigh&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">@&quot;temp.max&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">paths</span><span class="p">[</span><span class="s">@&quot;tempLow&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">@&quot;temp.min&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="c1">// 3</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">paths</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>获取<code>WXCondition</code>的映射，并创建它的可变副本。</li>
-<li>你需要为daily forecast做的是改变max和min键映射。</li>
-<li>返回新的映射。</li>
-</ol>
-
-
-<p>构建并运行您的App，看起来和上次运行没什么改变，但好的一点是，App编译和运行没有任何错误。</p>
-
-<p><img src="http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/built-layout.jpg" width="320" alt="Labels and Views" /></p>
-
-<h2>何去何从？</h2>
-
-<p>你可以从<a href="http://cdn4.raywenderlich.com/wp-content/uploads/2013/11/SimpleWeather-Part-1.zip">这里</a>下载完整程序。</p>
-
-<p>在这部分教程中，您使用Cocoapods设置项目，增加视图到控制器，编排视图，并建立模型来反映你抓取的气象数据。该App还没有充分发挥作用，但是你成功用纯代码创建视图，并学习了如何使用Mantle映射和转换JSON数据。</p>
-
-<p>接下来看看<a href="/blog/2014/02/15/yi--ios-7-best-practices-part-2/">教程的第二部分</a>，你将充实你的App，从weather API获取数据，并在UI上显示。您将使用新的iOS7 <a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/Introduction/Introduction.html">NSURLSession</a>去下载数据，以及使用<code>ReactiveCocoa</code>把位置查找，天气数据抓取和UI更新事件绑在一起。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -4562,6 +3559,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2019/04/04/payout/">用错误的方法赚到钱，迟早要还</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2019/01/01/2018summary/">2018 年终总结</a>
       </li>
     
@@ -4575,10 +3576,6 @@
     
       <li class="post">
         <a href="/blog/2016/09/17/paging/">iOS 仿淘宝详情页分页组件</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/04/18/jspatch-study/">JSPatch 学习</a>
       </li>
     
   </ul>
