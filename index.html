@@ -9,7 +9,7 @@
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="昨晚，美股做空，第一次收到了「平仓」预警信息。 去年下半年，做空美股，赚了 40%+。今年，中港美股市，都大涨，美股都快涨到前高了，太可怕了…… 因为做空，还有杠杆，且杠杆高，现在已经把去年赚的钱，连本带利都亏进去了。 我觉得，我真的印证了这句话「用错误的方法赚到钱，迟早要还」。 也慢慢懂了， &hellip;">
+  <meta name="description" content="今天，又是一个 A 股历史上的大日子 - 大大钦点的「科创板」正式上线。 据说 7.22 上线，是因为 05、14 年的大牛市的起点，是以 7.22 为支点。 今天科创板的走势 - 先抑后扬，据说和当年的科创板上线第一天的走势非常像：开盘高开，一波下杀，换手充分；临近中午，达到全天高点， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,47 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2019/07/22/kechuangban/">科创板</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2019-07-22T23:41:55+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2019</span></span> <span class='time'>11:41 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天，又是一个 A 股历史上的大日子 - 大大钦点的「科创板」正式上线。</p>
+
+<p>据说 7.22 上线，是因为 05、14 年的大牛市的起点，是以 7.22 为支点。</p>
+
+<p>今天科创板的走势 - 先抑后扬，据说和当年的科创板上线第一天的走势非常像：开盘高开，一波下杀，换手充分；临近中午，达到全天高点，然后平稳下跌。其实，昨天 骑大 的文章《科创首日上市，牢记7个数字》，已经把一天的情况，都数字化分析过了，奈何，缺乏实际体验，今早也没再次细读，导致今天对中科创板新股 - 天宜上佳（688033）的操作稀烂：早上下杀卖了一笔，下午平稳下跌，再卖一笔。卖点太差了……</p>
+
+<p><img src="/images/2019-07-22-kechuangban/688033-situation.png" alt="688033-situation" /></p>
+
+<p>今天，科创板首发 25 支新股，首日平均涨幅 140%，我才赚了 60%，哭死……</p>
+
+<p>按照科创板的规则，新股上市前 5 日，无涨幅限制，但第 1 天换手已经达到 80%，后面几天预计行情会更加精彩，拭目以待。</p>
+
+<p><img src="/images/2019-07-22-kechuangban/kechuangban-zhangfu.jpg" alt="kechuangban-zhangfu" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2019/04/04/payout/">用错误的方法赚到钱，迟早要还</a></h1>
     
     
@@ -115,7 +156,7 @@
 
 <p>还有，自己缺少政治敏感，我印象中，1 月初，出了美国要暂停加息的消息。其实，那个时候，就应该平仓了，不该全力空了，把自己暴露到不断扩大的风险当中。</p>
 
-<p>去年做空，赚了钱，自大了。需要学习与复盘，就算做空，一顶一顶要控制仓位。可能，最终，我做空是对的，但我中途可能就爆仓了……</p>
+<p>去年做空，赚了钱，自大了。需要学习与复盘，就算做空，一定一定要控制仓位。可能，最终，我做空是对的，但我中途可能就爆仓了……</p>
 </div>
   
   
@@ -1010,73 +1051,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/01/14/isequalandhash/">isEqual 与 Hash</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-01-14T01:17:56+08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:17 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>最佳实践</h2>
-
-<ul>
-<li>实现 <code>isEqualTo__ClassName__</code></li>
-<li>重写 isEqual 方法，同时重写 hash 方法。</li>
-</ul>
-
-
-<h2>关系</h2>
-
-<ul>
-<li>两个对象 isEqual 相等，hash 必须也相等</li>
-<li>两个对象 hash 相同，isEqual 则不一定相等</li>
-</ul>
-
-
-<h2>碰撞</h2>
-
-<p>当对象存入集合对象时（Array，Set，HashTable等），内部会使用对象的 hash 值来作为 key 来存入。
-当两个不相等的对象，有相同的 hash 值，存入集合对象，就会发生<code>碰撞</code>现象。
-发生碰撞现象，对使得存取数据变慢，所以需要尽量避免这个现象，但不可能完全避免。</p>
-
-<h2>作为集合对象 key 的注意点</h2>
-
-<ul>
-<li>实现 isEqual 和 hash 方法，遵守两者关系，尽量避免 hash 碰撞的情况发生</li>
-<li>实现 NSCopying 协议，接口：<code>- (void)setObject:(ObjectType)anObject forKey:(KeyType &lt;NSCopying&gt;)aKey;</code></li>
-</ul>
-
-
-<h2>测试 Demo</h2>
-
-<p><a href="https://github.com/sjpsega/EqualAndHashTest">测试 Demo</a></p>
-
-<h2>参考资料</h2>
-
-<p><a href="http://nshipster.com/equality/">Equality</a></p>
-
-<p><a href="https://mikeash.com/pyblog/friday-qa-2010-06-18-implementing-equality-and-hashing.html">Implementing Equality and Hashing</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -1092,6 +1066,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2019/07/22/kechuangban/">科创板</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2019/04/04/payout/">用错误的方法赚到钱，迟早要还</a>
       </li>
     
@@ -1105,10 +1083,6 @@
     
       <li class="post">
         <a href="/blog/2017/01/27/2016summary/">2016 年终总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/09/17/paging/">iOS 仿淘宝详情页分页组件</a>
       </li>
     
   </ul>
