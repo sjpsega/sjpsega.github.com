@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://sjpsega.me/blog/2019/11/23/crazyusstock/</loc>
+<lastmod>2019-11-23T00:15:32+08:00</lastmod>
+</url>
+<url>
 <loc>http://sjpsega.me/blog/2019/09/15/910/</loc>
 <lastmod>2019-09-15T23:42:21+08:00</lastmod>
 </url>
@@ -158,14 +162,5 @@
 </url>
 <url>
 <loc>http://sjpsega.me/blog/categories/study/</loc>
-</url>
-<url>
-<loc>http://sjpsega.me/posts/2/</loc>
-</url>
-<url>
-<loc>http://sjpsega.me/posts/3/</loc>
-</url>
-<url>
-<loc>http://sjpsega.me/posts/4/</loc>
 </url>
 </urlset>
