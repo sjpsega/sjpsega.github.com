@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2020-01-02T01:03:46+08:00</updated>
+  <updated>2020-01-02T01:09:57+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -34,7 +34,7 @@
 <tr>
 <td style="text-align:left;">A 股 1(RMB)</td>
 <td style="text-align:left;"><font color="red">+13.88%</font></td>
-<td style="text-align:left;">上证 2493.9 - 3050.12，+22.30%；<br>创业板，1250.53 - 1798.12，+43.78%；<br>中证 1000，4430.02 - 5567.03，+25.66%</td>
+<td style="text-align:left;">上证：2493.9 - 3050.12，+22.30%；<br>创业板：1250.53 - 1798.12，+43.78%；<br>中证 1000：4430.02 - 5567.03，+25.66%</td>
 </tr>
 <tr>
 <td style="text-align:left;">A 股 2(RMB)</td>
@@ -49,12 +49,12 @@
 <tr>
 <td style="text-align:left;">港股(HKD)</td>
 <td style="text-align:left;"><font color="red">+7.15%</font></td>
-<td style="text-align:left;">恒生 25845.7 - 28189.75，+9.06%</td>
+<td style="text-align:left;">恒生：25845.7 - 28189.75，+9.06%</td>
 </tr>
 <tr>
 <td style="text-align:left;">美股(USD)</td>
 <td style="text-align:left;"><font color="green">-45.88%</font></td>
-<td style="text-align:left;">道琼斯 23327.46 - 28538.44，+22.34%；<br>纳斯达克  6635.28 - 8972.6，+35.23%；<br>标普 500，2506.85 - 3230.78，+28.88%</td>
+<td style="text-align:left;">道琼斯：23327.46 - 28538.44，+22.34%；<br>纳斯达克：6635.28 - 8972.6，+35.23%；<br>标普 500：2506.85 - 3230.78，+28.88%</td>
 </tr>
 </tbody>
 </table>
@@ -343,7 +343,7 @@
 <tr>
 <td style="text-align:left;">A 股 1(RMB)</td>
 <td style="text-align:left;"><font color="green">-10.04%</font></td>
-<td style="text-align:left;">上证 3307.17 - 2493.9，-24.591%；<br>中证 1000，7017.35 - 4430.02，-36.870%</td>
+<td style="text-align:left;">上证：3307.17 - 2493.9，-24.591%；<br>中证 1000：7017.35 - 4430.02，-36.870%</td>
 </tr>
 <tr>
 <td style="text-align:left;">A 股 2(RMB)</td>
@@ -353,12 +353,12 @@
 <tr>
 <td style="text-align:left;">港股(HKD)</td>
 <td style="text-align:left;"><font color="green">-17.40%</font></td>
-<td style="text-align:left;">恒生 29919.15 - 25845.7，-13.614%</td>
+<td style="text-align:left;">恒生：29919.15 - 25845.7，-13.614%</td>
 </tr>
 <tr>
 <td style="text-align:left;">美股(USD)</td>
 <td style="text-align:left;"><font color="red">41.30%</font></td>
-<td style="text-align:left;">道琼斯 24719.22 - 23327.46，-5.630%；<br>纳斯达克 6903.39 - 6635.28，-3.883%；<br>标普 500，2673.61 - 2506.85，-6.237%</td>
+<td style="text-align:left;">道琼斯：24719.22 - 23327.46，-5.630%；<br>纳斯达克：6903.39 - 6635.28，-3.883%；<br>标普 500：2673.61 - 2506.85，-6.237%</td>
 </tr>
 </tbody>
 </table>
