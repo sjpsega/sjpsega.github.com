@@ -9,7 +9,7 @@
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="今年有点不想写年终总结了，因为去年想要完成的时候，今年大部分都没完成，惨不忍睹啊…… 2015已经过去，先总结下去年的目标与主要的事： 今年还是延续了去年的状态，加班加班加班，但我的无用功比较多，再加上去年股市红火，一部分精力花在炒股上，白天效率好低好低……虽然炒股收益还不错，差不多赚了一年的工资 &hellip;">
+  <meta name="description" content="这篇主要是代码学习。 官方代码地址：cordova-plugin-wkwebview-engine 我的测试代码：CordovaWKWebViewTest，融合了一个 Device JSBridge 的例子，该例子参考自CrossWalk - Cordova Plugin Support &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,347 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/02/15/cordova-wkwebview-study-2/">Cordova WKWebView 学习笔记（二）</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-02-15T00:11:47+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>12:11 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这篇主要是代码学习。</p>
+
+<p>官方代码地址：<a href="https://github.com/apache/cordova-plugin-wkwebview-engine">cordova-plugin-wkwebview-engine</a></p>
+
+<p>我的测试代码：<a href="https://github.com/sjpsega/CordovaWKWebViewTest">CordovaWKWebViewTest</a>，融合了一个 Device JSBridge 的例子，该例子参考自<a href="https://crosswalk-project.org/documentation/ios/cordova_plugin_support.html">CrossWalk - Cordova Plugin Support</a></p>
+
+<h3>WKWebView JSBridge 事件传递</h3>
+
+<p>在 WKWebView 中，开始原生支持 web 向 Native 发送消息，是通过 messageHandler 实现的。</p>
+
+<p>在 UIWebView 时代，实现 web 向 app 发送消息，通常是通过 iframe 发起一个特殊请求，UIWebView 通过在拦截方法中，拦截这个特殊请求，使用这种类似 hack 的方式曲线救国的。</p>
+
+<h4>实现步骤</h4>
+
+<ul>
+<li>Native 端添加 messageHandler</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="n">WKUserContentController</span><span class="o">*</span> <span class="n">userContentController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKUserContentController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="c1">// 关键代码，添加 messageHandler，名字为 cordova</span>
+</span><span class='line'><span class="p">[</span><span class="n">userContentController</span> <span class="nl">addScriptMessageHandler</span><span class="p">:</span><span class="nb">self</span> <span class="nl">name</span><span class="p">:</span><span class="s">@&quot;cordova&quot;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">WKWebViewConfiguration</span><span class="o">*</span> <span class="n">configuration</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKWebViewConfiguration</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'><span class="n">configuration</span><span class="p">.</span><span class="n">userContentController</span> <span class="o">=</span> <span class="n">userContentController</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">WKWebView</span><span class="o">*</span> <span class="n">wkWebView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKWebView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">frame</span> <span class="nl">configuration</span><span class="p">:</span><span class="n">configuration</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>JS 端调用</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//调用名为 cordova 的 messageHandler，与 Native 端进行通信</span>
+</span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">webkit</span><span class="p">.</span><span class="nx">messageHandlers</span><span class="p">.</span><span class="nx">cordova</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">command</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Native 接收</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//实现 WKScriptMessageHandler 接口</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">userContentController:</span><span class="p">(</span><span class="n">WKUserContentController</span><span class="o">*</span><span class="p">)</span><span class="nv">userContentController</span> <span class="nf">didReceiveScriptMessage:</span><span class="p">(</span><span class="n">WKScriptMessage</span><span class="o">*</span><span class="p">)</span><span class="nv">message</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span><span class="n">message</span><span class="p">.</span><span class="n">name</span><span class="p">);</span> <span class="c1">//cordova</span>
+</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span><span class="n">message</span><span class="p">.</span><span class="n">body</span><span class="p">);</span> <span class="c1">//JSBridge 内容体</span>
+</span><span class='line'>    <span class="p">...</span> <span class="c1">//实现调用 Native 代码</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一个 messageHandler 一个通道，Cordova 统一使用 cordova 这个通道来通信。</p>
+
+<h3>新增一个插件的实现步骤</h3>
+
+<p>目录结构（列出关键目录与文件）：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="o">|</span><span class="n">wkwvtest</span>
+</span><span class='line'>    <span class="o">|</span><span class="n">Staging</span>
+</span><span class='line'>        <span class="n">config</span><span class="p">.</span><span class="n">xml</span>
+</span><span class='line'>        <span class="o">|</span><span class="n">www</span>
+</span><span class='line'>            <span class="n">cordova_plugins</span><span class="p">.</span><span class="n">js</span>
+</span><span class='line'>            <span class="o">|</span><span class="n">plugins</span> <span class="c1">//JS Plugihns</span>
+</span><span class='line'>    <span class="o">|</span><span class="n">Plugins</span> <span class="c1">// Native Plugins</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>已实现一个 Device 插件为例：</p>
+
+<ul>
+<li>在 Staging/www/plugins 目录下，新增一个 device.js 文件，添加 JS 代码</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cordova</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;org.apache.cordova.device.device&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">Device</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">//...</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="c1">//...</span>
+</span><span class='line'>    <span class="nx">Device</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//调用 JSBridge，调用名为 Device 的 Native 类 getDeviceInfo 方法</span>
+</span><span class='line'>        <span class="nx">exec</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">,</span> <span class="s2">&quot;Device&quot;</span><span class="p">,</span> <span class="s2">&quot;getDeviceInfo&quot;</span><span class="p">,</span> <span class="p">[]);</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Device</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>在 Staging/www/cordova_plugins.js 文件中注册 device.js</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cordova</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;cordova/plugin_list&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="s2">&quot;file&quot;</span><span class="o">:</span> <span class="s2">&quot;plugins/device.js&quot;</span><span class="p">,</span><span class="c1">//写明相对 cordova_plugins.js 的文件路径</span>
+</span><span class='line'>            <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;org.apache.cordova.device.device&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s2">&quot;clobbers&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>                 <span class="s2">&quot;device&quot;</span> <span class="c1">//全局命名空间，会注册为 window.device</span>
+</span><span class='line'>            <span class="p">]</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">];</span>
+</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">metadata</span> <span class="o">=</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="s2">&quot;org.apache.cordova.device&quot;</span><span class="o">:</span> <span class="s2">&quot;0.3.0&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>添加在 plugins 目录下，新增 CDVDevice 类，继承于 CDVPlugin</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@interface</span> <span class="nc">CDVDevice</span> : <span class="nc">CDVPlugin</span>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">getDeviceInfo:</span><span class="p">(</span><span class="n">CDVInvokedUrlCommand</span><span class="o">*</span><span class="p">)</span><span class="nv">command</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>在 Staging/config.xml 中注册 CDVDevice</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;widget</span> <span class="na">id=</span><span class="s">&quot;my.project.wkwvtest&quot;</span> <span class="na">version=</span><span class="s">&quot;0.0.1&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/ns/widgets&quot;</span> <span class="na">xmlns:cdv=</span><span class="s">&quot;http://cordova.apache.org/ns/1.0&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;feature</span> <span class="na">name=</span><span class="s">&quot;Device&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;ios-package&quot;</span> <span class="na">value=</span><span class="s">&quot;CDVDevice&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/feature&gt;</span>
+</span><span class='line'><span class="nt">&lt;/widget&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完成这步骤，便可以通过 web 端，调用 <code>exec(successCallback, errorCallback, "Device", "getDeviceInfo", []);</code>，调用 Device 这个 Native 类的 getDeviceInfo 方法</p>
+
+<p>详见：<a href="https://github.com/sjpsega/CordovaWKWebViewTest">CordovaWKWebViewTest</a></p>
+
+<h3>&ldquo;同步&rdquo; JSBridge 代码执行</h3>
+
+<p>这里的"同步"需要打引号，虽然 WKWebView 提供了原生 web 向 Native 发送消息的方案，但是注意，这里是发送消息，还不是同步回调。</p>
+
+<p>Cordova 新版本的插件机制，通过多重事件机制的方式，使得一种类型的 JSBridge 同步成为可能 - webView 打开页面后，需要调用 Native 端获取环境变量的 JSBridge。比如上例的 Device 这个 JSBridge 就是典型。</p>
+
+<p>Cordova 启动的几个重要事件：</p>
+
+<ul>
+<li>onNativeReady</li>
+<li>onDOMContentLoaded</li>
+<li>onPluginsReady</li>
+<li>onCordovaReady</li>
+<li>onDeviceReady</li>
+</ul>
+
+
+<p>通常是从上往下依次进行，并且 web 开始调用 JSBridge，必须监听 <code>deviceready</code> 事件，所以 onDeviceReady 始终最后执行，代表 Cordova 插件环境完全准备完毕。</p>
+
+<p>所以，这种"同步" JSBridge 就是利用这个特性，做了一些文章。</p>
+
+<p>看关键代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cordova</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;org.apache.cordova.device.device&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">channel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cordova/channel&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">exec</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cordova/exec&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="c1">//注册名为 onCordovaInfoReady 的 Sticky 类型的事件</span>
+</span><span class='line'>    <span class="nx">channel</span><span class="p">.</span><span class="nx">createSticky</span><span class="p">(</span><span class="s1">&#39;onCordovaInfoReady&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="c1">//告诉系统，必须等待 CordovaInfoReady 事件发送</span>
+</span><span class='line'>    <span class="nx">channel</span><span class="p">.</span><span class="nx">waitForInitialization</span><span class="p">(</span><span class="s1">&#39;onCordovaInfoReady&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">Device</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>        <span class="c1">//在 onCordovaReady 事件中，注册回调，使得系统初始化便调用该回调，并且 onCordovaReady 在 onPluginsReady 事件后 fire</span>
+</span><span class='line'>        <span class="nx">channel</span><span class="p">.</span><span class="nx">onCordovaReady</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">//调用 JSBridge</span>
+</span><span class='line'>            <span class="nx">me</span><span class="p">.</span><span class="nx">getInfo</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="c1">//调用 JSBridge 成功回调用，fire onCordovaInfoReady 事件</span>
+</span><span class='line'>                <span class="nx">channel</span><span class="p">.</span><span class="nx">onCordovaInfoReady</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
+</span><span class='line'>            <span class="p">},</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">Device</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">exec</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">,</span> <span class="s2">&quot;Device&quot;</span><span class="p">,</span> <span class="s2">&quot;getDeviceInfo&quot;</span><span class="p">,</span> <span class="p">[]);</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Device</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>web 端调用 Device 的代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;deviceready&quot;</span><span class="p">,</span> <span class="nx">onDeviceReady</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">onDeviceReady</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">device</span><span class="p">.</span><span class="nx">uuid</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到，deviceready 的时候，便可以直接调用 device 这个全局变量。
+这是因为之前在 cordova_plugins.js 这个文件中，做了申明，会把 device 变为全局变量</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="s2">&quot;clobbers&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s2">&quot;device&quot;</span> <span class="c1">//全局命名空间，会注册为 window.device</span>
+</span><span class='line'><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这种设计非常巧妙，但是以我的经验，这种形式的 JSBridge 使用比较局限，主要缺点有：</p>
+
+<ul>
+<li>只能对整个 App 周期，固定不变的值使用。如果使用中，这个值会变化则无法使用，如地理位置信息就不行</li>
+<li>只能针对属性使用，不能对方法使用</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1333,96 +1674,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/06/ios-h5-trap/">iOS H5的那些坑</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-06T17:47:30+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:47 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。</p>
-
-<p>因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。</p>
-
-<h2>iOS 7.0 input 元素聚焦问题</h2>
-
-<h3>bug 演示</h3>
-
-<p><img src="/images/2014-08-06-ios-h5-trap/ios7.0bug.gif" alt="ios7.0bug.gif" /></p>
-
-<h3>bug 分析</h3>
-
-<p>点击屏幕下方的input元素，且该元素在键盘弹起的区域内；当键盘弹起时，input 元素未获得焦点，且 input 元素不在可视范围内，没有进行自动定位调整。</p>
-
-<p>但 input 元素不在键盘弹起的区域内，当键盘弹起时，一切正常。</p>
-
-<p>该 bug，iOS &lt; 7.1 有问题，>=7.1 无问题。</p>
-
-<h3>解决办法</h3>
-
-<p>办法有点猥琐，要通过 js，去强制 input 元素获得焦点。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">element</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;tap&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>参考资料</h3>
-
-<p><a href="http://stackoverflow.com/questions/16149083/keyboardshrinksview-makes-lose-focus">KeyboardShrinksView makes lose focus</a></p>
-
-<p><a href="https://issues.apache.org/jira/browse/CB-6974">Keyboard causes input focus issue</a></p>
-
-<h2>iOS 7.1 input 元素失焦问题</h2>
-
-<h3>bug 演示</h3>
-
-<p><img src="/images/2014-08-06-ios-h5-trap/ios7.1bug.gif" alt="ios7.1bug.gif" /></p>
-
-<h3>bug 分析</h3>
-
-<p>点击 input 元素（input 元素在不在浮层中不重要），弹出键盘时，当点击 Html 中的元素，致使 input 元素失去焦点，键盘收起，position:fixed 元素（演示中的浮层为 position:fixed）会导致界面错乱。</p>
-
-<p>但若点击键盘右上角的 <code>完成</code> 按钮，键盘收起，一切正常。</p>
-
-<p>也就是说，使用 iOS 系统的方式使得键盘收起，没有问题；使用其他方式，使得键盘收起，position:fixed 元素会导致界面错乱。</p>
-
-<p>该 bug，iOS >= 7.1 有问题，&lt; 7.1 无问题。正好与iOS 7.0 input 元素聚焦 bug 的情况相反。</p>
-
-<p><code>注：iOS 键盘的操作，必须由用户的操作引发，想通过 JSBridge 去让键盘收起的方案是行不通的。</code></p>
-
-<h3>解决办法</h3>
-
-<p>避免使用 position:fixed，换成 position:absolute 替代。</p>
-
-<h3>参考资料</h3>
-
-<p><a href="http://stackoverflow.com/questions/18970865/ios-7-input-elements-moving-fixed-positioned-elements">ios-7-input-elements-moving-fixed-positioned-elements</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -1440,6 +1691,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2019/11/23/crazyusstock/">疯狂的美股</a>
       </li>
     
@@ -1453,10 +1708,6 @@
     
       <li class="post">
         <a href="/blog/2019/04/04/payout/">用错误的方法赚到钱，迟早要还</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/01/01/2018summary/">2018 年终总结</a>
       </li>
     
   </ul>
@@ -1474,7 +1725,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2019 - sjpsega -
+  Copyright &copy; 2020 - sjpsega -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

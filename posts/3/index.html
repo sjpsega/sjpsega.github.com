@@ -9,7 +9,7 @@
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="昨天，刚好是扒衣见君节，我们一行9人去ChinaJoy。 这是我第一次去CJ，可开心啦！ 出发 因为要一大早赶去上海，7点的火车，我离得比较近，坐地铁一站路，所以我6：25起床，坐地铁前往城站火车坐火车。 事实证明，我太自信了。 差不多6：50才到城站，因为是第一次坐地铁来城站坐火车，不熟悉地形。 &hellip;">
+  <meta name="description" content="最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。 因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。 iOS 7.0 input 元素聚焦问题 bug 演示 bug &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,96 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/06/ios-h5-trap/">iOS H5的那些坑</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-06T17:47:30+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:47 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近做 iOS H5 项目，需要针对 iOS 的 webView 做适配，发现几个非常恶心的 bug。</p>
+
+<p>因为现在据统计 iOS7 的占比超过80%，所以适配主要针对 iOS7，但是 iOS7 不同版本缺有不同的 bug，真是让人蛋疼。</p>
+
+<h2>iOS 7.0 input 元素聚焦问题</h2>
+
+<h3>bug 演示</h3>
+
+<p><img src="/images/2014-08-06-ios-h5-trap/ios7.0bug.gif" alt="ios7.0bug.gif" /></p>
+
+<h3>bug 分析</h3>
+
+<p>点击屏幕下方的input元素，且该元素在键盘弹起的区域内；当键盘弹起时，input 元素未获得焦点，且 input 元素不在可视范围内，没有进行自动定位调整。</p>
+
+<p>但 input 元素不在键盘弹起的区域内，当键盘弹起时，一切正常。</p>
+
+<p>该 bug，iOS &lt; 7.1 有问题，>=7.1 无问题。</p>
+
+<h3>解决办法</h3>
+
+<p>办法有点猥琐，要通过 js，去强制 input 元素获得焦点。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">element</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;tap&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>参考资料</h3>
+
+<p><a href="http://stackoverflow.com/questions/16149083/keyboardshrinksview-makes-lose-focus">KeyboardShrinksView makes lose focus</a></p>
+
+<p><a href="https://issues.apache.org/jira/browse/CB-6974">Keyboard causes input focus issue</a></p>
+
+<h2>iOS 7.1 input 元素失焦问题</h2>
+
+<h3>bug 演示</h3>
+
+<p><img src="/images/2014-08-06-ios-h5-trap/ios7.1bug.gif" alt="ios7.1bug.gif" /></p>
+
+<h3>bug 分析</h3>
+
+<p>点击 input 元素（input 元素在不在浮层中不重要），弹出键盘时，当点击 Html 中的元素，致使 input 元素失去焦点，键盘收起，position:fixed 元素（演示中的浮层为 position:fixed）会导致界面错乱。</p>
+
+<p>但若点击键盘右上角的 <code>完成</code> 按钮，键盘收起，一切正常。</p>
+
+<p>也就是说，使用 iOS 系统的方式使得键盘收起，没有问题；使用其他方式，使得键盘收起，position:fixed 元素会导致界面错乱。</p>
+
+<p>该 bug，iOS >= 7.1 有问题，&lt; 7.1 无问题。正好与iOS 7.0 input 元素聚焦 bug 的情况相反。</p>
+
+<p><code>注：iOS 键盘的操作，必须由用户的操作引发，想通过 JSBridge 去让键盘收起的方案是行不通的。</code></p>
+
+<h3>解决办法</h3>
+
+<p>避免使用 position:fixed，换成 position:absolute 替代。</p>
+
+<h3>参考资料</h3>
+
+<p><a href="http://stackoverflow.com/questions/18970865/ios-7-input-elements-moving-fixed-positioned-elements">ios-7-input-elements-moving-fixed-positioned-elements</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -734,18 +824,8 @@
 <p>很喜欢最近微博上对产品的人性分析论，我也试着用这理论，分析下《刀塔传奇》。</p>
 
 <ul>
-<li>傲慢
-
-<ul>
-<li></li>
-</ul>
-</li>
-<li>窥视
-
-<ul>
-<li></li>
-</ul>
-</li>
+<li>傲慢</li>
+<li>窥视</li>
 <li>色欲
 
 <ul>
@@ -2636,116 +2716,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/01/qcon-beijing-1/">QCon北京行（一）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-05-01T14:37:27+08:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>2:37 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>去年因前端方凳会上的分享得了总分第一，获得了去参加QCon的机会，这次的地点在北京，北京还没去过，去见见世面。</p>
-
-<h2>北京印象</h2>
-
-<p>QCon的时间是4.25 - 4.27，共三天。因为25号早上7：30就开始签到。所以和同事一行9人，24号下午坐飞机去北京。</p>
-
-<p>出发前一晚，看了天气预报，北京和杭州的气温差不多，为了以防万一，还带了件毛衣，结果发现是多余的，下了飞机就感觉热，比杭州热。</p>
-
-<p>下了飞机，打的去酒店，这个季节，北京没有被沙尘暴侵袭，却被满天飘扬的柳絮给环绕，还好没有鼻子过敏，要不然就惨了。</p>
-
-<p>路上交通还不错，没有想象中的堵，不是说是“首堵”么……在车上查了下PM2.5，震惊了，200！！！一下子就突破了我在杭州看到的峰值！</p>
-
-<p>到达酒店，开好房间，放好东西，都6点多了，急需去填饱肚子。</p>
-
-<p>北京的第一顿晚餐，我们选了在酒店附近的<code>大鸭梨</code>，看了介绍，感觉像是杭州的<code>外婆家</code>，分店众多，价钱也和外婆家一样，经济实惠。晚饭很丰盛，就是烤鸭有点失望，跟杭州吃到的差不多……</p>
-
-<h2>天安门</h2>
-
-<p>吃完晚饭，同事说出去逛逛，去看看天安门。查了地图，发现很方便，走10分钟到地铁1号线，地铁直达天安门。</p>
-
-<p>据说地铁1号线是北京最老的一条地铁，进去看到设施比较旧，而且上车的地方没有防护栏，但感觉很舒服。值得一说的是，北京的地铁非常方便，通过换乘，能到北京大部分地方，比杭州方便太多了。</p>
-
-<p>到了天安门东这站，出了地铁站，一眼就看到在小学课本上出现过的熟悉的建筑 - 天安门。我们快步向前，发现有民警在查身份证，这安保好严啊……后来发现长安街的路灯上有其他国家的国旗，可能是有外宾来访的缘故，所以安保严了，而且天安门广场中央的人民英雄纪念碑也封闭了，不让进去。</p>
-
-<p>我们就沿着天安门广场走了大半圈，看了天安门、人民大会堂，远远望了望人民英雄纪念碑，拍照留念。逛完，都9点多了，明早要早起，就坐地铁回酒店了。</p>
-
-<p>来过天安门，总算是来过北京了。</p>
-
-<h2>地铁里的创意广告</h2>
-
-<p>在地铁上，看到一个绝妙的广告创意，印象非常深刻。
-场景是，我上了地铁，居然在地铁窗户上看到在播放广告，纳闷，窗户上没电视啊，怎么会播放广告呢，而且还是会动的？我去，原来是，在地铁隧道里面画了很多很多画面，地铁开起来，看到的就是连贯的广告了，赞！</p>
-
-<h2>美味</h2>
-
-<p>参加会议总是乏味的，而且是一连三天，从早到晚，再精彩的分享，一天下来也非常疲惫，每天最大的乐趣是去吃顿美味的晚餐。</p>
-
-<p>在北京的4天，我们一行人，每天都换地方吃。每天的晚餐都是美好的回忆。</p>
-
-<ul>
-<li>第一天：大鸭梨
-
-<ul>
-<li>物美价廉，经济实惠，孜然羊肉很合我口味</li>
-</ul>
-</li>
-<li>第二天：簋街 - 老北京四合院
-
-<ul>
-<li>簋街的小龙虾很出门，这家的小龙虾很棒，虽然没有吃遍簋街，但比簋街仔仔的小龙虾好了一个档次</li>
-</ul>
-</li>
-<li>第三天：风林火山烤肉店
-
-<ul>
-<li>羊蝎子不错，终于知道羊蝎子是羊的脊椎骨了，长姿势了</li>
-</ul>
-</li>
-<li>第四天：簋街 - 簋街仔仔
-
-<ul>
-<li>麻辣牛蛙很美味，牛蛙很大个</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>坏印象</h2>
-
-<p>第二天晚上，我们打的去簋街，分两辆的士去，另外辆比我们早了大半个小时到了簋街，打的费45，而我们辆要64，明显我们这辆司机师傅给我们饶了远路……这真不厚道。司机师傅欺负外地人，这真不好，给游客对这城市很坏的印象。</p>
-
-<h2>结语</h2>
-
-<p>在北京待了4天4夜，总体感觉不错。</p>
-
-<ul>
-<li>交通方便，就是高峰时间，市中心堵得慌</li>
-<li>好吃的地方很多，据说同事说，北京在世界美食城市排进前10，不仅能吃到特色的北京美食，还有来自各地的各种美味</li>
-<li>卫生环境好，空气质量糟糕</li>
-<li>IT氛围好，各大公司在北京都有分店，创业公司、风投云集，机会较多</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -2763,6 +2733,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2019/11/23/crazyusstock/">疯狂的美股</a>
       </li>
     
@@ -2776,10 +2750,6 @@
     
       <li class="post">
         <a href="/blog/2019/04/04/payout/">用错误的方法赚到钱，迟早要还</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/01/01/2018summary/">2018 年终总结</a>
       </li>
     
   </ul>
@@ -2797,7 +2767,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2019 - sjpsega -
+  Copyright &copy; 2020 - sjpsega -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
