@@ -9,7 +9,7 @@
   <meta name="author" content="sjpsega">
 
   
-  <meta name="description" content="这篇主要是代码学习。 官方代码地址：cordova-plugin-wkwebview-engine 我的测试代码：CordovaWKWebViewTest，融合了一个 Device JSBridge 的例子，该例子参考自CrossWalk - Cordova Plugin Support &hellip;">
+  <meta name="description" content="本例 Demo。 淘宝详情页的分页交互效果是一个经典的实现，隔离了淘宝商品基本属性页和图文详情页，即给用户一个良好的使用体验，也通过分页懒加载图文信息，提高了页面首屏加载速度，也减少了不必要的流量损耗。 下面说说怎么实现这个效果。 效果预览 实现 先想一下实现分页的步骤，其实很简单，就两步: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,6 +71,7 @@
   <li><a href="/blog/archives">所有文章</a></li>
   <li><a href="/blog/categories/study">学习</a></li>
   <li><a href="/blog/categories/life">生活</a></li>
+  <li><a href="/blog/categories/invest">投资</a></li>
   <li><a href="http://weibo.com/sjpsega" target="_blank">我的微博</a></li>
 </ul>
 
@@ -79,6 +80,143 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/09/17/paging/">iOS 仿淘宝详情页分页组件</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-09-17T21:42:08+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:42 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>本例 <a href="https://github.com/sjpsega/Paging">Demo</a>。</p>
+
+<p>淘宝详情页的分页交互效果是一个经典的实现，隔离了淘宝商品基本属性页和图文详情页，即给用户一个良好的使用体验，也通过分页懒加载图文信息，提高了页面首屏加载速度，也减少了不必要的流量损耗。</p>
+
+<p>下面说说怎么实现这个效果。</p>
+
+<h2>效果预览</h2>
+
+<p><img src="/images/2016-09-17-paging/paging-demo.gif" alt="main-flow" /></p>
+
+<h2>实现</h2>
+
+<p>先想一下实现分页的步骤，其实很简单，就两步:</p>
+
+<ol>
+<li>将需要分页的页面添加到分页组件上</li>
+<li>页面滚动，当检测到达页面边缘，通过动画滚动到下一页或上一页</li>
+</ol>
+
+
+<h3>利用自带的 ScrollView</h3>
+
+<p>想到滚动和分页，第一时间想到的肯定是自带的 UIScrollView。
+因为 UIScrollView 不仅有滚动效果，并且本身已经自带了一些分页的 API，比如 <code>pagingEnabled</code> 等。</p>
+
+<p>但是，想一下，直接使用 <code>pagingEnabled</code> 这个属性，然后添加上需要分页的页面，能实现我们的分页效果么？
+答案显然是不能的，因为我们的详情页面的基本属性页和图文详情页本身就是大页面，自身就有滚动效果，如果直接使用 UIScrollView ，两个滚动效果叠加，肯定会出现问题的。</p>
+
+<p>经过实践，我的做法是，使用 <code>UIScrollView</code> 来当做分页的容器，是利用相关的滚动 API，来实现翻页的效果。</p>
+
+<h3>实现中遇到的问题</h3>
+
+<p>主要是两个问题：</p>
+
+<ol>
+<li>需要分页的子页面，如何判断滚动到最底部</li>
+<li>翻页的效果如何实现</li>
+</ol>
+
+
+<p>问题 1 很好解决，仔细研究下 UIScrollView 的属性就有答案了，就是一个数学问题。</p>
+
+<p>图例：</p>
+
+<p><img src="/images/2016-09-17-paging/UIScrollView-structure.jpg" alt="UIScrollView-structure" /></p>
+
+<p>代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nf">contentOffsetBottom:</span><span class="p">(</span><span class="bp">UIScrollView</span><span class="o">*</span><span class="p">)</span><span class="nv">scrollView</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">scrollView</span><span class="p">.</span><span class="n">contentOffset</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">scrollView</span><span class="p">.</span><span class="n">contentSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">scrollView</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">scrollView</span><span class="p">.</span><span class="n">contentInset</span><span class="p">.</span><span class="n">bottom</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>问题 2 也很简单，就是利用了 UIScrollView 自带的一个 API <code>- (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;</code> 便可。</p>
+
+<h2>继续优化</h2>
+
+<p>现在我们的代码实现了分页的效果，但是缺少淘宝详情页的那样分页提示文字，要实现这个也不难。</p>
+
+<ul>
+<li>需要翻到下一页，可以在该页的最后加上“继续拖动，查看图文详情”的提示 label。</li>
+<li>需要返回到上一页，因为页面是 UIScrollView，可以使用 <a href="https://github.com/CoderMJLee/MJRefresh">MJRefresh</a> 加上一个自定义的 header 加上提示文字便可。</li>
+</ul>
+
+
+<h2>参考资料</h2>
+
+<p><a href="http://tech.glowing.com/cn/practice-in-uiscrollview/">UIScrollView 实践经验</a></p>
+
+<p><a href="https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/UIScrollView_pg/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008179-CH1-SW1">About Scroll View Programming</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/04/18/jspatch-study/">JSPatch 学习</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-04-18T00:19:13+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>12:19 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>主体流程</h2>
+
+<p><img src="/images/2016-04-18-jspatch-study/main-flow.jpg" alt="main-flow" /></p>
+
+<h2>JS 调用 OC 代码</h2>
+
+<p><img src="/images/2016-04-18-jspatch-study/js2oc.jpg" alt="js2oc" /></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1324,356 +1462,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/02/19/2014summer/">2014 年终总结</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-02-19T01:09:20+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:09 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>2014已经过去，先总结下去年的目标与主要的事：</h2>
-
-<ul>
-<li>一整年的工作，大部分都在做 iOS 开发，做了一些比较有成就感的东西，但是加班太多了，感觉好累好累，都没有时间思考，做一些自己感兴趣的事情；</li>
-<li>写了一份移动设备上，快速回到顶部的专利；</li>
-<li>优化了<a href="http://t.cn/zRAyu4l?u=1798492244&amp;m=3629415684524998&amp;cu=1798492244">Just Do it</a>这款 App，更新了几个版本，但是没做新应用，没有完成计划;</li>
-<li>坚持写 blog，数了一下，原创的、翻译的，加起来刚好 12 篇，刚好完成目标;</li>
-<li>宝宝终于开始熟练的会叫爸爸、妈妈、爷爷、奶奶、外婆了(就不会叫外公，估计是外公比较凶吧)，开始懂事了，模仿能力很强；比较惭愧，今年加班很多，较少时间陪他，陪他玩，和他在一起的时候我还经常拿着手机玩游戏……</li>
-<li>加了一点工资，虽然没有达到期望，但还算不错；</li>
-</ul>
-
-
-<p>总得来说去年的目标完成得非常一般，在及格线附近……</p>
-
-<h2>想想2015要做的</h2>
-
-<ul>
-<li>新年少加班，多充电学习，多陪陪家人；</li>
-<li>多花点时间思考代码、架构，而不要纯写代码，完成业务；</li>
-<li>写一份新专利；</li>
-<li>努力当个好爸爸，多陪陪儿子，自己的一些坏习惯也要改下，比如老是在他面前玩手机，不怎么做家务等；给儿子树立良好的榜样；</li>
-<li>带老婆出国旅游一次；</li>
-<li>多写技术文章与总结，一年至少12篇；</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/17/oc-method-swizzling/">Objective-C Method Swizzling</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-09-17T22:36:40+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:36 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Objective-C 中的 Method Swizzling 是一种可以在程序运行时，修改方法调用的技术。是 OC 作为动态语言的典型证明。</p>
-
-<p>Method Swizzling 是 OC <code>&lt;objc/runtime.h&gt;</code> 类库提供的“黑魔法”之一。</p>
-
-<h2>例子</h2>
-
-<p>以替换 NSArray 的 lastObject 方法为例：</p>
-
-<ul>
-<li>在 NSArray 中添加需要替换 lastObject 的方法 - xxx_lastObject方法：</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;  </span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="bp">NSArray</span> <span class="nl">(Swizzle)</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">xxx_lastObject</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">id</span> <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">xxx_lastObject</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;**********  myLastObject ***********&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>注意这里的写法，xxx_lastObject 方法的方法体中调用了 [self xxx_lastObject]，这样写并不会造成递归，后面会交换 xxx_lastObject 与 lastObject 的 IMP，其实 [self xxx_lastObject] 将会执行 [self lastObject] 。</p>
-
-<ul>
-<li>调换 IMP</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;  </span>
-</span><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
-</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
-</span><span class='line'><span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">ori_Method</span><span class="p">,</span> <span class="n">my_Method</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>注意这里需要引入 <code>&lt;objc/runtime.h&gt;</code>，否则会报错，因为使用了 runtime 中的 method_exchangeImplementations 方法。</p>
-
-<p>使用 <code>method_exchangeImplementations</code> 交换了 xxx_lastObject 与 lastObject 的 IMP。后面会讲解更深层次的原理。</p>
-
-<ul>
-<li>尝试调用 lastObject</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;objc/runtime.h&gt;</span>
-</span><span class='line'><span class="cp">#import &quot;NSArray+Swizzle.h&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="bp">NSArray</span> <span class="o">*</span><span class="n">array</span> <span class="o">=</span> <span class="l">@[</span><span class="s">@&quot;0&quot;</span><span class="p">,</span><span class="s">@&quot;1&quot;</span><span class="p">,</span><span class="s">@&quot;2&quot;</span><span class="p">,</span><span class="s">@&quot;3&quot;</span><span class="l">]</span><span class="p">;</span>
-</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">string</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span> <span class="n">lastObject</span><span class="p">];</span>
-</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;TEST RESULT : %@&quot;</span><span class="p">,</span><span class="n">string</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>输出结果为:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">**********</span>  <span class="n">myLastObject</span> <span class="o">***********</span>
-</span><span class='line'><span class="n">TEST</span> <span class="nl">RESULT</span> <span class="p">:</span> <span class="mi">3</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>很明显，这里调用 lastObject 方法，其实是调用了我们添加的 xxx_lastObject 方法。</p>
-
-<h2>用处</h2>
-
-<p>Method Swizzling 非常强大，主要作用有：</p>
-
-<ul>
-<li>在不修改 iOS 系统类库或第三方类库的源码基础上，修改原有调用逻辑</li>
-<li>动态添加、修改方法，修复线上 bug（如果 Apple 官方允许的话）</li>
-</ul>
-
-
-<h2>常用 API</h2>
-
-<p>相关常用方法，都在<code>&lt;objc/runtime.h&gt;</code>包内：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//向类中添加Method</span>
-</span><span class='line'><span class="kt">BOOL</span> <span class="nf">class_addMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="kt">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//修改类的Method</span>
-</span><span class='line'><span class="kt">IMP</span> <span class="n">class_replaceMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">cls</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">name</span><span class="p">,</span> <span class="kt">IMP</span> <span class="n">imp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">types</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//交换2个方法中的IMP</span>
-</span><span class='line'><span class="kt">void</span> <span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">Method</span> <span class="n">m1</span><span class="p">,</span> <span class="n">Method</span> <span class="n">m2</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//获取类的某个实例方法</span>
-</span><span class='line'><span class="n">Method</span> <span class="n">class_getInstanceMethod</span><span class="p">(</span><span class="kt">Class</span> <span class="n">aClass</span><span class="p">,</span> <span class="kt">SEL</span> <span class="n">aSelector</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>底层原理</h2>
-
-<p>在运行时，OC 的方法是一种叫 <code>Method</code> 的结构体，这种 <code>objc_method</code> 类型的结构体定义为：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">struct</span> <span class="n">objc_method</span>
-</span><span class='line'>   <span class="kt">SEL</span> <span class="n">method_name</span>         <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
-</span><span class='line'>   <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span>      <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
-</span><span class='line'>   <span class="kt">IMP</span> <span class="n">method_imp</span>          <span class="n">OBJC2_UNAVAILABLE</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>method_name 是方法的 selector，可以理解为运行时的方法名；</li>
-<li>*method_types 是一个参数和返回值类型<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html">编码</a>的字符串；</li>
-<li>method_imp 是指向方法实现的指针。</li>
-</ul>
-
-
-<p><code>Method Swizzling 的实质是在运行时，访问对象的方法结构体，并改变它的底层实现。</code></p>
-
-<p>我们以上节修改 NSArray 的 lastObject 为例做说明。</p>
-
-<ul>
-<li>初始时，lastObject 与 xxx_lastObject 方法的 Method 结构体：</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">lastObject</span> <span class="p">{</span>
-</span><span class='line'>      <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">)</span>
-</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="p">@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值void, 参数id(self)，selector(_cmd)</span>
-</span><span class='line'>      <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Method</span> <span class="n">xxx_lastObject</span> <span class="p">{</span>
-</span><span class='line'>       <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">swizzle_originalMethodName</span><span class="p">)</span>
-</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="n">v</span><span class="p">@</span><span class="o">:</span><span class="err">”</span>
-</span><span class='line'>       <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>调用 <code>void method_exchangeImplementations(Method m1, Method m2)</code> ,交换两者的实现：</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">ori_Method</span> <span class="o">=</span>  <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">));</span>
-</span><span class='line'><span class="n">Method</span> <span class="n">my_Method</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">],</span> <span class="k">@selector</span><span class="p">(</span><span class="n">xxx_lastObject</span><span class="p">));</span>
-</span><span class='line'><span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">ori_Method</span><span class="p">,</span> <span class="n">my_Method</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>调换后的 Method 结构体：</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Method</span> <span class="n">lastObject</span> <span class="p">{</span>
-</span><span class='line'>      <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">lastObject</span><span class="p">)</span>
-</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="p">@@</span><span class="o">:</span><span class="err">“</span> <span class="c1">//返回值id, 参数id(self)，selector(_cmd)</span>
-</span><span class='line'>      <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x1234AABA</span> <span class="c1">//指向([NSArray xxx_lastObject])</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Method</span> <span class="n">xxx_lastObject</span> <span class="p">{</span>
-</span><span class='line'>       <span class="kt">SEL</span> <span class="n">method_name</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">swizzle_originalMethodName</span><span class="p">)</span>
-</span><span class='line'>       <span class="kt">char</span> <span class="o">*</span><span class="n">method_types</span> <span class="o">=</span> <span class="err">“</span><span class="p">@@</span><span class="o">:</span><span class="err">”</span>
-</span><span class='line'>       <span class="kt">IMP</span> <span class="n">method_imp</span> <span class="o">=</span> <span class="mh">0x000FFFF</span> <span class="c1">//指向([NSArray lastObject])</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>可以看到使用<code>void method_exchangeImplementations(Method m1, Method m2)</code>的实质是交换了xxx_lastObject 与 lastObject 的 IMP，实现了在运行时做方法的替换。使得当执行 [array lastObject] 的时候，实际会去执行 [array xxx_lastObject] 的方法实现。</p>
-
-<h2>其他提示</h2>
-
-<h3>+load</h3>
-
-<p>Swizzling 的处理，在类的 <code>+load</code> 方法中完成。</p>
-
-<p>因为 <code>+load</code> 方法会在类被添加到 OC 运行时执行，且只会被调用一次，保证了 Swizzling 方法的及时处理。</p>
-
-<h3>dispatch_once</h3>
-
-<p>Swizzling 的处理，<code>dispatch_once</code> 中完成。保证只执行一次。</p>
-
-<h3>prefix</h3>
-
-<p>Swizzling 方法添加前缀，避免方法名称冲突。</p>
-
-<h2>代码示例</h2>
-
-<p><a href="https://github.com/sjpsega/SwizzleTest">代码示例</a></p>
-
-<h2>参考资料</h2>
-
-<p><a href="http://nshipster.com/method-swizzling/">Method Swizzling</a></p>
-
-<p><a href="http://stackoverflow.com/questions/3267506/how-to-swizzle-a-class-method-on-ios">How to swizzle a class method on iOS?</a></p>
-
-<p><a href="http://www.friday.com/bbum/2011/03/17/ios-4-3-imp_implementationwithblock/">iOS 4.3: imp_implementationWithBlock()</a></p>
-
-<p><a href="http://blog.csdn.net/yiyaaixuexi/article/details/9374411">Objective-C的hook方案（一）:  Method Swizzling</a></p>
-
-<p><a href="http://blog.jobbole.com/45963/">Objective-C 的动态提示和技巧</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -1691,6 +1479,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/02/09/soho/">SOHO 工作一周的感受</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2020/01/10/putitdown/">放下</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
       </li>
     
@@ -1700,14 +1496,6 @@
     
       <li class="post">
         <a href="/blog/2019/09/15/910/">怒放的生命</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/07/22/kechuangban/">科创板</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/04/04/payout/">用错误的方法赚到钱，迟早要还</a>
       </li>
     
   </ul>
