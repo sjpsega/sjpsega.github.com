@@ -3,7 +3,7 @@ layout: post
 title: "科创板"
 date: 2019-07-22 23:41:55 +0800
 comments: true
-categories: life
+categories: invest
 description: 
 keywords: 
 ---

@@ -3,7 +3,7 @@ layout: post
 title: "疯狂的美股"
 date: 2019-11-23 00:15:32 +0800
 comments: true
-categories: life
+categories: invest
 description: 
 keywords: 
 ---
