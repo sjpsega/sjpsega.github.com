@@ -3,7 +3,7 @@ layout: post
 title: "2019 年投资总结"
 date: 2020-01-01 23:03:53 +0800
 comments: true
-categories: life
+categories: invest
 description: 
 keywords: 2020 投资 总结
 ---
