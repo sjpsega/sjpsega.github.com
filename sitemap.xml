@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://sjpsega.me/blog/2020/02/15/2019summary/</loc>
+<lastmod>2020-02-15T23:08:33+08:00</lastmod>
+</url>
+<url>
 <loc>http://sjpsega.me/blog/2020/02/09/soho/</loc>
 <lastmod>2020-02-09T21:15:39+08:00</lastmod>
 </url>
@@ -177,5 +181,17 @@
 </url>
 <url>
 <loc>http://sjpsega.me/blog/categories/invest/</loc>
+</url>
+<url>
+<loc>http://sjpsega.me/posts/2/</loc>
+</url>
+<url>
+<loc>http://sjpsega.me/posts/3/</loc>
+</url>
+<url>
+<loc>http://sjpsega.me/posts/4/</loc>
+</url>
+<url>
+<loc>http://sjpsega.me/posts/5/</loc>
 </url>
 </urlset>
