@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Invest | sjpsega's Blog]]></title>
-  <link href="http://sjpsega.me/blog/categories/invest/atom.xml" rel="self"/>
-  <link href="http://sjpsega.me/"/>
-  <updated>2020-07-04T21:07:48+08:00</updated>
-  <id>http://sjpsega.me/</id>
+  <link href="http://sjpsega.com/blog/categories/invest/atom.xml" rel="self"/>
+  <link href="http://sjpsega.com/"/>
+  <updated>2020-07-04T21:21:30+08:00</updated>
+  <id>http://sjpsega.com/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
     
@@ -15,18 +15,18 @@
   
   <entry>
     <title type="html"><![CDATA[放下]]></title>
-    <link href="http://sjpsega.me/blog/2020/01/10/putitdown/"/>
+    <link href="http://sjpsega.com/blog/2020/01/10/putitdown/"/>
     <updated>2020-01-10T15:42:13+08:00</updated>
-    <id>http://sjpsega.me/blog/2020/01/10/putitdown</id>
+    <id>http://sjpsega.com/blog/2020/01/10/putitdown</id>
     <content type="html"><![CDATA[<p>昨天，终于受不了，把空头仓位都清了……美股太疯狂……不管好消息坏消息，都涨，只是快慢而已……</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[2019 年投资总结]]></title>
-    <link href="http://sjpsega.me/blog/2020/01/01/2020-invest-summary/"/>
+    <link href="http://sjpsega.com/blog/2020/01/01/2020-invest-summary/"/>
     <updated>2020-01-01T23:03:53+08:00</updated>
-    <id>http://sjpsega.me/blog/2020/01/01/2020-invest-summary</id>
+    <id>http://sjpsega.com/blog/2020/01/01/2020-invest-summary</id>
     <content type="html"><![CDATA[<p>2020 年已经到来，19 年依然过去，照例要总结下 2019 在投资上的得失。</p>
 
 <h2>概况</h2>
@@ -177,9 +177,9 @@
   
   <entry>
     <title type="html"><![CDATA[疯狂的美股]]></title>
-    <link href="http://sjpsega.me/blog/2019/11/23/crazyusstock/"/>
+    <link href="http://sjpsega.com/blog/2019/11/23/crazyusstock/"/>
     <updated>2019-11-23T00:15:32+08:00</updated>
-    <id>http://sjpsega.me/blog/2019/11/23/crazyusstock</id>
+    <id>http://sjpsega.com/blog/2019/11/23/crazyusstock</id>
     <content type="html"><![CDATA[<p><img src="/images/2019-11-23-crazyusstock/20191122_china_stock.jpg" alt="20191122_china_stock" /></p>
 
 <p><img src="/images/2019-11-23-crazyusstock/20191122_hk_stock.jpg" alt="20191122_hk_stock" /></p>
@@ -204,9 +204,9 @@
   
   <entry>
     <title type="html"><![CDATA[科创板]]></title>
-    <link href="http://sjpsega.me/blog/2019/07/22/kechuangban/"/>
+    <link href="http://sjpsega.com/blog/2019/07/22/kechuangban/"/>
     <updated>2019-07-22T23:41:55+08:00</updated>
-    <id>http://sjpsega.me/blog/2019/07/22/kechuangban</id>
+    <id>http://sjpsega.com/blog/2019/07/22/kechuangban</id>
     <content type="html"><![CDATA[<p>今天，又是一个 A 股历史上的大日子 - 大大钦点的「科创板」正式上线。</p>
 
 <p>据说 7.22 上线，是因为 05、14 年的大牛市的起点，是以 7.22 为支点。</p>
@@ -225,9 +225,9 @@
   
   <entry>
     <title type="html"><![CDATA[用错误的方法赚到钱，迟早要还]]></title>
-    <link href="http://sjpsega.me/blog/2019/04/04/payout/"/>
+    <link href="http://sjpsega.com/blog/2019/04/04/payout/"/>
     <updated>2019-04-04T00:17:35+08:00</updated>
-    <id>http://sjpsega.me/blog/2019/04/04/payout</id>
+    <id>http://sjpsega.com/blog/2019/04/04/payout</id>
     <content type="html"><![CDATA[<p><img src="/images/2019-04-04-payout/20190404_us_stock.jpg" alt="20190404_us_stock" /></p>
 
 <p>昨晚，美股做空，第一次收到了「平仓」预警信息。</p>
