@@ -5,7 +5,7 @@ date: 2020-02-15 23:08:33 +0800
 comments: true
 categories: life
 description: 
-keywords: 2018 总结
+keywords: 2019 总结
 ---
 
 2020 这开年真不一般，过年期间，科比走了，新型冠状病毒疫情疫情爆发，原本再该结束的春节假期，被迫延迟，在家办公。
