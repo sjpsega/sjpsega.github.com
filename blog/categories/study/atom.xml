@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Study | sjpsega's Blog]]></title>
-  <link href="http://sjpsega.com/blog/categories/study/atom.xml" rel="self"/>
-  <link href="http://sjpsega.com/"/>
-  <updated>2020-07-04T21:21:30+08:00</updated>
-  <id>http://sjpsega.com/</id>
+  <link href="http://sjpsega.me/blog/categories/study/atom.xml" rel="self"/>
+  <link href="http://sjpsega.me/"/>
+  <updated>2020-07-04T22:16:08+08:00</updated>
+  <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS 仿淘宝详情页分页组件]]></title>
-    <link href="http://sjpsega.com/blog/2016/09/17/paging/"/>
+    <link href="http://sjpsega.me/blog/2016/09/17/paging/"/>
     <updated>2016-09-17T21:42:08+08:00</updated>
-    <id>http://sjpsega.com/blog/2016/09/17/paging</id>
+    <id>http://sjpsega.me/blog/2016/09/17/paging</id>
     <content type="html"><![CDATA[<p>本例 <a href="https://github.com/sjpsega/Paging">Demo</a>。</p>
 
 <p>淘宝详情页的分页交互效果是一个经典的实现，隔离了淘宝商品基本属性页和图文详情页，即给用户一个良好的使用体验，也通过分页懒加载图文信息，提高了页面首屏加载速度，也减少了不必要的流量损耗。</p>
@@ -93,9 +93,9 @@
   
   <entry>
     <title type="html"><![CDATA[JSPatch 学习]]></title>
-    <link href="http://sjpsega.com/blog/2016/04/18/jspatch-study/"/>
+    <link href="http://sjpsega.me/blog/2016/04/18/jspatch-study/"/>
     <updated>2016-04-18T00:19:13+08:00</updated>
-    <id>http://sjpsega.com/blog/2016/04/18/jspatch-study</id>
+    <id>http://sjpsega.me/blog/2016/04/18/jspatch-study</id>
     <content type="html"><![CDATA[<h2>主体流程</h2>
 
 <p><img src="/images/2016-04-18-jspatch-study/main-flow.jpg" alt="main-flow" /></p>
@@ -108,9 +108,9 @@
   
   <entry>
     <title type="html"><![CDATA[Cordova WKWebView 学习笔记（二）]]></title>
-    <link href="http://sjpsega.com/blog/2016/02/15/cordova-wkwebview-study-2/"/>
+    <link href="http://sjpsega.me/blog/2016/02/15/cordova-wkwebview-study-2/"/>
     <updated>2016-02-15T00:11:47+08:00</updated>
-    <id>http://sjpsega.com/blog/2016/02/15/cordova-wkwebview-study-2</id>
+    <id>http://sjpsega.me/blog/2016/02/15/cordova-wkwebview-study-2</id>
     <content type="html"><![CDATA[<p>这篇主要是代码学习。</p>
 
 <p>官方代码地址：<a href="https://github.com/apache/cordova-plugin-wkwebview-engine">cordova-plugin-wkwebview-engine</a></p>
@@ -311,9 +311,9 @@ function onDeviceReady() {
   
   <entry>
     <title type="html"><![CDATA[Cordova WKWebView 学习笔记（一）]]></title>
-    <link href="http://sjpsega.com/blog/2016/02/06/cordova-wkwebview-study-1/"/>
+    <link href="http://sjpsega.me/blog/2016/02/06/cordova-wkwebview-study-1/"/>
     <updated>2016-02-06T13:43:47+08:00</updated>
-    <id>http://sjpsega.com/blog/2016/02/06/cordova-wkwebview-study-1</id>
+    <id>http://sjpsega.me/blog/2016/02/06/cordova-wkwebview-study-1</id>
     <content type="html"><![CDATA[<h2>WKWebView</h2>
 
 <p>Apple 从 iOS 8 开始，引入了新的 WebView 类 <code>WKWebView</code>，试图替换已经老迈的 UIWebView。</p>
@@ -388,9 +388,9 @@ function onDeviceReady() {
   
   <entry>
     <title type="html"><![CDATA[isEqual 与 Hash]]></title>
-    <link href="http://sjpsega.com/blog/2016/01/14/isequalandhash/"/>
+    <link href="http://sjpsega.me/blog/2016/01/14/isequalandhash/"/>
     <updated>2016-01-14T01:17:56+08:00</updated>
-    <id>http://sjpsega.com/blog/2016/01/14/isequalandhash</id>
+    <id>http://sjpsega.me/blog/2016/01/14/isequalandhash</id>
     <content type="html"><![CDATA[<h2>最佳实践</h2>
 
 <ul>
