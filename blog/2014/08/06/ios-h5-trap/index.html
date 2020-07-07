@@ -121,13 +121,12 @@
 
 <p>办法有点猥琐，要通过 js，去强制 input 元素获得焦点。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">element</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;tap&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>element.on("tap", function(e){
+</span><span class='line'>  element.focus();
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>参考资料</h3>
@@ -236,6 +235,10 @@ var uyan_config = {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/07/04/2020midyear-invest-summary/">2020 年中投资总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2020/02/15/2019summary/">2019 年终总结</a>
       </li>
     
@@ -249,10 +252,6 @@ var uyan_config = {
     
       <li class="post">
         <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/11/23/crazyusstock/">疯狂的美股</a>
       </li>
     
   </ul>

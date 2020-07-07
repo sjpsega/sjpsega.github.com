@@ -4,7 +4,7 @@
   <title><![CDATA[sjpsega's Blog]]></title>
   <link href="http://sjpsega.me/atom.xml" rel="self"/>
   <link href="http://sjpsega.me/"/>
-  <updated>2020-07-04T21:08:31+08:00</updated>
+  <updated>2020-07-07T21:25:33+08:00</updated>
   <id>http://sjpsega.me/</id>
   <author>
     <name><![CDATA[sjpsega]]></name>
@@ -12,6 +12,159 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2020 年中投资总结]]></title>
+    <link href="http://sjpsega.me/blog/2020/07/04/2020midyear-invest-summary/"/>
+    <updated>2020-07-04T23:00:09+08:00</updated>
+    <id>http://sjpsega.me/blog/2020/07/04/2020midyear-invest-summary</id>
+    <content type="html"><![CDATA[<p>2020 年已经过半，总结下这半年来在投资上的得失。</p>
+
+<h2>概况</h2>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">投资标的</th>
+<th style="text-align:left;">收益率</th>
+<th style="text-align:left;">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">A 股 1(RMB)</td>
+<td style="text-align:left;"><font color="red">+8.10%</font></td>
+<td style="text-align:left;">沪深 300：4096.58 - 4163.96，+1.64%</td>
+</tr>
+<tr>
+<td style="text-align:left;">A 股 2(RMB)</td>
+<td style="text-align:left;"><font color="red">+10.36%</font></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left;">A 股 3(RMB)</td>
+<td style="text-align:left;"><font color="red">-1.17%</font></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left;">港股(HKD)</td>
+<td style="text-align:left;"><font color="red">-0.49%</font></td>
+<td style="text-align:left;">恒生：28189.75 - 24427.19，-13.35%</td>
+</tr>
+<tr>
+<td style="text-align:left;">美股(USD)</td>
+<td style="text-align:left;"><font color="green">-90.16%</font></td>
+<td style="text-align:left;">标普 500：3230.78 - 3100.29，-4.04%</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>注：收益计算采用简单方案，资金流入全部算作期初本金。</p>
+
+<p>年初，忍痛清仓了美股的做空仓位，结果 4 月份，严重错估疫情的影响，又再次做空拼多多，结果遇上拼多多的一波翻倍行情，损失惨重，美股大幅亏损，收益为 -90.16%。A 股、港股均跑赢大盘。综合所有账户，上半年年的投资总收益为 <code>+2.19%</code>，跑赢沪深 300，还行。</p>
+
+<h2>A 股</h2>
+
+<h3>概述</h3>
+
+<p><img src="http://sjpsega.me/images/2020-07-04-2020midyear-invest-summary/2020s1_the_a_stock.PNG" alt="2020q1_the_a_stock" /></p>
+
+<p>上半年的市场行情，虽然经历疫情的影响，但我们处理得当，影响很小。股市行情和去年很像，也是旱的旱死涝的涝死，走牛的板块是医药、消费（酿酒、食品）、新能车、消费电子、半导体；指数方面，创业板一骑绝尘，上半年大涨 35.6%。金融、地产、基建，被按在地上摩擦摩擦……</p>
+
+<p>我刚好是被按在地上摩擦的……上半年进行了调仓，从高息股票，转移到了核心资产，主要仓位是 中国平安、招商银行、万科、冀东水泥、双汇，除了归属食品的双汇大涨，其他都是惨惨惨啊……</p>
+
+<p>上半年最大的失误是没有趁着疫情期间大幅回调的新能车、消费电子板块，反手买入，错过一波 50%+ 的上涨行情。又是我自身执行力的问题与猥琐的价格判断，期望买到一个低价，结果……</p>
+
+<h3>下半年策略</h3>
+
+<p>疫情期间，各国都进行了放水，放水无熊市。但意外的是，主题行情还是演绎得这么极致，我重仓的银证保地，被按在地上摩擦，连逻辑顺畅的基建也是。</p>
+
+<p>但是，风水轮流转，关键是医药、新能车、消费电子都太高了，一下子没法下手了，所以下半年的策略是：</p>
+
+<ul>
+<li>保持 银证保地 仓位，等风来。(写的时候已经是 7.4，这周，银证保地 已经涨起来了，特别是证券，大涨！)</li>
+<li>食品双汇保持关注，高位震荡避免不了，必要情况下减仓，转入其他高预期板块，如新能车。</li>
+<li>关注新能车、消费电子，回调买入一些，虽然板块高了，但是前景明朗，值得期待。</li>
+</ul>
+
+
+<h2>港股</h2>
+
+<h3>概述</h3>
+
+<p>上半年的港股很熊，-13.35%。但和 A 股很像，旱的旱死涝的涝死，腾讯、美团创新高，小米、海底捞疫情后大涨。</p>
+
+<p>医药股爆发，医药股打新非常火热，基本是 50%+ 的涨幅。上半年打了几个医疗股，结果只中了康基医疗、海吉亚医疗，涨幅还不错。</p>
+
+<p>3 月，疫情期间，融资买入了腾讯、融创、南航、海底捞，3 月底的时候，随着美股的崩盘，港股大幅下跌，下下跌幅度与速度超出预期，亏损额持续上升，底部时刻真是让人感到窒息。</p>
+
+<p>进入 4 月，把持续萎靡的 北京控股、太古 B、上海实业控股、国药控股 出了，减仓了腾讯、融创、海底捞，出了点小米，买入 三生，现在复盘，操作真是糊涂。虽然赚了点小钱，都之后都表明是捡了芝麻丢了西瓜的行为。腾讯、海底捞、小米，之后都大涨，腾讯更是创了历史新高，市值超越阿里。</p>
+
+<h3>下半年策略</h3>
+
+<p>强烈看好下半年港股的行情，在主要市场里，港股指数表现最差，潜力足。但还是要选择优势板块，虽然港股惨，但并不阻碍腾讯持续创新高。</p>
+
+<p>再加上 6 月初，卖了阿里，从美股转了一大笔钱到港股，还未完成加仓，股市就大涨了，踏空，难受。</p>
+
+<p>思考下半年策略：</p>
+
+<ul>
+<li>买入港股牛市利好最大的港交所，受益于手机产业的舜宇光学，目前想到就这两个。</li>
+</ul>
+
+
+<h2>美股</h2>
+
+<h3>概述</h3>
+
+<p><img src="http://sjpsega.me/images/2020-07-04-2020midyear-invest-summary/2020s1_nasdaq.PNG" alt="2020s1_nasdaq" /></p>
+
+<p>美股只能用两个字形容，那就是『牛逼』！特别是纳斯达克，疫情过后，一波 50%+ 的指数涨幅，真是把我惊呆了，颠覆了我的认知。</p>
+
+<p>美联储无限 QE，不断买入企业债的行为，真是让人叹为观止。老美对股市的呵护是在是太好了。</p>
+
+<p>我总觉得老美的这个行为是饮鸩止渴，但是在现实面前，我还是被打脸了，就算美股疫情没控制住，可是，还是新高了。</p>
+
+<h3>做空</h3>
+
+<p>我的美股真是失败，做多美股的时候，亏；做空美股的时候，还是亏……</p>
+
+<p><img src="http://sjpsega.me/images/2020-07-04-2020midyear-invest-summary/2020s1_pdd.PNG" alt="pdd走势" /></p>
+
+<p>4 月初，开始做空拼多多，但伴随的却是不断走高的美股和不断上涨的拼多多。我的倔强再次害死了我，从小亏到巨亏，真是想狠狠地扇自己两巴掌。经历了去年做空 AMD、好未来的巨亏，看来，我还没吃够苦头。</p>
+
+<p>不做空，巴菲特和芒格的教导，真是深刻。</p>
+
+<p>总觉得自己的人格有些分裂，在 A 股、港股上小心翼翼，在美股上却大手大脚；结果 A 股、港股小赚，美股大亏，大幅影响了自己的收益和心态。</p>
+
+<p>并且经历去年的巨亏，疫情期间，还再次反思了做空的种种问题，结果，我再次栽在了做空上……</p>
+
+<h3>下半年策略</h3>
+
+<p>冷静……</p>
+
+<h2>总结</h2>
+
+<p>下半年喜忧参半。</p>
+
+<p>忧：</p>
+
+<ul>
+<li>美股放水，造成股市高涨，估值高企，具有不确定性。总统大选大事件可能造成的风格变换。</li>
+<li>国内资金偏紧。</li>
+</ul>
+
+
+<p>喜：</p>
+
+<ul>
+<li>国内房住不炒，P2P 的暴雷，信托不再刚性兑付，余额宝的收益持续走低，利好资金进入股市。</li>
+<li>银证保地基建等低估值板块还在地上，潜力巨大。</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2019 年终总结]]></title>
@@ -651,13 +804,12 @@
 
 <p>代码：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nf">contentOffsetBottom:</span><span class="p">(</span><span class="bp">UIScrollView</span><span class="o">*</span><span class="p">)</span><span class="nv">scrollView</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">scrollView</span><span class="p">.</span><span class="n">contentOffset</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">scrollView</span><span class="p">.</span><span class="n">contentSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">scrollView</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">scrollView</span><span class="p">.</span><span class="n">contentInset</span><span class="p">.</span><span class="n">bottom</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (CGFloat)contentOffsetBottom:(UIScrollView*)scrollView{
+</span><span class='line'>    return scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height + scrollView.contentInset.bottom);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>问题 2 也很简单，就是利用了 UIScrollView 自带的一个 API <code>- (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;</code> 便可。</p>
@@ -719,7 +871,7 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -727,15 +879,14 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="n">WKUserContentController</span><span class="o">*</span> <span class="n">userContentController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKUserContentController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="c1">// 关键代码，添加 messageHandler，名字为 cordova</span>
-</span><span class='line'><span class="p">[</span><span class="n">userContentController</span> <span class="nl">addScriptMessageHandler</span><span class="p">:</span><span class="nb">self</span> <span class="nl">name</span><span class="p">:</span><span class="s">@&quot;cordova&quot;</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>WKUserContentController* userContentController = [[WKUserContentController alloc] init];
+</span><span class='line'>// 关键代码，添加 messageHandler，名字为 cordova
+</span><span class='line'>[userContentController addScriptMessageHandler:self name:@"cordova"];
 </span><span class='line'>
-</span><span class='line'><span class="n">WKWebViewConfiguration</span><span class="o">*</span> <span class="n">configuration</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKWebViewConfiguration</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="n">configuration</span><span class="p">.</span><span class="n">userContentController</span> <span class="o">=</span> <span class="n">userContentController</span><span class="p">;</span>
+</span><span class='line'>WKWebViewConfiguration* configuration = [[WKWebViewConfiguration alloc] init];
+</span><span class='line'>configuration.userContentController = userContentController;
 </span><span class='line'>
-</span><span class='line'><span class="n">WKWebView</span><span class="o">*</span> <span class="n">wkWebView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKWebView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">frame</span> <span class="nl">configuration</span><span class="p">:</span><span class="n">configuration</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>WKWebView* wkWebView = [[WKWebView alloc] initWithFrame:frame configuration:configuration];</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -743,11 +894,10 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//调用名为 cordova 的 messageHandler，与 Native 端进行通信</span>
-</span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">webkit</span><span class="p">.</span><span class="nx">messageHandlers</span><span class="p">.</span><span class="nx">cordova</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">command</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//调用名为 cordova 的 messageHandler，与 Native 端进行通信
+</span><span class='line'>window.webkit.messageHandlers.cordova.postMessage(command);</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -755,21 +905,20 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//实现 WKScriptMessageHandler 接口</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">userContentController:</span><span class="p">(</span><span class="n">WKUserContentController</span><span class="o">*</span><span class="p">)</span><span class="nv">userContentController</span> <span class="nf">didReceiveScriptMessage:</span><span class="p">(</span><span class="n">WKScriptMessage</span><span class="o">*</span><span class="p">)</span><span class="nv">message</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span><span class="n">message</span><span class="p">.</span><span class="n">name</span><span class="p">);</span> <span class="c1">//cordova</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span><span class="n">message</span><span class="p">.</span><span class="n">body</span><span class="p">);</span> <span class="c1">//JSBridge 内容体</span>
-</span><span class='line'>    <span class="p">...</span> <span class="c1">//实现调用 Native 代码</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//实现 WKScriptMessageHandler 接口
+</span><span class='line'>- (void)userContentController:(WKUserContentController*)userContentController didReceiveScriptMessage:(WKScriptMessage*)message
+</span><span class='line'>{
+</span><span class='line'>    NSLog(@"%@",message.name); //cordova
+</span><span class='line'>    NSLog(@"%@",message.body); //JSBridge 内容体
+</span><span class='line'>    ... //实现调用 Native 代码
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>一个 messageHandler 一个通道，Cordova 统一使用 cordova 这个通道来通信。</p>
@@ -778,21 +927,20 @@
 
 <p>目录结构（列出关键目录与文件）：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="o">|</span><span class="n">wkwvtest</span>
-</span><span class='line'>    <span class="o">|</span><span class="n">Staging</span>
-</span><span class='line'>        <span class="n">config</span><span class="p">.</span><span class="n">xml</span>
-</span><span class='line'>        <span class="o">|</span><span class="n">www</span>
-</span><span class='line'>            <span class="n">cordova_plugins</span><span class="p">.</span><span class="n">js</span>
-</span><span class='line'>            <span class="o">|</span><span class="n">plugins</span> <span class="c1">//JS Plugihns</span>
-</span><span class='line'>    <span class="o">|</span><span class="n">Plugins</span> <span class="c1">// Native Plugins</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>|wkwvtest
+</span><span class='line'>    |Staging
+</span><span class='line'>        config.xml
+</span><span class='line'>        |www
+</span><span class='line'>            cordova_plugins.js
+</span><span class='line'>            |plugins //JS Plugihns
+</span><span class='line'>    |Plugins // Native Plugins</span></code></pre></td></tr></table></div></figure>
 
 
 <p>已实现一个 Device 插件为例：</p>
@@ -802,7 +950,7 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -813,18 +961,17 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cordova</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;org.apache.cordova.device.device&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">function</span> <span class="nx">Device</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">//...</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="c1">//...</span>
-</span><span class='line'>    <span class="nx">Device</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">//调用 JSBridge，调用名为 Device 的 Native 类 getDeviceInfo 方法</span>
-</span><span class='line'>        <span class="nx">exec</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">,</span> <span class="s2">&quot;Device&quot;</span><span class="p">,</span> <span class="s2">&quot;getDeviceInfo&quot;</span><span class="p">,</span> <span class="p">[]);</span>
-</span><span class='line'>    <span class="p">};</span>
-</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Device</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cordova.define("org.apache.cordova.device.device", function(require, exports, module) { 
+</span><span class='line'>    function Device() {
+</span><span class='line'>    //...
+</span><span class='line'>    }
+</span><span class='line'>    //...
+</span><span class='line'>    Device.prototype.getInfo = function(successCallback, errorCallback) {
+</span><span class='line'>        //调用 JSBridge，调用名为 Device 的 Native 类 getDeviceInfo 方法
+</span><span class='line'>        exec(successCallback, errorCallback, "Device", "getDeviceInfo", []);
+</span><span class='line'>    };
+</span><span class='line'>    module.exports = new Device();
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -832,7 +979,7 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -847,22 +994,21 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cordova</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;cordova/plugin_list&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
-</span><span class='line'>        <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;file&quot;</span><span class="o">:</span> <span class="s2">&quot;plugins/device.js&quot;</span><span class="p">,</span><span class="c1">//写明相对 cordova_plugins.js 的文件路径</span>
-</span><span class='line'>            <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;org.apache.cordova.device.device&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;clobbers&quot;</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>                 <span class="s2">&quot;device&quot;</span> <span class="c1">//全局命名空间，会注册为 window.device</span>
-</span><span class='line'>            <span class="p">]</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">];</span>
-</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">metadata</span> <span class="o">=</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="s2">&quot;org.apache.cordova.device&quot;</span><span class="o">:</span> <span class="s2">&quot;0.3.0&quot;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cordova.define('cordova/plugin_list', function(require, exports, module) {
+</span><span class='line'>    module.exports = [
+</span><span class='line'>        {
+</span><span class='line'>            "file": "plugins/device.js",//写明相对 cordova_plugins.js 的文件路径
+</span><span class='line'>            "id": "org.apache.cordova.device.device",
+</span><span class='line'>            "clobbers": [
+</span><span class='line'>                 "device" //全局命名空间，会注册为 window.device
+</span><span class='line'>            ]
+</span><span class='line'>        }
+</span><span class='line'>    ];
+</span><span class='line'>    module.exports.metadata =
+</span><span class='line'>    {
+</span><span class='line'>        "org.apache.cordova.device": "0.3.0"
+</span><span class='line'>    }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -870,13 +1016,12 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@interface</span> <span class="nc">CDVDevice</span> : <span class="nc">CDVPlugin</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">getDeviceInfo:</span><span class="p">(</span><span class="n">CDVInvokedUrlCommand</span><span class="o">*</span><span class="p">)</span><span class="nv">command</span><span class="p">;</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface CDVDevice : CDVPlugin
+</span><span class='line'>- (void)getDeviceInfo:(CDVInvokedUrlCommand*)command;
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -884,17 +1029,16 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;widget</span> <span class="na">id=</span><span class="s">&quot;my.project.wkwvtest&quot;</span> <span class="na">version=</span><span class="s">&quot;0.0.1&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/ns/widgets&quot;</span> <span class="na">xmlns:cdv=</span><span class="s">&quot;http://cordova.apache.org/ns/1.0&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;feature</span> <span class="na">name=</span><span class="s">&quot;Device&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;ios-package&quot;</span> <span class="na">value=</span><span class="s">&quot;CDVDevice&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/feature&gt;</span>
-</span><span class='line'><span class="nt">&lt;/widget&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;widget id="my.project.wkwvtest" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"&gt;
+</span><span class='line'>    &lt;feature name="Device"&gt;
+</span><span class='line'>        &lt;param name="ios-package" value="CDVDevice" /&gt;
+</span><span class='line'>    &lt;/feature&gt;
+</span><span class='line'>&lt;/widget&gt;</span></code></pre></td></tr></table></div></figure>
 
 
 <p>完成这步骤，便可以通过 web 端，调用 <code>exec(successCallback, errorCallback, "Device", "getDeviceInfo", []);</code>，调用 Device 这个 Native 类的 getDeviceInfo 方法</p>
@@ -924,7 +1068,7 @@
 
 <p>看关键代码：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -951,59 +1095,56 @@
 <span class='line-number'>25</span>
 <span class='line-number'>26</span>
 <span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cordova</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;org.apache.cordova.device.device&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">channel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cordova/channel&#39;</span><span class="p">),</span>
-</span><span class='line'>    <span class="nx">exec</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cordova/exec&#39;</span><span class="p">),</span>
-</span><span class='line'>    <span class="c1">//注册名为 onCordovaInfoReady 的 Sticky 类型的事件</span>
-</span><span class='line'>    <span class="nx">channel</span><span class="p">.</span><span class="nx">createSticky</span><span class="p">(</span><span class="s1">&#39;onCordovaInfoReady&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="c1">//告诉系统，必须等待 CordovaInfoReady 事件发送</span>
-</span><span class='line'>    <span class="nx">channel</span><span class="p">.</span><span class="nx">waitForInitialization</span><span class="p">(</span><span class="s1">&#39;onCordovaInfoReady&#39;</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cordova.define("org.apache.cordova.device.device", function(require, exports, module) { 
+</span><span class='line'>    channel = require('cordova/channel'),
+</span><span class='line'>    exec = require('cordova/exec'),
+</span><span class='line'>    //注册名为 onCordovaInfoReady 的 Sticky 类型的事件
+</span><span class='line'>    channel.createSticky('onCordovaInfoReady');
+</span><span class='line'>    //告诉系统，必须等待 CordovaInfoReady 事件发送
+</span><span class='line'>    channel.waitForInitialization('onCordovaInfoReady');
 </span><span class='line'>
-</span><span class='line'>    <span class="kd">function</span> <span class="nx">Device</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-</span><span class='line'>        <span class="c1">//在 onCordovaReady 事件中，注册回调，使得系统初始化便调用该回调，并且 onCordovaReady 在 onPluginsReady 事件后 fire</span>
-</span><span class='line'>        <span class="nx">channel</span><span class="p">.</span><span class="nx">onCordovaReady</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>            <span class="c1">//调用 JSBridge</span>
-</span><span class='line'>            <span class="nx">me</span><span class="p">.</span><span class="nx">getInfo</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="c1">//调用 JSBridge 成功回调用，fire onCordovaInfoReady 事件</span>
-</span><span class='line'>                <span class="nx">channel</span><span class="p">.</span><span class="nx">onCordovaInfoReady</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
-</span><span class='line'>            <span class="p">},</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="p">});</span>
-</span><span class='line'>        <span class="p">});</span>
-</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    function Device() {
+</span><span class='line'>        var me = this;
+</span><span class='line'>        //在 onCordovaReady 事件中，注册回调，使得系统初始化便调用该回调，并且 onCordovaReady 在 onPluginsReady 事件后 fire
+</span><span class='line'>        channel.onCordovaReady.subscribe(function() {
+</span><span class='line'>            //调用 JSBridge
+</span><span class='line'>            me.getInfo(function(info) {
+</span><span class='line'>                //调用 JSBridge 成功回调用，fire onCordovaInfoReady 事件
+</span><span class='line'>                channel.onCordovaInfoReady.fire();
+</span><span class='line'>            },function(e) {
+</span><span class='line'>            });
+</span><span class='line'>        });
+</span><span class='line'>    }
 </span><span class='line'>
-</span><span class='line'>    <span class="nx">Device</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">exec</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">,</span> <span class="s2">&quot;Device&quot;</span><span class="p">,</span> <span class="s2">&quot;getDeviceInfo&quot;</span><span class="p">,</span> <span class="p">[]);</span>
-</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    Device.prototype.getInfo = function(successCallback, errorCallback) {
+</span><span class='line'>        exec(successCallback, errorCallback, "Device", "getDeviceInfo", []);
+</span><span class='line'>    };
 </span><span class='line'>
-</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Device</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    module.exports = new Device();
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
 <p>web 端调用 Device 的代码：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;deviceready&quot;</span><span class="p">,</span> <span class="nx">onDeviceReady</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
-</span><span class='line'><span class="kd">function</span> <span class="nx">onDeviceReady</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">device</span><span class="p">.</span><span class="nx">uuid</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>document.addEventListener("deviceready", onDeviceReady, false);
+</span><span class='line'>function onDeviceReady() {
+</span><span class='line'>    console.log(device.uuid);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>可以看到，deviceready 的时候，便可以直接调用 device 这个全局变量。
 这是因为之前在 cordova_plugins.js 这个文件中，做了申明，会把 device 变为全局变量</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="s2">&quot;clobbers&quot;</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>    <span class="s2">&quot;device&quot;</span> <span class="c1">//全局命名空间，会注册为 window.device</span>
-</span><span class='line'><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"clobbers": [
+</span><span class='line'>    "device" //全局命名空间，会注册为 window.device
+</span><span class='line'>]</span></code></pre></td></tr></table></div></figure>
 
 
 <p>这种设计非常巧妙，但是以我的经验，这种形式的 JSBridge 使用比较局限，主要缺点有：</p>
@@ -1188,7 +1329,7 @@
 
 <p>dispatch_async （异步）添加任务到一个队列，但继续执行原有队列上的任务，在队列中按照 FIFO 的规则执行。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1196,20 +1337,19 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_sync</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 1&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 2&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="o">/*</span> <span class="err">输出</span><span class="o">:</span>
-</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">1</span>
-</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">2</span>
-</span><span class='line'> <span class="o">*</span> <span class="o">/</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>        NSLog(@"log 1");
+</span><span class='line'>    });
+</span><span class='line'>NSLog(@"log 2");
+</span><span class='line'>/* 输出:
+</span><span class='line'> * log 1
+</span><span class='line'> * log 2
+</span><span class='line'> * /</span></code></pre></td></tr></table></div></figure>
 
 
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1217,30 +1357,28 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 1&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 2&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="o">/*</span> <span class="err">输出绝大多数情况为</span><span class="o">:</span>
-</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">2</span>
-</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">1</span>
-</span><span class='line'> <span class="o">*</span> <span class="o">/</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>        NSLog(@"log 1");
+</span><span class='line'>    });
+</span><span class='line'>NSLog(@"log 2");
+</span><span class='line'>/* 输出绝大多数情况为:
+</span><span class='line'> * log 2
+</span><span class='line'> * log 1
+</span><span class='line'> * /</span></code></pre></td></tr></table></div></figure>
 
 
 <p><code>注：不能在串行（主线程是一种串行队列）线程队列的任务中，再使用 dispatch_sync 添加任务到同一个串行队列中，否则必定发生死锁。</code></p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>    <span class="c1">//必定发生死锁</span>
-</span><span class='line'>    <span class="n">dispatch_sync</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_async(dispatch_get_main_queue(), ^{
+</span><span class='line'>    //必定发生死锁
+</span><span class='line'>    dispatch_sync(dispatch_get_main_queue(), ^{
+</span><span class='line'>    });
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>dispatch_once</h3>
@@ -1249,7 +1387,7 @@
 
 <p>在单例模式中普遍使用。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1259,24 +1397,23 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
-</span><span class='line'><span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 1&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'><span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 2&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'><span class="o">/*</span> <span class="err">输出</span><span class="o">:</span>
-</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">1</span>
-</span><span class='line'> <span class="o">*</span> <span class="o">/</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>static dispatch_once_t onceToken;
+</span><span class='line'>dispatch_once(&onceToken, ^{
+</span><span class='line'>    NSLog(@"log 1");
+</span><span class='line'>});
+</span><span class='line'>dispatch_once(&onceToken, ^{
+</span><span class='line'>    NSLog(@"log 2");
+</span><span class='line'>});
+</span><span class='line'>/* 输出:
+</span><span class='line'> * log 1
+</span><span class='line'> * /</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>dispatch_after</h3>
 
 <p>dispatch_after 延后一定时间，异步执行任务</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1284,15 +1421,14 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">dispatch_after</span><span class="p">(</span><span class="n">dispatch_time</span><span class="p">(</span><span class="n">DISPATCH_TIME_NOW</span><span class="p">,</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">NSEC_PER_SEC</span><span class="p">)),</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 1&quot;</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;log 2&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="o">/*</span> <span class="err">输出</span><span class="o">:</span>
-</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">2</span>
-</span><span class='line'> <span class="o">*</span> <span class="n">log</span> <span class="mi">1</span>
-</span><span class='line'> <span class="o">*</span> <span class="o">/</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+</span><span class='line'>        NSLog(@"log 1");
+</span><span class='line'>    });
+</span><span class='line'>NSLog(@"log 2");
+</span><span class='line'>/* 输出:
+</span><span class='line'> * log 2
+</span><span class='line'> * log 1
+</span><span class='line'> * /</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>group</h2>
@@ -1309,7 +1445,7 @@
 
 <p>a）不使用 dispatch_group_enter、dispatch_group_leave 的情况</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1332,30 +1468,29 @@
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">testGCDWithGroup</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">__block</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">__block</span> <span class="kt">BOOL</span> <span class="n">isDone</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="kt">dispatch_group_t</span> <span class="n">group</span> <span class="o">=</span> <span class="n">dispatch_group_create</span><span class="p">();</span>
-</span><span class='line'>    <span class="c1">// 2</span>
-</span><span class='line'>    <span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;CGD 1 .&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="c1">// 3</span>
-</span><span class='line'>        <span class="n">dispatch_after</span><span class="p">(</span><span class="n">dispatch_time</span><span class="p">(</span><span class="n">DISPATCH_TIME_NOW</span><span class="p">,</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)(</span><span class="mf">0.3</span> <span class="o">*</span> <span class="n">NSEC_PER_SEC</span><span class="p">)),</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;CGD 1 after.&quot;</span><span class="p">);</span>
-</span><span class='line'>            <span class="n">count</span><span class="o">++</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">});</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="n">dispatch_group_notify</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;done !!!&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="c1">// 4</span>
-</span><span class='line'>        <span class="n">isDone</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
-</span><span class='line'>        <span class="n">expect</span><span class="p">(</span><span class="n">count</span><span class="p">).</span><span class="n">to</span><span class="p">.</span><span class="n">equal</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="c1">// 5</span>
-</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">isDone</span><span class="p">).</span><span class="n">will</span><span class="p">.</span><span class="n">beTruthy</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)testGCDWithGroup{
+</span><span class='line'>    __block int count = 0;
+</span><span class='line'>    __block BOOL isDone = NO;
+</span><span class='line'>    // 1
+</span><span class='line'>    dispatch_group_t group = dispatch_group_create();
+</span><span class='line'>    // 2
+</span><span class='line'>    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>        NSLog(@"CGD 1 .");
+</span><span class='line'>        // 3
+</span><span class='line'>        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>            NSLog(@"CGD 1 after.");
+</span><span class='line'>            count++;
+</span><span class='line'>        });
+</span><span class='line'>    });
+</span><span class='line'>    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+</span><span class='line'>        NSLog(@"done !!!");
+</span><span class='line'>        // 4
+</span><span class='line'>        isDone = YES;
+</span><span class='line'>        expect(count).to.equal(1);
+</span><span class='line'>    });
+</span><span class='line'>    // 5
+</span><span class='line'>    expect(isDone).will.beTruthy();
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>该测试用例执行步骤为:</p>
@@ -1381,7 +1516,7 @@
 
 <p>b）使用 dispatch_group_enter、dispatch_group_leave 的情况</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1401,27 +1536,26 @@
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">testGCDWithGroupEnterAndLeave</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">__block</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">__block</span> <span class="kt">BOOL</span> <span class="n">isDone</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
-</span><span class='line'>    <span class="kt">dispatch_group_t</span> <span class="n">group</span> <span class="o">=</span> <span class="n">dispatch_group_create</span><span class="p">();</span>
-</span><span class='line'>    <span class="n">dispatch_group_enter</span><span class="p">(</span><span class="n">group</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;CGD 1 .&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">dispatch_after</span><span class="p">(</span><span class="n">dispatch_time</span><span class="p">(</span><span class="n">DISPATCH_TIME_NOW</span><span class="p">,</span> <span class="p">(</span><span class="kt">int64_t</span><span class="p">)(</span><span class="mf">0.3</span> <span class="o">*</span> <span class="n">NSEC_PER_SEC</span><span class="p">)),</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;CGD 1 after.&quot;</span><span class="p">);</span>
-</span><span class='line'>            <span class="n">dispatch_group_leave</span><span class="p">(</span><span class="n">group</span><span class="p">);</span>
-</span><span class='line'>            <span class="n">count</span><span class="o">++</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">});</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="n">dispatch_group_notify</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;done !!!&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">isDone</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
-</span><span class='line'>        <span class="n">expect</span><span class="p">(</span><span class="n">count</span><span class="p">).</span><span class="n">to</span><span class="p">.</span><span class="n">equal</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="n">expect</span><span class="p">(</span><span class="n">isDone</span><span class="p">).</span><span class="n">will</span><span class="p">.</span><span class="n">beTruthy</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)testGCDWithGroupEnterAndLeave{
+</span><span class='line'>    __block int count = 0;
+</span><span class='line'>    __block BOOL isDone = NO;
+</span><span class='line'>    dispatch_group_t group = dispatch_group_create();
+</span><span class='line'>    dispatch_group_enter(group);
+</span><span class='line'>    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>        NSLog(@"CGD 1 .");
+</span><span class='line'>        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+</span><span class='line'>            NSLog(@"CGD 1 after.");
+</span><span class='line'>            dispatch_group_leave(group);
+</span><span class='line'>            count++;
+</span><span class='line'>        });
+</span><span class='line'>    });
+</span><span class='line'>    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+</span><span class='line'>        NSLog(@"done !!!");
+</span><span class='line'>        isDone = YES;
+</span><span class='line'>        expect(count).to.equal(1);
+</span><span class='line'>    });
+</span><span class='line'>    expect(isDone).will.beTruthy();
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>这个测试用例的全部通过，使用手动控制组任务的开始和结束，完美解决了例子 a 中碰到的问题。</p>
@@ -1442,15 +1576,14 @@
 <p>用户还可以使用 <code>dispatch_queue_create(const char *label, dispatch_queue_attr_t attr)</code> 来创建自定义的串行或并发队列。
 主线程是系统提供的<code>串行</code>队列。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//创建自定义并发队列</span>
-</span><span class='line'><span class="kt">dispatch_queue_t</span> <span class="n">concurrentQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">(</span><span class="s">&quot;com.sjpsega&quot;</span><span class="p">,</span> <span class="n">DISPATCH_QUEUE_CONCURRENT</span><span class="p">);</span>
-</span><span class='line'><span class="c1">//创建自定义创兴队列</span>
-</span><span class='line'><span class="kt">dispatch_queue_t</span> <span class="n">serialQueue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">(</span><span class="s">&quot;com.sjpsega&quot;</span><span class="p">,</span> <span class="n">DISPATCH_QUEUE_SERIAL</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//创建自定义并发队列
+</span><span class='line'>dispatch_queue_t concurrentQueue = dispatch_queue_create("com.sjpsega", DISPATCH_QUEUE_CONCURRENT);
+</span><span class='line'>//创建自定义创兴队列
+</span><span class='line'>dispatch_queue_t serialQueue = dispatch_queue_create("com.sjpsega", DISPATCH_QUEUE_SERIAL);</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>dispatch_barrier</h2>
@@ -1463,7 +1596,7 @@
 
 <p>下面以使用 dispatch_barrier 保证类类变量线程安全为例：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1476,25 +1609,24 @@
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addStudents:</span><span class="p">(</span><span class="n">Student</span> <span class="o">*</span><span class="p">)</span><span class="nv">student</span><span class="p">{</span>
-</span><span class='line'>    <span class="n">dispatch_barrier_async</span><span class="p">(</span><span class="n">_concurrentQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">_students</span> <span class="nl">addObject</span><span class="p">:</span><span class="n">student</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">}</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)addStudents:(Student *)student{
+</span><span class='line'>    dispatch_barrier_async(_concurrentQueue, ^{
+</span><span class='line'>        [_students addObject:student];
+</span><span class='line'>    });
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">students</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">__block</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">copyObj</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">dispatch_sync</span><span class="p">(</span><span class="n">_concurrentQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">copyObj</span> <span class="o">=</span>  <span class="p">[</span><span class="n">_students</span> <span class="k">copy</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">copyObj</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>- (NSArray *)students{
+</span><span class='line'>    __block NSArray *copyObj;
+</span><span class='line'>    dispatch_sync(_concurrentQueue, ^{
+</span><span class='line'>        copyObj =  [_students copy];
+</span><span class='line'>    });
+</span><span class='line'>    return copyObj;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>但是，通常保证类变量线程安全，若不是高并发的情况下，比较简单的方式是使用 <code>synchronized</code> 关键字：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1505,18 +1637,17 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addStudents:</span><span class="p">(</span><span class="n">Student</span> <span class="o">*</span><span class="p">)</span><span class="nv">student</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">@synchronized</span><span class="p">(</span><span class="n">_students</span><span class="p">){</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">_students</span> <span class="nl">addObject</span><span class="p">:</span><span class="n">student</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)addStudents:(Student *)student{
+</span><span class='line'>    @synchronized(_students){
+</span><span class='line'>        [_students addObject:student];
+</span><span class='line'>    }
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">students</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">@synchronized</span><span class="p">(</span><span class="n">_students</span><span class="p">){</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="n">_students</span> <span class="k">copy</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>- (NSArray *)students{
+</span><span class='line'>    @synchronized(_students){
+</span><span class='line'>        return [_students copy];
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>测试 Demo</h2>
@@ -1558,7 +1689,7 @@
 
 <p>伪代码如下：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1574,23 +1705,22 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//原请求</span>
-</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">requestURLString</span> <span class="o">=</span> <span class="s">@&quot;abc://xxx.com/xx.js&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="c1">//根据原请求获得的 data 数据</span>
-</span><span class='line'><span class="bp">NSData</span> <span class="o">*</span><span class="n">abcData</span> <span class="o">=</span> <span class="p">...</span>
-</span><span class='line'><span class="c1">//将原请求的自定义协议改成 http</span>
-</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">changeURLString</span> <span class="o">=</span> <span class="s">@&quot;http://xxx.com/xx.js&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="c1">//创建 response</span>
-</span><span class='line'><span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">changeURLString</span><span class="p">];</span>
-</span><span class='line'><span class="bp">NSURLResponse</span><span class="o">*</span> <span class="n">response</span> <span class="o">=</span>
-</span><span class='line'><span class="p">[[</span><span class="bp">NSURLResponse</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL</span><span class="p">:</span><span class="n">url</span>
-</span><span class='line'>                          <span class="nl">MIMEType</span><span class="p">:</span><span class="s">@&quot;application/x-javascript&quot;</span>
-</span><span class='line'>             <span class="nl">expectedContentLength</span><span class="p">:</span><span class="n">abcData</span><span class="p">.</span><span class="n">length</span>
-</span><span class='line'>                  <span class="nl">textEncodingName</span><span class="p">:</span><span class="s">@&quot;UTF-8&quot;</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didReceiveResponse</span><span class="p">:</span><span class="n">response</span> <span class="nl">cacheStoragePolicy</span><span class="p">:</span><span class="n">NSURLCacheStorageNotAllowed</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didLoadData</span><span class="p">:</span><span class="n">abcData</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocolDidFinishLoading</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//原请求
+</span><span class='line'>NSString *requestURLString = @"abc://xxx.com/xx.js";
+</span><span class='line'>//根据原请求获得的 data 数据
+</span><span class='line'>NSData *abcData = ...
+</span><span class='line'>//将原请求的自定义协议改成 http
+</span><span class='line'>NSString *changeURLString = @"http://xxx.com/xx.js";
+</span><span class='line'>//创建 response
+</span><span class='line'>NSURL *url = [NSURL URLWithString:changeURLString];
+</span><span class='line'>NSURLResponse* response =
+</span><span class='line'>[[NSURLResponse alloc] initWithURL:url
+</span><span class='line'>                          MIMEType:@"application/x-javascript"
+</span><span class='line'>             expectedContentLength:abcData.length
+</span><span class='line'>                  textEncodingName:@"UTF-8"];
+</span><span class='line'>[[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
+</span><span class='line'>[[self client] URLProtocol:self didLoadData:abcData];
+</span><span class='line'>[[self client] URLProtocolDidFinishLoading:self];</span></code></pre></td></tr></table></div></figure>
 
 
 <p>本来结合方法一的解决方式，创建 response 的时候，在 url 后加上随机字符串，但是经过试验，该方案<code>无效</code>，缓存始终存在。</p>
@@ -1619,115 +1749,6 @@
 <p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i">URL Loading System</a></p>
 
 <p><a href="http://nshipster.cn/nsurlcache/">NSURLCache</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[台湾游记]]></title>
-    <link href="http://sjpsega.me/blog/2015/04/27/taiwanyou/"/>
-    <updated>2015-04-27T01:41:49+08:00</updated>
-    <id>http://sjpsega.me/blog/2015/04/27/taiwanyou</id>
-    <content type="html"><![CDATA[<p>4 月份天气不冷不热，是个出游的好时期。趁着工作上的事情暂时告一段落，忙里偷闲，delay 了近半年的台湾游终于成行。</p>
-
-<h2>注意事项</h2>
-
-<p>因为是跟团游，所以操心的事情不多，去台湾前看了一些别人的攻略，自己去了次，体会更深了，记录下。</p>
-
-<ul>
-<li>去机场坐飞机一定要赶早。
-去的那天因为我们要去上海浦东坐下午1点10分的飞机，本以为早上8点去武林广场坐大巴来得及，结果大巴要开3个半小时，顺利的话，11点半到机场。但是坐国际航班需要提前2个小时检票，时间太紧张，结果我们雇了辆小车，和一个大哥拼车，我们俩人花了800RMB，赶到机场&hellip;</li>
-<li>货币兑换最好带RMB到台湾再换。在台湾的机场用RMB换台币，汇率好，兑换金额不限，每笔只要30台币（约6RMB）。回大陆前，还能在机场换回RMB。
-我自己是带了招行卡去台湾ATM机上换的，结果每笔最低10RMB手续费，换的多，手续费更高。听说华夏卡免手续费，但是我没有这卡，无从验证。</li>
-<li>台湾电信运营商针对游客的7天无限流量套餐蛮划算的，450新台币，可在机场或代理商店里办理，很方便。这年头没网上怎么行。</li>
-</ul>
-
-
-<h2>台湾印象</h2>
-
-<p>跟团游时间很紧，基本是上车睡觉，下车拍照的模式，再加上购物点有点多，蛮郁闷的。
-但是这丝毫不影响我们对台湾的好印象，简单的说就是民风纯朴，风景秀丽。</p>
-
-<h3>day 1</h3>
-
-<p>第二天的路线是：国父纪念馆 -> 101大厦 -> 士林夜市 -> 福华大酒店
-我们从桃园机场着陆，到达宝岛台湾，坐车很快就到了台北，台湾的城市比较小，从一个城市开车很快就到另一个城市了，在大陆是不可想象的。</p>
-
-<ul>
-<li>在国父纪念馆看了交接仪式和降旗仪式，简单了解了孙中山的生平。</li>
-<li>101大厦89楼鸟瞰了台北的全景，和全球唯一外露的，可供游客参观的<a href="http://baike.baidu.com/link?url=gByDUgpWBQRL0EzaOtar4Sma6NquYdUljNg4IXVXqPZzwPEo1ss-svGZ7X1YJzeWSxpqXSVDjYtAkA50xx2bTq">风阻尼器</a>。</li>
-<li>在士林夜市吃了许多台湾的地道美食，有拍摄《转角遇到爱》的大头龙的蚵仔煎，号称比脸大的豪大大鸡排，名字奇怪的棺材板等等。
-吃完美食，回到第一晚的酒店，福华大酒店，据说很有名。放下行李，立马去市区转转，我的目的是去办个手机卡，用来上网。因为不熟悉路，问了好几次台北的路人，才好不容易找到了中华电信办理了手机卡。通过问路，问的几个都是年轻人，都特别耐心，给人的印象很好，特别是一个便利店的店员，问他路的时候，店里其实蛮忙的，他特意放下手头的工作，让同事打理，把我们领到店门口给我们指路。</li>
-</ul>
-
-
-<h3>day 2</h3>
-
-<p>第二天的路线是：士林官邸 -> 台北故宫博物馆 -> 维格饼屋 -> 日月潭大酒店</p>
-
-<ul>
-<li>士林官邸是老蒋的住处，地方很大，环境优美，有教堂，有花园，是个养人的好地方。</li>
-<li>台北故宫博物馆，诠释了浓缩就是精华，东西不多，但都是精品。规定有点多：不能穿拖鞋、不能背双肩包、不能带水杯进去、不能带单反、不准拍照等等。</li>
-<li>维格饼屋是第一个购物点，维格有名的是凤梨酥。比较有意思的是，在这里要亲手做凤梨酥。因为店家已经准备好了馅料和面团，所以只要稍微揉搓，放入馅料，搓成团，然后放入模具，造型各异的凤梨酥就搞定了。
-在这里买了点凤梨酥、绿豆糕、牛轧糖，准备回去给家人朋友带点。值得一说的是，我觉得绿豆糕比凤梨酥好吃多了。</li>
-<li>下午基本是在车上度过，大概3个小时的行程，从台北赶到了日月潭，到达的酒店的时候，天色已晚。
-晚餐在酒店里吃自助，自助很赞，连鲍鱼、螃蟹、鱿鱼、生鱼片、刺身都有。但我最喜欢这里的粉丝担仔面，加上一勺辣椒，特美味。
-吃完晚餐，到日月潭的街区逛了逛，这里给人的感觉非常宁静，人不多。之前给我有相同感觉的是日本的河口湖，都是在湖边的小镇。</li>
-</ul>
-
-
-<h3>day 3</h3>
-
-<p>第三天的行程：日月潭 -> 九族文化村 -> 钰通大饭店</p>
-
-<ul>
-<li>日月潭蛮大的，湖水是湛蓝的，水深达700余米，感觉像云南的洱海，天蓝水蓝，浑然一体。早上一团人坐游艇在日月潭里兜了一圈，游览了玄光寺。值得一说的是，玄光寺这里买的凤梨是本次在台湾吃到的最好吃的，很甜。</li>
-<li>下午在日月潭旁，坐缆车来到了九族文化村，这里看了传统的民俗表演，还有好多刺激的游乐设施，比如疯狂过山车等等。</li>
-<li>再坐车到嘉义，晚饭吃了小火锅，晚上入住钰通大饭店。说是这里是台湾的乡下，但是和大陆的乡下感觉不同，大陆的乡下破破的，真是乡下；台湾的乡下该有的都有，比大城市空旷些，感觉住在这里很舒服。</li>
-</ul>
-
-
-<h3>day 4</h3>
-
-<p>第四天的行程：阿里山 -> yuyupas 邹族文化园区 -> 高雄85大楼君鸿大酒店 -> 六合夜市</p>
-
-<ul>
-<li>早晨早早起床，6点半出发前往阿里山，看了阿里山神木。因为是跟团游，大巴上山，大巴下山，少了爬山的感觉，对阿里山的感觉一般，再加上大陆的名山大川很多。</li>
-<li>yuyupas 邹族文化园区，又是一个购物点，这里主要是卖茶叶，阿里山山茶，喝了点，口感一般。</li>
-<li>下午坐车来到高雄，入住85大楼君鸿大酒店，背靠高雄港，很气派。</li>
-<li>晚上晚餐自理，我们来到六合夜市，这是个观光客居多的夜市，每个小吃平均是100新台币，价格还行。吃了这里的超有名的郑老牌木瓜牛奶，马英九都来吃过三次；老师傅烤制的泰国虾等等。</li>
-</ul>
-
-
-<h3>day 5</h3>
-
-<p>第五天的行程：旗津海岸公园 -> 猫鼻头公园 -> 恒春渔港吃海鲜 -> 关山看日落 -> 福华度假酒店 -> 垦丁大街</p>
-
-<ul>
-<li>早上轮渡到旗津看海，因为天气有点燥热，加上没随身带凉鞋，拍了拍照就走了。看了一间庙宇，在旁边的一间冰铺吃了好吃的芒果刨冰。</li>
-<li>坐车来到台湾岛南端 - 垦丁，一路上看到好多凤梨、香蕉树，在猫鼻头公园看了天蓝海蓝的美景。</li>
-<li>来到恒春的一个小渔港吃海鲜，因为这里来吃的不仅有游客，还有台湾本地人，所以价格还不错；特别是生鱼片，100新台币有近20片，但是我对生鱼片无爱啊&hellip;在这里吃了两个打海鲜，共花了2500新台币，是在台湾最奢侈的一餐了。</li>
-<li>吃完海鲜，5点前往关山看日落。在天蓝海蓝的地方看日落真美。</li>
-<li>晚上入住福华度假酒店，酒店里的土著木雕、椅子等，很特别。</li>
-<li>逛了带感的垦丁大街，吃了点小吃。</li>
-</ul>
-
-
-<h3>day 6</h3>
-
-<p>第五天的行程：台湾最南点 -> 龙磐公园 -> 恒春古城 -> 高雄国际机场</p>
-
-<ul>
-<li>在台湾岛最南端，走过一处幽静的小路，看到最南端的标志建筑。</li>
-<li>龙磐公园是一个天大地大草原小的地方，很漂亮，在悬崖边看海，别有一番风味。</li>
-<li>恒春古城很一般，就是一处复建的城墙……</li>
-<li>然后，6天行程结束，依依不舍坐飞机回家……</li>
-</ul>
-
-
-<h3>结语</h3>
-
-<p>这次的台湾游运气这不错，6天都是晴空万里，只有第6天下了一点点小雨，还躲过了今年为止台湾最大的花莲地震。
-台湾很美，时间太少，行程太赶，愿下次再来。</p>
 ]]></content>
   </entry>
   

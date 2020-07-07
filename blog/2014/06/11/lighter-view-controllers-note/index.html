@@ -113,30 +113,28 @@
 
 <h3>添加Child View Controllers的步骤</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">ChildViewController</span> <span class="o">*</span><span class="n">childVC</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ChildViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="nb">self</span> <span class="nl">addChildViewController</span><span class="p">:</span><span class="n">childVC</span><span class="p">];</span>
-</span><span class='line'><span class="bp">CGRect</span> <span class="n">frame</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
-</span><span class='line'><span class="n">childVC</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">childVC</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="nl">didMoveToParentViewController</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ChildViewController *childVC = [[ChildViewController alloc] init];
+</span><span class='line'>[self addChildViewController:childVC];
+</span><span class='line'>CGRect frame = self.view.bounds;
+</span><span class='line'>childVC.view.frame = frame;
+</span><span class='line'>[self.view addSubview:childVC.view]; 
+</span><span class='line'>[childVC didMoveToParentViewController:self];</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>移除Child View Controllers的步骤</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="nl">willMoveToParentViewController</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">childVC</span><span class="p">.</span><span class="n">view</span> <span class="n">removeFromSuperview</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">childVC</span> <span class="n">removeFromParentViewController</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[childVC willMoveToParentViewController:nil];
+</span><span class='line'>[childVC.view removeFromSuperview];
+</span><span class='line'>[childVC removeFromParentViewController];</span></code></pre></td></tr></table></div></figure>
 
 
 <p>源自：<a href="http://geeklu.com/2014/05/custom-container-view-controller/">Custom Container View Controller</a></p>
@@ -151,7 +149,7 @@
 
 <h3>过场动画 - 新老VC替换</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -163,19 +161,18 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">toController</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">fromController</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
-</span><span class='line'><span class="p">[</span><span class="nb">self</span> <span class="nl">addChildViewController</span><span class="p">:</span><span class="n">toController</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">fromController</span> <span class="nl">willMoveToParentViewController</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="nb">self</span> <span class="nl">transitionFromViewController</span><span class="p">:</span><span class="n">fromController</span>
-</span><span class='line'>                  <span class="nl">toViewController</span><span class="p">:</span><span class="n">toController</span>
-</span><span class='line'>                          <span class="nl">duration</span><span class="p">:</span><span class="mf">0.2</span>
-</span><span class='line'>                           <span class="nl">options</span><span class="p">:</span><span class="n">direction</span> <span class="o">|</span> <span class="n">UIViewAnimationOptionCurveEaseIn</span>
-</span><span class='line'>                        <span class="nl">animations</span><span class="p">:</span><span class="nb">nil</span>
-</span><span class='line'>                        <span class="nl">completion</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">finished</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                            <span class="p">[</span><span class="n">toController</span> <span class="nl">didMoveToParentViewController</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
-</span><span class='line'>                            <span class="p">[</span><span class="n">fromController</span> <span class="n">removeFromParentViewController</span><span class="p">];</span>
-</span><span class='line'>                        <span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>toController.view.frame = fromController.view.bounds;                           
+</span><span class='line'>[self addChildViewController:toController];                                     
+</span><span class='line'>[fromController willMoveToParentViewController:nil];   
+</span><span class='line'>[self transitionFromViewController:fromController
+</span><span class='line'>                  toViewController:toController
+</span><span class='line'>                          duration:0.2
+</span><span class='line'>                           options:direction | UIViewAnimationOptionCurveEaseIn
+</span><span class='line'>                        animations:nil
+</span><span class='line'>                        completion:^(BOOL finished) {
+</span><span class='line'>                            [toController didMoveToParentViewController:self];  
+</span><span class='line'>                            [fromController removeFromParentViewController];    
+</span><span class='line'>                        }];</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>代码学习：</h2>
@@ -184,17 +181,16 @@
 
 <h3>反序列化</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSData</span> <span class="nl">dataWithContentsOfURL</span><span class="p">:</span><span class="n">archiveURL</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">error</span><span class="p">:</span><span class="nb">NULL</span><span class="p">];</span>
-</span><span class='line'><span class="bp">NSKeyedUnarchiver</span> <span class="o">*</span><span class="n">unarchiver</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSKeyedUnarchiver</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initForReadingWithData</span><span class="p">:</span><span class="n">data</span><span class="p">];</span>
-</span><span class='line'><span class="n">_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">unarchiver</span> <span class="nl">decodeObjectOfClass</span><span class="p">:[</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">]</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&quot;users&quot;</span><span class="p">];</span>
-</span><span class='line'><span class="n">_photos</span> <span class="o">=</span> <span class="p">[</span><span class="n">unarchiver</span> <span class="nl">decodeObjectOfClass</span><span class="p">:[</span><span class="bp">NSArray</span> <span class="k">class</span><span class="p">]</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&quot;photos&quot;</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">unarchiver</span> <span class="n">finishDecoding</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSData *data = [NSData dataWithContentsOfURL:archiveURL options:0 error:NULL];
+</span><span class='line'>NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+</span><span class='line'>_users = [unarchiver decodeObjectOfClass:[NSArray class] forKey:@"users"];
+</span><span class='line'>_photos = [unarchiver decodeObjectOfClass:[NSArray class] forKey:@"photos"];
+</span><span class='line'>[unarchiver finishDecoding];</span></code></pre></td></tr></table></div></figure>
 
 
 <p><a href="http://stackoverflow.com/questions/17301769/when-to-use-nssecurecoding">When to use NSSecureCoding</a></p>
@@ -275,6 +271,10 @@ var uyan_config = {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/07/04/2020midyear-invest-summary/">2020 年中投资总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2020/02/15/2019summary/">2019 年终总结</a>
       </li>
     
@@ -288,10 +288,6 @@ var uyan_config = {
     
       <li class="post">
         <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/11/23/crazyusstock/">疯狂的美股</a>
       </li>
     
   </ul>

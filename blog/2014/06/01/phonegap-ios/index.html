@@ -111,20 +111,18 @@
 
 <p>安装PhoneGap:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">sudo</span> <span class="n">npm</span> <span class="n">install</span> <span class="o">-</span><span class="n">g</span> <span class="n">phonegap</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo npm install -g phonegap</span></code></pre></td></tr></table></div></figure>
 
 
 <p>创建phoneGap应用:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">phonegap</span> <span class="n">create</span> <span class="n">my</span><span class="o">-</span><span class="n">app</span>
-</span><span class='line'><span class="n">cd</span> <span class="n">my</span><span class="o">-</span><span class="n">app</span>
-</span><span class='line'><span class="n">phonegap</span> <span class="n">run</span> <span class="n">ios</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>phonegap create my-app
+</span><span class='line'>cd my-app
+</span><span class='line'>phonegap run ios</span></code></pre></td></tr></table></div></figure>
 
 
 <p>具体可看<a href="http://phonegap.com/">phonegap官网</a>进行学习。</p>
@@ -147,14 +145,13 @@
 
 <p>在iOS中，js调用native并没有提供原生的实现，只能通过UIWebView相关的UIWebViewDelegate协议的</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">shouldStartLoadWithRequest:</span><span class="p">(</span><span class="bp">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="nv">request</span> <span class="nf">navigationType:</span><span class="p">(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="nv">navigationType</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType</span></code></pre></td></tr></table></div></figure>
 
 
 <p>方法来做拦截，并在这个方法中，根据url的协议或特征字符串来做调用方法或触发事件等工作，如</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -173,26 +170,25 @@
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">/*</span>
-</span><span class='line'><span class="o">*</span> <span class="err">方法的返回值是</span><span class="kt">BOOL</span><span class="err">值。</span>
-</span><span class='line'><span class="o">*</span> <span class="err">返回</span><span class="nb">YES</span><span class="err">：表示让浏览器执行默认操作，比如某个</span><span class="n">a</span><span class="err">链接跳转</span>
-</span><span class='line'><span class="o">*</span> <span class="err">返回</span><span class="nb">NO</span><span class="err">：表示不执行浏览器的默认操作，这里因为通过</span><span class="n">url</span><span class="err">协议来判断</span><span class="n">js</span><span class="err">执行</span><span class="n">native</span><span class="err">的操作，肯定不是浏览器默认操作，故返回</span><span class="nb">NO</span>
-</span><span class='line'><span class="o">*</span> <span class="o">/</span>
-</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nl">webView</span><span class="p">:(</span><span class="bp">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="n">webView</span> <span class="nl">shouldStartLoadWithRequest</span><span class="p">:(</span><span class="bp">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="n">request</span> <span class="nl">navigationType</span><span class="p">:(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="n">navigationType</span> <span class="p">{</span>
-</span><span class='line'>    <span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">request</span> <span class="n">URL</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">([[</span><span class="n">url</span> <span class="n">scheme</span><span class="p">]</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="s">@&quot;callFunction&quot;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">//调用原生方法</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/*
+</span><span class='line'>* 方法的返回值是BOOL值。
+</span><span class='line'>* 返回YES：表示让浏览器执行默认操作，比如某个a链接跳转
+</span><span class='line'>* 返回NO：表示不执行浏览器的默认操作，这里因为通过url协议来判断js执行native的操作，肯定不是浏览器默认操作，故返回NO
+</span><span class='line'>* /
+</span><span class='line'>- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+</span><span class='line'>    NSURL *url = [request URL];
+</span><span class='line'>    if ([[url scheme] isEqualToString:@"callFunction") {
+</span><span class='line'>        //调用原生方法
 </span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(([[</span><span class="n">url</span> <span class="n">scheme</span><span class="p">]</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="s">@&quot;sendEvent&quot;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">//触发事件</span>
+</span><span class='line'>        return NO;
+</span><span class='line'>    } else if (([[url scheme] isEqualToString:@"sendEvent") {
+</span><span class='line'>        //触发事件
 </span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>        return NO;
+</span><span class='line'>    } else {
+</span><span class='line'>        return YES;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>值得注意的是，通过这个方式，js调用native是<code>异步</code>的。</p>
@@ -201,9 +197,8 @@
 
 <p>native调用js非常简洁方便，只需要</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString</span><span class="p">:</span><span class="s">@&quot;alert(&#39;hello world!&#39;)&quot;</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[webView stringByEvaluatingJavaScriptFromString:@"alert('hello world!')"];</span></code></pre></td></tr></table></div></figure>
 
 
 <p>并且该方法是<code>同步</code>的。</p>
@@ -216,20 +211,19 @@
 
 <p>Dialog是一个PhoneGap的插件，可以看<a href="https://github.com/apache/cordova-plugin-dialogs/blob/master/doc/index.md">dialog 插件文档</a>，学习下载并使用该插件。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="err">这里有个很重要的事需要说明一下：</span>
-</span><span class='line'><span class="err">目前</span><span class="n">PhoneGap</span><span class="err">的文档更新非常不及时，特别是插件的使用方面，比如</span><span class="n">Dialog</span><span class="err">插件的使用，文档中写的是使用</span><span class="n">navigator</span><span class="p">.</span><span class="n">notification</span><span class="p">.</span><span class="n">alert</span><span class="err">，但是经过我的摸索，因为现在</span><span class="n">PhoneGap</span><span class="err">使用</span><span class="n">AMD</span><span class="err">的方式来管理插件，所以应该是使用</span><span class="n">cordova</span><span class="p">.</span><span class="n">require</span><span class="p">(</span><span class="s">&quot;cordova/plugin/notification&quot;</span><span class="p">).</span><span class="n">alert</span><span class="err">的方式来调用。</span>
-</span><span class='line'><span class="err">插件的合并方面，也有很多坑，主要是文档不全</span> <span class="o">-</span> <span class="o">-|||</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>这里有个很重要的事需要说明一下：
+</span><span class='line'>目前PhoneGap的文档更新非常不及时，特别是插件的使用方面，比如Dialog插件的使用，文档中写的是使用navigator.notification.alert，但是经过我的摸索，因为现在PhoneGap使用AMD的方式来管理插件，所以应该是使用cordova.require("cordova/plugin/notification").alert的方式来调用。
+</span><span class='line'>插件的合并方面，也有很多坑，主要是文档不全 - -|||</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>js部分</h3>
 
 <p>在html上添加一个button，然后通过下列代码调用：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -241,24 +235,23 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">alertDismissed</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// do something</span>
-</span><span class='line'><span class="p">}</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function alertDismissed() {
+</span><span class='line'>    // do something
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="kd">function</span> <span class="nx">showAlert</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">cordova</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;cordova/plugin/notification&quot;</span><span class="p">).</span><span class="nx">alert</span><span class="p">(</span>
-</span><span class='line'>        <span class="s1">&#39;You are the winner!&#39;</span><span class="p">,</span>  <span class="c1">// message</span>
-</span><span class='line'>        <span class="nx">alertDismissed</span><span class="p">,</span>         <span class="c1">// callback</span>
-</span><span class='line'>        <span class="s1">&#39;Game Over&#39;</span><span class="p">,</span>            <span class="c1">// title</span>
-</span><span class='line'>        <span class="s1">&#39;Done&#39;</span>                  <span class="c1">// buttonName</span>
-</span><span class='line'>    <span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>function showAlert() {
+</span><span class='line'>    cordova.require("cordova/plugin/notification").alert(
+</span><span class='line'>        'You are the winner!',  // message
+</span><span class='line'>        alertDismissed,         // callback
+</span><span class='line'>        'Game Over',            // title
+</span><span class='line'>        'Done'                  // buttonName
+</span><span class='line'>    );
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>再看下对应的<code>cordova/plugin/notification</code>的代码：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -279,28 +272,27 @@
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">exec</span> <span class="o">=</span> <span class="nx">cordova</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cordova/exec&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">platform</span> <span class="o">=</span> <span class="nx">cordova</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cordova/platform&#39;</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var exec = cordova.require('cordova/exec');
+</span><span class='line'>var platform = cordova.require('cordova/platform');
 </span><span class='line'>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>module.exports = {
+</span><span class='line'>    
+</span><span class='line'>    /**
+</span><span class='line'>     * Open a native alert dialog, with a customizable title and button text.
+</span><span class='line'>     *
+</span><span class='line'>     * @param {String} message              Message to print in the body of the alert
+</span><span class='line'>     * @param {Function} completeCallback   The callback that is called when user clicks on a button.
+</span><span class='line'>     * @param {String} title                Title of the alert dialog (default: Alert)
+</span><span class='line'>     * @param {String} buttonLabel          Label of the close button (default: OK)
+</span><span class='line'>     */
+</span><span class='line'>    alert: function(message, completeCallback, title, buttonLabel) {
+</span><span class='line'>        var _title = (title || "Alert");
+</span><span class='line'>        var _buttonLabel = (buttonLabel || "OK");
+</span><span class='line'>        exec(completeCallback, null, "Notification", "alert", [message, _title, _buttonLabel]);
+</span><span class='line'>    }
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * Open a native alert dialog, with a customizable title and button text.</span>
-</span><span class='line'><span class="cm">     *</span>
-</span><span class='line'><span class="cm">     * @param {String} message              Message to print in the body of the alert</span>
-</span><span class='line'><span class="cm">     * @param {Function} completeCallback   The callback that is called when user clicks on a button.</span>
-</span><span class='line'><span class="cm">     * @param {String} title                Title of the alert dialog (default: Alert)</span>
-</span><span class='line'><span class="cm">     * @param {String} buttonLabel          Label of the close button (default: OK)</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="nx">alert</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">completeCallback</span><span class="p">,</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">buttonLabel</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">_title</span> <span class="o">=</span> <span class="p">(</span><span class="nx">title</span> <span class="o">||</span> <span class="s2">&quot;Alert&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">_buttonLabel</span> <span class="o">=</span> <span class="p">(</span><span class="nx">buttonLabel</span> <span class="o">||</span> <span class="s2">&quot;OK&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">exec</span><span class="p">(</span><span class="nx">completeCallback</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;Notification&quot;</span><span class="p">,</span> <span class="s2">&quot;alert&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">message</span><span class="p">,</span> <span class="nx">_title</span><span class="p">,</span> <span class="nx">_buttonLabel</span><span class="p">]);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">....</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>....</span></code></pre></td></tr></table></div></figure>
 
 
 <p>可以看到alert最终其实是调用了<code>exec</code>方法来调用native代码的，<code>exec</code>方法非常关键，是PhoneGap js调用native的核心代码。</p>
@@ -309,7 +301,7 @@
 
 <p>因为对应的<code>cordova/exec</code>源码非常长，我只能截取最关键的代码并做说明：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -362,60 +354,59 @@
 <span class='line-number'>51</span>
 <span class='line-number'>52</span>
 <span class='line-number'>53</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;cordova/exec&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>define("cordova/exec", function(require, exports, module) {
 </span><span class='line'>
-</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'>    ...
 </span><span class='line'>
-</span><span class='line'>    <span class="kd">function</span> <span class="nx">iOSExec</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">...</span>
+</span><span class='line'>    function iOSExec() {
+</span><span class='line'>        ...
 </span><span class='line'>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">successCallback</span><span class="p">,</span> <span class="nx">failCallback</span><span class="p">,</span> <span class="nx">service</span><span class="p">,</span> <span class="nx">action</span><span class="p">,</span> <span class="nx">actionArgs</span><span class="p">,</span> <span class="nx">splitCommand</span><span class="p">;</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">callbackId</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>        var successCallback, failCallback, service, action, actionArgs, splitCommand;
+</span><span class='line'>        var callbackId = null;
+</span><span class='line'>        
+</span><span class='line'>        ...
 </span><span class='line'>
-</span><span class='line'>        <span class="p">...</span>
+</span><span class='line'>        // 格式化传入参数
+</span><span class='line'>        successCallback = arguments[0]; //成功的回调函数
+</span><span class='line'>        failCallback = arguments[1];    //失败的回调函数
+</span><span class='line'>        service = arguments[2];         //表示调用native类的类名
+</span><span class='line'>        action = arguments[3];          //表示调用native类的一个方法
+</span><span class='line'>        actionArgs = arguments[4];      //参数
 </span><span class='line'>
-</span><span class='line'>        <span class="c1">// 格式化传入参数</span>
-</span><span class='line'>        <span class="nx">successCallback</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="c1">//成功的回调函数</span>
-</span><span class='line'>        <span class="nx">failCallback</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>    <span class="c1">//失败的回调函数</span>
-</span><span class='line'>        <span class="nx">service</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>         <span class="c1">//表示调用native类的类名</span>
-</span><span class='line'>        <span class="nx">action</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>          <span class="c1">//表示调用native类的一个方法</span>
-</span><span class='line'>        <span class="nx">actionArgs</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>      <span class="c1">//参数</span>
+</span><span class='line'>        //默认callbackId为'INVALID'，表示不需要回调
+</span><span class='line'>        callbackId = 'INVALID';
+</span><span class='line'>        
+</span><span class='line'>        ...
 </span><span class='line'>
-</span><span class='line'>        <span class="c1">//默认callbackId为&#39;INVALID&#39;，表示不需要回调</span>
-</span><span class='line'>        <span class="nx">callbackId</span> <span class="o">=</span> <span class="s1">&#39;INVALID&#39;</span><span class="p">;</span>
+</span><span class='line'>        //如果传入参数有successCallback或failCallback，说明需要回调，就设置callbackId，并存储对应的回调函数
+</span><span class='line'>        if (successCallback || failCallback) {
+</span><span class='line'>            callbackId = service + cordova.callbackId++;
+</span><span class='line'>            cordova.callbacks[callbackId] =
+</span><span class='line'>                {success:successCallback, fail:failCallback};
+</span><span class='line'>        }
 </span><span class='line'>
-</span><span class='line'>        <span class="p">...</span>
+</span><span class='line'>        //格式化传入的service、action、actionArgs，并存储，准备native代码来调用
+</span><span class='line'>        actionArgs = massageArgsJsToNative(actionArgs);
 </span><span class='line'>
-</span><span class='line'>        <span class="c1">//如果传入参数有successCallback或failCallback，说明需要回调，就设置callbackId，并存储对应的回调函数</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">successCallback</span> <span class="o">||</span> <span class="nx">failCallback</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">callbackId</span> <span class="o">=</span> <span class="nx">service</span> <span class="o">+</span> <span class="nx">cordova</span><span class="p">.</span><span class="nx">callbackId</span><span class="o">++</span><span class="p">;</span>
-</span><span class='line'>            <span class="nx">cordova</span><span class="p">.</span><span class="nx">callbacks</span><span class="p">[</span><span class="nx">callbackId</span><span class="p">]</span> <span class="o">=</span>
-</span><span class='line'>                <span class="p">{</span><span class="nx">success</span><span class="o">:</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">fail</span><span class="o">:</span><span class="nx">failCallback</span><span class="p">};</span>
-</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        var command = [callbackId, service, action, actionArgs];
 </span><span class='line'>
-</span><span class='line'>        <span class="c1">//格式化传入的service、action、actionArgs，并存储，准备native代码来调用</span>
-</span><span class='line'>        <span class="nx">actionArgs</span> <span class="o">=</span> <span class="nx">massageArgsJsToNative</span><span class="p">(</span><span class="nx">actionArgs</span><span class="p">);</span>
+</span><span class='line'>        commandQueue.push(JSON.stringify(command));
 </span><span class='line'>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">command</span> <span class="o">=</span> <span class="p">[</span><span class="nx">callbackId</span><span class="p">,</span> <span class="nx">service</span><span class="p">,</span> <span class="nx">action</span><span class="p">,</span> <span class="nx">actionArgs</span><span class="p">];</span>
+</span><span class='line'>        ...
 </span><span class='line'>
-</span><span class='line'>        <span class="nx">commandQueue</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">command</span><span class="p">));</span>
+</span><span class='line'>        //通过创建一个iframe并设置src，给native代码一个指令，开始执行js调用native的过程
+</span><span class='line'>        execIframe = execIframe || createExecIframe();
+</span><span class='line'>        if (!execIframe.contentWindow) {
+</span><span class='line'>            execIframe = createExecIframe();
+</span><span class='line'>        }
+</span><span class='line'>        execIframe.src = "gap://ready";
 </span><span class='line'>
-</span><span class='line'>        <span class="p">...</span>
+</span><span class='line'>        ...
+</span><span class='line'>    }
 </span><span class='line'>
-</span><span class='line'>        <span class="c1">//通过创建一个iframe并设置src，给native代码一个指令，开始执行js调用native的过程</span>
-</span><span class='line'>        <span class="nx">execIframe</span> <span class="o">=</span> <span class="nx">execIframe</span> <span class="o">||</span> <span class="nx">createExecIframe</span><span class="p">();</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">execIframe</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">execIframe</span> <span class="o">=</span> <span class="nx">createExecIframe</span><span class="p">();</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="nx">execIframe</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;gap://ready&quot;</span><span class="p">;</span>
+</span><span class='line'>    module.exports = iOSExec;
 </span><span class='line'>
-</span><span class='line'>        <span class="p">...</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">iOSExec</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
 <p>为了调用native方法，exec方法做了大量初始化的工作，这么做的原因，还是因为<code>iOS没有提供直接的方法来执行js调用native，不能把参数直接传递给native，所以只能通过js端存储对应操作的所有参数，然后通过指令来让native代码来回调的方式间接完成。</code></p>
@@ -428,7 +419,7 @@
 
 <p>前面js通过创建一个iframe并发送<code>gap://ready</code>这个指令来告诉native开始执行操作。native中对应的操作在<code>CDVViewController.m</code>文件中的<code>webView:shouldStartLoadWithRequest:navigationType:</code>方法：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -447,26 +438,25 @@
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">UIWebView</span><span class="o">*</span><span class="p">)</span><span class="nv">theWebView</span> <span class="nf">shouldStartLoadWithRequest:</span><span class="p">(</span><span class="bp">NSURLRequest</span><span class="o">*</span><span class="p">)</span><span class="nv">request</span> <span class="nf">navigationType:</span><span class="p">(</span><span class="n">UIWebViewNavigationType</span><span class="p">)</span><span class="nv">navigationType</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="bp">NSURL</span><span class="o">*</span> <span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">request</span> <span class="n">URL</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (BOOL)webView:(UIWebView*)theWebView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType
+</span><span class='line'>{
+</span><span class='line'>    NSURL* url = [request URL];
 </span><span class='line'>
-</span><span class='line'>    <span class="cm">/*</span>
-</span><span class='line'><span class="cm">     * 判断url的协议以&quot;gap&quot;开头</span>
-</span><span class='line'><span class="cm">     * 执行在js端调用cordova.exec()的command队列</span>
-</span><span class='line'><span class="cm">     * 注：这里的command表示js调用native</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">([[</span><span class="n">url</span> <span class="n">scheme</span><span class="p">]</span> <span class="nl">isElaqualToString</span><span class="p">:</span><span class="s">@&quot;gap&quot;</span><span class="p">])</span> <span class="p">{</span>
-</span><span class='line'>       <span class="c1">//_commandQueue即CDVCommandQueue类</span>
-</span><span class='line'>        <span class="c1">//从js端拉取command，即存储在js端commandQueue数组中的数据</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">_commandQueue</span> <span class="n">fetchCommandsFromJs</span><span class="p">];</span>
-</span><span class='line'>        <span class="c1">//开始执行command</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">_commandQueue</span> <span class="n">executePending</span><span class="p">];</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    /*
+</span><span class='line'>     * 判断url的协议以"gap"开头
+</span><span class='line'>     * 执行在js端调用cordova.exec()的command队列
+</span><span class='line'>     * 注：这里的command表示js调用native
+</span><span class='line'>     */
+</span><span class='line'>    if ([[url scheme] isElaqualToString:@"gap"]) {
+</span><span class='line'>       //_commandQueue即CDVCommandQueue类
+</span><span class='line'>        //从js端拉取command，即存储在js端commandQueue数组中的数据
+</span><span class='line'>        [_commandQueue fetchCommandsFromJs];
+</span><span class='line'>        //开始执行command
+</span><span class='line'>        [_commandQueue executePending];
+</span><span class='line'>        return NO;
+</span><span class='line'>    }
+</span><span class='line'>...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>到这里，其实已经走完js调用native的主要过程了。</p>
@@ -475,21 +465,20 @@
 
 <h4>CDVCommandQueue</h4>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">fetchCommandsFromJs</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 获取js端存储的command，并在native暂存</span>
-</span><span class='line'>    <span class="bp">NSString</span><span class="o">*</span> <span class="n">queuedCommandsJSON</span> <span class="o">=</span> <span class="p">[</span><span class="n">_viewController</span><span class="p">.</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString</span><span class="p">:</span>
-</span><span class='line'>        <span class="s">@&quot;cordova.require(&#39;cordova/exec&#39;).nativeFetchMessages()&quot;</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="nl">enqueueCommandBatch</span><span class="p">:</span><span class="n">queuedCommandsJSON</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)fetchCommandsFromJs
+</span><span class='line'>{
+</span><span class='line'>    // 获取js端存储的command，并在native暂存
+</span><span class='line'>    NSString* queuedCommandsJSON = [_viewController.webView stringByEvaluatingJavaScriptFromString:
+</span><span class='line'>        @"cordova.require('cordova/exec').nativeFetchMessages()"];
+</span><span class='line'>    [self enqueueCommandBatch:queuedCommandsJSON];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>fetchCommandsFromJs方法非常简单，不细说了。</p>
@@ -498,7 +487,7 @@
 
 <p>executePending方法其实与之后的execute方法紧密相连，这里一起列出，只保留关键代码：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -533,42 +522,41 @@
 <span class='line-number'>33</span>
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">executePending</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">...</span>
-</span><span class='line'>    <span class="c1">//_queue即command队列，依次执行</span>
-</span><span class='line'>    <span class="k">while</span> <span class="p">([</span><span class="n">_queue</span> <span class="n">count</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">...</span>
-</span><span class='line'>        <span class="c1">//取出从js中获取的command字符串，解析为native端的CDVInvokedUrlCommand类</span>
-</span><span class='line'>        <span class="n">CDVInvokedUrlCommand</span><span class="o">*</span> <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="n">CDVInvokedUrlCommand</span> <span class="nl">commandFromJson</span><span class="p">:</span><span class="n">jsonEntry</span><span class="p">];</span>
-</span><span class='line'>        <span class="p">...</span>
-</span><span class='line'>        <span class="c1">//执行command</span>
-</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="nl">execute</span><span class="p">:</span><span class="n">command</span><span class="p">])</span>
-</span><span class='line'>        <span class="p">...</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)executePending
+</span><span class='line'>{
+</span><span class='line'>    ...
+</span><span class='line'>    //_queue即command队列，依次执行
+</span><span class='line'>    while ([_queue count] &gt; 0) {
+</span><span class='line'>        ...
+</span><span class='line'>        //取出从js中获取的command字符串，解析为native端的CDVInvokedUrlCommand类
+</span><span class='line'>        CDVInvokedUrlCommand* command = [CDVInvokedUrlCommand commandFromJson:jsonEntry];
+</span><span class='line'>        ...
+</span><span class='line'>        //执行command
+</span><span class='line'>        [self execute:command])
+</span><span class='line'>        ...
+</span><span class='line'>    }
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">execute:</span><span class="p">(</span><span class="n">CDVInvokedUrlCommand</span><span class="o">*</span><span class="p">)</span><span class="nv">command</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">...</span>
-</span><span class='line'>    <span class="kt">BOOL</span> <span class="n">retVal</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
-</span><span class='line'>    <span class="c1">//获取plugin对应的实例</span>
-</span><span class='line'>    <span class="n">CDVPlugin</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">_viewController</span><span class="p">.</span><span class="n">commandDelegate</span> <span class="nl">getCommandInstance</span><span class="p">:</span><span class="n">command</span><span class="p">.</span><span class="n">className</span><span class="p">];</span>
-</span><span class='line'>    <span class="c1">//调用plugin实例的方法名</span>
-</span><span class='line'>    <span class="bp">NSString</span><span class="o">*</span> <span class="n">methodName</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%@:&quot;</span><span class="p">,</span> <span class="n">command</span><span class="p">.</span><span class="n">methodName</span><span class="p">];</span>
-</span><span class='line'>    <span class="kt">SEL</span> <span class="n">normalSelector</span> <span class="o">=</span> <span class="n">NSSelectorFromString</span><span class="p">(</span><span class="n">methodName</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">([</span><span class="n">obj</span> <span class="nl">respondsToSelector</span><span class="p">:</span><span class="n">normalSelector</span><span class="p">])</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">//消息发送，执行plugin实例对应的方法，并传递参数</span>
-</span><span class='line'>        <span class="n">objc_msgSend</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">normalSelector</span><span class="p">,</span> <span class="n">command</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// There&#39;s no method to call, so throw an error.</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;ERROR: Method &#39;%@&#39; not defined in Plugin &#39;%@&#39;&quot;</span><span class="p">,</span> <span class="n">methodName</span><span class="p">,</span> <span class="n">command</span><span class="p">.</span><span class="n">className</span><span class="p">);</span>
-</span><span class='line'>        <span class="n">retVal</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="p">...</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">retVal</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>- (BOOL)execute:(CDVInvokedUrlCommand*)command
+</span><span class='line'>{
+</span><span class='line'>    ...
+</span><span class='line'>    BOOL retVal = YES;
+</span><span class='line'>    //获取plugin对应的实例
+</span><span class='line'>    CDVPlugin* obj = [_viewController.commandDelegate getCommandInstance:command.className];
+</span><span class='line'>    //调用plugin实例的方法名
+</span><span class='line'>    NSString* methodName = [NSString stringWithFormat:@"%@:", command.methodName];
+</span><span class='line'>    SEL normalSelector = NSSelectorFromString(methodName);
+</span><span class='line'>    if ([obj respondsToSelector:normalSelector]) {
+</span><span class='line'>        //消息发送，执行plugin实例对应的方法，并传递参数
+</span><span class='line'>        objc_msgSend(obj, normalSelector, command);
+</span><span class='line'>    } else {
+</span><span class='line'>        // There's no method to call, so throw an error.
+</span><span class='line'>        NSLog(@"ERROR: Method '%@' not defined in Plugin '%@'", methodName, command.className);
+</span><span class='line'>        retVal = NO;
+</span><span class='line'>    }
+</span><span class='line'>    ...
+</span><span class='line'>    return retVal;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>可以看到js调用native plugin最终执行的是<code>objc_msgSend(obj, normalSelector, command);</code>这块代码，这里我们再拿js端的代码来进行理解。</p>
@@ -591,7 +579,7 @@
 
 <p>看下CDVNotification的代码：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -600,16 +588,15 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">alert:</span><span class="p">(</span><span class="n">CDVInvokedUrlCommand</span><span class="o">*</span><span class="p">)</span><span class="nv">command</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="bp">NSString</span><span class="o">*</span> <span class="n">callbackId</span> <span class="o">=</span> <span class="n">command</span><span class="p">.</span><span class="n">callbackId</span><span class="p">;</span>
-</span><span class='line'>    <span class="bp">NSString</span><span class="o">*</span> <span class="n">message</span> <span class="o">=</span> <span class="p">[</span><span class="n">command</span> <span class="nl">argumentAtIndex</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
-</span><span class='line'>    <span class="bp">NSString</span><span class="o">*</span> <span class="n">title</span> <span class="o">=</span> <span class="p">[</span><span class="n">command</span> <span class="nl">argumentAtIndex</span><span class="p">:</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'>    <span class="bp">NSString</span><span class="o">*</span> <span class="n">buttons</span> <span class="o">=</span> <span class="p">[</span><span class="n">command</span> <span class="nl">argumentAtIndex</span><span class="p">:</span><span class="mi">2</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)alert:(CDVInvokedUrlCommand*)command
+</span><span class='line'>{
+</span><span class='line'>    NSString* callbackId = command.callbackId;
+</span><span class='line'>    NSString* message = [command argumentAtIndex:0];
+</span><span class='line'>    NSString* title = [command argumentAtIndex:1];
+</span><span class='line'>    NSString* buttons = [command argumentAtIndex:2];
 </span><span class='line'>
-</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="nl">showDialogWithMessage</span><span class="p">:</span><span class="n">message</span> <span class="nl">title</span><span class="p">:</span><span class="n">title</span> <span class="nl">buttons</span><span class="p">:</span><span class="l">@[</span><span class="n">buttons</span><span class="l">]</span> <span class="nl">defaultText</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">callbackId</span><span class="p">:</span><span class="n">callbackId</span> <span class="nl">dialogType</span><span class="p">:</span><span class="n">DIALOG_TYPE_ALERT</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    [self showDialogWithMessage:message title:title buttons:@[buttons] defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>前面用<code>objc_msgSend(obj, normalSelector, command);</code>做消息发送，执行的便是这块代码，代码很好理解，就是对command再做解析，并显示。</p>
@@ -728,6 +715,10 @@ var uyan_config = {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/07/04/2020midyear-invest-summary/">2020 年中投资总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2020/02/15/2019summary/">2019 年终总结</a>
       </li>
     
@@ -741,10 +732,6 @@ var uyan_config = {
     
       <li class="post">
         <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/11/23/crazyusstock/">疯狂的美股</a>
       </li>
     
   </ul>

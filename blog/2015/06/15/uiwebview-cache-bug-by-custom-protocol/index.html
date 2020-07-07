@@ -121,7 +121,7 @@
 
 <p>伪代码如下：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -137,23 +137,22 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//原请求</span>
-</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">requestURLString</span> <span class="o">=</span> <span class="s">@&quot;abc://xxx.com/xx.js&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="c1">//根据原请求获得的 data 数据</span>
-</span><span class='line'><span class="bp">NSData</span> <span class="o">*</span><span class="n">abcData</span> <span class="o">=</span> <span class="p">...</span>
-</span><span class='line'><span class="c1">//将原请求的自定义协议改成 http</span>
-</span><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">changeURLString</span> <span class="o">=</span> <span class="s">@&quot;http://xxx.com/xx.js&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="c1">//创建 response</span>
-</span><span class='line'><span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">changeURLString</span><span class="p">];</span>
-</span><span class='line'><span class="bp">NSURLResponse</span><span class="o">*</span> <span class="n">response</span> <span class="o">=</span>
-</span><span class='line'><span class="p">[[</span><span class="bp">NSURLResponse</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL</span><span class="p">:</span><span class="n">url</span>
-</span><span class='line'>                          <span class="nl">MIMEType</span><span class="p">:</span><span class="s">@&quot;application/x-javascript&quot;</span>
-</span><span class='line'>             <span class="nl">expectedContentLength</span><span class="p">:</span><span class="n">abcData</span><span class="p">.</span><span class="n">length</span>
-</span><span class='line'>                  <span class="nl">textEncodingName</span><span class="p">:</span><span class="s">@&quot;UTF-8&quot;</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didReceiveResponse</span><span class="p">:</span><span class="n">response</span> <span class="nl">cacheStoragePolicy</span><span class="p">:</span><span class="n">NSURLCacheStorageNotAllowed</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocol</span><span class="p">:</span><span class="nb">self</span> <span class="nl">didLoadData</span><span class="p">:</span><span class="n">abcData</span><span class="p">];</span>
-</span><span class='line'><span class="p">[[</span><span class="nb">self</span> <span class="n">client</span><span class="p">]</span> <span class="nl">URLProtocolDidFinishLoading</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//原请求
+</span><span class='line'>NSString *requestURLString = @"abc://xxx.com/xx.js";
+</span><span class='line'>//根据原请求获得的 data 数据
+</span><span class='line'>NSData *abcData = ...
+</span><span class='line'>//将原请求的自定义协议改成 http
+</span><span class='line'>NSString *changeURLString = @"http://xxx.com/xx.js";
+</span><span class='line'>//创建 response
+</span><span class='line'>NSURL *url = [NSURL URLWithString:changeURLString];
+</span><span class='line'>NSURLResponse* response =
+</span><span class='line'>[[NSURLResponse alloc] initWithURL:url
+</span><span class='line'>                          MIMEType:@"application/x-javascript"
+</span><span class='line'>             expectedContentLength:abcData.length
+</span><span class='line'>                  textEncodingName:@"UTF-8"];
+</span><span class='line'>[[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
+</span><span class='line'>[[self client] URLProtocol:self didLoadData:abcData];
+</span><span class='line'>[[self client] URLProtocolDidFinishLoading:self];</span></code></pre></td></tr></table></div></figure>
 
 
 <p>本来结合方法一的解决方式，创建 response 的时候，在 url 后加上随机字符串，但是经过试验，该方案<code>无效</code>，缓存始终存在。</p>
@@ -257,6 +256,10 @@ var uyan_config = {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/07/04/2020midyear-invest-summary/">2020 年中投资总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2020/02/15/2019summary/">2019 年终总结</a>
       </li>
     
@@ -270,10 +273,6 @@ var uyan_config = {
     
       <li class="post">
         <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/11/23/crazyusstock/">疯狂的美股</a>
       </li>
     
   </ul>

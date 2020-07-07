@@ -113,7 +113,7 @@
 
 <p><code>Singleton.h:</code></p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -124,23 +124,23 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Singleton.h</span>
-</span><span class='line'><span class="c1">//  Singleton</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  Singleton.h
+</span><span class='line'>//  Singleton
 </span><span class='line'>
-</span><span class='line'><span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
+</span><span class='line'>#import &lt;Foundation/Foundation.h&gt;
 </span><span class='line'>
-</span><span class='line'><span class="k">@interface</span> <span class="nc">Singleton</span> : <span class="bp">NSObject</span>
+</span><span class='line'>@interface Singleton : NSObject
 </span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">;</span>
+</span><span class='line'>+ (Singleton *)sharedInstance;
 </span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>@end
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p><code>Singleton.m:</code></p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -166,32 +166,34 @@
 <span class='line-number'>24</span>
 <span class='line-number'>25</span>
 <span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Singleton.m</span>
-</span><span class='line'><span class="c1">//  Singleton</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>//
+</span><span class='line'>//  Singleton.m
+</span><span class='line'>//  Singleton
 </span><span class='line'>
-</span><span class='line'><span class="cp">#import &quot;Singleton.h&quot;</span>
+</span><span class='line'>#import "Singleton.h"
 </span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">Singleton</span>
+</span><span class='line'>@implementation Singleton
 </span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">singleton</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">token</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">token</span><span class="p">,</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">singleton</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Singleton</span> <span class="n">alloc</span><span class="p">]</span><span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">singleton</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'>+ (Singleton *)sharedInstance{
+</span><span class='line'>    static Singleton *singleton;
+</span><span class='line'>    static dispatch_once_t token;
+</span><span class='line'>    dispatch_once(&token,^{
+</span><span class='line'>        singleton = [[Singleton alloc]init];
+</span><span class='line'>    });
+</span><span class='line'>    return singleton;
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span><span class="p">{</span>
-</span><span class='line'>    <span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nb">self</span><span class="p">){</span>
-</span><span class='line'>        <span class="c1">//在这里可以进行类的初始化工作</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'>- (id)init{
+</span><span class='line'>    self = [super init];
+</span><span class='line'>    if(self){
+</span><span class='line'>        //在这里可以进行类的初始化工作
+</span><span class='line'>    }
+</span><span class='line'>    return self;
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>@end
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -203,22 +205,21 @@
 
 <p>例如：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">Singleton</span> <span class="o">*</span><span class="n">single1</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Singleton</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="n">Singleton</span> <span class="o">*</span><span class="n">single2</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Singleton</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="c1">//结果为0，即NO，两者不是同一个实例</span>
-</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%d&quot;</span><span class="p">,</span><span class="n">single1</span> <span class="o">==</span> <span class="n">single2</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Singleton *single1 = [[Singleton alloc] init];
+</span><span class='line'>Singleton *single2 = [[Singleton alloc] init];
+</span><span class='line'>//结果为0，即NO，两者不是同一个实例
+</span><span class='line'>NSLog(@"%d",single1 == single2);</span></code></pre></td></tr></table></div></figure>
 
 
 <p><code>2014-10-10 更新：</code></p>
 
 <p><code>摒弃之前的实现方式：</code></p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -260,49 +261,48 @@
 <span class='line-number'>40</span>
 <span class='line-number'>41</span>
 <span class='line-number'>42</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">## 更好的实现</span>
-</span><span class='line'><span class="err">其实是要对</span> <span class="err">`</span><span class="n">Singleton</span><span class="p">.</span><span class="n">m</span><span class="err">`</span> <span class="err">做一点改变，就能封住这个纰漏：</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>## 更好的实现
+</span><span class='line'>其实是要对 `Singleton.m` 做一点改变，就能封住这个纰漏：
 </span><span class='line'>
-</span><span class='line'><span class="err">```</span><span class="n">objc</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Singleton.m</span>
-</span><span class='line'><span class="c1">//  Singleton</span>
+</span><span class='line'>```
+</span><span class='line'>//
+</span><span class='line'>//  Singleton.m
+</span><span class='line'>//  Singleton
 </span><span class='line'>
-</span><span class='line'><span class="cp">#import &quot;Singleton.h&quot;</span>
+</span><span class='line'>#import "Singleton.h"
 </span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">Singleton</span>
+</span><span class='line'>@implementation Singleton
 </span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">singleton</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">token</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">token</span><span class="p">,</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="c1">//这里调用私有的initSingle方法</span>
-</span><span class='line'>        <span class="n">singleton</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Singleton</span> <span class="n">alloc</span><span class="p">]</span><span class="n">initSingle</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">singleton</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'>+ (Singleton *)sharedInstance{
+</span><span class='line'>    static Singleton *singleton;
+</span><span class='line'>    static dispatch_once_t token;
+</span><span class='line'>    dispatch_once(&token,^{
+</span><span class='line'>        //这里调用私有的initSingle方法
+</span><span class='line'>        singleton = [[Singleton alloc]initSingle];
+</span><span class='line'>    });
+</span><span class='line'>    return singleton;
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="c1">//只是把原来在init方法中的代码，全都搬到initSingle</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">initSingle</span><span class="p">{</span>
-</span><span class='line'>    <span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nb">self</span><span class="p">){</span>
-</span><span class='line'>        <span class="c1">//在这里可以进行类的初始化工作</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'>//只是把原来在init方法中的代码，全都搬到initSingle
+</span><span class='line'>- (id)initSingle{
+</span><span class='line'>    self = [super init];
+</span><span class='line'>    if(self){
+</span><span class='line'>        //在这里可以进行类的初始化工作
+</span><span class='line'>    }
+</span><span class='line'>    return self;
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span><span class="p">{</span>
-</span><span class='line'>    <span class="c1">//改为调用[Singleton sharedInstance]</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">Singleton</span> <span class="n">sharedInstance</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'>- (id)init{
+</span><span class='line'>    //改为调用[Singleton sharedInstance]
+</span><span class='line'>    return [Singleton sharedInstance];
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span><span class='line'><span class="err">```</span>
+</span><span class='line'>@end
+</span><span class='line'>```
 </span><span class='line'>
-</span><span class='line'><span class="o">*</span> <span class="err">新建私有的</span><span class="n">initSingle</span><span class="err">方法，将原来</span><span class="n">init</span><span class="err">中的实现，全部搬入</span>
-</span><span class='line'><span class="o">*</span> <span class="n">sharedInstance</span><span class="err">中的</span><span class="n">singleton</span><span class="err">初始化，调用</span><span class="n">initSingle</span><span class="err">方法</span>
-</span><span class='line'><span class="o">*</span> <span class="n">init</span><span class="err">方法中，调用</span><span class="p">[</span><span class="n">Singleton</span> <span class="n">sharedInstance</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>* 新建私有的initSingle方法，将原来init中的实现，全部搬入
+</span><span class='line'>* sharedInstance中的singleton初始化，调用initSingle方法
+</span><span class='line'>* init方法中，调用[Singleton sharedInstance]</span></code></pre></td></tr></table></div></figure>
 
 
 <p><code>更好的实现：</code></p>
@@ -311,7 +311,7 @@
 
 <p>在内存分配阶段就指向同一份数据了，如果外界调用 alloc 与 init 来新建对象，自然还是指向同一份数据，问题自然解决了。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -330,25 +330,25 @@
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Singleton.m</span>
-</span><span class='line'><span class="c1">//  Singleton</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//
+</span><span class='line'>//  Singleton.m
+</span><span class='line'>//  Singleton
 </span><span class='line'>
-</span><span class='line'><span class="cp">#import &quot;Singleton.h&quot;</span>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">Singleton</span>
+</span><span class='line'>#import "Singleton.h"
+</span><span class='line'>@implementation Singleton
 </span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="n">Singleton</span> <span class="o">*</span><span class="p">)</span><span class="nf">sharedInstance</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">Singleton</span> <span class="o">*</span><span class="n">_singleton</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">_singleton</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">super</span> <span class="nl">allocWithZone</span><span class="p">:</span><span class="nb">NULL</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">_singleton</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'>+ (Singleton *)sharedInstance{
+</span><span class='line'>    static dispatch_once_t onceToken;
+</span><span class='line'>    static Singleton *_singleton = nil;
+</span><span class='line'>    dispatch_once(&onceToken,^{
+</span><span class='line'>        _singleton = [[super allocWithZone:NULL] init];
+</span><span class='line'>    });
+</span><span class='line'>    return _singleton;
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">allocWithZone:</span><span class="p">(</span><span class="k">struct</span> <span class="bp">_NSZone</span> <span class="o">*</span><span class="p">)</span><span class="nv">zone</span><span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="n">sharedInstance</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'>+ (id)allocWithZone:(struct _NSZone *)zone{
+</span><span class='line'>    return [self sharedInstance];
+</span><span class='line'>}
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -440,6 +440,10 @@ var uyan_config = {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/07/04/2020midyear-invest-summary/">2020 年中投资总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2020/02/15/2019summary/">2019 年终总结</a>
       </li>
     
@@ -453,10 +457,6 @@ var uyan_config = {
     
       <li class="post">
         <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/11/23/crazyusstock/">疯狂的美股</a>
       </li>
     
   </ul>

@@ -118,7 +118,7 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -126,15 +126,14 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="n">WKUserContentController</span><span class="o">*</span> <span class="n">userContentController</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKUserContentController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="c1">// 关键代码，添加 messageHandler，名字为 cordova</span>
-</span><span class='line'><span class="p">[</span><span class="n">userContentController</span> <span class="nl">addScriptMessageHandler</span><span class="p">:</span><span class="nb">self</span> <span class="nl">name</span><span class="p">:</span><span class="s">@&quot;cordova&quot;</span><span class="p">];</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>WKUserContentController* userContentController = [[WKUserContentController alloc] init];
+</span><span class='line'>// 关键代码，添加 messageHandler，名字为 cordova
+</span><span class='line'>[userContentController addScriptMessageHandler:self name:@"cordova"];
 </span><span class='line'>
-</span><span class='line'><span class="n">WKWebViewConfiguration</span><span class="o">*</span> <span class="n">configuration</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKWebViewConfiguration</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'><span class="n">configuration</span><span class="p">.</span><span class="n">userContentController</span> <span class="o">=</span> <span class="n">userContentController</span><span class="p">;</span>
+</span><span class='line'>WKWebViewConfiguration* configuration = [[WKWebViewConfiguration alloc] init];
+</span><span class='line'>configuration.userContentController = userContentController;
 </span><span class='line'>
-</span><span class='line'><span class="n">WKWebView</span><span class="o">*</span> <span class="n">wkWebView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WKWebView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">frame</span> <span class="nl">configuration</span><span class="p">:</span><span class="n">configuration</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>WKWebView* wkWebView = [[WKWebView alloc] initWithFrame:frame configuration:configuration];</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -142,11 +141,10 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//调用名为 cordova 的 messageHandler，与 Native 端进行通信</span>
-</span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">webkit</span><span class="p">.</span><span class="nx">messageHandlers</span><span class="p">.</span><span class="nx">cordova</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">command</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//调用名为 cordova 的 messageHandler，与 Native 端进行通信
+</span><span class='line'>window.webkit.messageHandlers.cordova.postMessage(command);</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -154,21 +152,20 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//实现 WKScriptMessageHandler 接口</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">userContentController:</span><span class="p">(</span><span class="n">WKUserContentController</span><span class="o">*</span><span class="p">)</span><span class="nv">userContentController</span> <span class="nf">didReceiveScriptMessage:</span><span class="p">(</span><span class="n">WKScriptMessage</span><span class="o">*</span><span class="p">)</span><span class="nv">message</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span><span class="n">message</span><span class="p">.</span><span class="n">name</span><span class="p">);</span> <span class="c1">//cordova</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span><span class="n">message</span><span class="p">.</span><span class="n">body</span><span class="p">);</span> <span class="c1">//JSBridge 内容体</span>
-</span><span class='line'>    <span class="p">...</span> <span class="c1">//实现调用 Native 代码</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//实现 WKScriptMessageHandler 接口
+</span><span class='line'>- (void)userContentController:(WKUserContentController*)userContentController didReceiveScriptMessage:(WKScriptMessage*)message
+</span><span class='line'>{
+</span><span class='line'>    NSLog(@"%@",message.name); //cordova
+</span><span class='line'>    NSLog(@"%@",message.body); //JSBridge 内容体
+</span><span class='line'>    ... //实现调用 Native 代码
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>一个 messageHandler 一个通道，Cordova 统一使用 cordova 这个通道来通信。</p>
@@ -177,21 +174,20 @@
 
 <p>目录结构（列出关键目录与文件）：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="o">|</span><span class="n">wkwvtest</span>
-</span><span class='line'>    <span class="o">|</span><span class="n">Staging</span>
-</span><span class='line'>        <span class="n">config</span><span class="p">.</span><span class="n">xml</span>
-</span><span class='line'>        <span class="o">|</span><span class="n">www</span>
-</span><span class='line'>            <span class="n">cordova_plugins</span><span class="p">.</span><span class="n">js</span>
-</span><span class='line'>            <span class="o">|</span><span class="n">plugins</span> <span class="c1">//JS Plugihns</span>
-</span><span class='line'>    <span class="o">|</span><span class="n">Plugins</span> <span class="c1">// Native Plugins</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>|wkwvtest
+</span><span class='line'>    |Staging
+</span><span class='line'>        config.xml
+</span><span class='line'>        |www
+</span><span class='line'>            cordova_plugins.js
+</span><span class='line'>            |plugins //JS Plugihns
+</span><span class='line'>    |Plugins // Native Plugins</span></code></pre></td></tr></table></div></figure>
 
 
 <p>已实现一个 Device 插件为例：</p>
@@ -201,7 +197,7 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -212,18 +208,17 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cordova</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;org.apache.cordova.device.device&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">function</span> <span class="nx">Device</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">//...</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="c1">//...</span>
-</span><span class='line'>    <span class="nx">Device</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">//调用 JSBridge，调用名为 Device 的 Native 类 getDeviceInfo 方法</span>
-</span><span class='line'>        <span class="nx">exec</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">,</span> <span class="s2">&quot;Device&quot;</span><span class="p">,</span> <span class="s2">&quot;getDeviceInfo&quot;</span><span class="p">,</span> <span class="p">[]);</span>
-</span><span class='line'>    <span class="p">};</span>
-</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Device</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cordova.define("org.apache.cordova.device.device", function(require, exports, module) { 
+</span><span class='line'>    function Device() {
+</span><span class='line'>    //...
+</span><span class='line'>    }
+</span><span class='line'>    //...
+</span><span class='line'>    Device.prototype.getInfo = function(successCallback, errorCallback) {
+</span><span class='line'>        //调用 JSBridge，调用名为 Device 的 Native 类 getDeviceInfo 方法
+</span><span class='line'>        exec(successCallback, errorCallback, "Device", "getDeviceInfo", []);
+</span><span class='line'>    };
+</span><span class='line'>    module.exports = new Device();
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -231,7 +226,7 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -246,22 +241,21 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cordova</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;cordova/plugin_list&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
-</span><span class='line'>        <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;file&quot;</span><span class="o">:</span> <span class="s2">&quot;plugins/device.js&quot;</span><span class="p">,</span><span class="c1">//写明相对 cordova_plugins.js 的文件路径</span>
-</span><span class='line'>            <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;org.apache.cordova.device.device&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;clobbers&quot;</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>                 <span class="s2">&quot;device&quot;</span> <span class="c1">//全局命名空间，会注册为 window.device</span>
-</span><span class='line'>            <span class="p">]</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">];</span>
-</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">metadata</span> <span class="o">=</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="s2">&quot;org.apache.cordova.device&quot;</span><span class="o">:</span> <span class="s2">&quot;0.3.0&quot;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cordova.define('cordova/plugin_list', function(require, exports, module) {
+</span><span class='line'>    module.exports = [
+</span><span class='line'>        {
+</span><span class='line'>            "file": "plugins/device.js",//写明相对 cordova_plugins.js 的文件路径
+</span><span class='line'>            "id": "org.apache.cordova.device.device",
+</span><span class='line'>            "clobbers": [
+</span><span class='line'>                 "device" //全局命名空间，会注册为 window.device
+</span><span class='line'>            ]
+</span><span class='line'>        }
+</span><span class='line'>    ];
+</span><span class='line'>    module.exports.metadata =
+</span><span class='line'>    {
+</span><span class='line'>        "org.apache.cordova.device": "0.3.0"
+</span><span class='line'>    }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -269,13 +263,12 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@interface</span> <span class="nc">CDVDevice</span> : <span class="nc">CDVPlugin</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">getDeviceInfo:</span><span class="p">(</span><span class="n">CDVInvokedUrlCommand</span><span class="o">*</span><span class="p">)</span><span class="nv">command</span><span class="p">;</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface CDVDevice : CDVPlugin
+</span><span class='line'>- (void)getDeviceInfo:(CDVInvokedUrlCommand*)command;
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -283,17 +276,16 @@
 </ul>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;widget</span> <span class="na">id=</span><span class="s">&quot;my.project.wkwvtest&quot;</span> <span class="na">version=</span><span class="s">&quot;0.0.1&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/ns/widgets&quot;</span> <span class="na">xmlns:cdv=</span><span class="s">&quot;http://cordova.apache.org/ns/1.0&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;feature</span> <span class="na">name=</span><span class="s">&quot;Device&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;ios-package&quot;</span> <span class="na">value=</span><span class="s">&quot;CDVDevice&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/feature&gt;</span>
-</span><span class='line'><span class="nt">&lt;/widget&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;widget id="my.project.wkwvtest" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"&gt;
+</span><span class='line'>    &lt;feature name="Device"&gt;
+</span><span class='line'>        &lt;param name="ios-package" value="CDVDevice" /&gt;
+</span><span class='line'>    &lt;/feature&gt;
+</span><span class='line'>&lt;/widget&gt;</span></code></pre></td></tr></table></div></figure>
 
 
 <p>完成这步骤，便可以通过 web 端，调用 <code>exec(successCallback, errorCallback, "Device", "getDeviceInfo", []);</code>，调用 Device 这个 Native 类的 getDeviceInfo 方法</p>
@@ -323,7 +315,7 @@
 
 <p>看关键代码：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -350,59 +342,56 @@
 <span class='line-number'>25</span>
 <span class='line-number'>26</span>
 <span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cordova</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;org.apache.cordova.device.device&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">channel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cordova/channel&#39;</span><span class="p">),</span>
-</span><span class='line'>    <span class="nx">exec</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cordova/exec&#39;</span><span class="p">),</span>
-</span><span class='line'>    <span class="c1">//注册名为 onCordovaInfoReady 的 Sticky 类型的事件</span>
-</span><span class='line'>    <span class="nx">channel</span><span class="p">.</span><span class="nx">createSticky</span><span class="p">(</span><span class="s1">&#39;onCordovaInfoReady&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="c1">//告诉系统，必须等待 CordovaInfoReady 事件发送</span>
-</span><span class='line'>    <span class="nx">channel</span><span class="p">.</span><span class="nx">waitForInitialization</span><span class="p">(</span><span class="s1">&#39;onCordovaInfoReady&#39;</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cordova.define("org.apache.cordova.device.device", function(require, exports, module) { 
+</span><span class='line'>    channel = require('cordova/channel'),
+</span><span class='line'>    exec = require('cordova/exec'),
+</span><span class='line'>    //注册名为 onCordovaInfoReady 的 Sticky 类型的事件
+</span><span class='line'>    channel.createSticky('onCordovaInfoReady');
+</span><span class='line'>    //告诉系统，必须等待 CordovaInfoReady 事件发送
+</span><span class='line'>    channel.waitForInitialization('onCordovaInfoReady');
 </span><span class='line'>
-</span><span class='line'>    <span class="kd">function</span> <span class="nx">Device</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-</span><span class='line'>        <span class="c1">//在 onCordovaReady 事件中，注册回调，使得系统初始化便调用该回调，并且 onCordovaReady 在 onPluginsReady 事件后 fire</span>
-</span><span class='line'>        <span class="nx">channel</span><span class="p">.</span><span class="nx">onCordovaReady</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>            <span class="c1">//调用 JSBridge</span>
-</span><span class='line'>            <span class="nx">me</span><span class="p">.</span><span class="nx">getInfo</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="c1">//调用 JSBridge 成功回调用，fire onCordovaInfoReady 事件</span>
-</span><span class='line'>                <span class="nx">channel</span><span class="p">.</span><span class="nx">onCordovaInfoReady</span><span class="p">.</span><span class="nx">fire</span><span class="p">();</span>
-</span><span class='line'>            <span class="p">},</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="p">});</span>
-</span><span class='line'>        <span class="p">});</span>
-</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    function Device() {
+</span><span class='line'>        var me = this;
+</span><span class='line'>        //在 onCordovaReady 事件中，注册回调，使得系统初始化便调用该回调，并且 onCordovaReady 在 onPluginsReady 事件后 fire
+</span><span class='line'>        channel.onCordovaReady.subscribe(function() {
+</span><span class='line'>            //调用 JSBridge
+</span><span class='line'>            me.getInfo(function(info) {
+</span><span class='line'>                //调用 JSBridge 成功回调用，fire onCordovaInfoReady 事件
+</span><span class='line'>                channel.onCordovaInfoReady.fire();
+</span><span class='line'>            },function(e) {
+</span><span class='line'>            });
+</span><span class='line'>        });
+</span><span class='line'>    }
 </span><span class='line'>
-</span><span class='line'>    <span class="nx">Device</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">exec</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">,</span> <span class="s2">&quot;Device&quot;</span><span class="p">,</span> <span class="s2">&quot;getDeviceInfo&quot;</span><span class="p">,</span> <span class="p">[]);</span>
-</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'>    Device.prototype.getInfo = function(successCallback, errorCallback) {
+</span><span class='line'>        exec(successCallback, errorCallback, "Device", "getDeviceInfo", []);
+</span><span class='line'>    };
 </span><span class='line'>
-</span><span class='line'>    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Device</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    module.exports = new Device();
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
 <p>web 端调用 Device 的代码：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;deviceready&quot;</span><span class="p">,</span> <span class="nx">onDeviceReady</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
-</span><span class='line'><span class="kd">function</span> <span class="nx">onDeviceReady</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">device</span><span class="p">.</span><span class="nx">uuid</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>document.addEventListener("deviceready", onDeviceReady, false);
+</span><span class='line'>function onDeviceReady() {
+</span><span class='line'>    console.log(device.uuid);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>可以看到，deviceready 的时候，便可以直接调用 device 这个全局变量。
 这是因为之前在 cordova_plugins.js 这个文件中，做了申明，会把 device 变为全局变量</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="s2">&quot;clobbers&quot;</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>    <span class="s2">&quot;device&quot;</span> <span class="c1">//全局命名空间，会注册为 window.device</span>
-</span><span class='line'><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"clobbers": [
+</span><span class='line'>    "device" //全局命名空间，会注册为 window.device
+</span><span class='line'>]</span></code></pre></td></tr></table></div></figure>
 
 
 <p>这种设计非常巧妙，但是以我的经验，这种形式的 JSBridge 使用比较局限，主要缺点有：</p>
@@ -487,6 +476,10 @@ var uyan_config = {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/07/04/2020midyear-invest-summary/">2020 年中投资总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2020/02/15/2019summary/">2019 年终总结</a>
       </li>
     
@@ -500,10 +493,6 @@ var uyan_config = {
     
       <li class="post">
         <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/11/23/crazyusstock/">疯狂的美股</a>
       </li>
     
   </ul>

@@ -111,7 +111,7 @@
 
 <p>经过不断尝试，发现以下方式是有效果的：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -123,19 +123,18 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">//重置 webView 的 html viewport 属性，变成不可缩放，并且缩放比例为1.0，并执行javaScript</span>
-</span><span class='line'><span class="cp">#define QUOTE(...) #__VA_ARGS__</span>
-</span><span class='line'><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">webViewHeightJSString</span> <span class="o">=</span> <span class="n">QUOTE</span><span class="p">(</span>
-</span><span class='line'><span class="n">var</span> <span class="n">viewportmeta</span> <span class="o">=</span> <span class="n">document</span><span class="p">.</span><span class="n">querySelector</span><span class="p">(</span><span class="err">&#39;</span><span class="n">meta</span><span class="p">[</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span><span class="p">]</span><span class="err">&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">viewportmeta</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'><span class="n">viewportmeta</span><span class="p">.</span><span class="n">content</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">width</span><span class="o">=</span><span class="n">device</span><span class="o">-</span><span class="n">width</span><span class="p">,</span> <span class="n">initial</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>      <span class="n">minimum</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">maximum</span><span class="o">-</span><span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">user</span><span class="o">-</span><span class="n">scalable</span><span class="o">=</span><span class="n">no</span><span class="err">&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="p">);</span>
-</span><span class='line'><span class="cp">#undef QUOTE</span>
-</span><span class='line'><span class="p">[</span><span class="n">webView</span> <span class="nl">stringByEvaluatingJavaScriptFromString</span><span class="p">:[</span><span class="bp">NSString</span> <span class="nl">stringWithUTF8String</span><span class="p">:</span><span class="n">webViewHeightJSString</span><span class="p">]];</span>
-</span><span class='line'><span class="c1">//设置 webView zoomScale 为 1.0，且必须设置animated为YES</span>
-</span><span class='line'><span class="p">[</span><span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span> <span class="nl">setZoomScale</span><span class="p">:</span><span class="mf">1.0</span> <span class="nl">animated</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//重置 webView 的 html viewport 属性，变成不可缩放，并且缩放比例为1.0，并执行javaScript
+</span><span class='line'>#define QUOTE(...) #__VA_ARGS__
+</span><span class='line'>const char *webViewHeightJSString = QUOTE(
+</span><span class='line'>var viewportmeta = document.querySelector('meta[name="viewport"]');
+</span><span class='line'>if (viewportmeta) {
+</span><span class='line'>viewportmeta.content = 'width=device-width, initial-scale=1.0,        minimum-scale=1.0, maximum-scale=1.0, user-scalable=no';
+</span><span class='line'>}
+</span><span class='line'>);
+</span><span class='line'>#undef QUOTE
+</span><span class='line'>[webView stringByEvaluatingJavaScriptFromString:[NSString stringWithUTF8String:webViewHeightJSString]];
+</span><span class='line'>//设置 webView zoomScale 为 1.0，且必须设置animated为YES
+</span><span class='line'>[webView.scrollView setZoomScale:1.0 animated:YES];</span></code></pre></td></tr></table></div></figure>
 
 
 <p>此方法在iOS7、8上的 UIWebView 上测试通过，WKWebView 没有测试。</p>
@@ -214,6 +213,10 @@ var uyan_config = {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/07/04/2020midyear-invest-summary/">2020 年中投资总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2020/02/15/2019summary/">2019 年终总结</a>
       </li>
     
@@ -227,10 +230,6 @@ var uyan_config = {
     
       <li class="post">
         <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/11/23/crazyusstock/">疯狂的美股</a>
       </li>
     
   </ul>

@@ -115,33 +115,30 @@
 
 <p>确保你使用<code>SimpleWeather.xcworkspace</code>,打开<code>WXClient.h</code>并增加imports</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">@</span><span class="n">import</span> <span class="n">CoreLocation</span><span class="p">;</span>
-</span><span class='line'><span class="cp">#import &lt;ReactiveCocoa/ReactiveCocoa/ReactiveCocoa.h&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@import CoreLocation;
+</span><span class='line'>#import &lt;ReactiveCocoa/ReactiveCocoa/ReactiveCocoa.h&gt;</span></code></pre></td></tr></table></div></figure>
 
 
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="err">注意：您可能之前没有见过的</span><span class="p">@</span><span class="n">import</span><span class="err">指令，它在</span><span class="n">Xcode5</span><span class="err">中被引入，是由苹果公司看作是一个现代的，更高效的替代</span> <span class="err">#</span><span class="n">import</span><span class="err">。有一个非常好的教程，涵盖了最新的</span><span class="n">Objective</span><span class="o">-</span><span class="n">C</span><span class="err">特性</span><span class="o">-</span><span class="p">[</span><span class="n">What</span><span class="err">’</span><span class="n">s</span> <span class="n">New</span> <span class="k">in</span> <span class="n">Objective</span><span class="o">-</span><span class="n">C</span> <span class="n">and</span> <span class="n">Foundation</span> <span class="k">in</span> <span class="n">iOS</span> <span class="mi">7</span><span class="p">](</span><span class="nl">http</span><span class="p">:</span><span class="c1">//www.raywenderlich.com/49850/whats-new-in-objective-c-and-foundation-in-ios-7)。</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>注意：您可能之前没有见过的@import指令，它在Xcode5中被引入，是由苹果公司看作是一个现代的，更高效的替代 #import。有一个非常好的教程，涵盖了最新的Objective-C特性-[What’s New in Objective-C and Foundation in iOS 7](http://www.raywenderlich.com/49850/whats-new-in-objective-c-and-foundation-in-ios-7)。</span></code></pre></td></tr></table></div></figure>
 
 
 <p>在<code>WXClient.h</code>中添加下列四个方法到接口申明：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">@</span><span class="n">import</span> <span class="n">Foundation</span><span class="p">;</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">fetchJSONFromURL:</span><span class="p">(</span><span class="bp">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">url</span><span class="p">;</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">fetchCurrentConditionsForLocation:</span><span class="p">(</span><span class="n">CLLocationCoordinate2D</span><span class="p">)</span><span class="nv">coordinate</span><span class="p">;</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">fetchHourlyForecastForLocation:</span><span class="p">(</span><span class="n">CLLocationCoordinate2D</span><span class="p">)</span><span class="nv">coordinate</span><span class="p">;</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">fetchDailyForecastForLocation:</span><span class="p">(</span><span class="n">CLLocationCoordinate2D</span><span class="p">)</span><span class="nv">coordinate</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@import Foundation;
+</span><span class='line'>- (RACSignal *)fetchJSONFromURL:(NSURL *)url;
+</span><span class='line'>- (RACSignal *)fetchCurrentConditionsForLocation:(CLLocationCoordinate2D)coordinate;
+</span><span class='line'>- (RACSignal *)fetchHourlyForecastForLocation:(CLLocationCoordinate2D)coordinate;
+</span><span class='line'>- (RACSignal *)fetchDailyForecastForLocation:(CLLocationCoordinate2D)coordinate;</span></code></pre></td></tr></table></div></figure>
 
 
 <p>现在，似乎是一个很好的机会来介绍<a href="https://github.com/ReactiveCocoa/ReactiveCocoa">ReactiveCocoa</a>！</p>
@@ -161,20 +158,19 @@
 
 <p>例如，你可以监听<code>username</code>属性的变化，用这样的代码:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">RACAble</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">username</span><span class="p">)</span> <span class="nl">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="n">newName</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="n">newName</span><span class="p">);</span>
-</span><span class='line'><span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[RACAble(self.username) subscribeNext:^(NSString *newName) {
+</span><span class='line'>    NSLog(@"%@", newName);
+</span><span class='line'>}];</span></code></pre></td></tr></table></div></figure>
 
 
 <p><code>subscribeNext</code>这个block会在<code>self.username</code>属性变化的时候执行。新的值会传递给这个block。</p>
 
 <p>您还可以合并信号并组合数据到一个组合数据中。下面的示例取自于ReactiveCocoa的Github页面：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -182,15 +178,14 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[[</span><span class="n">RACSignal</span>
-</span><span class='line'>    <span class="nl">combineLatest</span><span class="p">:</span><span class="l">@[</span> <span class="n">RACAble</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">password</span><span class="p">),</span> <span class="n">RACAble</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">passwordConfirmation</span><span class="p">)</span> <span class="l">]</span>
-</span><span class='line'>           <span class="nl">reduce</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="n">currentPassword</span><span class="p">,</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">currentConfirmPassword</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>               <span class="k">return</span> <span class="p">[</span><span class="bp">NSNumber</span> <span class="nl">numberWithBool</span><span class="p">:[</span><span class="n">currentConfirmPassword</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="n">currentPassword</span><span class="p">]];</span>
-</span><span class='line'>           <span class="p">}]</span>
-</span><span class='line'>    <span class="nl">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSNumber</span> <span class="o">*</span><span class="n">passwordsMatch</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">createEnabled</span> <span class="o">=</span> <span class="p">[</span><span class="n">passwordsMatch</span> <span class="n">boolValue</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[[RACSignal 
+</span><span class='line'>    combineLatest:@[ RACAble(self.password), RACAble(self.passwordConfirmation) ] 
+</span><span class='line'>           reduce:^(NSString *currentPassword, NSString *currentConfirmPassword) {
+</span><span class='line'>               return [NSNumber numberWithBool:[currentConfirmPassword isEqualToString:currentPassword]];
+</span><span class='line'>           }] 
+</span><span class='line'>    subscribeNext:^(NSNumber *passwordsMatch) {
+</span><span class='line'>        self.createEnabled = [passwordsMatch boolValue];
+</span><span class='line'>    }];</span></code></pre></td></tr></table></div></figure>
 
 
 <p><a href="https://github.com/ReactiveCocoa/ReactiveCocoa/blob/master/ReactiveCocoaFramework/ReactiveCocoa/RACSignal.h">RACSignal</a>对象捕捉当前和未来的值。信号可以被观察者链接，组合和反应。信号实际上不会执行，直到它被订阅。</p>
@@ -199,54 +194,50 @@
 
 <p>打开<code>WXClient.m</code>加入以下imports:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;WXCondition.h&quot;</span>
-</span><span class='line'><span class="cp">#import &quot;WXDailyForecast.h&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#import "WXCondition.h"
+</span><span class='line'>#import "WXDailyForecast.h"</span></code></pre></td></tr></table></div></figure>
 
 
 <p>在imports下，添加私有接口：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">WXClient</span> <span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSURLSession</span> <span class="o">*</span><span class="n">session</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface WXClient ()
+</span><span class='line'> 
+</span><span class='line'>@property (nonatomic, strong) NSURLSession *session;
+</span><span class='line'> 
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
 
 
 <p>这个接口用这个属性来管理API请求的URL session。</p>
 
 <p>添加以下<code>init</code>放到到<code>@implementation</code>和<code>@end</code>之间：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">])</span> <span class="p">{</span>
-</span><span class='line'>        <span class="bp">NSURLSessionConfiguration</span> <span class="o">*</span><span class="n">config</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURLSessionConfiguration</span> <span class="n">defaultSessionConfiguration</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">_session</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURLSession</span> <span class="nl">sessionWithConfiguration</span><span class="p">:</span><span class="n">config</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)init {
+</span><span class='line'>    if (self = [super init]) {
+</span><span class='line'>        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+</span><span class='line'>        _session = [NSURLSession sessionWithConfiguration:config];
+</span><span class='line'>    }
+</span><span class='line'>    return self;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>使用<code>defaultSessionConfiguration</code>为您创建session。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="err">注意：如果你以前没有了解过</span><span class="bp">NSURLSession</span><span class="err">，看看我们的</span><span class="p">[</span><span class="bp">NSURLSession</span><span class="err">教程</span><span class="p">](</span><span class="nl">http</span><span class="p">:</span><span class="c1">//www.raywenderlich.com/51127/nsurlsession-tutorial)，了解更多信息。</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>注意：如果你以前没有了解过NSURLSession，看看我们的[NSURLSession教程](http://www.raywenderlich.com/51127/nsurlsession-tutorial)，了解更多信息。</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>构建信号</h2>
@@ -259,7 +250,7 @@
 
 <p>增加下列方法到<code>WXClient.m</code>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -281,29 +272,28 @@
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">fetchJSONFromURL:</span><span class="p">(</span><span class="bp">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">url</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Fetching: %@&quot;</span><span class="p">,</span><span class="n">url</span><span class="p">.</span><span class="n">absoluteString</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[[</span><span class="n">RACSignal</span> <span class="nl">createSignal</span><span class="p">:</span><span class="o">^</span><span class="n">RACDisposable</span> <span class="o">*</span><span class="p">(</span><span class="kt">id</span><span class="o">&lt;</span><span class="n">RACSubscriber</span><span class="o">&gt;</span> <span class="n">subscriber</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 2</span>
-</span><span class='line'>        <span class="bp">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">dataTask</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">session</span> <span class="nl">dataTaskWithURL</span><span class="p">:</span><span class="n">url</span> <span class="nl">completionHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSData</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="bp">NSURLResponse</span> <span class="o">*</span><span class="n">response</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="c1">// TODO: Handle retrieved data</span>
-</span><span class='line'>        <span class="p">}];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// 3</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">dataTask</span> <span class="n">resume</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// 4</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="n">RACDisposable</span> <span class="nl">disposableWithBlock</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>            <span class="p">[</span><span class="n">dataTask</span> <span class="n">cancel</span><span class="p">];</span>
-</span><span class='line'>        <span class="p">}];</span>
-</span><span class='line'>    <span class="p">}]</span> <span class="nl">doError</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 5</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span><span class="n">error</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (RACSignal *)fetchJSONFromURL:(NSURL *)url {
+</span><span class='line'>    NSLog(@"Fetching: %@",url.absoluteString);
+</span><span class='line'> 
+</span><span class='line'>    // 1
+</span><span class='line'>    return [[RACSignal createSignal:^RACDisposable *(id&lt;RACSubscriber&gt; subscriber) {
+</span><span class='line'>        // 2
+</span><span class='line'>        NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+</span><span class='line'>            // TODO: Handle retrieved data
+</span><span class='line'>        }];
+</span><span class='line'> 
+</span><span class='line'>        // 3
+</span><span class='line'>        [dataTask resume];
+</span><span class='line'> 
+</span><span class='line'>        // 4
+</span><span class='line'>        return [RACDisposable disposableWithBlock:^{
+</span><span class='line'>            [dataTask cancel];
+</span><span class='line'>        }];
+</span><span class='line'>    }] doError:^(NSError *error) {
+</span><span class='line'>        // 5
+</span><span class='line'>        NSLog(@"%@",error);
+</span><span class='line'>    }];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>通过一个一个注释，你会看到代码执行以下操作：</p>
@@ -317,14 +307,13 @@
 </ol>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="err">如果你觉得需要更多一些背景知识，看看由</span><span class="n">Ash</span> <span class="n">Furrow</span><span class="err">编写的</span><span class="p">[</span><span class="err">这篇文章</span><span class="p">](</span><span class="nl">http</span><span class="p">:</span><span class="c1">//www.teehanlax.com/blog/getting-started-with-reactivecocoa/)，以便更好地了解ReactiveCocoa的核心概念。</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>如果你觉得需要更多一些背景知识，看看由Ash Furrow编写的[这篇文章](http://www.teehanlax.com/blog/getting-started-with-reactivecocoa/)，以便更好地了解ReactiveCocoa的核心概念。</span></code></pre></td></tr></table></div></figure>
 
 
 <p>在<code>-fetchJSONFromURL:</code>中找到<code>// TODO: Handle retrieved data</code> ，替换为:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -343,26 +332,25 @@
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="bp">NSError</span> <span class="o">*</span><span class="n">jsonError</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
-</span><span class='line'>    <span class="kt">id</span> <span class="n">json</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSJSONSerialization</span> <span class="nl">JSONObjectWithData</span><span class="p">:</span><span class="n">data</span> <span class="nl">options</span><span class="p">:</span><span class="n">kNilOptions</span> <span class="nl">error</span><span class="p">:</span><span class="o">&amp;</span><span class="n">jsonError</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">jsonError</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 1</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">subscriber</span> <span class="nl">sendNext</span><span class="p">:</span><span class="n">json</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 2</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">subscriber</span> <span class="nl">sendError</span><span class="p">:</span><span class="n">jsonError</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 2</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">subscriber</span> <span class="nl">sendError</span><span class="p">:</span><span class="n">error</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="p">[</span><span class="n">subscriber</span> <span class="n">sendCompleted</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (! error) {
+</span><span class='line'>    NSError *jsonError = nil;
+</span><span class='line'>    id json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
+</span><span class='line'>    if (! jsonError) {
+</span><span class='line'>        // 1
+</span><span class='line'>        [subscriber sendNext:json];
+</span><span class='line'>    }
+</span><span class='line'>    else {
+</span><span class='line'>        // 2
+</span><span class='line'>        [subscriber sendError:jsonError];
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>else {
+</span><span class='line'>    // 2
+</span><span class='line'>    [subscriber sendError:error];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>// 3
+</span><span class='line'>[subscriber sendCompleted];</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -378,7 +366,7 @@
 
 <p>还在<code>WXClient.m</code>中，添加如下方法：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -389,18 +377,17 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">fetchCurrentConditionsForLocation:</span><span class="p">(</span><span class="n">CLLocationCoordinate2D</span><span class="p">)</span><span class="nv">coordinate</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="bp">NSString</span> <span class="o">*</span><span class="n">urlString</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;http://api.openweathermap.org/data/2.5/weather?lat=%f&amp;lon=%f&amp;units=imperial&quot;</span><span class="p">,</span><span class="n">coordinate</span><span class="p">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">.</span><span class="n">longitude</span><span class="p">];</span>
-</span><span class='line'>    <span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">urlString</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 2</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[[</span><span class="nb">self</span> <span class="nl">fetchJSONFromURL</span><span class="p">:</span><span class="n">url</span><span class="p">]</span> <span class="nl">map</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">json</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 3</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[</span><span class="n">MTLJSONAdapter</span> <span class="nl">modelOfClass</span><span class="p">:[</span><span class="n">WXCondition</span> <span class="k">class</span><span class="p">]</span> <span class="nl">fromJSONDictionary</span><span class="p">:</span><span class="n">json</span> <span class="nl">error</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (RACSignal *)fetchCurrentConditionsForLocation:(CLLocationCoordinate2D)coordinate {
+</span><span class='line'>    // 1
+</span><span class='line'>    NSString *urlString = [NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&units=imperial",coordinate.latitude, coordinate.longitude];
+</span><span class='line'>    NSURL *url = [NSURL URLWithString:urlString];
+</span><span class='line'> 
+</span><span class='line'>    // 2
+</span><span class='line'>    return [[self fetchJSONFromURL:url] map:^(NSDictionary *json) {
+</span><span class='line'>        // 3
+</span><span class='line'>        return [MTLJSONAdapter modelOfClass:[WXCondition class] fromJSONDictionary:json error:nil];
+</span><span class='line'>    }];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -414,7 +401,7 @@
 
 <p>现在添加根据坐标获取逐时预报的方法到<code>WXClient.m</code>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -431,24 +418,23 @@
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">fetchHourlyForecastForLocation:</span><span class="p">(</span><span class="n">CLLocationCoordinate2D</span><span class="p">)</span><span class="nv">coordinate</span> <span class="p">{</span>
-</span><span class='line'>    <span class="bp">NSString</span> <span class="o">*</span><span class="n">urlString</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;http://api.openweathermap.org/data/2.5/forecast?lat=%f&amp;lon=%f&amp;units=imperial&amp;cnt=12&quot;</span><span class="p">,</span><span class="n">coordinate</span><span class="p">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">.</span><span class="n">longitude</span><span class="p">];</span>
-</span><span class='line'>    <span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">urlString</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[[</span><span class="nb">self</span> <span class="nl">fetchJSONFromURL</span><span class="p">:</span><span class="n">url</span><span class="p">]</span> <span class="nl">map</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">json</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 2</span>
-</span><span class='line'>        <span class="n">RACSequence</span> <span class="o">*</span><span class="n">list</span> <span class="o">=</span> <span class="p">[</span><span class="n">json</span><span class="p">[</span><span class="s">@&quot;list&quot;</span><span class="p">]</span> <span class="n">rac_sequence</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// 3</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[[</span><span class="n">list</span> <span class="nl">map</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">item</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="c1">// 4</span>
-</span><span class='line'>            <span class="k">return</span> <span class="p">[</span><span class="n">MTLJSONAdapter</span> <span class="nl">modelOfClass</span><span class="p">:[</span><span class="n">WXCondition</span> <span class="k">class</span><span class="p">]</span> <span class="nl">fromJSONDictionary</span><span class="p">:</span><span class="n">item</span> <span class="nl">error</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>        <span class="c1">// 5</span>
-</span><span class='line'>        <span class="p">}]</span> <span class="n">array</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (RACSignal *)fetchHourlyForecastForLocation:(CLLocationCoordinate2D)coordinate {
+</span><span class='line'>    NSString *urlString = [NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/forecast?lat=%f&lon=%f&units=imperial&cnt=12",coordinate.latitude, coordinate.longitude];
+</span><span class='line'>    NSURL *url = [NSURL URLWithString:urlString];
+</span><span class='line'> 
+</span><span class='line'>    // 1
+</span><span class='line'>    return [[self fetchJSONFromURL:url] map:^(NSDictionary *json) {
+</span><span class='line'>        // 2
+</span><span class='line'>        RACSequence *list = [json[@"list"] rac_sequence];
+</span><span class='line'> 
+</span><span class='line'>        // 3
+</span><span class='line'>        return [[list map:^(NSDictionary *item) {
+</span><span class='line'>            // 4
+</span><span class='line'>            return [MTLJSONAdapter modelOfClass:[WXCondition class] fromJSONDictionary:item error:nil];
+</span><span class='line'>        // 5
+</span><span class='line'>        }] array];
+</span><span class='line'>    }];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -464,7 +450,7 @@
 
 <p>最后，添加如下方法到<code>WXClient.m</code>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -479,22 +465,21 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">fetchDailyForecastForLocation:</span><span class="p">(</span><span class="n">CLLocationCoordinate2D</span><span class="p">)</span><span class="nv">coordinate</span> <span class="p">{</span>
-</span><span class='line'>    <span class="bp">NSString</span> <span class="o">*</span><span class="n">urlString</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;http://api.openweathermap.org/data/2.5/forecast/daily?lat=%f&amp;lon=%f&amp;units=imperial&amp;cnt=7&quot;</span><span class="p">,</span><span class="n">coordinate</span><span class="p">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">.</span><span class="n">longitude</span><span class="p">];</span>
-</span><span class='line'>    <span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">urlString</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Use the generic fetch method and map results to convert into an array of Mantle objects</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[[</span><span class="nb">self</span> <span class="nl">fetchJSONFromURL</span><span class="p">:</span><span class="n">url</span><span class="p">]</span> <span class="nl">map</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">json</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Build a sequence from the list of raw JSON</span>
-</span><span class='line'>        <span class="n">RACSequence</span> <span class="o">*</span><span class="n">list</span> <span class="o">=</span> <span class="p">[</span><span class="n">json</span><span class="p">[</span><span class="s">@&quot;list&quot;</span><span class="p">]</span> <span class="n">rac_sequence</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// Use a function to map results from JSON to Mantle objects</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">[[</span><span class="n">list</span> <span class="nl">map</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">item</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="p">[</span><span class="n">MTLJSONAdapter</span> <span class="nl">modelOfClass</span><span class="p">:[</span><span class="n">WXDailyForecast</span> <span class="k">class</span><span class="p">]</span> <span class="nl">fromJSONDictionary</span><span class="p">:</span><span class="n">item</span> <span class="nl">error</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class='line'>        <span class="p">}]</span> <span class="n">array</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (RACSignal *)fetchDailyForecastForLocation:(CLLocationCoordinate2D)coordinate {
+</span><span class='line'>    NSString *urlString = [NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/forecast/daily?lat=%f&lon=%f&units=imperial&cnt=7",coordinate.latitude, coordinate.longitude];
+</span><span class='line'>    NSURL *url = [NSURL URLWithString:urlString];
+</span><span class='line'> 
+</span><span class='line'>    // Use the generic fetch method and map results to convert into an array of Mantle objects
+</span><span class='line'>    return [[self fetchJSONFromURL:url] map:^(NSDictionary *json) {
+</span><span class='line'>        // Build a sequence from the list of raw JSON
+</span><span class='line'>        RACSequence *list = [json[@"list"] rac_sequence];
+</span><span class='line'> 
+</span><span class='line'>        // Use a function to map results from JSON to Mantle objects
+</span><span class='line'>        return [[list map:^(NSDictionary *item) {
+</span><span class='line'>            return [MTLJSONAdapter modelOfClass:[WXDailyForecast class] fromJSONDictionary:item error:nil];
+</span><span class='line'>        }] array];
+</span><span class='line'>    }];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>是不是看起来很熟悉？是的，这个方法与<code>-fetchHourlyForecastForLocation:</code>方法非常像。除了它使用<code>WXDailyForecast</code>代替<code>WXCondition</code>，并获取每日预报。</p>
@@ -516,7 +501,7 @@
 
 <p>打开<code>WXManager.h</code>使用以下代码来替换其内容：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -538,29 +523,28 @@
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">@</span><span class="n">import</span> <span class="n">Foundation</span><span class="p">;</span>
-</span><span class='line'><span class="p">@</span><span class="n">import</span> <span class="n">CoreLocation</span><span class="p">;</span>
-</span><span class='line'><span class="cp">#import &lt;ReactiveCocoa/ReactiveCocoa/ReactiveCocoa.h&gt;</span>
-</span><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="cp">#import &quot;WXCondition.h&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@interface</span> <span class="nc">WXManager</span> : <span class="bp">NSObject</span>
-</span><span class='line'><span class="o">&lt;</span><span class="bp">CLLocationManagerDelegate</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="o">+</span> <span class="p">(</span><span class="kt">instancetype</span><span class="p">)</span><span class="n">sharedManager</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">CLLocation</span> <span class="o">*</span><span class="n">currentLocation</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="n">WXCondition</span> <span class="o">*</span><span class="n">currentCondition</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">hourlyForecast</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readonly</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">dailyForecast</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 4</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">findCurrentLocation</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@import Foundation;
+</span><span class='line'>@import CoreLocation;
+</span><span class='line'>#import &lt;ReactiveCocoa/ReactiveCocoa/ReactiveCocoa.h&gt;
+</span><span class='line'>// 1
+</span><span class='line'>#import "WXCondition.h"
+</span><span class='line'> 
+</span><span class='line'>@interface WXManager : NSObject
+</span><span class='line'>&lt;CLLocationManagerDelegate&gt;
+</span><span class='line'> 
+</span><span class='line'>// 2
+</span><span class='line'>+ (instancetype)sharedManager;
+</span><span class='line'> 
+</span><span class='line'>// 3
+</span><span class='line'>@property (nonatomic, strong, readonly) CLLocation *currentLocation;
+</span><span class='line'>@property (nonatomic, strong, readonly) WXCondition *currentCondition;
+</span><span class='line'>@property (nonatomic, strong, readonly) NSArray *hourlyForecast;
+</span><span class='line'>@property (nonatomic, strong, readonly) NSArray *dailyForecast;
+</span><span class='line'> 
+</span><span class='line'>// 4
+</span><span class='line'>- (void)findCurrentLocation;
+</span><span class='line'> 
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -579,7 +563,7 @@
 
 <p>在imports下方，粘贴如下私有接口：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -593,21 +577,20 @@
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@interface</span> <span class="nc">WXManager</span> <span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readwrite</span><span class="p">)</span> <span class="n">WXCondition</span> <span class="o">*</span><span class="n">currentCondition</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readwrite</span><span class="p">)</span> <span class="bp">CLLocation</span> <span class="o">*</span><span class="n">currentLocation</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readwrite</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">hourlyForecast</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">,</span> <span class="k">readwrite</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">dailyForecast</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">CLLocationManager</span> <span class="o">*</span><span class="n">locationManager</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">isFirstUpdate</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="n">WXClient</span> <span class="o">*</span><span class="n">client</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface WXManager ()
+</span><span class='line'> 
+</span><span class='line'>// 1
+</span><span class='line'>@property (nonatomic, strong, readwrite) WXCondition *currentCondition;
+</span><span class='line'>@property (nonatomic, strong, readwrite) CLLocation *currentLocation;
+</span><span class='line'>@property (nonatomic, strong, readwrite) NSArray *hourlyForecast;
+</span><span class='line'>@property (nonatomic, strong, readwrite) NSArray *dailyForecast;
+</span><span class='line'> 
+</span><span class='line'>// 2
+</span><span class='line'>@property (nonatomic, strong) CLLocationManager *locationManager;
+</span><span class='line'>@property (nonatomic, assign) BOOL isFirstUpdate;
+</span><span class='line'>@property (nonatomic, strong) WXClient *client;
+</span><span class='line'> 
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -618,7 +601,7 @@
 
 <p>添加如下通用的单例构造器到<code>@implementation</code>与<code>@end</code>å中间：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -627,23 +610,22 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">+</span> <span class="p">(</span><span class="kt">instancetype</span><span class="p">)</span><span class="nf">sharedManager</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">static</span> <span class="kt">id</span> <span class="n">_sharedManager</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">static</span> <span class="kt">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">_sharedManager</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">self</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="n">_sharedManager</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ (instancetype)sharedManager {
+</span><span class='line'>    static id _sharedManager = nil;
+</span><span class='line'>    static dispatch_once_t onceToken;
+</span><span class='line'>    dispatch_once(&onceToken, ^{
+</span><span class='line'>        _sharedManager = [[self alloc] init];
+</span><span class='line'>    });
+</span><span class='line'> 
+</span><span class='line'>    return _sharedManager;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>然后，你需要设置你的属性和观察者。</p>
 
 <p>添加如下方法到<code>WXManager.m</code>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -675,39 +657,38 @@
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
 <span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">])</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 1</span>
-</span><span class='line'>        <span class="n">_locationManager</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">CLLocationManager</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">_locationManager</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// 2</span>
-</span><span class='line'>        <span class="n">_client</span> <span class="o">=</span> <span class="p">[[</span><span class="n">WXClient</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// 3</span>
-</span><span class='line'>        <span class="p">[[[[</span><span class="n">RACObserve</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">currentLocation</span><span class="p">)</span>
-</span><span class='line'>            <span class="c1">// 4</span>
-</span><span class='line'>            <span class="nl">ignore</span><span class="p">:</span><span class="nb">nil</span><span class="p">]</span>
-</span><span class='line'>            <span class="c1">// 5</span>
-</span><span class='line'>           <span class="c1">// Flatten and subscribe to all 3 signals when currentLocation updates</span>
-</span><span class='line'>           <span class="nl">flattenMap</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">CLLocation</span> <span class="o">*</span><span class="n">newLocation</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>               <span class="k">return</span> <span class="p">[</span><span class="n">RACSignal</span> <span class="nl">merge</span><span class="p">:</span><span class="l">@[</span>
-</span><span class='line'>                                         <span class="p">[</span><span class="nb">self</span> <span class="n">updateCurrentConditions</span><span class="p">],</span>
-</span><span class='line'>                                         <span class="p">[</span><span class="nb">self</span> <span class="n">updateDailyForecast</span><span class="p">],</span>
-</span><span class='line'>                                         <span class="p">[</span><span class="nb">self</span> <span class="n">updateHourlyForecast</span><span class="p">]</span>
-</span><span class='line'>                                         <span class="l">]</span><span class="p">];</span>
-</span><span class='line'>            <span class="c1">// 6</span>
-</span><span class='line'>           <span class="p">}]</span> <span class="nl">deliverOn</span><span class="p">:</span><span class="n">RACScheduler</span><span class="p">.</span><span class="n">mainThreadScheduler</span><span class="p">]</span>
-</span><span class='line'>           <span class="c1">// 7</span>
-</span><span class='line'>         <span class="nl">subscribeError</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>             <span class="p">[</span><span class="n">TSMessage</span> <span class="nl">showNotificationWithTitle</span><span class="p">:</span><span class="s">@&quot;Error&quot;</span>
-</span><span class='line'>                                         <span class="nl">subtitle</span><span class="p">:</span><span class="s">@&quot;There was a problem fetching the latest weather.&quot;</span>
-</span><span class='line'>                                             <span class="nl">type</span><span class="p">:</span><span class="n">TSMessageNotificationTypeError</span><span class="p">];</span>
-</span><span class='line'>         <span class="p">}];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)init {
+</span><span class='line'>    if (self = [super init]) {
+</span><span class='line'>        // 1
+</span><span class='line'>        _locationManager = [[CLLocationManager alloc] init];
+</span><span class='line'>        _locationManager.delegate = self;
+</span><span class='line'> 
+</span><span class='line'>        // 2
+</span><span class='line'>        _client = [[WXClient alloc] init];
+</span><span class='line'> 
+</span><span class='line'>        // 3
+</span><span class='line'>        [[[[RACObserve(self, currentLocation)
+</span><span class='line'>            // 4
+</span><span class='line'>            ignore:nil]
+</span><span class='line'>            // 5
+</span><span class='line'>           // Flatten and subscribe to all 3 signals when currentLocation updates
+</span><span class='line'>           flattenMap:^(CLLocation *newLocation) {
+</span><span class='line'>               return [RACSignal merge:@[
+</span><span class='line'>                                         [self updateCurrentConditions],
+</span><span class='line'>                                         [self updateDailyForecast],
+</span><span class='line'>                                         [self updateHourlyForecast]
+</span><span class='line'>                                         ]];
+</span><span class='line'>            // 6
+</span><span class='line'>           }] deliverOn:RACScheduler.mainThreadScheduler]
+</span><span class='line'>           // 7
+</span><span class='line'>         subscribeError:^(NSError *error) {
+</span><span class='line'>             [TSMessage showNotificationWithTitle:@"Error" 
+</span><span class='line'>                                         subtitle:@"There was a problem fetching the latest weather."
+</span><span class='line'>                                             type:TSMessageNotificationTypeError];
+</span><span class='line'>         }];
+</span><span class='line'>    }
+</span><span class='line'>    return self;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>你正使用更多的ReactiveCocoa方法来观察和反应数值的变化。上面这些你做了：</p>
@@ -731,7 +712,7 @@
 
 <p>添加如下代码到<code>WXManager.m</code>的实现块中:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -752,28 +733,27 @@
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">findCurrentLocation</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">isFirstUpdate</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">locationManager</span> <span class="n">startUpdatingLocation</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">locationManager:</span><span class="p">(</span><span class="bp">CLLocationManager</span> <span class="o">*</span><span class="p">)</span><span class="nv">manager</span> <span class="nf">didUpdateLocations:</span><span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">locations</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">isFirstUpdate</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">isFirstUpdate</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">return</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="bp">CLLocation</span> <span class="o">*</span><span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">locations</span> <span class="n">lastObject</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 2</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">location</span><span class="p">.</span><span class="n">horizontalAccuracy</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 3</span>
-</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">currentLocation</span> <span class="o">=</span> <span class="n">location</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">locationManager</span> <span class="n">stopUpdatingLocation</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)findCurrentLocation {
+</span><span class='line'>    self.isFirstUpdate = YES;
+</span><span class='line'>    [self.locationManager startUpdatingLocation];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+</span><span class='line'>    // 1
+</span><span class='line'>    if (self.isFirstUpdate) {
+</span><span class='line'>        self.isFirstUpdate = NO;
+</span><span class='line'>        return;
+</span><span class='line'>    }
+</span><span class='line'> 
+</span><span class='line'>    CLLocation *location = [locations lastObject];
+</span><span class='line'> 
+</span><span class='line'>    // 2
+</span><span class='line'>    if (location.horizontalAccuracy &gt; 0) {
+</span><span class='line'>        // 3
+</span><span class='line'>        self.currentLocation = location;
+</span><span class='line'>        [self.locationManager stopUpdatingLocation];
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -791,7 +771,7 @@
 
 <p>添加如下代码到<code>WXManager.m</code>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -808,52 +788,48 @@
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">updateCurrentConditions</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[[</span><span class="nb">self</span><span class="p">.</span><span class="n">client</span> <span class="nl">fetchCurrentConditionsForLocation</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">currentLocation</span><span class="p">.</span><span class="n">coordinate</span><span class="p">]</span> <span class="nl">doNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">WXCondition</span> <span class="o">*</span><span class="n">condition</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">currentCondition</span> <span class="o">=</span> <span class="n">condition</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">updateHourlyForecast</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[[</span><span class="nb">self</span><span class="p">.</span><span class="n">client</span> <span class="nl">fetchHourlyForecastForLocation</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">currentLocation</span><span class="p">.</span><span class="n">coordinate</span><span class="p">]</span> <span class="nl">doNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="n">conditions</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">hourlyForecast</span> <span class="o">=</span> <span class="n">conditions</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nf">updateDailyForecast</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="p">[[</span><span class="nb">self</span><span class="p">.</span><span class="n">client</span> <span class="nl">fetchDailyForecastForLocation</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">currentLocation</span><span class="p">.</span><span class="n">coordinate</span><span class="p">]</span> <span class="nl">doNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="n">conditions</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">dailyForecast</span> <span class="o">=</span> <span class="n">conditions</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (RACSignal *)updateCurrentConditions {
+</span><span class='line'>    return [[self.client fetchCurrentConditionsForLocation:self.currentLocation.coordinate] doNext:^(WXCondition *condition) {
+</span><span class='line'>        self.currentCondition = condition;
+</span><span class='line'>    }];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (RACSignal *)updateHourlyForecast {
+</span><span class='line'>    return [[self.client fetchHourlyForecastForLocation:self.currentLocation.coordinate] doNext:^(NSArray *conditions) {
+</span><span class='line'>        self.hourlyForecast = conditions;
+</span><span class='line'>    }];
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>- (RACSignal *)updateDailyForecast {
+</span><span class='line'>    return [[self.client fetchDailyForecastForLocation:self.currentLocation.coordinate] doNext:^(NSArray *conditions) {
+</span><span class='line'>        self.dailyForecast = conditions;
+</span><span class='line'>    }];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>它看起来像将一切都连接起来，并蓄势待发。别急！这App实际上并没有告诉管理者做任何事情。
 打开<code>WXController.m</code>并导入这管理者到文件的顶部，如下所示：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;WXManager.h&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#import "WXManager.h"</span></code></pre></td></tr></table></div></figure>
 
 
 <p>添加如下代码到<code>-viewDidLoad:</code>的最后:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[[</span><span class="n">WXManager</span> <span class="n">sharedManager</span><span class="p">]</span> <span class="n">findCurrentLocation</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[[WXManager sharedManager] findCurrentLocation];</span></code></pre></td></tr></table></div></figure>
 
 
 <p>这告诉管理类，开始寻找设备的当前位置。</p>
 
 <p>构建并运行您的App，系统会提示您是否允许使用位置服务。你仍然不会看到任何UI的更新，但检查控制台日志，你会看到类似以下内容：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="mi">2013</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mo">05</span> <span class="mi">08</span><span class="o">:</span><span class="mi">38</span><span class="o">:</span><span class="mf">48.886</span> <span class="n">WeatherTutorial</span><span class="p">[</span><span class="mi">17097</span><span class="o">:</span><span class="mi">70</span><span class="n">b</span><span class="p">]</span> <span class="nl">Fetching</span><span class="p">:</span> <span class="nl">http</span><span class="p">:</span><span class="c1">//api.openweathermap.org/data/2.5/weather?lat=37.785834&amp;lon=-122.406417&amp;units=imperial</span>
-</span><span class='line'><span class="mi">2013</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mo">05</span> <span class="mi">08</span><span class="o">:</span><span class="mi">38</span><span class="o">:</span><span class="mf">48.886</span> <span class="n">WeatherTutorial</span><span class="p">[</span><span class="mi">17097</span><span class="o">:</span><span class="mi">70</span><span class="n">b</span><span class="p">]</span> <span class="nl">Fetching</span><span class="p">:</span> <span class="nl">http</span><span class="p">:</span><span class="c1">//api.openweathermap.org/data/2.5/forecast/daily?lat=37.785834&amp;lon=-122.406417&amp;units=imperial&amp;cnt=7</span>
-</span><span class='line'><span class="mi">2013</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mo">05</span> <span class="mi">08</span><span class="o">:</span><span class="mi">38</span><span class="o">:</span><span class="mf">48.886</span> <span class="n">WeatherTutorial</span><span class="p">[</span><span class="mi">17097</span><span class="o">:</span><span class="mi">70</span><span class="n">b</span><span class="p">]</span> <span class="nl">Fetching</span><span class="p">:</span> <span class="nl">http</span><span class="p">:</span><span class="c1">//api.openweathermap.org/data/2.5/forecast?lat=37.785834&amp;lon=-122.406417&amp;units=imperial&amp;cnt=12</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>2013-11-05 08:38:48.886 WeatherTutorial[17097:70b] Fetching: http://api.openweathermap.org/data/2.5/weather?lat=37.785834&lon=-122.406417&units=imperial
+</span><span class='line'>2013-11-05 08:38:48.886 WeatherTutorial[17097:70b] Fetching: http://api.openweathermap.org/data/2.5/forecast/daily?lat=37.785834&lon=-122.406417&units=imperial&cnt=7
+</span><span class='line'>2013-11-05 08:38:48.886 WeatherTutorial[17097:70b] Fetching: http://api.openweathermap.org/data/2.5/forecast?lat=37.785834&lon=-122.406417&units=imperial&cnt=12</span></code></pre></td></tr></table></div></figure>
 
 
 <p>这些输出代表你的代码工作正常，网络请求正常执行。</p>
@@ -864,7 +840,7 @@
 
 <p>还在<code>WXController.m</code>，到<code>- viewDidLoad</code>的底部，并添加下面的代码到<code>[[WXManager sharedManager] findCurrentLocation];</code>之前：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -877,20 +853,19 @@
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="p">[[</span><span class="n">RACObserve</span><span class="p">([</span><span class="n">WXManager</span> <span class="n">sharedManager</span><span class="p">],</span> <span class="n">currentCondition</span><span class="p">)</span>
-</span><span class='line'>  <span class="c1">// 2</span>
-</span><span class='line'>  <span class="nl">deliverOn</span><span class="p">:</span><span class="n">RACScheduler</span><span class="p">.</span><span class="n">mainThreadScheduler</span><span class="p">]</span>
-</span><span class='line'> <span class="nl">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">WXCondition</span> <span class="o">*</span><span class="n">newCondition</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>     <span class="c1">// 3</span>
-</span><span class='line'>     <span class="n">temperatureLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%.0f°&quot;</span><span class="p">,</span><span class="n">newCondition</span><span class="p">.</span><span class="n">temperature</span><span class="p">.</span><span class="n">floatValue</span><span class="p">];</span>
-</span><span class='line'>     <span class="n">conditionsLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="n">newCondition</span><span class="p">.</span><span class="n">condition</span> <span class="n">capitalizedString</span><span class="p">];</span>
-</span><span class='line'>     <span class="n">cityLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="n">newCondition</span><span class="p">.</span><span class="n">locationName</span> <span class="n">capitalizedString</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="c1">// 4</span>
-</span><span class='line'>     <span class="n">iconView</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:[</span><span class="n">newCondition</span> <span class="n">imageName</span><span class="p">]];</span>
-</span><span class='line'> <span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 1
+</span><span class='line'>[[RACObserve([WXManager sharedManager], currentCondition)
+</span><span class='line'>  // 2
+</span><span class='line'>  deliverOn:RACScheduler.mainThreadScheduler]
+</span><span class='line'> subscribeNext:^(WXCondition *newCondition) {
+</span><span class='line'>     // 3
+</span><span class='line'>     temperatureLabel.text = [NSString stringWithFormat:@"%.0f°",newCondition.temperature.floatValue];
+</span><span class='line'>     conditionsLabel.text = [newCondition.condition capitalizedString];
+</span><span class='line'>     cityLabel.text = [newCondition.locationName capitalizedString];
+</span><span class='line'> 
+</span><span class='line'>     // 4
+</span><span class='line'>     iconView.image = [UIImage imageNamed:[newCondition imageName]];
+</span><span class='line'> }];</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -913,14 +888,13 @@
 
 <p>这是一个非常强大的概念，不是吗？</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="err">注意：要获得更多的绑定实例代码，请查看</span><span class="p">[</span><span class="n">ReactiveCocoa</span> <span class="n">Readme</span><span class="p">](</span><span class="nl">https</span><span class="p">:</span><span class="c1">//github.com/ReactiveCocoa/ReactiveCocoa)。</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>注意：要获得更多的绑定实例代码，请查看[ReactiveCocoa Readme](https://github.com/ReactiveCocoa/ReactiveCocoa)。</span></code></pre></td></tr></table></div></figure>
 
 
 <p>添加如下代码到你上一步添加的代码后面：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -931,18 +905,17 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="n">RAC</span><span class="p">(</span><span class="n">hiloLabel</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RACSignal</span> <span class="nl">combineLatest</span><span class="p">:</span><span class="l">@[</span>
-</span><span class='line'>                        <span class="c1">// 2</span>
-</span><span class='line'>                        <span class="n">RACObserve</span><span class="p">([</span><span class="n">WXManager</span> <span class="n">sharedManager</span><span class="p">],</span> <span class="n">currentCondition</span><span class="p">.</span><span class="n">tempHigh</span><span class="p">),</span>
-</span><span class='line'>                        <span class="n">RACObserve</span><span class="p">([</span><span class="n">WXManager</span> <span class="n">sharedManager</span><span class="p">],</span> <span class="n">currentCondition</span><span class="p">.</span><span class="n">tempLow</span><span class="p">)</span><span class="l">]</span>
-</span><span class='line'>                        <span class="c1">// 3</span>
-</span><span class='line'>                        <span class="nl">reduce</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSNumber</span> <span class="o">*</span><span class="n">hi</span><span class="p">,</span> <span class="bp">NSNumber</span> <span class="o">*</span><span class="n">low</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                            <span class="k">return</span> <span class="p">[</span><span class="bp">NSString</span>  <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%.0f° / %.0f°&quot;</span><span class="p">,</span><span class="n">hi</span><span class="p">.</span><span class="n">floatValue</span><span class="p">,</span><span class="n">low</span><span class="p">.</span><span class="n">floatValue</span><span class="p">];</span>
-</span><span class='line'>                        <span class="p">}]</span>
-</span><span class='line'>                        <span class="c1">// 4</span>
-</span><span class='line'>                        <span class="nl">deliverOn</span><span class="p">:</span><span class="n">RACScheduler</span><span class="p">.</span><span class="n">mainThreadScheduler</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 1
+</span><span class='line'>RAC(hiloLabel, text) = [[RACSignal combineLatest:@[
+</span><span class='line'>                        // 2
+</span><span class='line'>                        RACObserve([WXManager sharedManager], currentCondition.tempHigh),
+</span><span class='line'>                        RACObserve([WXManager sharedManager], currentCondition.tempLow)]
+</span><span class='line'>                        // 3
+</span><span class='line'>                        reduce:^(NSNumber *hi, NSNumber *low) {
+</span><span class='line'>                            return [NSString  stringWithFormat:@"%.0f° / %.0f°",hi.floatValue,low.floatValue];
+</span><span class='line'>                        }]
+</span><span class='line'>                        // 4
+</span><span class='line'>                        deliverOn:RACScheduler.mainThreadScheduler];</span></code></pre></td></tr></table></div></figure>
 
 
 <p>上面的代码结合高温、低温的值到hiloLabel的text属性。看看你完成了什么：</p>
@@ -967,18 +940,17 @@
 
 <p>到<code>WXController.m</code>最顶端的私有接口处，添加下列两个属性</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSDateFormatter</span> <span class="o">*</span><span class="n">hourlyFormatter</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span> <span class="bp">NSDateFormatter</span> <span class="o">*</span><span class="n">dailyFormatter</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@property (nonatomic, strong) NSDateFormatter *hourlyFormatter;
+</span><span class='line'>@property (nonatomic, strong) NSDateFormatter *dailyFormatter;</span></code></pre></td></tr></table></div></figure>
 
 
 <p>由于创建日期格式化非常昂贵，我们将在init方法中实例化他们，并使用这些变量去存储他们的引用。</p>
 
 <p>还在<code>WXController.m</code>中，添加如下代码到<code>@implementation</code>中：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -988,17 +960,16 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">init</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="n">init</span><span class="p">])</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">_hourlyFormatter</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSDateFormatter</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">_hourlyFormatter</span><span class="p">.</span><span class="n">dateFormat</span> <span class="o">=</span> <span class="s">@&quot;h a&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">_dailyFormatter</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSDateFormatter</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">_dailyFormatter</span><span class="p">.</span><span class="n">dateFormat</span> <span class="o">=</span> <span class="s">@&quot;EEEE&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (id)init {
+</span><span class='line'>    if (self = [super init]) {
+</span><span class='line'>        _hourlyFormatter = [[NSDateFormatter alloc] init];
+</span><span class='line'>        _hourlyFormatter.dateFormat = @"h a";
+</span><span class='line'> 
+</span><span class='line'>        _dailyFormatter = [[NSDateFormatter alloc] init];
+</span><span class='line'>        _dailyFormatter.dateFormat = @"EEEE";
+</span><span class='line'>    }
+</span><span class='line'>    return self;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <p>你可能想知道为什么在<code>-init</code>中初始化这些日期格式化，而不是在<code>-viewDidLoad</code>中初始化他们。好问题！</p>
@@ -1007,19 +978,18 @@
 
 <p>在<code>WXController.m</code>中，寻找<code>tableView:numberOfRowsInSection：</code>,并用如下代码更换<code>TODO</code>到<code>return</code>：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">section</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">MIN</span><span class="p">([[</span><span class="n">WXManager</span> <span class="n">sharedManager</span><span class="p">].</span><span class="n">hourlyForecast</span> <span class="n">count</span><span class="p">],</span> <span class="mi">6</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="k">return</span> <span class="n">MIN</span><span class="p">([[</span><span class="n">WXManager</span> <span class="n">sharedManager</span><span class="p">].</span><span class="n">dailyForecast</span> <span class="n">count</span><span class="p">],</span> <span class="mi">6</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 1
+</span><span class='line'>if (section == 0) {
+</span><span class='line'>    return MIN([[WXManager sharedManager].hourlyForecast count], 6) + 1;
+</span><span class='line'>}
+</span><span class='line'>// 2
+</span><span class='line'>return MIN([[WXManager sharedManager].dailyForecast count], 6) + 1;</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -1028,14 +998,13 @@
 </ol>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="err">注意：您使用表格单元格作为标题，而不是内置的、具有粘性的滚动行为的标题。这个</span><span class="n">table</span> <span class="n">view</span><span class="err">设置了分页，粘性滚动行为看起来会很奇怪。</span>
-</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>注意：您使用表格单元格作为标题，而不是内置的、具有粘性的滚动行为的标题。这个table view设置了分页，粘性滚动行为看起来会很奇怪。</span></code></pre></td></tr></table></div></figure>
 
 
 <p>在<code>WXController.m</code>找到<code>tableView:cellForRowAtIndexPath:</code>,并用如下代码更换<code>TODO</code>：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1057,29 +1026,28 @@
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">indexPath</span><span class="p">.</span><span class="n">section</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">indexPath</span><span class="p">.</span><span class="n">row</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="nl">configureHeaderCell</span><span class="p">:</span><span class="n">cell</span> <span class="nl">title</span><span class="p">:</span><span class="s">@&quot;Hourly Forecast&quot;</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 2</span>
-</span><span class='line'>        <span class="n">WXCondition</span> <span class="o">*</span><span class="n">weather</span> <span class="o">=</span> <span class="p">[</span><span class="n">WXManager</span> <span class="n">sharedManager</span><span class="p">].</span><span class="n">hourlyForecast</span><span class="p">[</span><span class="n">indexPath</span><span class="p">.</span><span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="nl">configureHourlyCell</span><span class="p">:</span><span class="n">cell</span> <span class="nl">weather</span><span class="p">:</span><span class="n">weather</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">indexPath</span><span class="p">.</span><span class="n">section</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">indexPath</span><span class="p">.</span><span class="n">row</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="nl">configureHeaderCell</span><span class="p">:</span><span class="n">cell</span> <span class="nl">title</span><span class="p">:</span><span class="s">@&quot;Daily Forecast&quot;</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// 3</span>
-</span><span class='line'>        <span class="n">WXCondition</span> <span class="o">*</span><span class="n">weather</span> <span class="o">=</span> <span class="p">[</span><span class="n">WXManager</span> <span class="n">sharedManager</span><span class="p">].</span><span class="n">dailyForecast</span><span class="p">[</span><span class="n">indexPath</span><span class="p">.</span><span class="n">row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-</span><span class='line'>        <span class="p">[</span><span class="nb">self</span> <span class="nl">configureDailyCell</span><span class="p">:</span><span class="n">cell</span> <span class="nl">weather</span><span class="p">:</span><span class="n">weather</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (indexPath.section == 0) {
+</span><span class='line'>    // 1
+</span><span class='line'>    if (indexPath.row == 0) {
+</span><span class='line'>        [self configureHeaderCell:cell title:@"Hourly Forecast"];
+</span><span class='line'>    }
+</span><span class='line'>    else {
+</span><span class='line'>        // 2
+</span><span class='line'>        WXCondition *weather = [WXManager sharedManager].hourlyForecast[indexPath.row - 1];
+</span><span class='line'>        [self configureHourlyCell:cell weather:weather];
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>else if (indexPath.section == 1) {
+</span><span class='line'>    // 1
+</span><span class='line'>    if (indexPath.row == 0) {
+</span><span class='line'>        [self configureHeaderCell:cell title:@"Daily Forecast"];
+</span><span class='line'>    }
+</span><span class='line'>    else {
+</span><span class='line'>        // 3
+</span><span class='line'>        WXCondition *weather = [WXManager sharedManager].dailyForecast[indexPath.row - 1];
+</span><span class='line'>        [self configureDailyCell:cell weather:weather];
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -1091,7 +1059,7 @@
 
 <p>最后，添加如下代码到<code>WXController.m</code>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1120,36 +1088,35 @@
 <span class='line-number'>27</span>
 <span class='line-number'>28</span>
 <span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="c1">// 1</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">configureHeaderCell:</span><span class="p">(</span><span class="bp">UITableViewCell</span> <span class="o">*</span><span class="p">)</span><span class="nv">cell</span> <span class="nf">title:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">title</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">textLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Medium&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">18</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">textLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">title</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">detailTextLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&quot;&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">imageView</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 2</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">configureHourlyCell:</span><span class="p">(</span><span class="bp">UITableViewCell</span> <span class="o">*</span><span class="p">)</span><span class="nv">cell</span> <span class="nf">weather:</span><span class="p">(</span><span class="n">WXCondition</span> <span class="o">*</span><span class="p">)</span><span class="nv">weather</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">textLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">18</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">detailTextLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Medium&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">18</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">textLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">hourlyFormatter</span> <span class="nl">stringFromDate</span><span class="p">:</span><span class="n">weather</span><span class="p">.</span><span class="n">date</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">detailTextLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%.0f°&quot;</span><span class="p">,</span><span class="n">weather</span><span class="p">.</span><span class="n">temperature</span><span class="p">.</span><span class="n">floatValue</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">imageView</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:[</span><span class="n">weather</span> <span class="n">imageName</span><span class="p">]];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">imageView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFit</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 3</span>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">configureDailyCell:</span><span class="p">(</span><span class="bp">UITableViewCell</span> <span class="o">*</span><span class="p">)</span><span class="nv">cell</span> <span class="nf">weather:</span><span class="p">(</span><span class="n">WXCondition</span> <span class="o">*</span><span class="p">)</span><span class="nv">weather</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">textLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Light&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">18</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">detailTextLabel</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIFont</span> <span class="nl">fontWithName</span><span class="p">:</span><span class="s">@&quot;HelveticaNeue-Medium&quot;</span> <span class="nl">size</span><span class="p">:</span><span class="mi">18</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">textLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">dailyFormatter</span> <span class="nl">stringFromDate</span><span class="p">:</span><span class="n">weather</span><span class="p">.</span><span class="n">date</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">detailTextLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%.0f° / %.0f°&quot;</span><span class="p">,</span>
-</span><span class='line'>                                  <span class="n">weather</span><span class="p">.</span><span class="n">tempHigh</span><span class="p">.</span><span class="n">floatValue</span><span class="p">,</span>
-</span><span class='line'>                                  <span class="n">weather</span><span class="p">.</span><span class="n">tempLow</span><span class="p">.</span><span class="n">floatValue</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">imageView</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:[</span><span class="n">weather</span> <span class="n">imageName</span><span class="p">]];</span>
-</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">imageView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFit</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 1
+</span><span class='line'>- (void)configureHeaderCell:(UITableViewCell *)cell title:(NSString *)title {
+</span><span class='line'>    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
+</span><span class='line'>    cell.textLabel.text = title;
+</span><span class='line'>    cell.detailTextLabel.text = @"";
+</span><span class='line'>    cell.imageView.image = nil;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>// 2
+</span><span class='line'>- (void)configureHourlyCell:(UITableViewCell *)cell weather:(WXCondition *)weather {
+</span><span class='line'>    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+</span><span class='line'>    cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
+</span><span class='line'>    cell.textLabel.text = [self.hourlyFormatter stringFromDate:weather.date];
+</span><span class='line'>    cell.detailTextLabel.text = [NSString stringWithFormat:@"%.0f°",weather.temperature.floatValue];
+</span><span class='line'>    cell.imageView.image = [UIImage imageNamed:[weather imageName]];
+</span><span class='line'>    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+</span><span class='line'>}
+</span><span class='line'> 
+</span><span class='line'>// 3
+</span><span class='line'>- (void)configureDailyCell:(UITableViewCell *)cell weather:(WXCondition *)weather {
+</span><span class='line'>    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+</span><span class='line'>    cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:18];
+</span><span class='line'>    cell.textLabel.text = [self.dailyFormatter stringFromDate:weather.date];
+</span><span class='line'>    cell.detailTextLabel.text = [NSString stringWithFormat:@"%.0f° / %.0f°",
+</span><span class='line'>                                  weather.tempHigh.floatValue,
+</span><span class='line'>                                  weather.tempLow.floatValue];
+</span><span class='line'>    cell.imageView.image = [UIImage imageNamed:[weather imageName]];
+</span><span class='line'>    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -1167,7 +1134,7 @@
 
 <p>在<code>WXController.m</code>的<code>-viewDidLoad</code>中，添加下列代码到其他ReactiveCocoa观察代码中：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1178,18 +1145,17 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[[</span><span class="n">RACObserve</span><span class="p">([</span><span class="n">WXManager</span> <span class="n">sharedManager</span><span class="p">],</span> <span class="n">hourlyForecast</span><span class="p">)</span>
-</span><span class='line'>       <span class="nl">deliverOn</span><span class="p">:</span><span class="n">RACScheduler</span><span class="p">.</span><span class="n">mainThreadScheduler</span><span class="p">]</span>
-</span><span class='line'>   <span class="nl">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="n">newForecast</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span> <span class="n">reloadData</span><span class="p">];</span>
-</span><span class='line'>   <span class="p">}];</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">[[</span><span class="n">RACObserve</span><span class="p">([</span><span class="n">WXManager</span> <span class="n">sharedManager</span><span class="p">],</span> <span class="n">dailyForecast</span><span class="p">)</span>
-</span><span class='line'>       <span class="nl">deliverOn</span><span class="p">:</span><span class="n">RACScheduler</span><span class="p">.</span><span class="n">mainThreadScheduler</span><span class="p">]</span>
-</span><span class='line'>   <span class="nl">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="n">newForecast</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>       <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">tableView</span> <span class="n">reloadData</span><span class="p">];</span>
-</span><span class='line'>   <span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[[RACObserve([WXManager sharedManager], hourlyForecast)
+</span><span class='line'>       deliverOn:RACScheduler.mainThreadScheduler]
+</span><span class='line'>   subscribeNext:^(NSArray *newForecast) {
+</span><span class='line'>       [self.tableView reloadData];
+</span><span class='line'>   }];
+</span><span class='line'> 
+</span><span class='line'>[[RACObserve([WXManager sharedManager], dailyForecast)
+</span><span class='line'>       deliverOn:RACScheduler.mainThreadScheduler]
+</span><span class='line'>   subscribeNext:^(NSArray *newForecast) {
+</span><span class='line'>       [self.tableView reloadData];
+</span><span class='line'>   }];</span></code></pre></td></tr></table></div></figure>
 
 
 <p>构建并运行App；滚动table view，你将看到填充的所有预报数据。</p>
@@ -1202,11 +1168,10 @@
 
 <p>在<code>WXController.m</code>中，查找table view的委托方法<code>-tableView:heightForRowAtIndexPath:</code>，并且替换<code>TODO</code>到<code>return</code>的代码:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="bp">NSInteger</span> <span class="n">cellCount</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">tableView</span><span class="p">:</span><span class="n">tableView</span> <span class="nl">numberOfRowsInSection</span><span class="p">:</span><span class="n">indexPath</span><span class="p">.</span><span class="n">section</span><span class="p">];</span>
-</span><span class='line'><span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="n">screenHeight</span> <span class="o">/</span> <span class="p">(</span><span class="n">CGFloat</span><span class="p">)</span><span class="n">cellCount</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSInteger cellCount = [self tableView:tableView numberOfRowsInSection:indexPath.section];
+</span><span class='line'>return self.screenHeight / (CGFloat)cellCount;</span></code></pre></td></tr></table></div></figure>
 
 
 <p>屏幕高度由一定数量的cell所分割，所以所有cell的总高度等于屏幕的高度。</p>
@@ -1219,7 +1184,7 @@
 
 <p>添加下列scroll delegate到<code>WXController.m</code>最底部：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1230,18 +1195,17 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#pragma mark - UIScrollViewDelegate</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">scrollViewDidScroll:</span><span class="p">(</span><span class="bp">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="nv">scrollView</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 1</span>
-</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">height</span> <span class="o">=</span> <span class="n">scrollView</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">position</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">scrollView</span><span class="p">.</span><span class="n">contentOffset</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
-</span><span class='line'>    <span class="c1">// 2</span>
-</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">percent</span> <span class="o">=</span> <span class="n">MIN</span><span class="p">(</span><span class="n">position</span> <span class="o">/</span> <span class="n">height</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
-</span><span class='line'>    <span class="c1">// 3</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">blurredImageView</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">percent</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#pragma mark - UIScrollViewDelegate
+</span><span class='line'> 
+</span><span class='line'>- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+</span><span class='line'>    // 1
+</span><span class='line'>    CGFloat height = scrollView.bounds.size.height;
+</span><span class='line'>    CGFloat position = MAX(scrollView.contentOffset.y, 0.0);
+</span><span class='line'>    // 2
+</span><span class='line'>    CGFloat percent = MIN(position / height, 1.0);
+</span><span class='line'>    // 3
+</span><span class='line'>    self.blurredImageView.alpha = percent;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
 <ol>
@@ -1339,6 +1303,10 @@ var uyan_config = {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2020/07/04/2020midyear-invest-summary/">2020 年中投资总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2020/02/15/2019summary/">2019 年终总结</a>
       </li>
     
@@ -1352,10 +1320,6 @@ var uyan_config = {
     
       <li class="post">
         <a href="/blog/2020/01/01/2020-invest-summary/">2019 年投资总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2019/11/23/crazyusstock/">疯狂的美股</a>
       </li>
     
   </ul>
