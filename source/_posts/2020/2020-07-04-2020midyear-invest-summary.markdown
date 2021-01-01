@@ -15,8 +15,8 @@ keywords: 2020 年中 投资 总结
 |:--|:--|:--|
 |A 股 1(RMB)|<font color="red">+8.10%</font>|沪深 300：4096.58 - 4163.96，+1.64%|
 |A 股 2(RMB)|<font color="red">+10.36%</font>|
-|A 股 3(RMB)|<font color="red">-1.17%</font>||
-|港股(HKD)|<font color="red">-0.49%</font>|恒生：28189.75 - 24427.19，-13.35%|
+|A 股 3(RMB)|<font color="green">-1.17%</font>||
+|港股(HKD)|<font color="green">-0.49%</font>|恒生：28189.75 - 24427.19，-13.35%|
 |美股(USD)|<font color="green">-90.16%</font>|标普 500：3230.78 - 3100.29，-4.04%|
     
 注：收益计算采用简单方案，资金流入全部算作期初本金。
