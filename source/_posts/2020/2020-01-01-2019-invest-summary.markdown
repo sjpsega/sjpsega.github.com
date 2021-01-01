@@ -5,7 +5,7 @@ date: 2020-01-01 23:03:53 +0800
 comments: true
 categories: invest
 description: 
-keywords: 2020 投资 总结
+keywords: 2019 投资 总结
 ---
 2020 年已经到来，19 年依然过去，照例要总结下 2019 在投资上的得失。
 
@@ -26,7 +26,7 @@ keywords: 2020 投资 总结
 ## A 股
 ### 概述
 
-![2019global-stock-market](/images/2020-01-01-2020-invest-summary/2019global-stock-market.jpg)
+![2019global-stock-market](/images/2020-01-01-2019-invest-summary/2019global-stock-market.jpg)
 
 19 年，A 股涨幅在全球排名占据前排，其中深证成指、创业板指排名第二、第三。
 
