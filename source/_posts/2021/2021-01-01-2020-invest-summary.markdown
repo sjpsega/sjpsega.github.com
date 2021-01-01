@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "2020-invest-summary"
+title: "2020 年投资总结"
 date: 2021-01-01 21:50:20 +0800
 comments: true
 categories: invest
