@@ -1,0 +1,227 @@
+---
+layout: post
+title: "GCD 学习"
+date: 2015-08-31 00:08:49 +0800
+comments: true
+categories: study
+description: GCD aync async group queue barrier serial concurrent同步 异步 组 队列 障碍 串行 并发
+keywords: GCD aync async group queue barrier serial concurrent同步 异步 组 队列 障碍 串行 并发
+---
+Grand Central Dispatch （GCD）是 Apple 开发的一个多核编程的解决方法。
+
+底层、轻量，是 iOS 上常用的多线程解决方案。
+
+## 基本操作
+### sync、async
+dispatch_sync （同步）添加任务到一个队列并等待，直到任务完成，再执行原有队列上的任务。
+
+dispatch_async （异步）添加任务到一个队列，但继续执行原有队列上的任务，在队列中按照 FIFO 的规则执行。
+
+```objc
+dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"log 1");
+    });
+NSLog(@"log 2");
+/* 输出:
+ * log 1
+ * log 2
+ * /
+```
+
+```objc
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"log 1");
+    });
+NSLog(@"log 2");
+/* 输出绝大多数情况为:
+ * log 2
+ * log 1
+ * /
+```
+
+`注：不能在串行（主线程是一种串行队列）线程队列的任务中，再使用 dispatch_sync 添加任务到同一个串行队列中，否则必定发生死锁。`
+
+```objc
+dispatch_async(dispatch_get_main_queue(), ^{
+    //必定发生死锁
+    dispatch_sync(dispatch_get_main_queue(), ^{
+    });
+});
+```
+
+### dispatch_once
+dispatch_once 线程安全的方式执行任务且仅执行其代码块一次。
+
+在单例模式中普遍使用。
+
+```objc
+static dispatch_once_t onceToken;
+dispatch_once(&onceToken, ^{
+    NSLog(@"log 1");
+});
+dispatch_once(&onceToken, ^{
+    NSLog(@"log 2");
+});
+/* 输出:
+ * log 1
+ * /
+```
+### dispatch_after
+dispatch_after 延后一定时间，异步执行任务
+
+```objc
+dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSLog(@"log 1");
+    });
+NSLog(@"log 2");
+/* 输出:
+ * log 2
+ * log 1
+ * /
+```
+
+## group
+通常使用分组来关联一组相关的任务，任务全部完成后，再做相关操作。
+
+### group_enter、group_leave
+使用 dispatch_group_enter、dispatch_group_leave 来手动设置一个组任务的开始和结束，用来控制复杂情况下的任务完成情况。
+
+必须保证 dispatch_group_enter 和 dispatch_group_leave `成对出现`，否则会遇到崩溃问题。
+
+实例：
+
+a）不使用 dispatch_group_enter、dispatch_group_leave 的情况
+```objc
+- (void)testGCDWithGroup{
+    __block int count = 0;
+    __block BOOL isDone = NO;
+    // 1
+    dispatch_group_t group = dispatch_group_create();
+    // 2
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"CGD 1 .");
+        // 3
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSLog(@"CGD 1 after.");
+            count++;
+        });
+    });
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        NSLog(@"done !!!");
+        // 4
+        isDone = YES;
+        expect(count).to.equal(1);
+    });
+    // 5
+    expect(isDone).will.beTruthy();
+}
+```
+该测试用例执行步骤为:
+
+1. 生成一个自定义组
+2. 在自定义组上，添加任务到子线程上执行
+3. 子线程上的任务为执行一个延时任务，使得 count + 1
+4. 当一个组内的任务全部完成，设置 isDone 为 YES，并期望 count 为 1
+5. 异步执行，期望 isDone 为 YES
+
+期望4、5处的测试均能通过，但测试结果为：
+
+1. 5 的测试 case 为通过
+2. 4 的测试 case `不通过`，count 不为 1
+
+因为在这个例子中，执行完毕 dispatch_group_async 中的任务，就算任务完成了；而不是等到 dispatch_group_async 中的 dispatch_after 任务完成，才算任务完成。
+
+b）使用 dispatch_group_enter、dispatch_group_leave 的情况
+```objc
+- (void)testGCDWithGroupEnterAndLeave{
+    __block int count = 0;
+    __block BOOL isDone = NO;
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_enter(group);
+    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"CGD 1 .");
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSLog(@"CGD 1 after.");
+            dispatch_group_leave(group);
+            count++;
+        });
+    });
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        NSLog(@"done !!!");
+        isDone = YES;
+        expect(count).to.equal(1);
+    });
+    expect(isDone).will.beTruthy();
+}
+```
+这个测试用例的全部通过，使用手动控制组任务的开始和结束，完美解决了例子 a 中碰到的问题。
+
+使用 dispatch_group_enter、dispatch_group_leave，用来处理复杂的异步任务非常有效。
+
+## queue
+### 串行、并发
+串行队列每次只有一个任务被执行，并发队列在同一时间可以有多个任务被执行。
+
+主线程是系统提供的一个特殊的队列，是一个`串行`队列，是唯一可用与更新 UI 的线程。
+
+除了主线程，其他均为子线程，通常用来执行与 UI 无关的操作。
+实际编码中，通常使用 `dispatch_get_global_queue(long identifier, unsigned long flags)` 来获取子线程队列。通过该方法获取的是`并发`的全局调度队列，并且可以设置四个不同优先级的队列：high、default、low、background，若没有特殊原因，只使用 default 级别的队列。
+
+用户还可以使用 `dispatch_queue_create(const char *label, dispatch_queue_attr_t attr)` 来创建自定义的串行或并发队列。
+主线程是系统提供的`串行`队列。
+
+```objc
+//创建自定义并发队列
+dispatch_queue_t concurrentQueue = dispatch_queue_create("com.sjpsega", DISPATCH_QUEUE_CONCURRENT);
+//创建自定义创兴队列
+dispatch_queue_t serialQueue = dispatch_queue_create("com.sjpsega", DISPATCH_QUEUE_SERIAL);
+```
+## dispatch_barrier
+barrier 意为“障碍”。dispatch_barrier 在并发队列上工作时扮演一个串行式的瓶颈。当提交的任务开始执行时，该 API 保障这个时刻队列里只执行当前任务，不会执行其他任务。
+
+![dispatch_barrier](/images/2015-08-31-gcd-study/dispatch_barrier.png)
+
+使用 dispatch_barrier API 最佳的方式是使用`自定义并发队列`执行。
+
+下面以使用 dispatch_barrier 保证类类变量线程安全为例：
+
+```objc
+- (void)addStudents:(Student *)student{
+    dispatch_barrier_async(_concurrentQueue, ^{
+        [_students addObject:student];
+    });
+}
+
+- (NSArray *)students{
+    __block NSArray *copyObj;
+    dispatch_sync(_concurrentQueue, ^{
+        copyObj =  [_students copy];
+    });
+    return copyObj;
+}
+```
+
+但是，通常保证类变量线程安全，若不是高并发的情况下，比较简单的方式是使用 `synchronized` 关键字：
+
+```objc
+- (void)addStudents:(Student *)student{
+    @synchronized(_students){
+        [_students addObject:student];
+    }
+}
+
+- (NSArray *)students{
+    @synchronized(_students){
+        return [_students copy];
+    }
+}
+```
+
+## 测试 Demo
+[测试 Demo](https://github.com/sjpsega/GCDTest)
+
+## 参考资料
+[GCD 深入理解：第一部分](https://github.com/nixzhu/dev-blog/blob/master/2014-04-19-grand-central-dispatch-in-depth-part-1.md)
+
+[GCD 深入理解：第二部分](https://github.com/nixzhu/dev-blog/blob/master/2014-05-14-grand-central-dispatch-in-depth-part-2.md)
+

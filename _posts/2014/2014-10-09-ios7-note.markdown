@@ -1,0 +1,20 @@
+---
+layout: post
+title: "《#5 iOS7》 学习笔记"
+date: 2014-10-09 23:36:38 +0800
+comments: true
+categories: study
+description: iOS 7
+keywords: iOS 7
+published: false
+---
+文章地址：[objc第五章](http://objccn.io/issue-5/)
+
+## 初识 TextKit
+
+iOS7 之前的所有版本，（几乎）所有的文本都是 WebKit 来处理的。所有 UILabel、UITextField，以及 UITextView 都在后台以某种方式使用 web views 来进行文本布局和渲染。为了新的界面风格，它们全都被重新设计以使用 TextKit。
+
+### UIKit 文本系统 —— TextKit 的简图
+![TextKit 的简图](/images/2014-10-09-ios7-note/TextKit.png)
+
+## UICollectionView + UIKit Dynamics
