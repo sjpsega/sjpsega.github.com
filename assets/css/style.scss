@@ -2,3 +2,10 @@
 ---
 
 @import "jekyll-theme-modernist";
+
+// 高亮自定义样式
+code.language-plaintext{
+  background: #ffc;
+  padding: 0 0.3em;
+  border-radius: 0.4em;
+}
