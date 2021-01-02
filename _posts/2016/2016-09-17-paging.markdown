@@ -1,0 +1,66 @@
+---
+layout: post
+title: "iOS 仿淘宝详情页分页组件"
+date: 2016-09-17 21:42:08 +0800
+comments: true
+categories: study
+description: 
+keywords: pagding UIScrollView
+---
+
+本例 [Demo](https://github.com/sjpsega/Paging)。
+
+淘宝详情页的分页交互效果是一个经典的实现，隔离了淘宝商品基本属性页和图文详情页，即给用户一个良好的使用体验，也通过分页懒加载图文信息，提高了页面首屏加载速度，也减少了不必要的流量损耗。
+
+下面说说怎么实现这个效果。
+
+## 效果预览
+![main-flow](/images/2016-09-17-paging/paging-demo.gif)
+
+## 实现
+先想一下实现分页的步骤，其实很简单，就两步:
+
+1. 将需要分页的页面添加到分页组件上
+2. 页面滚动，当检测到达页面边缘，通过动画滚动到下一页或上一页
+
+### 利用自带的 ScrollView
+想到滚动和分页，第一时间想到的肯定是自带的 UIScrollView。
+因为 UIScrollView 不仅有滚动效果，并且本身已经自带了一些分页的 API，比如 `pagingEnabled` 等。
+
+但是，想一下，直接使用 `pagingEnabled` 这个属性，然后添加上需要分页的页面，能实现我们的分页效果么？
+答案显然是不能的，因为我们的详情页面的基本属性页和图文详情页本身就是大页面，自身就有滚动效果，如果直接使用 UIScrollView ，两个滚动效果叠加，肯定会出现问题的。
+
+经过实践，我的做法是，使用 `UIScrollView` 来当做分页的容器，是利用相关的滚动 API，来实现翻页的效果。
+
+### 实现中遇到的问题
+主要是两个问题：
+
+1. 需要分页的子页面，如何判断滚动到最底部
+2. 翻页的效果如何实现
+
+问题 1 很好解决，仔细研究下 UIScrollView 的属性就有答案了，就是一个数学问题。
+
+图例：
+
+![UIScrollView-structure](/images/2016-09-17-paging/UIScrollView-structure.jpg)
+
+代码：
+
+```objectivec
+- (CGFloat)contentOffsetBottom:(UIScrollView*)scrollView{
+    return scrollView.contentOffset.y - (scrollView.contentSize.height - scrollView.frame.size.height + scrollView.contentInset.bottom);
+}
+```
+
+问题 2 也很简单，就是利用了 UIScrollView 自带的一个 API `- (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated;` 便可。
+
+## 继续优化
+现在我们的代码实现了分页的效果，但是缺少淘宝详情页的那样分页提示文字，要实现这个也不难。
+
+* 需要翻到下一页，可以在该页的最后加上“继续拖动，查看图文详情”的提示 label。
+* 需要返回到上一页，因为页面是 UIScrollView，可以使用 [MJRefresh](https://github.com/CoderMJLee/MJRefresh) 加上一个自定义的 header 加上提示文字便可。
+
+## 参考资料
+[UIScrollView 实践经验](http://tech.glowing.com/cn/practice-in-uiscrollview/)
+
+[About Scroll View Programming](https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/UIScrollView_pg/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008179-CH1-SW1)
