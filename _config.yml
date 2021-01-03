@@ -26,6 +26,8 @@ github_username:
 markdown: kramdown
 # theme: minima
 theme: jekyll-theme-modernist
+# 显示摘要
+show_excerpts: true
 plugins:
   - jekyll-feed
   - github-pages
