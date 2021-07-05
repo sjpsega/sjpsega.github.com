@@ -70,8 +70,8 @@ A 股账户 2：17.35%
 股票玩了这么多年，还是只赚赚小钱，虽然早就觉得炒股需要大智慧，买入好的股票等待收益，但是，知易行难。
 特别是有感悟了，但是没有付诸行动，更加懊恼，见图：
 
-![2020global-stock-market](/images/2018-01-02-2017-invest-summary/mypointofview.jpg)
+![stock-market](/images/2018-01-02-2017-invest-summary/mypointofview.jpg)
 
-![2020global-stock-market](/images/2018-01-02-2017-invest-summary/stock_compare.jpg)
+![stock-market](/images/2018-01-02-2017-invest-summary/stock_compare.jpg)
 
 其他不多说了，加油吧，少年。
